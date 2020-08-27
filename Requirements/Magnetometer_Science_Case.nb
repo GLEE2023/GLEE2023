@@ -1,0 +1,798 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     31530,        790]
+NotebookOptionsPosition[     23859,        601]
+NotebookOutlinePosition[     24389,        619]
+CellTagsIndexPosition[     24346,        616]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ "Magnetometer Science Cases\n",
+ StyleBox["Project: ", "Subsubsection"],
+ StyleBox[Cell[BoxData[
+  FormBox[
+   ButtonBox["GLEE",
+    BaseStyle->"Hyperlink",
+    ButtonData->{
+      URL["https://www.GLEE2023.org"], None},
+    ButtonNote->"https://www.GLEE2023.org"], TraditionalForm]], 
+  "Subsubsection",
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "707d5691-1600-4627-a805-1ff24d874762"], "Subsubsection"],
+ StyleBox["\nAuthor: John Walker Johnson\nDate Created: August 27th 2020", 
+  "Subsubsection"]
+}], "Title",
+ CellChangeTimes->{{3.8075455353851757`*^9, 3.807545663321006*^9}, {
+  3.80754570120557*^9, 
+  3.807545701210861*^9}},ExpressionUUID->"7bbf8b62-fb21-42a3-8cce-\
+2f85eeab16f4"],
+
+Cell[CellGroupData[{
+
+Cell["Contents", "Section",
+ CellChangeTimes->{{3.8075455877374763`*^9, 3.807545588429356*^9}, {
+  3.80754589011159*^9, 3.807545892255249*^9}, {3.807545927031348*^9, 
+  3.8075459283853197`*^9}},ExpressionUUID->"e26b25ea-ea32-48c8-9604-\
+222b713336d8"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "ItemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546003263391*^9}, {3.8075462503275948`*^9, 
+  3.807546252902287*^9}},ExpressionUUID->"ad7454e6-9775-47c8-8300-\
+6af12b5f913d"],
+
+Cell[CellGroupData[{
+
+Cell["Mission Overview", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.8075460134345083`*^9}, {3.80754626344528*^9, 
+  3.807546271917346*^9}, {3.807547543750139*^9, 
+  3.807547549044547*^9}},ExpressionUUID->"5ad94e8a-915f-4a9d-aa48-\
+633855218066"],
+
+Cell["Local Science ", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+   3.807546000890337*^9, 3.807546040675263*^9}, 
+   3.8075462742700577`*^9},ExpressionUUID->"51f38a74-fdd1-4b3f-8dc4-\
+f860b473fad1"],
+
+Cell["Distributed Science ", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+   3.807546000890337*^9, 3.80754602847759*^9}, {3.8075461705372057`*^9, 
+   3.8075461705374327`*^9}, {3.807546202865858*^9, 3.807546202866044*^9}, 
+   3.8075462770044327`*^9},ExpressionUUID->"9b66f576-bd35-4222-8c32-\
+68e24f99c668"]
+}, Open  ]],
+
+Cell["Sensor Information", "ItemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.80754602847759*^9}, {3.8075461705372057`*^9, 
+  3.8075461705374327`*^9}, {3.807546203173917*^9, 3.807546259943468*^9}, {
+  3.807546677107732*^9, 
+  3.807546677108244*^9}},ExpressionUUID->"b1bd1182-3136-44a0-af10-\
+a2bad92dff78"],
+
+Cell[CellGroupData[{
+
+Cell["Sensor Overview", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.80754602847759*^9}, {3.8075461705372057`*^9, 
+  3.8075461705374327`*^9}, {3.807546203173917*^9, 3.807546259943468*^9}, {
+  3.807546678136361*^9, 
+  3.8075466822905188`*^9}},ExpressionUUID->"6c7c9fad-200a-4a7e-986a-\
+4e4f4ef67d67"],
+
+Cell["Sensor Specifications", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.80754602847759*^9}, {3.8075461705372057`*^9, 
+  3.8075461705374327`*^9}, {3.807546203173917*^9, 3.807546259943468*^9}, {
+  3.807546678136361*^9, 
+  3.807546689206019*^9}},ExpressionUUID->"efcaf7fb-340a-424b-a61f-\
+58f9dfe74d29"]
+}, Open  ]],
+
+Cell["Local Science Cases", "ItemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546146249584*^9}, {3.807549691787944*^9, 
+  3.807549691789133*^9}},ExpressionUUID->"fc9ac7ff-8cfc-4f62-b761-\
+0c172e7395b6"],
+
+Cell[CellGroupData[{
+
+Cell["Local Regolith Composition", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546146249584*^9}, {3.807549692830882*^9, 
+  3.807549700137649*^9}},ExpressionUUID->"8ab1ec13-3cf6-420b-b384-\
+a15dce778d73"],
+
+Cell["Lunar Effects on COTS Sensor", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546136530443*^9}, {3.807546843049622*^9, 3.807546864179408*^9}, {
+  3.807547001224616*^9, 
+  3.80754709988533*^9}},ExpressionUUID->"a0aac2c0-7c8b-4f97-95e1-\
+c8ac5c0f52a6"],
+
+Cell["Magnetic Effects of Regolith Ionization", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546136530443*^9}, {3.807546843049622*^9, 3.807546864179408*^9}, {
+  3.807547001224616*^9, 3.8075471221559877`*^9}, {3.807547318091482*^9, 
+  3.807547318092165*^9}},ExpressionUUID->"b028a149-e278-4387-b260-\
+accd31b3bd06"],
+
+Cell[TextData[StyleBox["Temporal Magnetic Field Evolution",
+ FontSlant->"Italic"]], "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546136530443*^9}, {3.807546843049622*^9, 3.807546864179408*^9}, {
+  3.807547001224616*^9, 3.8075471221559877`*^9}, {3.8075473198604183`*^9, 
+  3.80754732822084*^9}},ExpressionUUID->"cca4a584-781d-48ba-b6ad-\
+b42e96d9d365"],
+
+Cell[" Magnetic Effects of Micrometeorites", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546136530443*^9}, {3.807546843049622*^9, 3.807546864179408*^9}, {
+  3.807547001224616*^9, 3.807547057364876*^9}, {3.80754714324625*^9, 
+  3.807547157165896*^9}, {3.807547338211207*^9, 
+  3.807547338211582*^9}},ExpressionUUID->"6f0a1429-8996-43f7-bbd5-\
+912f9d177751"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Temporal Magnetic Field Evolution",
+ FontSlant->"Italic"]], "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546136530443*^9}, {3.807546843049622*^9, 3.807546864179408*^9}, {
+  3.807547001224616*^9, 3.807547057364876*^9}, {3.80754714324625*^9, 
+  3.807547157165896*^9}, {3.807547348807189*^9, 3.807547355645939*^9}, {
+  3.807547391441115*^9, 
+  3.807547391441391*^9}},ExpressionUUID->"5bc0040f-50b0-47ac-b82a-\
+775af2fcf38c"],
+
+Cell[TextData[StyleBox["Temporal Accelerometer Evolution",
+ FontSlant->"Italic"]], "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546136530443*^9}, {3.807546843049622*^9, 3.807546864179408*^9}, {
+  3.807547001224616*^9, 3.807547057364876*^9}, {3.80754714324625*^9, 
+  3.807547157165896*^9}, {3.807547348807189*^9, 3.807547355645939*^9}, {
+  3.807547394647142*^9, 3.8075474202335443`*^9}, {3.80754967690877*^9, 
+  3.807549676909227*^9}},ExpressionUUID->"76d7a278-ea09-430e-8b17-\
+42a006ca044e"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["Distributed Science Cases", "ItemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.8075461480955467`*^9}},ExpressionUUID->"31bf5af6-75a8-4f12-b0c6-\
+7995bf37bb8d"],
+
+Cell[CellGroupData[{
+
+Cell["Magnetic Field Formation", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 3.807547237808899*^9}, {3.807547278554821*^9, 
+  3.807547284365316*^9}},ExpressionUUID->"f83c9fff-1a73-4090-baf5-\
+ab661d44df37"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Net Magnetic Moment of Surface",
+ FontSlant->"Italic"]], "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 
+  3.807547260283855*^9}},ExpressionUUID->"5e9a3ceb-08b6-494c-9c06-\
+d81d5ed1889c"],
+
+Cell[TextData[StyleBox["Spatial Variance in Magnetic Field",
+ FontSlant->"Italic"]], "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 3.807547259430016*^9}, {3.8075472952720337`*^9, 
+  3.807547302921864*^9}, {3.8075473695673933`*^9, 
+  3.8075473695676727`*^9}},ExpressionUUID->"939aaffd-eff6-43f3-a1df-\
+8eb904c0299a"]
+}, Open  ]],
+
+Cell["Swirl Composition", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 3.807547259430016*^9}, {3.8075472952720337`*^9, 
+  3.807547302921864*^9}, {3.807547371274506*^9, 3.8075473813532476`*^9}, {
+  3.8075474243947897`*^9, 
+  3.807547431730156*^9}},ExpressionUUID->"59b637ec-1697-4705-93f3-\
+3db5274adef2"],
+
+Cell[CellGroupData[{
+
+Cell["Net Magnetic Moment of Surface", "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 3.807547259430016*^9}, {3.8075472952720337`*^9, 
+  3.807547302921864*^9}, {3.807547371274506*^9, 3.8075473813532476`*^9}, {
+  3.8075474243947897`*^9, 
+  3.807547453147215*^9}},ExpressionUUID->"2339e9b8-5b2b-4705-8136-\
+113a61b029f0"],
+
+Cell["Regolith Conductivity ", "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 3.807547259430016*^9}, {3.8075472952720337`*^9, 
+  3.807547302921864*^9}, {3.807547371274506*^9, 3.8075473813532476`*^9}, {
+  3.8075474243947897`*^9, 
+  3.807547466422948*^9}},ExpressionUUID->"1d5b127c-ecd1-4ab5-bf36-\
+d65de44c84e8"],
+
+Cell["Regolith Emissivity", "SubsubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.8075462856919622`*^9, 3.807546285692376*^9}, {
+  3.807547204519786*^9, 3.807547259430016*^9}, {3.8075472952720337`*^9, 
+  3.807547302921864*^9}, {3.807547371274506*^9, 3.8075473813532476`*^9}, {
+  3.8075474243947897`*^9, 
+  3.807547472299526*^9}},ExpressionUUID->"e24c5298-ab77-461b-9615-\
+b53b7f2447da"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["Appendix", "ItemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.807546287236391*^9, 
+  3.8075462904563913`*^9}},ExpressionUUID->"b29b068f-3733-45e6-8311-\
+4471f80ff85e"],
+
+Cell[CellGroupData[{
+
+Cell["References", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.807546287236391*^9, 
+  3.807546301959585*^9}},ExpressionUUID->"24b54772-a7ef-486d-9707-\
+766b32d141b9"],
+
+Cell["Lunar Swirls", "SubitemNumbered",
+ CellChangeTimes->{{3.8075459612164907`*^9, 3.8075459642012367`*^9}, {
+  3.807546000890337*^9, 3.807546027881599*^9}, {3.807546131954262*^9, 
+  3.807546143216722*^9}, {3.807546287236391*^9, 
+  3.807546306804811*^9}},ExpressionUUID->"58362a0d-18f9-4ba6-8d4b-\
+0b47fa35454a"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ CellChangeTimes->{{3.8075463395362873`*^9, 3.807546341388027*^9}, 
+   3.807549217314433*^9},ExpressionUUID->"9772a504-8f68-4388-ab60-\
+ec998a301c71"],
+
+Cell[CellGroupData[{
+
+Cell["Mission Overview", "Subsection",
+ CellChangeTimes->{{3.80754635979911*^9, 
+  3.8075463651698837`*^9}},ExpressionUUID->"44cdc601-8ac3-45f2-9223-\
+bce3497ff517"],
+
+Cell["\<\
+GLEE is the Great Lunar Expedition for Everyone, a project by the Colorado \
+Space Grant Consortium.\
+\>", "Text",
+ CellChangeTimes->{{3.8075463776855783`*^9, 3.807546383369331*^9}, {
+  3.807547625503538*^9, 3.807547668642315*^9}, {3.807549722593335*^9, 
+  3.8075497294980907`*^9}},ExpressionUUID->"86508a0c-d053-465c-b3ac-\
+9fa82831ae71"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Local Science Missions", "Subsection",
+ CellChangeTimes->{{3.807546594904101*^9, 3.8075465971832533`*^9}, {
+  3.8075476912317257`*^9, 
+  3.807547692870769*^9}},ExpressionUUID->"74fe7b28-99f4-477d-b70a-\
+310c71fa135c"],
+
+Cell["\<\
+Local science missions are scientific missions in which data is collected and \
+used from only one LunaSat. Local missions will collect data from one LunaSat \
+to use in data processing and analysis in order to learn new information \
+about the Lunar Surface, our LunaSat, its sensors, and more. Local missions \
+can involve one or more sensors from a single LunaSat in its scientific \
+mission. Local missions can involve temporal evolution, but by nature are \
+static in spatial evolution.\
+\>", "Text",
+ CellChangeTimes->{{3.8075466081559467`*^9, 3.807546614516658*^9}, {
+  3.807547679602991*^9, 3.8075477159132843`*^9}, {3.80754775213811*^9, 
+  3.807547873265751*^9}, {3.8075479224938726`*^9, 3.807547953525272*^9}, {
+  3.807548066334723*^9, 
+  3.8075481038229437`*^9}},ExpressionUUID->"55fcd7b8-54c8-4460-8b05-\
+6c6b9b9cdeb5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Distributed Science Missions", "Subsection",
+ CellChangeTimes->{{3.807546649712913*^9, 3.8075466534557867`*^9}, {
+  3.807547694180574*^9, 
+  3.807547695564281*^9}},ExpressionUUID->"9b55a1f1-3fc5-4ced-8a8c-\
+92d09e893c65"],
+
+Cell["\<\
+Distributed science missions are scientific missions that utilize multiple \
+LunaSats in its data collection. Utilizing the aggregate data of multiple \
+LunaSats will allow for both spatial and temporal data to be used in data \
+analysis which allows for a greater depth of study. Distributed science \
+missions also have the benefit of utilizing multiple identical sensors in \
+order to better study and characterize the lunar surface as well as improve \
+scientific data return through statistical analysis. Distributed missions \
+could allow for accurate measurements beyond a single sensors capabilities.\
+\>", "Text",
+ CellChangeTimes->{{3.807546658320682*^9, 3.807546662925563*^9}, {
+  3.807547876161182*^9, 3.807547915314171*^9}, {3.8075479694694567`*^9, 
+  3.807548054148995*^9}, {3.807548109159567*^9, 
+  3.807548312264518*^9}},ExpressionUUID->"03d02cbf-b89f-44cd-909c-\
+cc2a5f1b3b6a"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Sensor Information", "Section",
+ CellChangeTimes->{{3.8075466703462553`*^9, 
+  3.8075466739244204`*^9}},ExpressionUUID->"8caa9d6b-ca73-4af0-9358-\
+356016d3b23d"],
+
+Cell[CellGroupData[{
+
+Cell["Sensor Overview", "Subsection",
+ CellChangeTimes->{{3.807546717475586*^9, 
+  3.807546719871051*^9}},ExpressionUUID->"39785977-c006-488f-8941-\
+7960d29cf82d"],
+
+Cell["\<\
+The magnetic field sensor selected for the GLEE mission is the AK09940 by \
+AKM. The AK09940 is a Hall Effect sensor that measures magnetic field \
+strength along three orthogonal axes. \
+\>", "Text",
+ CellChangeTimes->{{3.807546732022303*^9, 3.807546732638237*^9}, {
+  3.8075484176324472`*^9, 
+  3.807548561554792*^9}},ExpressionUUID->"7eb3b604-6377-4447-bc41-\
+8e37fae0f72f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Sensor Specifications", "Subsection",
+ CellChangeTimes->{{3.8075467233602657`*^9, 
+  3.807546728721263*^9}},ExpressionUUID->"f30a4b5f-5dc8-4e94-a186-\
+c30fcad85365"],
+
+Cell[TextData[Cell[BoxData[
+ RowBox[{"(", "\[NoBreak]", GridBox[{
+    {"Specification", "Minimum", "Typical", "Maximum"},
+    {
+     RowBox[{"Measurement", " ", "Range"}], "-", 
+     RowBox[{
+      RowBox[{"\[PlusMinus]", "1200"}], "\[Gamma]"}], "-"},
+    {
+     RowBox[{"Sensor", " ", "Resolution"}], "\[Placeholder]", 
+     RowBox[{"10", " ", "\[Gamma]"}], "\[Placeholder]"},
+    {
+     RowBox[{
+      RowBox[{"Sensor", " ", "Noise"}], ",", " ", "RMS"}], 
+     RowBox[{"40", "\[Gamma]"}], "-", 
+     RowBox[{"70", "\[Gamma]"}]},
+    {
+     RowBox[{"Operating", " ", "Temperature"}], "\[Placeholder]", 
+     "\[Placeholder]", "\[Placeholder]"},
+    {
+     RowBox[{"Storage", " ", "Temperature", " "}], "\[Placeholder]", 
+     "\[Placeholder]", "\[Placeholder]"},
+    {"\[Placeholder]", "\[Placeholder]", "\[Placeholder]", "\[Placeholder]"}
+   }], "\[NoBreak]", 
+  ")"}]],ExpressionUUID->"41e9c20e-a085-4cce-bd9b-cb4b9cb9b7ef"]], "Text",
+ CellChangeTimes->{{3.80754673474104*^9, 3.807546735407947*^9}, 
+   3.8075485697801456`*^9, {3.807548599840949*^9, 
+   3.807548786212967*^9}},ExpressionUUID->"b071bf70-4741-443f-ae9a-\
+fcb052e359d7"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Local Science Cases", "Section",
+ CellChangeTimes->{{3.807546740647057*^9, 
+  3.807546745864541*^9}},ExpressionUUID->"c1e1a269-becf-426d-90f6-\
+808280135ed2"],
+
+Cell[CellGroupData[{
+
+Cell["Local Magnetic Field Characterization", "Subsection",
+ CellChangeTimes->{{3.807550004595541*^9, 
+  3.807550014926446*^9}},ExpressionUUID->"9aaa0f49-1bb3-4221-96ce-\
+c20e3ccc0c21"],
+
+Cell["\<\
+In order to better study the Lunar surface and conduct distributed science, \
+each LunaSat will collect and transmit data suitable for the characterization \
+of its local magnetic environment. The data collected must be suitable for \
+determining following characteristics. Successful characterization of the \
+local lunar magnetic field will yield the static magnetic field flux density, \
+with both magnitude and direction relative to the surface measured, as well \
+as the location of the measurement.\
+\>", "Text",
+ CellChangeTimes->{{3.807550086827546*^9, 3.807550316778796*^9}, {
+  3.807550349836113*^9, 3.807550410246928*^9}, {3.8075505327251873`*^9, 
+  3.80755060854362*^9}, {3.807551246689695*^9, 3.80755144061229*^9}, {
+  3.807552333157696*^9, 
+  3.807552334337096*^9}},ExpressionUUID->"142a6217-b927-43b2-a8a1-\
+dbb6078f74d8"],
+
+Cell[CellGroupData[{
+
+Cell["LunaSat Location", "Subsubsection",
+ CellChangeTimes->{{3.807550472132723*^9, 3.807550478189344*^9}, {
+  3.8075523575105247`*^9, 
+  3.807552358481329*^9}},ExpressionUUID->"f65bfd41-d121-4396-84d8-\
+4bf6424f9d4e"],
+
+Cell["\<\
+In order to successfully determine the local Lunar magnetic field at each \
+location, we must know the orientation of each LunaSat relative to the lunar \
+surface. As the X,Y, and Z axes measured from each magnetic field sensor. \
+Only with LunaSat orientation, magnetic field components, and LunaSat \
+location data, can we successfully characterize the local Lunar magnetic field\
+\>", "Text",
+ CellChangeTimes->{{3.807552057179372*^9, 
+  3.80755229429186*^9}},ExpressionUUID->"ee05627d-bd23-4a8b-aee4-\
+687a62a0d760"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["LunaSat Orientation", "Subsubsection",
+ CellChangeTimes->{{3.807550472132723*^9, 
+  3.807550478189344*^9}},ExpressionUUID->"742ad7d7-2e00-48bc-85fb-\
+8c961f7d5e56"],
+
+Cell["\<\
+In order to successfully determine the local Lunar magnetic field at each \
+location, we must know the orientation of each LunaSat relative to the lunar \
+surface. As the X,Y, and Z axes measured from each magnetic field sensor. \
+Only with LunaSat orientation, magnetic field components, and LunaSat \
+location data, can we successfully characterize the local Lunar magnetic field\
+\>", "Text",
+ CellChangeTimes->{{3.807552057179372*^9, 
+  3.80755229429186*^9}},ExpressionUUID->"9fd6996c-7789-4b4f-a8d6-\
+c5cd86545b01"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Static X,Y, and Z Magnetic Field Components", "Subsubsection",
+ CellChangeTimes->{{3.807550445548243*^9, 
+  3.807550460294207*^9}},ExpressionUUID->"77fbb870-122b-4e9f-a169-\
+aaef6831649e"],
+
+Cell[TextData[{
+ "The static X,Y, and Z magnetic field components will be defined to be the \
+static magnetic flux density present at the LunaSats location. The static \
+magnetic field is the temporally invariant magnetic field present throughout \
+the duration of the GLEE mission. \n\n\t",
+ StyleBox["Measurement Options:\n\t",
+  FontWeight->"Bold"],
+ StyleBox["Single Measurement\n\tMultiple Measurement Average\n\tRolling \
+Average", "ItemNumbered",
+  FontWeight->"Plain"],
+ "\n"
+}], "Text",
+ CellChangeTimes->{{3.807551458248706*^9, 3.807551635436303*^9}, {
+  3.807551670515668*^9, 3.80755196772258*^9}, {3.807552008105009*^9, 
+  3.8075520168896093`*^9}},ExpressionUUID->"b7c53bd5-4f3e-4276-8e93-\
+bc2afe8041ec"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["Local Regolith Composition", "Subsection",
+ CellChangeTimes->{{3.807549167299822*^9, 
+  3.807549189840115*^9}},ExpressionUUID->"04865ff5-e82e-4418-9653-\
+75de60339d1f"],
+
+Cell[CellGroupData[{
+
+Cell["Environmental Effects on AK09940", "Subsection",
+ CellChangeTimes->{{3.807548805646503*^9, 3.807548854803989*^9}, {
+  3.8075489692949123`*^9, 3.807548971045334*^9}, {3.807549162917377*^9, 
+  3.807549164902267*^9}},ExpressionUUID->"e04113c0-949f-4b64-a35b-\
+54b314a189a0"],
+
+Cell["\<\
+Throughout the LunaSat\[CloseCurlyQuote]s mission to the moon, each LunaSat \
+will undergo extreme environmental conditions.\
+\>", "Text",
+ CellChangeTimes->{{3.80754885767062*^9, 
+  3.807548915022683*^9}},ExpressionUUID->"db9cfee0-e0d8-4769-b61b-\
+f590e19d8201"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Magnetic Effects of Micrometeorite", "Subsection",
+ CellChangeTimes->{{3.807549069574766*^9, 3.807549075984542*^9}, 
+   3.807549129597166*^9},ExpressionUUID->"a37c55e0-5062-4c33-aeeb-\
+b11ee3e70ab4"],
+
+Cell["Text", "Text",
+ CellChangeTimes->{{3.807549083401135*^9, 
+  3.807549083941399*^9}},ExpressionUUID->"e1faea83-c96b-4150-a680-\
+62174869f810"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Magnetic Effects of Regolith Ionization", "Subsection",
+ CellChangeTimes->{{3.8075491168294992`*^9, 
+  3.807549125755151*^9}},ExpressionUUID->"1fb299a0-07cf-462f-a39c-\
+3ae44bdb63a9"],
+
+Cell["Text", "Text",
+ CellChangeTimes->{{3.807549133928426*^9, 
+  3.807549134500062*^9}},ExpressionUUID->"13e501ca-2997-415c-b80a-\
+af5e4e10d0d6"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Distributed Science Cases", "Section",
+ CellChangeTimes->{{3.807549746814245*^9, 
+  3.8075497508840322`*^9}},ExpressionUUID->"b5279898-bddd-4141-a6ce-\
+702d2319e982"],
+
+Cell["Magnetic Field Formation", "Subsection",
+ CellChangeTimes->{{3.80754976422598*^9, 3.807549769457806*^9}, {
+  3.8075499166975107`*^9, 
+  3.807549919013309*^9}},ExpressionUUID->"8d3a855e-fcaa-4d37-9c90-\
+bfdc2301b1e8"],
+
+Cell["Regolith Composition", "Subsection",
+ CellChangeTimes->{{3.807549781406918*^9, 3.807549791672344*^9}, {
+  3.8075499126112013`*^9, 
+  3.807549914330443*^9}},ExpressionUUID->"6113c0aa-444f-46bd-bdd5-\
+8d7cd2cc55ed"]
+}, Open  ]],
+
+Cell["Appendix", "Section",
+ CellChangeTimes->{{3.807549803940477*^9, 
+  3.8075498056251717`*^9}},ExpressionUUID->"c58024b1-64ca-42bb-99a9-\
+14d32d0b5a42"]
+}, Open  ]]
+},
+WindowSize->{Full, Full},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 27, \
+2017)",
+StyleDefinitions->FrontEnd`FileName[{$RootDirectory, "Users", "walker", 
+   "Library", "Mathematica", "SystemFiles", "FrontEnd", "StyleSheets"}, 
+  "SimpleBlackStyleSheet.nb", CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 715, 19, 167, "Title", "ExpressionUUID" -> \
+"7bbf8b62-fb21-42a3-8cce-2f85eeab16f4"],
+Cell[CellGroupData[{
+Cell[1320, 45, 251, 4, 63, "Section", "ExpressionUUID" -> \
+"e26b25ea-ea32-48c8-9604-222b713336d8"],
+Cell[CellGroupData[{
+Cell[1596, 53, 263, 4, 30, "ItemNumbered", "ExpressionUUID" -> \
+"ad7454e6-9775-47c8-8300-6af12b5f913d"],
+Cell[CellGroupData[{
+Cell[1884, 61, 318, 5, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"5ad94e8a-915f-4a9d-aa48-633855218066"],
+Cell[2205, 68, 246, 4, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"51f38a74-fdd1-4b3f-8dc4-f860b473fad1"],
+Cell[2454, 74, 351, 5, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"9b66f576-bd35-4222-8c32-68e24f99c668"]
+}, Open  ]],
+Cell[2820, 82, 368, 6, 30, "ItemNumbered", "ExpressionUUID" -> \
+"b1bd1182-3136-44a0-af10-a2bad92dff78"],
+Cell[CellGroupData[{
+Cell[3213, 92, 370, 6, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"6c7c9fad-200a-4a7e-986a-4e4f4ef67d67"],
+Cell[3586, 100, 374, 6, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"efcaf7fb-340a-424b-a61f-58f9dfe74d29"]
+}, Open  ]],
+Cell[3975, 109, 317, 5, 30, "ItemNumbered", "ExpressionUUID" -> \
+"fc9ac7ff-8cfc-4f62-b761-0c172e7395b6"],
+Cell[CellGroupData[{
+Cell[4317, 118, 327, 5, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"8ab1ec13-3cf6-420b-b384-a15dce778d73"],
+Cell[4647, 125, 377, 6, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"a0aac2c0-7c8b-4f97-95e1-c8ac5c0f52a6"],
+Cell[5027, 133, 437, 6, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"b028a149-e278-4387-b260-accd31b3bd06"],
+Cell[5467, 141, 477, 7, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"cca4a584-781d-48ba-b6ad-b42e96d9d365"],
+Cell[5947, 150, 480, 7, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"6f0a1429-8996-43f7-bbd5-912f9d177751"],
+Cell[CellGroupData[{
+Cell[6452, 161, 571, 9, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"5bc0040f-50b0-47ac-b82a-775af2fcf38c"],
+Cell[7026, 172, 617, 9, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"76d7a278-ea09-430e-8b17-42a006ca044e"]
+}, Open  ]]
+}, Open  ]],
+Cell[7670, 185, 276, 4, 30, "ItemNumbered", "ExpressionUUID" -> \
+"31bf5af6-75a8-4f12-b0c6-7995bf37bb8d"],
+Cell[CellGroupData[{
+Cell[7971, 193, 422, 6, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"f83c9fff-1a73-4090-baf5-ab661d44df37"],
+Cell[CellGroupData[{
+Cell[8418, 203, 427, 7, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"5e9a3ceb-08b6-494c-9c06-d81d5ed1889c"],
+Cell[8848, 212, 532, 8, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"939aaffd-eff6-43f3-a1df-8eb904c0299a"]
+}, Open  ]],
+Cell[9395, 223, 519, 8, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"59b637ec-1697-4705-93f3-3db5274adef2"],
+Cell[CellGroupData[{
+Cell[9939, 235, 535, 8, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"2339e9b8-5b2b-4705-8136-113a61b029f0"],
+Cell[10477, 245, 527, 8, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"1d5b127c-ecd1-4ab5-bf36-d65de44c84e8"],
+Cell[11007, 255, 524, 8, 23, "SubsubitemNumbered", "ExpressionUUID" -> \
+"e24c5298-ab77-461b-9615-b53b7f2447da"]
+}, Open  ]]
+}, Open  ]],
+Cell[11558, 267, 308, 5, 30, "ItemNumbered", "ExpressionUUID" -> \
+"b29b068f-3733-45e6-8311-4471f80ff85e"],
+Cell[CellGroupData[{
+Cell[11891, 276, 311, 5, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"24b54772-a7ef-486d-9707-766b32d141b9"],
+Cell[12205, 283, 313, 5, 24, "SubitemNumbered", "ExpressionUUID" -> \
+"58362a0d-18f9-4ba6-8d4b-0b47fa35454a"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12579, 295, 182, 3, 63, "Section", "ExpressionUUID" -> \
+"9772a504-8f68-4388-ab60-ec998a301c71"],
+Cell[CellGroupData[{
+Cell[12786, 302, 165, 3, 44, "Subsection", "ExpressionUUID" -> \
+"44cdc601-8ac3-45f2-9223-bce3497ff517"],
+Cell[12954, 307, 349, 7, 30, "Text", "ExpressionUUID" -> \
+"86508a0c-d053-465c-b3ac-9fa82831ae71"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13340, 319, 223, 4, 44, "Subsection", "ExpressionUUID" -> \
+"74fe7b28-99f4-477d-b70a-310c71fa135c"],
+Cell[13566, 325, 841, 14, 68, "Text", "ExpressionUUID" -> \
+"55fcd7b8-54c8-4460-8b05-6c6b9b9cdeb5"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14444, 344, 227, 4, 44, "Subsection", "ExpressionUUID" -> \
+"9b55a1f1-3fc5-4ced-8a8c-92d09e893c65"],
+Cell[14674, 350, 904, 14, 68, "Text", "ExpressionUUID" -> \
+"03d02cbf-b89f-44cd-909c-cc2a5f1b3b6a"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15627, 370, 167, 3, 63, "Section", "ExpressionUUID" -> \
+"8caa9d6b-ca73-4af0-9358-356016d3b23d"],
+Cell[CellGroupData[{
+Cell[15819, 377, 163, 3, 44, "Subsection", "ExpressionUUID" -> \
+"39785977-c006-488f-8941-7960d29cf82d"],
+Cell[15985, 382, 387, 8, 30, "Text", "ExpressionUUID" -> \
+"7eb3b604-6377-4447-bc41-8e37fae0f72f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16409, 395, 171, 3, 44, "Subsection", "ExpressionUUID" -> \
+"f30a4b5f-5dc8-4e94-a186-c30fcad85365"],
+Cell[16583, 400, 1137, 27, 143, "Text", "ExpressionUUID" -> \
+"b071bf70-4741-443f-ae9a-fcb052e359d7"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17769, 433, 164, 3, 63, "Section", "ExpressionUUID" -> \
+"c1e1a269-becf-426d-90f6-808280135ed2"],
+Cell[CellGroupData[{
+Cell[17958, 440, 185, 3, 44, "Subsection", "ExpressionUUID" -> \
+"9aaa0f49-1bb3-4221-96ce-c20e3ccc0c21"],
+Cell[18146, 445, 847, 14, 68, "Text", "ExpressionUUID" -> \
+"142a6217-b927-43b2-a8a1-dbb6078f74d8"],
+Cell[CellGroupData[{
+Cell[19018, 463, 218, 4, 33, "Subsubsection", "ExpressionUUID" -> \
+"f65bfd41-d121-4396-84d8-4bf6424f9d4e"],
+Cell[19239, 469, 530, 9, 49, "Text", "ExpressionUUID" -> \
+"ee05627d-bd23-4a8b-aee4-687a62a0d760"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19806, 483, 170, 3, 33, "Subsubsection", "ExpressionUUID" -> \
+"742ad7d7-2e00-48bc-85fb-8c961f7d5e56"],
+Cell[19979, 488, 530, 9, 49, "Text", "ExpressionUUID" -> \
+"9fd6996c-7789-4b4f-a8d6-c5cd86545b01"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20546, 502, 194, 3, 33, "Subsubsection", "ExpressionUUID" -> \
+"77fbb870-122b-4e9f-a169-aaef6831649e"],
+Cell[20743, 507, 717, 15, 169, "Text", "ExpressionUUID" -> \
+"b7c53bd5-4f3e-4276-8e93-bc2afe8041ec"]
+}, Open  ]]
+}, Open  ]],
+Cell[21487, 526, 174, 3, 44, "Subsection", "ExpressionUUID" -> \
+"04865ff5-e82e-4418-9653-75de60339d1f"],
+Cell[CellGroupData[{
+Cell[21686, 533, 277, 4, 36, "Subsection", "ExpressionUUID" -> \
+"e04113c0-949f-4b64-a35b-54b314a189a0"],
+Cell[21966, 539, 273, 6, 30, "Text", "ExpressionUUID" -> \
+"db9cfee0-e0d8-4769-b61b-f590e19d8201"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22276, 550, 205, 3, 44, "Subsection", "ExpressionUUID" -> \
+"a37c55e0-5062-4c33-aeeb-b11ee3e70ab4"],
+Cell[22484, 555, 146, 3, 30, "Text", "ExpressionUUID" -> \
+"e1faea83-c96b-4150-a680-62174869f810"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22667, 563, 189, 3, 44, "Subsection", "ExpressionUUID" -> \
+"1fb299a0-07cf-462f-a39c-3ae44bdb63a9"],
+Cell[22859, 568, 146, 3, 30, "Text", "ExpressionUUID" -> \
+"13e501ca-2997-415c-b80a-af5e4e10d0d6"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23054, 577, 172, 3, 63, "Section", "ExpressionUUID" -> \
+"b5279898-bddd-4141-a6ce-702d2319e982"],
+Cell[23229, 582, 222, 4, 44, "Subsection", "ExpressionUUID" -> \
+"8d3a855e-fcaa-4d37-9c90-bfdc2301b1e8"],
+Cell[23454, 588, 219, 4, 36, "Subsection", "ExpressionUUID" -> \
+"6113c0aa-444f-46bd-bdd5-8d7cd2cc55ed"]
+}, Open  ]],
+Cell[23688, 595, 155, 3, 63, "Section", "ExpressionUUID" -> \
+"c58024b1-64ca-42bb-99a9-14d32d0b5a42"]
+}, Open  ]]
+}
+]
+*)
+
