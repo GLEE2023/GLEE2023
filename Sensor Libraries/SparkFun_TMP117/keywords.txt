@@ -1,0 +1,40 @@
+######################################################################
+# Syntax Coloring Map for SparkFun TMP117 Temperature Sensor Library #
+######################################################################
+# Class
+######################################################################
+
+TMP117	KEYWORD1
+
+######################################################################
+# Methods and Functions
+######################################################################
+
+begin	KEYWORD2
+getAddress	KEYWORD2
+readTempC	KEYWORD2
+readTempF	KEYWORD2
+softReset	KEYWORD2
+getTemperatureOffset	KEYWORD2
+setTemperatureOffset	KEYWORD2
+getLowLimit	KEYWORD2
+setLowLimit	KEYWORD2
+getHighLimit	KEYWORD2
+setHighLimit	KEYWORD2
+getConfigurationRegister	KEYWORD2
+getHighLowAlert	KEYWORD2
+getHighAlert	KEYWORD2
+getLowAlert	KEYWORD2
+setAlertFunctionMode	KEYWORD2
+getAlertFunctionMode	KEYWORD2
+getConversionMode	KEYWORD2
+setContinuousConversionMode	KEYWORD2
+setOneShotMode	KEYWORD2
+setShutdownMode	KEYWORD2
+setConversionAverageMode	KEYWORD2
+getConversionAverageMode	KEYWORD2
+setConversionCycleBit	KEYWORD2
+getConversionCycleBit	KEYWORD2
+dataReady	KEYWORD2
+readRegister	KEYWORD2
+writeRegister	KEYWORD2
