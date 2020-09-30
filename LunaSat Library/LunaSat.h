@@ -23,12 +23,14 @@ sensors, and communicate with the LunaSat
 class LunaSat {
 
     public:
-        LunaSat(string LunaSatName);      // LunaSat Constructors
+        LunaSat(uint8_t idNumber,string LunaSatName);      // LunaSat Constructors
         void getData();
+        void setMode();
+
     private:
         string myName;
-
-
+        uint8_t myID;
+        void initalize(void);
 
 
 };

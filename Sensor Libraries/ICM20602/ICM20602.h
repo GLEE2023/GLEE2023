@@ -134,9 +134,9 @@ class ICM20602 {
 	bool isConnected(void);
 	void writeByte(uint8_t ICM20602_reg,uint8_t ICM20602_data);
 	byte readByte(uint8_t ICM20602_reg);
-        void whoAmI(void);
-        void initialize(void);
-        float getAccelX(void);
-        float getAccelY(void);
-        float getAccelZ(void);
+    void whoAmI(void);
+    void initialize(void);
+    float getAccelX(void);
+    float getAccelY(void);
+    float getAccelZ(void);
 };
