@@ -128,15 +128,16 @@
 extern float aRes, gRes; 
 
 class ICM20602 {
+
     public:
-	ICM20602(void);
-	void begin(void);
-	bool isConnected(void);
-	void writeByte(uint8_t ICM20602_reg,uint8_t ICM20602_data);
-	byte readByte(uint8_t ICM20602_reg);
-    void whoAmI(void);
-    void initialize(void);
-    float getAccelX(void);
-    float getAccelY(void);
-    float getAccelZ(void);
+	    ICM20602(void);
+	    void begin(void);
+	    bool isConnected(void);
+        void writeByte(uint8_t ICM20602_reg,uint8_t ICM20602_data);
+        byte readByte(uint8_t ICM20602_reg);
+        void whoAmI(void);
+        void initialize(void);
+        float getAccelX(void);
+        float getAccelY(void);
+        float getAccelZ(void);
 };
