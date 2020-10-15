@@ -12,7 +12,7 @@ returns false if we cannot communicate with sensor or any other error occurs
 */
 
 bool Sensor::isConnected(void){
-    uint8_t statusByte
+    uint8_t statusByte;
     Wire.beginTransmission(Sensor.sensorAddress);
     statusByte = Wire.endTransmission();
     

@@ -69,7 +69,6 @@ typedef struct ak09940_DataStatus_s
 {
 	bool dataValid;
 	bool dataOverflow;
-
 };
 
 

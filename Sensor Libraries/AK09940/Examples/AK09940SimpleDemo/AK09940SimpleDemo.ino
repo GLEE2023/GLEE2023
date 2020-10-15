@@ -9,7 +9,7 @@
 
 #include <Arduino.h>
 #include "GLEE_Sensor.h"
-#include "AK09940.h"
+#include "Ak09940.h"
 
 
 AK09940 ak09940 = AK09940();
