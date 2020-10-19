@@ -1,26 +1,24 @@
+#include "tmp117.h"
 #include <Arduino.h>
 #include <Wire.h>
-#include "tmp117.h"
 
 
-TMP117::TMP117(){
-    TMP117::sensorName = "TMP177 Temperature Sensor";
-  	TMP117::sensorAddress = 0x48;
-  	TMP117::sensorDebug = false;
-  	Wire.begin(TMP117::sensorAddress);
+
+TMP117::TMP117(uint8_t addr){
+    TMP117.sensorName = "TMP177 Temperature Sensor";
+  	TMP117.sensorAddress = addr;
+  	TMP117.sensorDebug = false;
+  	Wire.begin(TMP117.sensorAddress);
 }
 
 uint8_t TMP117::getAddress(){
-    return TMP117::sensorAddress;
+    return TMP117.sensorAddress;
 }
 
 double TMP117::getTemperatureC()
 {
-  int16_t digitalTempC = read2Byte(TMP117_TEMP_REG); // Calls to read registers to pull all the bits to store in an array
-
-	float finalTempC = digitalTempC * TMP117_RESOLUTION; // Multiplies by the resolution for digital to final temp
-
-	return finalTempC;
+    int16_t temp = readByte(TMP117_TEMP_REG);
+    return (temp*TMP117_RESOLUTION);
 }
 double TMP117::getTemperatureF(){
     return getTemperatureC() * 9.0 / 5.0 + 32.0;
@@ -72,7 +70,7 @@ bool TMP117::getHighAlert(){
     return false;
 }
 bool TMP117::getLowAlert(){
-    uint16_t config = read2Byte(TMP117_CONFIG_REG);
+    uint16_t config = readByte(TMP117_CONFIG_REG);
     uint8_t configBit = bitRead(config, 14);
     if(configBit==1){
       return true;
@@ -87,19 +85,9 @@ void TMP117::reset(){
 }
 
 bool TMP117::dataReady(){
-    uint16_t config = read2Byte(TMP117_CONFIG_REG);
+    uint16_t config = readByte(TMP117_CONFIG_REG);
     if(config & 1 << 13){
       return true;
     }
     return false;
-}
-
-uint16_t TMP117::read2Byte(uint8_t registerAddress){
-    uint16_t readByte;                                       //byte to store data that is read
-    Wire.beginTransmission(Sensor::sensorAddress);           //begins comms with sensor specified
-    Wire.write(registerAddress);                            //identifies register for data to be read from
-    Wire.endTransmission();                                 //end transmission
-    Wire.requestFrom(Sensor::sensorAddress, uint8_t(2) );               //request 2 bytes from the sensor address
-    readByte = Wire.read();                                 //read data and store in the readByte variable
-    return readByte;                                        //return the read data byte
 }
