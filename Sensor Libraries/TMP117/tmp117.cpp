@@ -4,7 +4,7 @@
 
 
 TMP117::TMP117(){
-    TMP117::sensorName = "TMP177 Temperature Sensor";
+    TMP117::sensorName = "TMP117 Temperature Sensor";
   	TMP117::sensorAddress = 0x48;
   	TMP117::sensorDebug = false;
   	Wire.begin(TMP117::sensorAddress);
@@ -100,6 +100,13 @@ uint16_t TMP117::read2Byte(uint8_t registerAddress){
     Wire.write(registerAddress);                            //identifies register for data to be read from
     Wire.endTransmission();                                 //end transmission
     Wire.requestFrom(Sensor::sensorAddress, uint8_t(2) );               //request 2 bytes from the sensor address
-    readByte = Wire.read();                                 //read data and store in the readByte variable
-    return readByte;                                        //return the read data byte
+    uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
+  	int16_t datac = 0;				// Declares the return variable to be 0
+  	if (Wire.available() <= 2) // Won't read more than 2 bits
+  	{
+  		data[0] = Wire.read();			// Reads the first set of bits (D15-D8)
+  		data[1] = Wire.read();			// Reads the second set of bits (D7-D0)
+  		datac = ((data[0] << 8) | data[1]); // Swap the LSB and the MSB
+  	}
+  	return datac;                                //read data and store in the readByte variable                                       //return the read data byte
 }
