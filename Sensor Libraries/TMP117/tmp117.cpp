@@ -45,26 +45,26 @@ float TMP117::getUncertainty(float inputTemperature){
 }
 void TMP117::setLowLimit(float lowLimit){
     int16_t lLimit = lowLimit/TMP117_RESOLUTION;
-    writeByte(TMP117_LOW_LIMIT_REG, lLimit);
+    write2Byte(TMP117_LOW_LIMIT_REG, lLimit);
 }
 float TMP117::getLowLimit(){
-    int16_t LowLimit = readByte(TMP117_LOW_LIMIT_REG);
+    int16_t LowLimit = read2Byte(TMP117_LOW_LIMIT_REG);
     float limit = (float)LowLimit * TMP117_RESOLUTION;
     return limit;
 }
 
 void TMP117::setHighLimit(float highLimit){
     int16_t hLimit = highLimit/TMP117_RESOLUTION;
-    writeByte(TMP117_HIGH_LIMIT_REG, hLimit);
+    write2Byte(TMP117_HIGH_LIMIT_REG, hLimit);
 }
 
 float TMP117::getHighLimit(){
-    int16_t HighLimit = readByte(TMP117_HIGH_LIMIT_REG);
+    int16_t HighLimit = read2Byte(TMP117_HIGH_LIMIT_REG);
     float limit = (float)HighLimit * TMP117_RESOLUTION;
     return limit;
 }
 bool TMP117::getHighAlert(){
-    uint16_t config = readByte(TMP117_CONFIG_REG);
+    uint16_t config = read2Byte(TMP117_CONFIG_REG);
     uint8_t configBit = bitRead(config, 15);
     if(configBit==1){
       return true;
@@ -83,7 +83,7 @@ bool TMP117::getLowAlert(){
 void TMP117::reset(){
     uint16_t defaultConfig = 0;
     defaultConfig |= 1UL << 1; //0000000000000010
-    writeByte(TMP117_CONFIG_REG, defaultConfig);
+    write2Byte(TMP117_CONFIG_REG, defaultConfig);
 }
 
 bool TMP117::dataReady(){
@@ -96,10 +96,10 @@ bool TMP117::dataReady(){
 
 uint16_t TMP117::read2Byte(uint8_t registerAddress){
     uint16_t readByte;                                       //byte to store data that is read
-    Wire.beginTransmission(Sensor::sensorAddress);           //begins comms with sensor specified
+    Wire.beginTransmission(TMP117::sensorAddress);           //begins comms with sensor specified
     Wire.write(registerAddress);                            //identifies register for data to be read from
     Wire.endTransmission();                                 //end transmission
-    Wire.requestFrom(Sensor::sensorAddress, uint8_t(2) );               //request 2 bytes from the sensor address
+    Wire.requestFrom(TMP117::sensorAddress, uint8_t(2) );               //request 2 bytes from the sensor address
     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
   	int16_t datac = 0;				// Declares the return variable to be 0
   	if (Wire.available() <= 2) // Won't read more than 2 bits
@@ -109,4 +109,12 @@ uint16_t TMP117::read2Byte(uint8_t registerAddress){
   		datac = ((data[0] << 8) | data[1]); // Swap the LSB and the MSB
   	}
   	return datac;                                //read data and store in the readByte variable                                       //return the read data byte
+}
+void TMP117::write2Byte(uint8_t reg, uint16_t data) // originally TMP117_Register reg
+{
+	Wire.beginTransmission(TMP117::sensorAddress); // Originally cast uint8_t when a register value again
+	Wire.write(reg);
+	Wire.write(highByte(data)); // Write MSB (D15-D8)
+	Wire.write(lowByte(data));  // Write LSB (D7-D0)
+	Wire.endTransmission();	 // Stop transmitting data
 }
