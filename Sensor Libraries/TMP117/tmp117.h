@@ -27,8 +27,9 @@ class TMP117 : public Sensor
 {
     public:
         TMP117();
-        uint8_t getAddress();
 
+
+        bool dataReady();
         double getTemperatureC();
         double getTemperatureF();
 
@@ -43,7 +44,8 @@ class TMP117 : public Sensor
 
         void reset();
 
-        bool dataReady();
+        uint8_t getAddress();
         uint16_t read2Byte(uint8_t registerAddress);
+        void write2Byte(uint8_t reg, uint16_t data); 
   };
   #endif
