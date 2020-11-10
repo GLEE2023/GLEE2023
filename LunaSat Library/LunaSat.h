@@ -17,6 +17,7 @@ class LunaSat {
         unsigned long time;
         void getData();
         void printData();
-
+        
+        
     private:
 };
