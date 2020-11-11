@@ -6,9 +6,8 @@
 #include "Adafruit_Sensor.h"
 
 class LunaSat {
-
     public:
-        LunaSat();// LunaSat Constructors
+        LunaSat();              // LunaSat Constructors
         unsigned long time;
         string sensorList [7];  
         float readings [7];     //TODO Fix hardcoaded #readings

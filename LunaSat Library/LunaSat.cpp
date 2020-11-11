@@ -6,13 +6,15 @@ TMP117 tmp117;
 AK09940 ak09940;
 ICM20602 icm20602;
 
-LunaSat::LunaSat(){   //Constructor: Names LunaSat and Creates Object
+//Constructor: Initializes lunasat and subsequent sensors
+LunaSat::LunaSat(){                             
   sensorList = {"TMP117","ICM20602","AK09940"};
   nSensors = sensorList.length();
-  //TODO: Handle passing modes/configurations as arguments into sensor constructors
   tmp117 = new TMP117(); 
   icm20602 = new ICM20602();
   ak09940 = new AK09940();
+  //TODO: Handle passing modes/configurations as arguments into sensor constructors
+  //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
 }
 
 LunaSat::getData(float time){
