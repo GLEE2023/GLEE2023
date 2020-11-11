@@ -7,16 +7,18 @@ AK09940 ak09940;
 ICM20602 icm20602;
 
 LunaSat::LunaSat(){   //Constructor: Names LunaSat and Creates Object
-  senserList = {"TMP117","ICM20602","AK09940"};
-  tmp117 = new TMP117(); //TODO: Allow sensors to take applicable configurations as arguments
+  sensorList = {"TMP117","ICM20602","AK09940"};
+  nSensors = sensorList.length();
+  //TODO: Handle passing modes/configurations as arguments into sensor constructors
+  tmp117 = new TMP117(); 
   icm20602 = new ICM20602();
   ak09940 = new AK09940();
 }
 
-LunaSat::getData(){
+LunaSat::getData(float time){
   //time = currentTime;
-  time = millis();
-  readings = {tmp117.getTemperatureC(), 
+  readings = {time,
+              tmp117.getTemperatureC(), 
               icm20602.getAccelX(),
               icm20602.getAccelY(),
               icm20602.getAccelZ(),
@@ -26,11 +28,10 @@ LunaSat::getData(){
 }
 
 LunaSat::printData(){
-  Serial.print(time);
-  Serial.print(",");
+  // Loop through array of readings 
   for(int i = 0; i < nSensors-1; i++){
-    Serial.print(",");
     Serial.print(readings[i],7);
+    Serial.print(",");
   }
   Serial.println(readings[nSensors-1],7);
 }

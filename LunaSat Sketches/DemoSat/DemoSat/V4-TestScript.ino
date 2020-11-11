@@ -11,36 +11,28 @@
 #include "Adafruit_Sensor.h"
 #include "Arduino_LSM9DS1.h"
 
-/*Project: GLEE DemoSat 
- * Board: LunaSat V2
- * 
- * Description:This Arudino Sketch will be uploaded to LunaSat v2 
- * for the purpose of the DemoSat mission. This sketch will combine all available 
- * sensors and their libraries into one sketch in order to record 
- * 
- * 
- * Author: John Walker Johnson
- * Contributors:
- * Date Created:July 15th 2020
- * Date Modified:July 31st 2020
- * 
- * CURRENT SERIAL OUTPUT FORMAL = .csv
+/*Project: Baseline System test for V4
+
+
 */
 
-//CONSTRUCT SENSORS
 
-
-
+// Define variable to store current time
 unsigned long currentTime;
+
+// Define lunaSat instance
 LunaSat lunaSat; 
 
 void setup() {
-  Serial.begin(9600);     //begin serial communication w/ LunaSat; baud=9600 //TODO Note what baud rate is determined by
+  //begin serial communication w/ LunaSat; baud=9600
+  //TODO: Note what baud rate is determined by
+  Serial.begin(9600);      
 
   //This calls the constructor which inilializes the set of sensors and RF
   lunaSat = new LunaSat(MAGN,TEMP,ACCL,THERM) //Args: (List of Sensors,modes) 
 
-  // Wait for lunasat to begin (TODO: lunasat has its own begin function that waits for sensors and rf to begin)
+  // Wait for lunasat to acknowledge and begin communiction
+  //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
   while (lunaSat.begin()!=true){
     delay(250);
     Serial.println("Waiting to Begin");
@@ -51,6 +43,7 @@ void setup() {
 
 void loop() {
   currentTime=millis();
-  
+  lunaSat.getData(currentTime);
+  lunaSat.printData();
   delay(500);
 }
