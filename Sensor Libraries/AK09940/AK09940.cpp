@@ -9,17 +9,11 @@
 *Arduino Wire Library Reference Guide
 */
 
-
 #include "AK09940.h"
 #include <Arduino.h>
 #include <Wire.h>
 
-
-
-
-
-
-void AK09940::AK09940(void) {							//constructor
+AK09940::AK09940(){							//constructor
 	AK09940.sensorName = "AK09940 Magnetometer";		//assign sensor name
 	AK09940.sensorAddress = AK09940_SENSOR_ADDR;		//assign sensor i2c address
 	AK09940.sensorDebug=false;							//debug flag status
@@ -29,7 +23,6 @@ void AK09940::AK09940(void) {							//constructor
 		Serial.print("Beginning Communication with AK09940");
 	}
 }
-
 
 bool AK09940::ak09940WAI(void) {						//Internal Who Am I Register verification, returns true if values given by data sheet are correct!
 	uint8_t whoAmI_1,whoAmI_2;
@@ -63,19 +56,13 @@ bool AK09940::ak09940WAI(void) {						//Internal Who Am I Register verification,
 	{
 		return false;
 	}
-	
 }
 
-
 void AK09940::getCalculatedData(void) {
-	
-	
-		
 		AK09940.readableData.magX=AK09940.getMag( AK09940.rawData.XMagLow , AK09940.rawData.XMagMid , AK09940.rawData.XMagHigh );
 		AK09940.readableData.magY=AK09940.getMag( AK09940.rawData.YMagLow , AK09940.rawData.YMagMid , AK09940.rawData.YMagHigh );
 		AK09940.readableData.magZ=AK09940.getMag( AK09940.rawData.ZMagLow , AK09940.rawData.ZMagMid , AK09940.rawData.ZMagHigh );
 		AK09940.readableData.temperature=AK09940.getTemperature( AK09940.rawData.tempByte);
-	
 }
 
 
@@ -122,21 +109,13 @@ void AK09940::getRawData(void)
 		{
 			Serial.println(" ERROR in getRawData: Data invalid or data overflow.");
 		}
-		
-
 	}
 
 	else
 	{
 		Serial.println("ERROR in getRawData: Data Not Ready.")
-	}
-	
-
-	
+	}	
 }
-
-
-
 
 float AK09940::calcTemp(uint8_t tempByte)
 { 
@@ -177,9 +156,6 @@ float AK09940::calcMag(uint8_t lowByte, uint8_t midByte, uint8_t highByte)
 
 }
 
-
-
-
 void AK09940::setDriveMode(ak09940_Drive_mode_t driveMode)			//writes to CNTRL 3 Register. Bits: [7] = FIFO, [6:5] = Drive Mode, [4:0] = Measurement Mode
 {
 	uint8_t FIFOData = uint8_t(AK09940.sensorFIFOEnabled);
@@ -199,7 +175,6 @@ ak09940_Drive_Mode_t AK9940::getDriveMode(void)
 
 	return driveMode;
 }
-
 
 void AK09940::setMeasurementMode(ak09940_Measurement_Mode_t measurementMode)	//writes to CNTRL 3 Register. Bits: [7] = FIFO, [6:5] = Drive Mode, [4:0] = Measurement Mode
 {
@@ -280,10 +255,6 @@ void AK09940::setWatermarkMode(uint8_t watermarkLevel)		//must be between 0 && 7
 		}
 
 	}
-	
-
-
-
 }
 
 AK09940::getWatermarkMode(void);
