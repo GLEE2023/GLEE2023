@@ -1,14 +1,12 @@
 /*
 *Description: This arduino sketch (.ino) is for testing AK09940 magnetometer with the newly revised sensor library format. This sketch will also be used for filming the tutorials of the AK09940 magnetometer.
 *Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
-*Library Author: John Walker Johnson
-*Library Contributors:
-*Library Created on: October 10th 2020
-*Last Modified on: October 12th 2020
+*Skript Authors: John Walker Johnson, Lawson Nerenberg
+
+* Skript CreatedL 11/11/20
 */
 
 #include <Arduino.h>
-#include "GLEE_Sensor.h"
 #include "AK09940.h"
 
 
