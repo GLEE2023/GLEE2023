@@ -8,9 +8,73 @@
 *ICM20602 Datasheet
 *Arduino Wire Library Reference Guide
 */
+#ifndef ICM20602_H
+#define ICM20602_H
 
 #include <Arduino.h>
+#include "GLEE_Sensor.h"
 
+// Following are registers currently utilized
+// ICM20602 Register Constants 
+
+#define ICM20602_slave_addr       0x69
+#define ICM20602_PWR_MGMT_1       0x6B  // Device defaults to the SLEEP mode
+#define ICM20602_PWR_MGMT_2       0x6C
+#define ICM20602_CONFIG           0x1A
+#define ICM20602_GYRO_CONFIG      0x1B
+#define ICM20602_ACCEL_CONFIG     0x1C
+#define ICM20602_ACCEL_XOUT_H     0x3B
+#define ICM20602_ACCEL_XOUT_L     0x3C
+#define ICM20602_ACCEL_YOUT_H     0x3D
+#define ICM20602_ACCEL_YOUT_L     0x3E
+#define ICM20602_ACCEL_ZOUT_H     0x3F
+#define ICM20602_ACCEL_ZOUT_L     0x40
+
+#define IMU_ONE_G 9.80665
+
+extern float aRes, gRes; 
+
+// Acc Full Scale Range  +-2G 4G 8G 16G 
+enum Ascale{
+    AFS_2G = 0,  
+    AFS_4G = 1,
+    AFS_8G = 2,
+    AFS_16G = 3
+};
+
+// Gyro Full Scale Range +-250 500 1000 2000 Degrees per second
+enum Gscale{
+    GFS_250DPS=0,   
+    GFS_500DPS,
+    GFS_1000DPS,
+    GFS_2000DPS
+};
+
+class ICM20602:public Sensor{
+    public:
+      Ascale scaleA; //g-force range
+      sensor_uint16_vec_t accelRaw;
+      sensor_float_vec_t accelMPS;
+      sensor_float_vec_t accelG;
+
+      ICM20602();
+      bool begin();
+      void initialize();
+      float ICM20602::getSensitivity(enum Ascale scaleA);
+      sensor_uint16_vec_t ICM20602::getRawAccel();
+      sensor_float_vec_t ICM20602::getMPSAccel();
+      sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA);
+      
+      //void ICM20602::setScale(enum Ascale scaleA);
+      //impact function
+};
+#endif
+
+
+
+// Default Register Constants sorted by register value
+// See data sheet for reference
+/*
 #define ICM20602_SELF_TEST_X_ACCEL  0x0D
 #define ICM20602_SELF_TEST_Y_ACCEL  0x0E    
 #define ICM20602_SELF_TEST_Z_ACCEL  0x0F
@@ -113,31 +177,4 @@
 #define ICM20602_FIFO_COUNTL      0x73
 #define ICM20602_FIFO_R_W         0x74
 #define ICM20602_WHO_AM_I         0x75 // Should return 0x68
-
-// Using the GY-521 breakout board, I set ADO to 0 by grounding through a 4k7 resistor
-// Seven-bit device address is 110100 for ADO = 0 and 110101 for ADO = 1
-//#define ADO 0
-//#if ADO
-//#define ICM20602_slave_addr 0x69<<1  // Device address when ADO = 1
-//#else
-//#define ICM20602_slave_addr 0x68<<1  // Device address when ADO = 0
-//#endif
-
-#define IMU_ONE_G 9.80665
-#define ICM20602_slave_addr          0x69
-extern float aRes, gRes; 
-
-class ICM20602 {
-
-    public:
-	    ICM20602(void);
-	    void begin(void);
-	    bool isConnected(void);
-        void writeByte(uint8_t ICM20602_reg,uint8_t ICM20602_data);
-        byte readByte(uint8_t ICM20602_reg);
-        void whoAmI(void);
-        void initialize(void);
-        float getAccelX(void);
-        float getAccelY(void);
-        float getAccelZ(void);
-};
+*/

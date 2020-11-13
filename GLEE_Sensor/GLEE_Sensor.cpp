@@ -53,6 +53,9 @@ void Sensor::whoAmI(void){
     Serial.println(Sensor::sensorAddress,HEX);
 }
 
+void Sensor::setDebugMode(bool debug){
+    Sensor::sensorDebug = debug;
+}
 
 uint8_t Sensor::readByte(uint8_t registerAddress){
     uint8_t readByte;                                       //byte to store data that is read
@@ -70,4 +73,3 @@ void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
     Wire.write(writeData);                                      //write data to adress specificed above
     Wire.endTransmission();                                     //end communication
 }
-
