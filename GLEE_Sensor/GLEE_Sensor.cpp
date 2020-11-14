@@ -16,15 +16,15 @@ returns false if we cannot communicate with sensor or any other error occurs
 bool Sensor::isConnected(void)
 {
     uint8_t statusByte;
-    Wire.beginTransmission(Sensor::sensorAddress);
+    Wire.beginTransmission(Sensor::info.address);
     statusByte = Wire.endTransmission();
     
     if (statusByte==0){
         if (Sensor::sensorDebug){
             Serial.print("Sucessful Connection with: ");
-            Serial.print(Sensor::sensorName);
+            Serial.print(Sensor::info.name);
             Serial.print(" at address: ");
-            Serial.println(Sensor::sensorAddress,HEX);
+            Serial.println(Sensor::info.address,HEX);
         }
         return true;
     }
@@ -32,7 +32,7 @@ bool Sensor::isConnected(void)
     else {
         if (Sensor::sensorDebug){
             Serial.print("ERROR: UNABLE TO CONNECT TO ");
-            Serial.println(Sensor::sensorName);
+            Serial.println(Sensor::info.name);
 		    Serial.print("Status Byte = ");
 		    Serial.println(statusByte);    
         }
@@ -48,9 +48,9 @@ outputs: None. currently will print sensor details to serial monitor
 
 void Sensor::whoAmI(void){
     Serial.print("My sensor name is: ");
-    Serial.println(Sensor::sensorName);
+    Serial.println(Sensor::info.name);
     Serial.print("My sensor I2C address is");
-    Serial.println(Sensor::sensorAddress,HEX);
+    Serial.println(Sensor::info.address,HEX);
 }
 
 void Sensor::setDebugMode(bool debug){
@@ -59,16 +59,16 @@ void Sensor::setDebugMode(bool debug){
 
 uint8_t Sensor::readByte(uint8_t registerAddress){
     uint8_t readByte;                                       //byte to store data that is read
-    Wire.beginTransmission(Sensor::sensorAddress);           //begins comms with sensor specified
+    Wire.beginTransmission(Sensor::info.address);           //begins comms with sensor specified
     Wire.write(registerAddress);                            //identifies register for data to be read from
     Wire.endTransmission();                                 //end transmission
-    Wire.requestFrom(Sensor::sensorAddress, uint8_t (1) );               //request 1 byte from the sensor address
+    Wire.requestFrom(Sensor::info.address, uint8_t (1) );   //request 1 byte from the sensor address
     readByte = Wire.read();                                 //read data and store in the readByte variable
     return readByte;                                        //return the read data byte
 }
 
 void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
-    Wire.beginTransmission(Sensor::sensorAddress);               //begin communication with the sensor 
+    Wire.beginTransmission(Sensor::info.address);               //begin communication with the sensor 
     Wire.write(registerAddress);                                //point to address to be written to
     Wire.write(writeData);                                      //write data to adress specificed above
     Wire.endTransmission();                                     //end communication

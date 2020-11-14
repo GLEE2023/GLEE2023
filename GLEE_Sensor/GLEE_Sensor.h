@@ -8,9 +8,8 @@ Date Created: September 10th 2020
 Date Revised: October 7th 2020
 */
 
-
 /*
-The Sensor class is used a parent class in order to reduce redundant,
+The Sensor class is used a parent class in order to reduce redundancy among,
 universal funnctions required for I2C communication and LunaSat performance
 */
 
@@ -21,19 +20,13 @@ universal funnctions required for I2C communication and LunaSat performance
 #include <string.h>
 #include <Arduino.h>
 
+#define sensor_gravity = (9.80665F);
 
-class Sensor {
-    public:
-        bool isConnected(void);             //Using the wire interface we check to see if we can communicate with the sensor
-        void whoAmI(void);                  //Returns info about the sensor!
-        void setDebugMode(bool);
-        String sensorName;
-        uint8_t sensorAddress;
-        bool sensorDebug;
-        uint8_t readByte(uint8_t registerAddress);
-        void writeByte(uint8_t registerAddress, uint8_t writeData);
-};
-
+typedef struct{
+    uint8_t id;
+    uint8_t address;
+    String name; // Might want to stray away from the string in this struct for better packing
+} sensor_info_t;
 
 typedef struct{
     float x;
@@ -48,4 +41,18 @@ typedef struct{
 } sensor_uint16_vec_t;
 
 
+class Sensor {
+    public:
+        bool isConnected(void);             //Using the wire interface we check to see if we can communicate with the sensor
+        void whoAmI(void);                  //Returns info about the sensor!
+        void setDebugMode(bool);
+        bool sensorDebug;
+        uint8_t readByte(uint8_t registerAddress);
+        void writeByte(uint8_t registerAddress, uint8_t writeData);
+
+        sensor_info_t info;
+
+    private:
+        bool debug;
+};
 #endif
