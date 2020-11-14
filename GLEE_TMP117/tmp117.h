@@ -21,7 +21,7 @@ enum TMP117_Register{
 
 class TMP117 : public Sensor{
   public:
-    TMP117(bool _debug = false);                       // Constructor
+    TMP117(int _id, bool _debug = false);                       // Constructor
     bool dataReady();              
     double getTemperatureC();     
     double getTemperatureF();

@@ -53,8 +53,8 @@ void Sensor::whoAmI(void){
     Serial.println(Sensor::info.address,HEX);
 }
 
-void Sensor::setDebugMode(bool debug){
-    Sensor::sensorDebug = debug;
+void Sensor::setDebugMode(bool _debug){
+    Sensor::sensorDebug = _debug;
 }
 
 uint8_t Sensor::readByte(uint8_t registerAddress){

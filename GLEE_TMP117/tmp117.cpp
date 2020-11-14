@@ -2,11 +2,12 @@
 #include <Wire.h>
 #include "tmp117.h"
 
-TMP117::TMP117(bool _debug){
+TMP117::TMP117(int _id, bool _debug){
+    TMP117::info.id = _id;
     TMP117::info.name = "TMP117 Temperature Sensor";
   	TMP117::info.address = 0x48;
   	TMP117::sensorDebug = _debug;
-    Wire.begin(TMP117::info.address);
+    Wire.begin(TMP117::info.address); // Might need to move this out of the initializer
 }
 
 uint8_t TMP117::getAddress(){
@@ -14,8 +15,8 @@ uint8_t TMP117::getAddress(){
 }
 
 double TMP117::getTemperatureC(){
-    int16_t digitalTempC = read2Byte(TMP117_TEMP_REG); // Calls to read registers to pull all the bits to store in an array
-    float finalTempC = digitalTempC * TMP117_RESOLUTION; // Multiplies by the resolution for digital to final temp
+    int16_t digitalTempC = read2Byte(TMP117_TEMP_REG);      // Calls to read registers to pull all the bits to store in an array
+    float finalTempC = digitalTempC * TMP117_RESOLUTION;    // Multiplies by the resolution for digital to final temp
     return finalTempC;
 }
 
@@ -95,7 +96,7 @@ bool TMP117::dataReady(){
 }
 
 uint16_t TMP117::read2Byte(uint8_t registerAddress){
-    uint16_t readByte;              //byte to store data that is read
+    uint16_t readByte;              // byte to store data that is read
     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
   	int16_t datac = 0;				// Declares the return variable to be 0
     
@@ -104,7 +105,7 @@ uint16_t TMP117::read2Byte(uint8_t registerAddress){
     Wire.endTransmission();                                 //end transmission
     Wire.requestFrom(TMP117::info.address, uint8_t(2) );   //request 2 bytes from the sensor address
   	
-    if (Wire.available() <= 2){  // Don't read more than 2 bits
+    if (Wire.available() <= 2){             // Don't read more than 2 bits
   		data[0] = Wire.read();			    // Reads the first set of bits (D15-D8)
   		data[1] = Wire.read();			    // Reads the second set of bits (D7-D0)
   		datac = ((data[0] << 8) | data[1]); // Swap the LSB and the MSB
