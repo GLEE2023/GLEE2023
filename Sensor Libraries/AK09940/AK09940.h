@@ -11,8 +11,11 @@
 *
 */
 
+#ifndef AK09940_H
+#define AK09940_H
+
 #include <Arduino.h>
-#include <GLEE_Sensor.h>
+#include "GLEE_Sensor.h"
 
 //BEGIN REGISTER MAP DEFINITIONS
 
@@ -38,9 +41,10 @@
 
 //END REGISTER MAP DEFINITIONS
 
-#define AK09940_SENSOR_ADDR 0x0C	//AK09940 Sensor ADDRESS
+#define AK09940_SENSOR_ADDR 0x0C				//AK09940 Sensor ADDRESS
 
-typedef struct{				
+typedef struct ak09940_RawData_s 				//structure to hold sensor temp, and magnetic x,y,z output 
+{				
 	uint8_t xMagLow;							//x magnetic output - X-Axis Low byte
 	uint8_t xMagMid;							//x magnetic output - X-Axis Middle byte
 	uint8_t xMagHigh;							//x magnetic output - X-Axis High byte
@@ -50,34 +54,27 @@ typedef struct{
 	uint8_t zMagLow;							//Z magnetic output - Z-Axis Low byte
 	uint8_t zMagMid;							//Z magnetic output - Z-Axis Middle byte
 	uint8_t zMagHigh;							//Z magnetic output - Z-Axis High byte
-	uint8_t tempByte;							//Temperature output - Temperature byte
-}ak09940_RawData_s;
+	uint8_t tempByte;								//Temperature output - Temperature byte
+};
 
-typedef struct
+typedef struct ak09940_CalculatedData_s
 {
-	float xMag;
-	float yMag;
-	float zMag;
+	int32_t xMag;
+	int32_t yMag;
+	int32_t zMag;
 	float temperature;
-}ak09940_CalculatedData_s;
+};
 
-typedef struct
+typedef struct ak09940_DataStatus_s
 {
 	bool dataValid;
 	bool dataOverflow;
-}ak09940_DataStatus_s;
+};
 
 
 
-
-
- class AK09940 : public Sensor{
- 	public:
-
-	 //Sensor Data and Information Variables and Data Structures
-	 AK09940(void);
-
-	typedef enum{									
+typedef enum ak09940_Measurement_Mode_t			//Sensor Modes From DataSheet
+{									
 	POWER_DOWN=0b00000,							//These sensor modes and values
 	SINGLE_MEASURE = 0b00001,					//represent bits [4:0] of the CNTL3 Byte
 	CONT_MEASURE_1 = 0b00010,
@@ -86,71 +83,86 @@ typedef struct
 	CONT_MEASURE_4 = 0b01000,
 	CONT_MEASURE_5 = 0b01010,
 	CONT_MEASURE_6 = 0b01100,
-	SELF_TEST = 0b10000
-	}ak09940_Measurement_Mode_t;
-
-	typedef enum ak09940_Drive_Mode_t {			//
-		LOW_NOISE_1=0b00,
-		LOW_NOISE_2=0b01,
-		LOW_POWER_1=0b10,
-		LOW_POWER_2=0b11
-	}ak09940_Drive_Mode_t;
-
-	 ak09940_RawData_s rawData;
-	 ak09940_DataStatus_s dataStatus;
-	 ak09940_CalculatedData_s calculateDdata;
-	 ak09940_Measurement_Mode_t measurementMode;
-	 ak09940_Drive_Mode_t driveMode;
-	 uint8_t watermarkLevel;
-	 bool FIFOEnabled;
-
-	 //Sensor Functions 
-	 
-	 void getCalculatedData(void);
-
-
-	 void setMeasurementMode(ak09940_Measurement_Mode_t mode);
-	 ak09940_Measurement_Mode_t getMeasurementMode(void);
-
-	 void setWatermarkMode(uint8_t steps);
-	 uint8_t getWatermarkMode(void);
-
-	void setDriveMode(void);
-	ak09940_Drive_Mode_t getDriveMode(void);
-
-	 void setFIFO(bool FIFOState);
-	 bool getFIFOState(void);
-	 uint8_t getNumDataInBuffer(void);		//Returns number of data sets in FIFO buffer
-
-
-
-	 void softReset(void);
-
-
-	 int32_t interpret18BitAs32Bit(int32_t input);
-
-
-		 void getRawData(void);			//reads the registers and returns
-
-	 bool dataReady(void);			//Is the data ready to be read? *Read .cpp file for further info*
-
-	 void getDataStatus(void);		//Called after measuring data from registers, it verifies that the data was correctly read, with no data overwrites or gaps in measurements 
-
-
-	 bool ak09940WAI(void);			//checks for proper sensor internal WAI returns
-
- private:
-
-	 float calcMag(uint8_t lowByte, uint8_t middleByte, uint8_t highByte);
-	 float calcTemp(uint8_t tempByte);
-
-
-
+	SELF_TEST = 0b10000,
  };
+
+ typedef enum ak09940_Drive_Mode_t {			//Drive mode options from data sheet
+	 LOW_NOISE_1=0b00,
+	 LOW_NOISE_2=0b01,
+	 LOW_POWER_1=0b10,
+	 LOW_POWER_2=0b11,
+ };
+
+
+
+class AK09940: public Sensor{
+	public:
+		
+		//Sensor Data and Information Variables and Data Structures
+
+		ak09940_RawData_s rawData;
+		ak09940_DataStatus_s dataStatus;
+		ak09940_CalculatedData_s calculatedData;	
+		ak09940_Measurement_Mode_t measurementMode;
+		ak09940_Drive_Mode_t driveMode; 
+		uint8_t watermarkLevel;
+		bool FIFOEnabled;
+
+		//Sensor Functions 
+		AK09940();						//constructor
+		
+		void getCalculatedData(void);		//get data data converted to nT and Celcius
+
+
+		void setMeasurementMode(ak09940_Measurement_Mode_t sensorMeasurementMode);		//set measurement mode to a predefined sensor measurement mode
+		ak09940_Measurement_Mode_t getMeasurementMode(void);							//read and return the current sensor mode to the sensors information 
+
+		void setWatermarkMode(uint8_t steps);											//set size of watermark level. When the number of sets of data in buffer exceeds the Watermark level, the data ready pin and bit turn on. 
+		uint8_t getWatermarkMode(void);													//retreive the current water mark level. Output is between 0 and 7, add one to output to determine watermark level. (i.e. 0 means watermark set at 1, 2 means watermark is set at 3, etc.)
+
+		void setDriveMode(ak09940_Drive_Mode_t newMode);														//set sensor drive mode. 4 possible options, each with different noise rating and power consumption.
+		ak09940_Drive_Mode_t getDriveMode(void);										//read and return the current sensor drive mode to the sensors information
+
+		void setFIFO(bool FIFOState);													//Set FIFO Status -- "First in first out" -- a data buffer capable of storing up to 8 sets of data from registers HXL to TMPS
+		bool getFIFOState(void);														//get current FIFO status. True = FIFO enabled, False = FIFO Disabled
+		uint8_t getNumDataInBuffer(void);												//Returns number of data sets currently stored in FIFO buffer
+
+		void setDebugMode(bool state);
+
+		void softReset(void);															//soft reset function sets all registers to values as defined on data sheet
+
+
+		int32_t interpret18BitAs32Bit(int32_t input);									// for 18 bit magnetic sensor output to 32 bit ardiuno output conversion
+
+
+		bool getRawData(void);			//reads the registers and returns true if data is read and stored in the sensors raw data data structure
+
+		bool dataReady(void);			//Verifies if the data ready to be read
+
+		void getDataStatus(void);		//Must be called after measuring data from registers, it verifies that the data was correctly read, with no data overwrites or gaps in measurements 
+
+
+		bool ak09940WAI(void);			//checks for proper sensor internal WAI returns true if all registers and correctly returned
+
+		
+
+		private:
+
+		float calcMag(uint8_t lowByte , uint8_t middleByte , uint8_t highByte);		//converts low, mid, and high bytes form one axis into units of nT
+		float calcTemp(uint8_t tempByte);										//converts temp byte to celcius
+		
+
+
+};
+
+
+#endif
 
 /*class AK09940 {
 	
 	//This the AK09940 Class containing necessary functions for magnetic field measurements
+
+	//FROM OLD AK09940 library
 
 	public:
 		AK09940(void);
