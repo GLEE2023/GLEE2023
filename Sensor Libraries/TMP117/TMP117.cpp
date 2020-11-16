@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include "tmp117.h"
+#include "TMP117.h"
 
 
 TMP117::TMP117(){
