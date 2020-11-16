@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "AK09940.h"
 #include "ICM20602.h"
-#include "tmp117.h"
+#include "TMP117.h"
 #include "string.h"
 
 class LunaSat {
