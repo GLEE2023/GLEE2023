@@ -49,43 +49,6 @@
 // SX127X_REG_VERSION
 #define SX1272_CHIP_VERSION                           0x22
 
-// SX1272 FSK modem settings
-// SX127X_REG_OP_MODE
-#define SX1272_NO_SHAPING                             0b00000000  //  4     3     data shaping: no shaping (default)
-#define SX1272_FSK_GAUSSIAN_1_0                       0b00001000  //  4     3                   FSK modulation Gaussian filter, BT = 1.0
-#define SX1272_FSK_GAUSSIAN_0_5                       0b00010000  //  4     3                   FSK modulation Gaussian filter, BT = 0.5
-#define SX1272_FSK_GAUSSIAN_0_3                       0b00011000  //  4     3                   FSK modulation Gaussian filter, BT = 0.3
-#define SX1272_OOK_FILTER_BR                          0b00001000  //  4     3                   OOK modulation filter, f_cutoff = BR
-#define SX1272_OOK_FILTER_2BR                         0b00010000  //  4     3                   OOK modulation filter, f_cutoff = 2*BR
-
-// SX127X_REG_PA_RAMP
-#define SX1272_LOW_PN_TX_PLL_OFF                      0b00010000  //  4     4     use standard PLL in transmit mode (default)
-#define SX1272_LOW_PN_TX_PLL_ON                       0b00000000  //  4     4     use lower phase noise PLL in transmit mode
-
-// SX127X_REG_SYNC_CONFIG
-#define SX1272_FIFO_FILL_CONDITION_SYNC_ADDRESS       0b00000000  //  3     3     FIFO will be filled when sync address interrupt occurs (default)
-#define SX1272_FIFO_FILL_CONDITION_ALWAYS             0b00001000  //  3     3     FIFO will be filled as long as this bit is set
-
-// SX1272_REG_AGC_REF
-#define SX1272_AGC_REFERENCE_LEVEL                    0x13        //  5     0     floor reference for AGC thresholds: AgcRef = -174 + 10*log(2*RxBw) + 8 + AGC_REFERENCE_LEVEL [dBm]
-
-// SX1272_REG_AGC_THRESH_1
-#define SX1272_AGC_STEP_1                             0x0E        //  4     0     1st AGC threshold
-
-// SX1272_REG_AGC_THRESH_2
-#define SX1272_AGC_STEP_2                             0x50        //  7     4     2nd AGC threshold
-#define SX1272_AGC_STEP_3                             0x0B        //  4     0     3rd AGC threshold
-
-// SX1272_REG_AGC_THRESH_3
-#define SX1272_AGC_STEP_4                             0xD0        //  7     4     4th AGC threshold
-#define SX1272_AGC_STEP_5                             0x0B        //  4     0     5th AGC threshold
-
-// SX1272_REG_PLL_LOW_PN
-#define SX1272_PLL_LOW_PN_BANDWIDTH_75_KHZ            0b00000000  //  7     6     low phase noise PLL bandwidth: 75 kHz
-#define SX1272_PLL_LOW_PN_BANDWIDTH_150_KHZ           0b01000000  //  7     6                                    150 kHz
-#define SX1272_PLL_LOW_PN_BANDWIDTH_225_KHZ           0b10000000  //  7     6                                    225 kHz
-#define SX1272_PLL_LOW_PN_BANDWIDTH_300_KHZ           0b11000000  //  7     6                                    300 kHz (default)
-
 /*!
   \class SX1272
 
@@ -133,28 +96,6 @@ class SX1272: public SX127x {
     int16_t begin(float freq = 915.0, float bw = 125.0, uint8_t sf = 9, uint8_t cr = 7, uint8_t syncWord = SX127X_SYNC_WORD, int8_t power = 10, uint16_t preambleLength = 8, uint8_t gain = 0);
 
     /*!
-      \brief FSK modem initialization method. Must be called at least once from Arduino sketch to initialize the module.
-
-      \param freq Carrier frequency in MHz. Allowed values range from 860.0 MHz to 1020.0 MHz.
-
-      \param br Bit rate of the FSK transmission in kbps (kilobits per second). Allowed values range from 1.2 to 300.0 kbps.
-
-      \param freqDev Frequency deviation of the FSK transmission in kHz. Allowed values range from 0.6 to 200.0 kHz.
-      Note that the allowed range changes based on bit rate setting, so that the condition FreqDev + BitRate/2 <= 250 kHz is always met.
-
-      \param rxBw Receiver bandwidth in kHz. Allowed values are 2.6, 3.1, 3.9, 5.2, 6.3, 7.8, 10.4, 12.5, 15.6, 20.8, 25, 31.3, 41.7, 50, 62.5, 83.3, 100, 125, 166.7, 200 and 250 kHz.
-
-      \param power Transmission output power in dBm. Allowed values range from 2 to 17 dBm.
-
-      \param preambleLength Length of FSK preamble in bits.
-
-      \param enableOOK Use OOK modulation instead of FSK.
-
-      \returns \ref status_codes
-    */
-    int16_t beginFSK(float freq = 915.0, float br = 48.0, float rxBw = 125.0, float freqDev = 50.0, int8_t power = 10, uint16_t preambleLength = 16, bool enableOOK = false);
-
-    /*!
       \brief Reset method. Will reset the chip to the default state using RST pin.
     */
     void reset() override;
@@ -187,7 +128,7 @@ class SX1272: public SX127x {
       \returns \ref status_codes
     */
     int16_t setSpreadingFactor(uint8_t sf);
-
+      
     /*!
       \brief Sets %LoRa link coding rate denominator. Allowed values range from 5 to 8. Only available in %LoRa mode.
 
@@ -216,60 +157,7 @@ class SX1272: public SX127x {
     */
     int16_t setGain(uint8_t gain);
 
-    /*!
-      \brief Sets Gaussian filter bandwidth-time product that will be used for data shaping. Only available in FSK mode with FSK modulation.
-      Allowed values are RADIOLIB_SHAPING_0_3, RADIOLIB_SHAPING_0_5 or RADIOLIB_SHAPING_1_0. Set to RADIOLIB_SHAPING_NONE to disable data shaping.
 
-      \param sh Gaussian shaping bandwidth-time product that will be used for data shaping
-
-      \returns \ref status_codes
-    */
-    int16_t setDataShaping(uint8_t sh) override;
-
-    /*!
-      \brief Sets filter cutoff frequency that will be used for data shaping.
-      Allowed values are 1 for frequency equal to bit rate and 2 for frequency equal to 2x bit rate. Set to 0 to disable data shaping.
-      Only available in FSK mode with OOK modulation.
-
-      \param sh Cutoff frequency that will be used for data shaping
-
-      \returns \ref status_codes
-    */
-    int16_t setDataShapingOOK(uint8_t sh);
-
-    /*!
-      \brief Gets recorded signal strength indicator of the latest received packet for LoRa modem, or current RSSI level for FSK modem.
-
-      \returns Last packet RSSI for LoRa modem, or current RSSI level for FSK modem.
-    */
-    float getRSSI();
-
-    /*!
-      \brief Enables/disables CRC check of received packets.
-
-      \param enableCRC Enable (true) or disable (false) CRC.
-
-      \returns \ref status_codes
-    */
-    int16_t setCRC(bool enableCRC);
-
-    /*!
-      \brief Forces LoRa low data rate optimization. Only available in LoRa mode. After calling this method, LDRO will always be set to
-      the provided value, regardless of symbol length. To re-enable automatic LDRO configuration, call SX1278::autoLDRO()
-
-      \param enable Force LDRO to be always enabled (true) or disabled (false).
-
-      \returns \ref status_codes
-    */
-    int16_t forceLDRO(bool enable);
-
-    /*!
-      \brief Re-enables automatic LDRO configuration. Only available in LoRa mode. After calling this method, LDRO will be enabled automatically
-      when symbol length exceeds 16 ms.
-
-      \returns \ref status_codes
-    */
-    int16_t autoLDRO();
 
 #ifndef RADIOLIB_GODMODE
   protected:
@@ -277,9 +165,6 @@ class SX1272: public SX127x {
     int16_t setBandwidthRaw(uint8_t newBandwidth);
     int16_t setSpreadingFactorRaw(uint8_t newSpreadingFactor);
     int16_t setCodingRateRaw(uint8_t newCodingRate);
-
-    int16_t configFSK();
-
 #ifndef RADIOLIB_GODMODE
   private:
 #endif

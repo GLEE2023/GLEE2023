@@ -25,11 +25,6 @@ public:
 
 private:
 	SX1272 radio = new Module(NSS_PIN, DIO0_PIN, RESET_PIN, DIO1_PIN);
-	float c_freq;
-	uint8_t output_pwr;
-	float bandwidth;
-	uint8_t spread_factor;
-	uint8_t coding_rate;
 	char disp_buff[50];
 };
 
