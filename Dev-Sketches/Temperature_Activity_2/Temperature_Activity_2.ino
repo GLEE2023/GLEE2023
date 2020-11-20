@@ -17,6 +17,7 @@ float endTime;
 void setup(){
     // Set sample rate to 1 sample per second (1Hz)
     sampleRate = 1;
+    Serial.begin(9600);
 };
 
 void loop(){

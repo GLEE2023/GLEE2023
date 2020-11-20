@@ -1,9 +1,12 @@
+// TODO: Refactor 
+// TODO: Refernce https://os.mbed.com/users/sarahbest/code/ICM20602_I2C/, 
+
 /*
 *Description: This is an Arduino (C++) .cpp file required for the ICM20602 Accelerometer
 *Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
 *Library Author: John Walker Johnson
 *Library Created on: July 13th 2020
-*Last Modified on: July 14th 2020
+*Last Modified on: Nov 9th 2020
 *Resources Used in Creation:
 *ICM20602 Datasheet
 *Arduino Wire Library Reference Guide
@@ -52,18 +55,19 @@ enum Gscale{
 
 class ICM20602:public Sensor{
     public:
+      ICM20602(int _id, bool _debug = true);
+      
       Ascale scaleA; //g-force range
       sensor_uint16_vec_t accelRaw;
       sensor_float_vec_t accelMPS;
       sensor_float_vec_t accelG;
 
-      ICM20602();
       bool begin();
       void initialize();
-      float ICM20602::getSensitivity(enum Ascale scaleA);
-      sensor_uint16_vec_t ICM20602::getRawAccel();
-      sensor_float_vec_t ICM20602::getMPSAccel();
-      sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA);
+      float getSensitivity(enum Ascale scaleA);
+      sensor_uint16_vec_t getRawAccel();
+      sensor_float_vec_t getMPSAccel();
+      sensor_float_vec_t getGAccel(enum Ascale scaleA);
       
       //void ICM20602::setScale(enum Ascale scaleA);
       //impact function

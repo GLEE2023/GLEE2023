@@ -9,60 +9,52 @@ float aRes, gRes;
 //int Ascale = AFS_2G;
 int Gscale = GFS_1000DPS;
 
-ICM20602::ICM20602(void){
-    ICM20602::sensorName = "ICM20602 Inertial Measurement Unit";
-  	ICM20602::sensorAddress = 0x48;
-  	ICM20602::sensorDebug = false;
-    scaleA = AFS_2G;
+ICM20602::ICM20602(int _id, bool _debug){
+    ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
+  	ICM20602::info.address = ICM20602_slave_addr;
+  	ICM20602::sensorDebug = _debug;
+    ICM20602::scaleA = AFS_2G;
 }
 
 bool ICM20602::begin(void){
-  Wire.begin(ICM20602_slave_addr);
+  Wire.begin();
   Serial.println("Beginning Communication With ICM20602");
   return true;
 }
 
 void ICM20602::initialize(void){
-  Wire.setClock(400000);
-  writeByte(ICM20602_PWR_MGMT_1, 0x01);   //set clock set to auto
-  writeByte(ICM20602_PWR_MGMT_2,0x07);    //disable gyro
-  writeByte(ICM20602_CONFIG, 0x01); //176Hz     // set TEMP_OUT_L, DLPF=3 (Fs=1KHz):0x03
-  writeByte(ICM20602_GYRO_CONFIG, 0x00);    // bit[4:3] 0=+-250d/s,1=+-500d/s,2=+-1000d/s,3=+-2000d/s :0x18
-  writeByte(ICM20602_ACCEL_CONFIG, 0x10);   // bit[4:3] 0=+-2g,1=+-4g,2=+-8g,3=+-16g, ACC_HPF=On (5Hz):0x01
+  Wire.setClock(100000);
+  writeByte(ICM20602_PWR_MGMT_1, 0x01);   // Set clock set to auto
+  writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
+  writeByte(ICM20602_CONFIG, 0x01); 
+  writeByte(ICM20602_GYRO_CONFIG, 0x00);    
+  writeByte(ICM20602_ACCEL_CONFIG, 0x10);   
 }
 
 sensor_uint16_vec_t ICM20602::getRawAccel(){
-  int hByteX,lByteX, hByteY,lByteY, hByteZ,lByteZ;
+  uint8_t hByteX,lByteX, hByteY,lByteY, hByteZ,lByteZ;
   hByteX = readByte(ICM20602_ACCEL_XOUT_H);
   lByteX = readByte(ICM20602_ACCEL_XOUT_L);
   hByteY = readByte(ICM20602_ACCEL_YOUT_H);
   lByteY = readByte(ICM20602_ACCEL_YOUT_L);
   hByteZ = readByte(ICM20602_ACCEL_ZOUT_H);
   lByteZ = readByte(ICM20602_ACCEL_ZOUT_L);
-  accelRaw.x = (hByteX<<8|lByteX);
-  accelRaw.y = (hByteY<<8|lByteY);
-  accelRaw.z = (hByteZ<<8|lByteZ);
-  return accelRaw;
+  ICM20602::accelRaw.x = (hByteX<<8|lByteX);
+  ICM20602::accelRaw.y = (hByteY<<8|lByteY);
+  ICM20602::accelRaw.z = (hByteZ<<8|lByteZ);
+  return ICM20602::accelRaw;
 }
 
 sensor_float_vec_t ICM20602::getMPSAccel(){
   float MPSScale = 8.0/32768.0;
-  accelMPS.x = accelRaw.x* MPSScale;
-  accelMPS.x = accelRaw.y* MPSScale;
-  accelMPS.x = accelRaw.z* MPSScale;
-  return accelMPS;    
+  ICM20602::accelMPS.x = accelRaw.x * MPSScale;
+  ICM20602::accelMPS.x = accelRaw.y * MPSScale;
+  ICM20602::accelMPS.x = accelRaw.z * MPSScale;
+  return ICM20602::accelMPS;    
 }
 
-/*
-void setScale(enum Ascale newScale){
-   scaleA = newScale;
-   //writebyte??
-}
-*/
-
-float getSensitivity(enum Ascale scaleA){
+float ICM20602::getSensitivity(enum Ascale scaleA){
   float factor;
-
   switch (scaleA) {
     case (AFS_2G):
       factor = 16384.0;
@@ -82,8 +74,16 @@ float getSensitivity(enum Ascale scaleA){
 
 sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA){
   float factor = getSensitivity(scaleA);
-  accelG.x = accelRaw.x/ factor;
-  accelG.y = accelRaw.y/ factor;
-  accelG.z = accelRaw.z/ factor;
-	return accelG;
+  ICM20602::accelG.x = accelRaw.x/ factor;
+  ICM20602::accelG.y = accelRaw.y/ factor;
+  ICM20602::accelG.z = accelRaw.z/ factor;
+	return ICM20602::accelG;
 }
+
+
+/*
+void setScale(enum Ascale newScale){
+   scaleA = newScale;
+   //writebyte??
+}
+*/
