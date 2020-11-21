@@ -17,22 +17,17 @@
 //
 //
 
-
 #include "AK09940.h"
 #include <Arduino.h>
 #include <Wire.h>
 
 
-
-
-
-
 AK09940::AK09940() 			//constructor - Function Status: TBR -- add inital sensor settings?
 {							
-	AK09940::sensorName = "AK09940 Magnetometer";		//assign sensor name
-	AK09940::sensorAddress = AK09940_SENSOR_ADDR;		//assign sensor i2c address
+	AK09940::info.name = "AK09940 Magnetometer";		//assign sensor name
+	AK09940::info.address = AK09940_SENSOR_ADDR;		//assign sensor i2c address
 	AK09940::sensorDebug=false;							//debug flag status
-	Wire.begin(AK09940::sensorAddress);					//begin i2c comms with sensor, must be called once
+	Wire.begin(AK09940::info.address);					//begin i2c comms with sensor, must be called once
 	
 	if (AK09940::sensorDebug) {							//Print Statements for debugging and visualization of what this sensor does!
 		Serial.print("Beginning Communication with AK09940");
