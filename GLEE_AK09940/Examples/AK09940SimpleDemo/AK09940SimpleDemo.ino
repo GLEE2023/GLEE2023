@@ -11,26 +11,20 @@
 #include "GLEE_Sensor.h"
 #include "AK09940.h"
 
-
 AK09940 ak09940 = AK09940();
 
-void setup ()
-{
+void setup (){
     Serial.begin(9600);
     ak09940.setDebugMode(true);
     ak09940.ak09940WAI();
     ak09940.setDriveMode(LOW_NOISE_1);
     ak09940.setMeasurementMode(POWER_DOWN);
-
 };
 
-void loop ()
-{   
-    
+void loop (){   
     Serial.print("Current Measurement Mode: ");
     Serial.println(ak09940.getMeasurementMode());
-    if (ak09940.getMeasurementMode() == POWER_DOWN)
-    {
+    if (ak09940.getMeasurementMode() == POWER_DOWN){
         Serial.print("Current Measurement Mode: ");
         Serial.println("Transitioning from POWER_DOWN to SINGLE_MEASURE");        
         ak09940.setMeasurementMode(SINGLE_MEASURE);
@@ -49,8 +43,5 @@ void loop ()
         Serial.println();
     }
 
-
     delay(1000);
-    
-
 };
