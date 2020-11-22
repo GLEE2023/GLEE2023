@@ -46,15 +46,18 @@ sensor_uint16_vec_t ICM20602::getRawAccel(){
 }
 
 sensor_float_vec_t ICM20602::getMPSAccel(){
+  // TODO: Apply sensitivity factor, currently hard coded
   float MPSScale = 8.0/32768.0;
   ICM20602::accelMPS.x = accelRaw.x * MPSScale;
-  ICM20602::accelMPS.x = accelRaw.y * MPSScale;
-  ICM20602::accelMPS.x = accelRaw.z * MPSScale;
+  ICM20602::accelMPS.y = accelRaw.y * MPSScale;
+  ICM20602::accelMPS.z = accelRaw.z * MPSScale;
   return ICM20602::accelMPS;    
 }
 //testing colaberative work
 
 float ICM20602::getSensitivity(enum Ascale scaleA){
+  // TODO: Write setter for sensity a variable, possibly private
+  // TODO: Set sensitivity on initialization
   float factor;
   switch (scaleA) {
     case (AFS_2G):
