@@ -52,7 +52,7 @@ sensor_float_vec_t ICM20602::getMPSAccel(){
   ICM20602::accelMPS.x = accelRaw.z * MPSScale;
   return ICM20602::accelMPS;    
 }
-//testing
+//testing colaberative work
 
 float ICM20602::getSensitivity(enum Ascale scaleA){
   float factor;
