@@ -21,12 +21,12 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-AK09940::AK09940(){
+AK09940::AK09940(int _id, bool _debug){
 	//constructor - Function Status: TBR -- add inital sensor settings?
-
+	AK09940::info.id = _id;
 	AK09940::info.name = "AK09940 Magnetometer";		//assign sensor name
 	AK09940::info.address = AK09940_SENSOR_ADDR;		//assign sensor i2c address
-	AK09940::sensorDebug=false;							//debug flag status
+	AK09940::sensorDebug= _debug;						//debug flag status
 	Wire.begin(AK09940::info.address);					//begin i2c comms with sensor, must be called once
 	
 	if (AK09940::sensorDebug) {							//Print Statements for debugging and visualization of what this sensor does!
@@ -87,6 +87,7 @@ void AK09940::getCalculatedData(void){
 }
 
 
+
 bool AK09940::getRawData(void){
 	// TBR -- Redundancy?? 
 	uint8_t XML, XMM , XMH;			//variables to hold low, mid, and high bytes for X-axis magnetic field 
@@ -142,7 +143,20 @@ bool AK09940::getRawData(void){
 	}
 }
 
+sensor_float_vec_t AK09940::getrawData(void){
+	// Suggested refactor revision:
+	// get raw data either returns raw data in sensor float structure for testing
+	
+	AK09940::getRawData();
+	AK09940::getCalculatedData();
 
+	sensor_float_vec_t rawData_;
+	rawData_.x = 1;
+	rawData_.y = 1;
+	rawData_.z = 1;
+
+	return rawData_;
+}
 
 
 float AK09940::calcTemp(uint8_t tempByte){

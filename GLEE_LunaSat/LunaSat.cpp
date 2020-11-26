@@ -1,5 +1,6 @@
-//First Draft LunaSat
+// LunaSat Class contains core lunasat functionality such as transmission and sensing
 #include <Arduino.h>
+#include <Wire.h>
 #include "LunaSat.h"
 
 
@@ -9,12 +10,13 @@ LunaSat::LunaSat(int _id, bool _debug){
     info.id = _id;
     
     // Initialize sensors
-    //TMP117 tmp117(); 
-    //ICM20602 icm20602();
-    //AK09940 ak09940();
 
     // Set private variables
     debug = _debug;
+
+    tmp117 = new TMP117(1,true);
+    icm20602 = new ICM20602(2,true);
+    ak09940 = new AK09940(3,true);
 
     //TODO: Handle passing modes/configurations as arguments into sensor constructors
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
@@ -43,11 +45,13 @@ lunaSat_sample_t LunaSat::getSample(void){
         sample.magnetic.x = 1;
         sample.magnetic.y = 2;
         sample.magnetic.z = 3; 
+    }else{
+        sample.timeStamp = millis();
+        sample.temperature = tmp117->getTemperatureC();
+        sample.acceleration = icm20602->getGAccel(AFS_2G);
+        sample.magnetic = ak09940->getrawData();
     }
     
-    //sample.temp = tmp117.getTemperatureC();
-    //sample.acc = icm20602.getData();
-    //sample.mag = ak09940.getData();
     return sample;
 }
 

@@ -114,7 +114,7 @@ class AK09940: public Sensor{
 		bool FIFOEnabled;
 
 		//Sensor Functions 
-		AK09940();						//constructor
+		AK09940(int _id, bool _debug = true);						//constructor
 		
 		void getCalculatedData(void);		//get data data converted to nT and Celcius
 
@@ -164,7 +164,9 @@ class AK09940: public Sensor{
 
 		// TODO: Suggestion that getRawData returns raw data as appropriate data type, possible redundancy in get data status
 		// Getter that reads the registers and returns true if data is read and stored in the sensors raw data data structure
-		bool getRawData(void);			
+		bool getRawData(void);
+
+		sensor_float_vec_t getrawData(void);		
 
 		// Method which returns boolean signifying that data is ready
 		bool dataReady(void);			
