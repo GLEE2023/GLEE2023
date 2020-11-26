@@ -144,16 +144,34 @@ bool AK09940::getRawData(void){
 }
 
 sensor_float_vec_t AK09940::getrawData(void){
-	// Suggested refactor revision:
+	// Suggested refactoring example, uses old style for getRawData (updates local rawData structure instance) Probably should refrence a local pointer to a struct
 	// get raw data either returns raw data in sensor float structure for testing
 	
-	AK09940::getRawData();
+	// Reads raw data and sets local instance 
+	AK09940::getRawData(); // By "get" it really means update
+
+	// updates calculated data instance
 	AK09940::getCalculatedData();
 
 	sensor_float_vec_t rawData_;
-	rawData_.x = 1;
-	rawData_.y = 1;
-	rawData_.z = 1;
+	rawData_.x = 3.2;
+	rawData_.y = 5.2;
+	rawData_.z = 6.2;
+
+	return rawData_;
+}
+
+sensor_float_vec_t AK09940::getRawData_fuzzed(void){
+	// fuzzed data return for data structure pass through testing
+	// get raw data either returns raw data in sensor float structure for testing
+	
+	// AK09940::getRawData();
+	// AK09940::getCalculatedData();
+
+	sensor_float_vec_t rawData_;
+	rawData_.x = 3.2;
+	rawData_.y = 5.2;
+	rawData_.z = 6.2;
 
 	return rawData_;
 }

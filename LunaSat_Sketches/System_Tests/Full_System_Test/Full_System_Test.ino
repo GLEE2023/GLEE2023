@@ -1,15 +1,17 @@
 #include <Arduino.h>
 #include <LunaSat.h>
 
-LunaSat lunaSat(0,false);
+LunaSat lunaSat(0, true);
 
 
+lunaSat_sample_t sample;
 
-void setup(){
-    lunaSat.begin(9600);
+void setup() {
+  lunaSat.begin(9600);
 }
 
-void loop(){
-    
-    delay(2000);
+void loop() {
+  sample = lunaSat.getSample();
+  lunaSat.dispSample(sample);
+  delay(2000);
 }

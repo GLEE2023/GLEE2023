@@ -14,9 +14,9 @@ LunaSat::LunaSat(int _id, bool _debug){
     // Set private variables
     debug = _debug;
 
-    tmp117 = new TMP117(1,true);
-    icm20602 = new ICM20602(2,true);
-    ak09940 = new AK09940(3,true);
+    tmp117 = new TMP117(1,_debug);
+    icm20602 = new ICM20602(2,_debug);
+    ak09940 = new AK09940(3,_debug);
 
     //TODO: Handle passing modes/configurations as arguments into sensor constructors
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
@@ -34,17 +34,12 @@ lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
     
     if(debug){
-        sample.timeStamp = 5;
+        // Debug test functonality passes appropriatley type values for testing library interfacing
 
-        sample.temperature = 22;
-        
-        sample.acceleration.x = 1;
-        sample.acceleration.y = 2;
-        sample.acceleration.z = 3; 
-    
-        sample.magnetic.x = 1;
-        sample.magnetic.y = 2;
-        sample.magnetic.z = 3; 
+        sample.timeStamp = millis();
+        sample.temperature = tmp117->getTemperatureC_fuzzed();
+        sample.acceleration = icm20602->getGAccel_fuzzed(AFS_2G);
+        sample.magnetic = ak09940->getRawData_fuzzed();
     }else{
         sample.timeStamp = millis();
         sample.temperature = tmp117->getTemperatureC();

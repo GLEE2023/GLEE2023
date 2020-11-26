@@ -129,6 +129,14 @@ sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA){
 	return ICM20602::accelG;
 }
 
+sensor_float_vec_t ICM20602::getGAccel_fuzzed(enum Ascale scaleA){
+  float factor = getSensitivity(scaleA);
+  ICM20602::accelG.x = factor*1;
+  ICM20602::accelG.y = factor*2;
+  ICM20602::accelG.z = factor*3;
+	return ICM20602::accelG;
+}
+
 
 /*
 void setScale(enum Ascale newScale){

@@ -69,6 +69,9 @@ class ICM20602:public Sensor{
       sensor_float_vec_t getMPSAccel();
       sensor_float_vec_t getGAccel(enum Ascale scaleA);
       
+      sensor_float_vec_t getGAccel_fuzzed(enum Ascale scaleA);
+
+
       //void ICM20602::setScale(enum Ascale scaleA);
       //impact function
 };

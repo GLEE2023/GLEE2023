@@ -14,9 +14,16 @@ uint8_t TMP117::getAddress(){
     return TMP117::info.address;
 }
 
+double TMP117::getTemperatureC_fuzzed(){
+  // Enter fuzzing function for temperature here
+  double finalTempC;
+  finalTempC = 999.99;
+  return finalTempC;
+}
+
 double TMP117::getTemperatureC(){
     int16_t digitalTempC = read2Byte(TMP117_TEMP_REG);      // Calls to read registers to pull all the bits to store in an array
-    float finalTempC = digitalTempC * TMP117_RESOLUTION;    // Multiplies by the resolution for digital to final temp
+    double finalTempC = digitalTempC * TMP117_RESOLUTION;    // Multiplies by the resolution for digital to final temp
     return finalTempC;
 }
 

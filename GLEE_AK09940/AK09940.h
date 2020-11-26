@@ -166,7 +166,11 @@ class AK09940: public Sensor{
 		// Getter that reads the registers and returns true if data is read and stored in the sensors raw data data structure
 		bool getRawData(void);
 
-		sensor_float_vec_t getrawData(void);		
+		// Refactoring raw data here
+		sensor_float_vec_t getrawData(void);
+
+		// Method for library structure testing
+		sensor_float_vec_t getRawData_fuzzed(void);		
 
 		// Method which returns boolean signifying that data is ready
 		bool dataReady(void);			

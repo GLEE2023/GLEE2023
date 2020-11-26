@@ -45,10 +45,10 @@ typedef struct {
         // Acceleratio/ Magnetic Field (x,y,z)
 
     unsigned long timeStamp;
-    float temperature;
+    double temperature;
     sensor_float_vec_t acceleration;
     sensor_float_vec_t magnetic;
-    
+
 } lunaSat_sample_t;
 
 class LunaSat {
