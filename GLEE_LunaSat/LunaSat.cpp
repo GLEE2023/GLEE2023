@@ -28,6 +28,14 @@ void LunaSat::begin(int baudRate){
     if (debug){
         Serial.println("LunaSat has begun serial communications");
     }
+
+
+    icm20602->begin();
+    icm20602->initialize();
+
+    // TODO: Implement sensor begin outside of constructor classes implement
+    // tmp begin
+    // mag begin 
 }
 
 lunaSat_sample_t LunaSat::getSample(void){
