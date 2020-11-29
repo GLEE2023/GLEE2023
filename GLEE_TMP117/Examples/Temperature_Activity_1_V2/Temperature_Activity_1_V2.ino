@@ -16,6 +16,9 @@ float startTime;    // Variables for timing offset calculations
 float endTime;
 
 void setup(){
+    // Begin Serial Communications (Lunasat baud rate set to 9600)
+    Serial.begin(9600);
+
     // Set sample rate to 1 sample per second (1Hz)
     sampleRate = 1;
 };
