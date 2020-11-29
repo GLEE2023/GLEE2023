@@ -3,7 +3,6 @@
 #include <Wire.h>
 #include "LunaSat.h"
 
-
 //Constructor: Initializes lunasat and subsequent sensors
 LunaSat::LunaSat(int _id, bool _debug){                             
     // Set lunaSat info
@@ -29,7 +28,6 @@ void LunaSat::begin(int baudRate){
         Serial.println("LunaSat has begun serial communications");
     }
 
-
     icm20602->begin();
     icm20602->initialize();
 
@@ -40,7 +38,6 @@ void LunaSat::begin(int baudRate){
 
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
-    
     if(debug){
         // Debug test functonality passes appropriatley type values for testing library interfacing
 
@@ -54,7 +51,6 @@ lunaSat_sample_t LunaSat::getSample(void){
         sample.acceleration = icm20602->getGAccel(AFS_2G);
         sample.magnetic = ak09940->getrawData();
     }
-    
     return sample;
 }
 
@@ -73,5 +69,5 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(',');
     Serial.print(sample.magnetic.y);
     Serial.print(',');
-    Serial.print(sample.magnetic.z);
+    Serial.println(sample.magnetic.z);
 }

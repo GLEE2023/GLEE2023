@@ -10,7 +10,6 @@
 #include "ICM20602.h"
 #include "TMP117.h"
 
-
 typedef struct {
     float x;
     float y;
@@ -52,8 +51,6 @@ typedef struct {
 } lunaSat_sample_t;
 
 class LunaSat {
-        
-    
     public:
         // Constructor
         // The LunaSat constructor takes one argument
@@ -77,9 +74,6 @@ class LunaSat {
         bool debug;
     
 };
-
-
-
 #endif
 
 
