@@ -4,8 +4,8 @@
 Version Note: First draft/unverified instructions
 1. Download Zipped GLEE2023 folder
 2. Locate your arduino custom libraries folder 
- * Typically stored in ~Documents > Arduino > Libraries
- * Can also be found by navigating to add library from Arduino IDE
+  * Typically stored in ~Documents > Arduino > Libraries
+  * Can also be found by navigating to add library from Arduino IDE
 3. Extract the GLEE2023 folder into your custom libraries folder
 4. Move the sketches folder to where you wish to keep your sketches
 
