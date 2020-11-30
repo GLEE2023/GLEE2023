@@ -1,6 +1,6 @@
 # GLEE_TMP117
 
-This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with the GLEE's LunaSat object class, it can be used to monitor, configure and control the TMP117. This library supports basic functionality such as Celsius/Fahrenheit temperature readouts and low/high temperature alerts. 
+This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with the GLEE's LunaSat object class, it can be used to monitor, configure and control the TMP117. GLEE_TMP117 supports basic functionality such as Celsius/Fahrenheit temperature readouts and low/high temperature alerts. 
 
 ## Registers
 	
