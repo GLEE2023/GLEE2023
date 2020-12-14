@@ -13,8 +13,8 @@ V4 uses Atmega328, not the Atmega328p, so the microprocessor has a hardware sig 
   * Arduino IDE
   
 # Wiring Configuration
-
-  TODO: Add wiring diagram alongside annotate image of bootload connections and jumper configuration
+* External Power to arduino when bootloading
+TODO: Add wiring diagram alongside annotate image of bootload connections and jumper configuration
 
 # Arduino IDE Hardware File Modification
 
