@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <LunaSat.h>
-#include "GLEE_Radio.h"
+#include <GLEE_Radio.h>
 
 LunaRadio Rad;
 LunaSat lunaSat(0, true);
