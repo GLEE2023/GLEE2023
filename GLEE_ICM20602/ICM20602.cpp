@@ -48,7 +48,10 @@ void ICM20602::initialize(void){
   writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
   writeByte(ICM20602_CONFIG, 0x01); 
   writeByte(ICM20602_GYRO_CONFIG, 0x00);    
-  writeByte(ICM20602_ACCEL_CONFIG, 0x10);   
+  writeByte(ICM20602_ACCEL_CONFIG, 0x00); 
+  // TODO: 0x10 - 8G sensitivity mode? 
+  // 0x00 - 2G Sensitivity mode?
+  // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
 /*

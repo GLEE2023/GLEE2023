@@ -13,8 +13,7 @@ returns false if we cannot communicate with sensor or any other error occurs
 
 #include "GLEE_Sensor.h"
 
-bool Sensor::isConnected(void)
-{
+bool Sensor::isConnected(void){
     uint8_t statusByte;
     Wire.beginTransmission(Sensor::info.address);
     statusByte = Wire.endTransmission();
