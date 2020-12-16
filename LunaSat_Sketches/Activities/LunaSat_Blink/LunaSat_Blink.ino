@@ -11,10 +11,14 @@ void setup() {
 
 // Countiously running loop
 void loop() {
+  
   digitalWrite(LED1, HIGH);         // Turn on LED1 by outputting High Voltage to that pin
   digitalWrite(LED2, HIGH);         // Turn on LED2 by outputting High Voltage to that pin
-  delay(1000);                      // wait for a second
+  
+  delay(1000);                      // Wait 1 second before turning LEDs off
+  
   digitalWrite(LED1, LOW);          // Turn off LED1 by outputting High Voltage to that pin
   digitalWrite(LED2, LOW);          // Turn off LED2 by outputting High Voltage to that pin
-  delay(1000);                      // wait for a second
+  
+  delay(1000);                      // Wait 1 second before turning LEDs back on
 }
