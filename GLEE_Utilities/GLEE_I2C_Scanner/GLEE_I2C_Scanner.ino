@@ -58,7 +58,7 @@ void loop() {
     if(!err){
       
       Serial.print(sensorNames[i])
-      Serial.print(" sensor found at ")
+      Serial.print(" sensor found at ");
       // Hex address formating "0x00"
 
       Serial.print("0");
@@ -66,7 +66,7 @@ void loop() {
       Serial.println("  !");
 
     }else if(err==4)
-      Serial.print("Error at ")
+      Serial.print("Error at ");
 
       Serial.print("0");
       Serial.println(addr, HEX);
