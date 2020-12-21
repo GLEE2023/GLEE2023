@@ -3,14 +3,14 @@
 #include "GLEE_Sensor.h"
 #include "ICM20602.h"
 
-// Instantiate ICM20602 sensor class with id of one and debugging set to true
-ICM20602 accelerometer(1,true);
+// Instantiate ICM20602 sensor class with id of one and debugging set to false
+ICM20602 accelerometer(1,false);
 
 // Observation configuration
 int sampleRate;
 
 // Dynamic Variable 
-sensor_float_vec_t acceleration;  
+sensor_float_vec_t accRaw, accG, accMPS;  
 float startTime;    
 float endTime;
 
@@ -30,12 +30,28 @@ void setup(){
 
 void loop(){
     startTime = millis();
-    
 
     acceleration = accelerometer.getGAccel(AFS_2G);
     
-    Serial.println(acceleration.x);
+    Serial.print(accRaw.x, 8);
+    Serial.print(", ");
+    Serial.print(accRaw.y, 8);
+    Serial.print(", ");
+    Serial.println(accRaw.z, 8);
+
+    Serial.print(accG.x, 8);
+    Serial.print(", ");
+    Serial.print(accG.y, 8);
+    Serial.print(", ");
+    Serial.println(accG.z, 8);
+
+    Serial.print(accMPS.x, 8);
+    Serial.print(", ");
+    Serial.print(accMPS.y, 8);
+    Serial.print(", ");
+    Serial.println(accMPS.z, 8);
     
     endTime = millis();
-    delay(sampleRate * 1000 - (endTime - startTime));
+
+    delay(sampleRate * 100 - (endTime - startTime));
 };
