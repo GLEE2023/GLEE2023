@@ -18,7 +18,7 @@
 
 byte sensorsAddrs[4] = {0x0C, 0x49, 0x0D, 0x69};
 
-String sensorNames[4] = {"Mag", "Temp", "Therm", "Accelerometer"}
+String sensorNames[4] = {"Mag", "Temp", "Therm", "Accelerometer"};
 
 byte addr; // Byte representation of I2C addresses
 byte err; // Byte to store error responses
@@ -57,7 +57,7 @@ void loop() {
     err = Wire.endTransmission();
     if(!err){
       
-      Serial.print(sensorNames[i])
+      Serial.print(sensorNames[i]);
       Serial.print(" sensor found at ");
       // Hex address formating "0x00"
 
