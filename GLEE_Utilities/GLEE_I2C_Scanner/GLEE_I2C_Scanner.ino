@@ -38,7 +38,11 @@ void setup() {
   Serial.println("LunaSat Connection Succsessful");
 
   // Initalize Thermopile Sensor
-  writeByte(0x00, 0x04, 0x00); // Might interfear with other sensors, needs verification
+  Wire.beginTransmission(0x00);     // Tx buffer
+  Wire.write(0x04);                 // Add Register Address to Tx buffer
+  Wire.write(0x00);                 // Add initialization data to Tx buffer
+  Wire.endTransmission();           // Send
+
   delay(50);
 
   Serial.println("Sensor initialization Initialization Succsessful\n");
