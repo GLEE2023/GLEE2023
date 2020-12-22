@@ -31,6 +31,7 @@ void setup(){
 void loop(){
     startTime = millis();
     
+
     acceleration = accelerometer.getGAccel(AFS_2G);
     
     Serial.println(acceleration.x);
