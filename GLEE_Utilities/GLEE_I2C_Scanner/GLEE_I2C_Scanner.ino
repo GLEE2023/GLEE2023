@@ -12,17 +12,17 @@
 // Standard V4 Lunasat I2C Address Configuration (7-Bit Addresses)
 
   // AK09940:   0x0C
-  // TMP117:    0x49
+  // TMP117:    0x48
   // TPIS1385:  0x0D
   // ICM20602:  0x69
 
-byte sensorsAddrs[4] = {0x0C, 0x49, 0x0D, 0x69};
+byte sensorsAddrs[4] = {0x0C, 0x48, 0x0D, 0x69};
 
 String sensorNames[4] = {"Mag", "Temp", "Therm", "Accelerometer"};
 
 byte addr; // Byte representation of I2C addresses
 byte err; // Byte to store error responses
-// int numDevices; // Accumulator for tracking number of found devices
+int numDevices; // Accumulator for tracking number of found devices
 
 void setup() {
 
@@ -31,7 +31,7 @@ void setup() {
   Wire.setClock(100000);  // Set Standard 100Mhz i2c speed
   Serial.begin(9600);     // Set Default 
 
-  if(!Serial){]
+  if(!Serial){
     delay(1000); // Delay if issue with serial
   }
 
@@ -54,28 +54,32 @@ void loop() {
   int numDevices = 0; // Number of devices found
 
   // Loop through expected addresses of sensors
-  for (i=0; i<4; i++){
+  for (int i=0; i<4; i++){
 
-    addr = addresses[i];
+    addr = sensorsAddrs[i];
     Wire.beginTransmission(addr);
     err = Wire.endTransmission();
+    
     if(!err){
-      
+      numDevices++;
       Serial.print(sensorNames[i]);
       Serial.print(" sensor found at ");
+      
       // Hex address formating "0x00"
-
       Serial.print("0");
-      Serial.print(address,HEX);
+      Serial.print(addr,HEX);
       Serial.println("  !");
-
-    }else if(err==4)
+      
+    }else if(err==4){
       Serial.print("Error at ");
-
       Serial.print("0");
       Serial.println(addr, HEX);
     }
   }
-
+  
+  Serial.print("Scan Complete: ");
+  Serial.print(numDevices);
+  Serial.println(" devices found\n");
+  
   delay(1000);
 }
