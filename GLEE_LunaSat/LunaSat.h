@@ -10,6 +10,9 @@
 #include "ICM20602.h"
 #include "TMP117.h"
 
+#define LED1 4 // Indicator LED Pin Constants defined here
+#define LED2 5 
+
 typedef struct {
     float x;
     float y;
@@ -65,6 +68,8 @@ class LunaSat {
         lunaSat_sample_t getSample();
         void dispSample(lunaSat_sample_t sample);
         lunaSat_info_t info;
+
+        void blink(int _pin, int _delay);
 
         TMP117 *tmp117; 
         ICM20602 *icm20602;

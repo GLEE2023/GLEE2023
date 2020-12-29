@@ -17,6 +17,10 @@ LunaSat::LunaSat(int _id, bool _debug){
     icm20602 = new ICM20602(2,_debug);
     ak09940 = new AK09940(3,_debug);
 
+    // Set indicator LED pin modes
+    pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
+
     //TODO: Handle passing modes/configurations as arguments into sensor constructors
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
 }
@@ -54,6 +58,7 @@ lunaSat_sample_t LunaSat::getSample(void){
     return sample;
 }
 
+
 void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(sample.timeStamp);
     Serial.print(',');
@@ -70,4 +75,21 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(sample.magnetic.y);
     Serial.print(',');
     Serial.println(sample.magnetic.z);
+}
+
+void LunaSat::blink(int _LED, int _delay){
+    int pin;
+    
+    if (_LED == 1){
+        pin = LED1;
+    }else if(_LED == 2){
+        pin = LED2;
+    }else{
+        // Invalid Pin
+    }
+
+    digitalWrite(pin, HIGH);
+    delay(_delay);
+    digitalWrite(pin, LOW);
+    delay(_delay);
 }
