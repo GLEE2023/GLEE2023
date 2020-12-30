@@ -14,9 +14,7 @@ sensor_float_vec_t accelG;
 
 void setup(){
     Serial.begin(9600);
-
     accelerometer.begin();
-
     accelerometer.initialize();
 
     Serial.println("X-Axis (Gs), Y-Axis(Gs), Z-Axis(Gs)");
