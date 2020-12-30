@@ -17,6 +17,7 @@ public:
 	void initialize_radio(float freq = 915.0, uint8_t pwr = 17, float bw = 250.0, uint8_t sf = 12, uint8_t cr = 8);
 	void transmit_data(char* buff);
 	String receive_data_string(void);
+	String receive_data_string_plotting(void);
 	void setFreq(float freq);
 	void setCR(uint8_t cr);
 	void setSF(uint8_t sf);
