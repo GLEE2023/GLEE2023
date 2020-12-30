@@ -3,7 +3,7 @@
 #include <LunaSat.h>
 
 LunaSat lunaSat(0, false); 
-lunaSat_sample_t sample;
+double sample;
 LunaRadio Rad;
 char MSG[16];
 String msg;
@@ -14,8 +14,8 @@ void setup() {
 }
 
 void loop() {
-    sample = lunaSat.getSample();
-    msg = String(sample.temperature);
+    sample = lunaSat.tmp117->getTemperatureC();
+    msg = String(sample);
     msg.toCharArray(MSG,16);
     Rad.transmit_data(MSG);
     delay(1000);  
