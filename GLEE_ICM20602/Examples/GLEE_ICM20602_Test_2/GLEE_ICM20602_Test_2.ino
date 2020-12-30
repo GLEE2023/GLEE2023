@@ -2,15 +2,20 @@
 #include <Arduino.h>
 #include "GLEE_Sensor.h"
 #include "ICM20602.h"
+
 // Instantiate ICM20602 sensor class with id of one and debugging set to false
 ICM20602 accelerometer(1,false);
+
 // Observation configuration
 int sampleRate;
+
 // Dynamic Variable 
 sensor_float_vec_t accG, accMPS;
 sensor_uint16_vec_t accRaw;  
+
 float startTime;    
 float endTime;
+
 void setup(){
     // Set sample rate to 1 sample per second (1Hz)
     sampleRate = 1;
@@ -22,6 +27,7 @@ void setup(){
     // Initialize the sensor with default GLEE configuration (gyro disabled, low power mode)
     accelerometer.initialize();
 };
+
 void loop(){
     startTime = millis();
     accRaw = accelerometer.getRawAccel();
