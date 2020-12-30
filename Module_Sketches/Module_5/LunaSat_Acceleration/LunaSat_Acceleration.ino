@@ -1,3 +1,5 @@
+// GLEE 2023 Module 5: Acceleration - Basic acceleration output via serial in Gs
+
 #include <Arduino.h>
 #include "GLEE_Sensor.h"
 #include "ICM20602.h"
@@ -16,19 +18,20 @@ void setup(){
     accelerometer.begin();
 
     accelerometer.initialize();
+
+    Serial.println("X-Axis (Gs), Y-Axis(Gs), Z-Axis(Gs)");
 };
 
 void loop(){
     startTime = millis();
     
     accelG = accelerometer.getGAccel(AFS_2G);
-    Serial.print("G, X-Axis");
-    Serial.println(accelG.x, 8);
-    Serial.print("G, Y-Axis");
-    Serial.println(accelG.y, 8);
-    Serial.print("G, Z-Axis");
+    
+    Serial.print(accelG.x, 8);
+    Serial.print(",");
+    Serial.print(accelG.y, 8);
+    Serial.print(",");
     Serial.println(accelG.z, 8);
-    Serial.println();
     
     endTime = millis();
     delay(1000 - (endTime - startTime));
