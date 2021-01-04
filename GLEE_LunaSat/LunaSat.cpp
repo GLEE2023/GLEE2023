@@ -4,18 +4,31 @@
 #include "LunaSat.h"
 
 //Constructor: Initializes lunasat and subsequent sensors
-LunaSat::LunaSat(int _id, bool _debug){                             
+LunaSat::LunaSat(int _id, int _conf[5], bool _debug){                             
     // Set lunaSat info
     info.id = _id;
     
+    for(int i = 0; i < 5; i++){ // Might need to replace this with more optimal refrencing
+        info.conf[i] = _conf[i];
+    }
+
     // Initialize sensors
 
     // Set private variables
     debug = _debug;
 
-    tmp117 = new TMP117(1,_debug);
-    icm20602 = new ICM20602(2,_debug);
-    ak09940 = new AK09940(3,_debug);
+    if(info.conf[0]){
+        tmp117 = new TMP117(1,_debug);
+    }
+
+    if(info.conf[1]){
+        icm20602 = new ICM20602(2,_debug);
+    }
+    
+    if(info.conf[2]){
+        ak09940 = new AK09940(3,_debug);
+    }
+    
 
     // Set indicator LED pin modes
     pinMode(LED1, OUTPUT);
@@ -32,8 +45,13 @@ void LunaSat::begin(int baudRate){
         Serial.println("LunaSat has begun serial communications");
     }
 
-    icm20602->begin();
-    icm20602->initialize();
+
+    // Sensor specific begins and initializations
+    if(info.conf[1]){
+        icm20602->begin();
+        icm20602->initialize();
+    }
+    
 
     // TODO: Implement sensor begin outside of constructor classes implement
     // tmp begin
@@ -51,9 +69,23 @@ lunaSat_sample_t LunaSat::getSample(void){
         sample.magnetic = ak09940->getRawData_fuzzed();
     }else{
         sample.timeStamp = millis();
-        sample.temperature = tmp117->getTemperatureC();
-        sample.acceleration = icm20602->getGAccel(AFS_2G);
-        sample.magnetic = ak09940->getrawData();
+        sample.temperature = (info.conf[0] == 1) ? tmp117->getTemperatureC() : 0;
+        
+        if(info.conf[1]){
+            sample.acceleration = icm20602->getGAccel(AFS_2G);
+        }else{
+            sample.acceleration.x = 0;
+            sample.acceleration.y = 0;
+            sample.acceleration.z = 0;
+        }
+        
+        if(info.conf[2]){
+            sample.magnetic = ak09940->getrawData();
+        }else{
+            sample.magnetic.x = 0;
+            sample.magnetic.y = 0;
+            sample.magnetic.z = 0;
+        }
     }
     return sample;
 }
@@ -62,19 +94,26 @@ lunaSat_sample_t LunaSat::getSample(void){
 void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(sample.timeStamp);
     Serial.print(',');
-    Serial.print(sample.temperature);
-    Serial.print(',');
-    Serial.print(sample.acceleration.x);
-    Serial.print(',');
-    Serial.print(sample.acceleration.y);
-    Serial.print(',');
-    Serial.print(sample.acceleration.z);
-    Serial.print(',');
-    Serial.print(sample.magnetic.x);
-    Serial.print(',');
-    Serial.print(sample.magnetic.y);
-    Serial.print(',');
-    Serial.println(sample.magnetic.z);
+    if(info.conf[0]){
+        Serial.print(sample.temperature);
+        Serial.print(',');
+    }
+    if(info.conf[1]){
+        Serial.print(sample.acceleration.x);
+        Serial.print(',');
+        Serial.print(sample.acceleration.y);
+        Serial.print(',');
+        Serial.print(sample.acceleration.z);
+        Serial.print(',');
+    }
+    if(info.conf[2]){
+        Serial.print(sample.magnetic.x);
+        Serial.print(',');
+        Serial.print(sample.magnetic.y);
+        Serial.print(',');
+        Serial.print(sample.magnetic.z);
+    }
+    Serial.println("");
 }
 
 void LunaSat::blink(int _LED, int _delay){

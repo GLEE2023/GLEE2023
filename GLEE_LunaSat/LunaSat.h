@@ -28,7 +28,7 @@ typedef struct {
 
     int id;
     String name;
-
+    int conf[5];
     // TODO: Find optimal structure packing    
 } lunaSat_info_t;
 
@@ -61,7 +61,7 @@ class LunaSat {
         // This controlls whether debug messages are 
         // printed to serial
 
-        LunaSat(int _id, bool _debug = false);    
+        LunaSat(int _id, int _conf[5], bool _debug = false);    
 
         // Methods
         void begin(int baudRate);                      
