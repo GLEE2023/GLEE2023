@@ -1,10 +1,10 @@
 /*
-*Description: This is an Arduino (C++) Header file required for the AK09940 Magnetometer
+*Description: This is an Arduino (C++) Header file required for the TPiS 1S 1385 Infrared Thermopile
 *Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
 *Library Author: John Walker Johnson
 *Library Contributors:
-*Library Created on: July 13th 2020
-*Last Modified on: October 7th 2020
+*Library Created on: November 13th 2020
+*Last Modified on: November 30th 2020
 *Primary Resources Used in Creation:
 *TPiS 1S 1385 Datasheet
 *Arduino Wire Library Reference Guide
@@ -14,6 +14,7 @@
 #ifndef GLEE_IR_THERMOPILE_H
 #define GLEE_IR_THERMOPILE_H
 
+#include "GLEE_Sensor.h"
 
 /*
 *All definitions below allow us to use variable names, rather than integers, to 
@@ -79,31 +80,60 @@ struct CalibrationCoef
 {
     int16_t sensorM;
     int16_t sensorPTAT25;
+    int16_t sensorU0;
+    int16_t sensorUOut1;
 
 };
 
 struct rawADC
 {
-    int_t
-}
+    int8_t TP_OBJ_ADC_H;
+    int8_t TP_OBJ_ADC_M;       //Raw 17 bit ADC output of Object Temp
+    int8_t TP_OBJ_ADC_L;
 
-class Thermopile : public GLEE_Sensor        //inheritied class from the GLEE_Sensor
+    int8_t TP_AMB_ADC_H;       //Raw 15 bit ambient temperature output
+    int8_t TP_AMB_ADC_L;
+
+    int8_t TP_OBJ_LP1_ADC_H;
+    int8_t TP_OBJ_LP1_ADC_M;       //20 bit ADC output of Object Temp with Low-Pass Filter #1
+    int8_t TP_OBJ_LP1_ADC_L;
+
+    int8_t TP_OBJ_LP2_ADC_H;
+    int8_t TP_OBJ_LP2_ADC_M;       //20 bit ADC output of Object Temp with Low-Pass Filter #2
+    int8_t TP_OBJ_LP2_ADC_L;
+
+    int8_t TP_AMB_LP3_ADC_H;    //16 bit ADC value of the Low pass filtered TP_AMB signal
+    int8_t TP_AMB_LP3_ADC_L;
+};
+
+struct sensorADC
+{
+    int32_t TP_OBJ;
+    int32_t TP_AMB;
+};
+
+
+class Thermopile : public Sensor                   //inheritied class from the GLEE_Sensor
 {
     public:
-        IR_Thermopile();                        //constructor
+        Thermopile();                                //constructor
 
-        getCalibration();                       //Retreive and store calibration info to calibration data structure
+        void getCalibration(void);                      //Retreive and store calibration info to calibration data structure
 
-        getRawADCs();                           //Retreive raw temperature ADC values
+        void readADC(void);                             //Retreive raw temperature ADC values
 
-        getSensorTemperature();                 //Retreive most recent ADC Values and store in temperature data structure
-        getObjectTemperature();                 //Retreive most recent ADC Values and store in temperature data structure
+        double getSensorTemperature(void);              //Retreive most recent ADC Values and store in temperature data structure
+        double getObjectTemperature(void);              //Retreive most recent ADC Values and store in temperature data structure
 
-        tempCtoF();                             //converts a celcius output to kelvin
+        double tempKtoF(double inputTemp);              //converts a kelvin output to fahrenheit
+
+        void checkStatus(void);                         //reads status registers
 
     private:
-
-}
+        CalibrationCoef sensorCalibration;              //structure containing the sensor Calibration Details
+        rawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
+        sensorADC sensorADC;
+};
 
 
 #endif
