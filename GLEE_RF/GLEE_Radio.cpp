@@ -139,3 +139,21 @@ String LunaRadio::receive_data_string(void){
 		return "Check Code";
 	}
 }
+
+String LunaRadio::receive_data_string_plotting(void){
+	String tmp_str;
+	LunaRadio::err_state = LunaRadio::radio.receive(tmp_str);
+	if(LunaRadio::err_state == ERR_NONE){
+		return tmp_str;
+	}else if(LunaRadio::err_state == ERR_RX_TIMEOUT){
+		Serial.println("Receive Failed");
+		return "Receiver Timeout";
+	}else if(LunaRadio::err_state == ERR_CRC_MISMATCH){
+		Serial.println("Receive Failed");
+		return "CTC Error";
+	}else{
+		Serial.print(F("failed, code "));
+		Serial.println(LunaRadio::err_state);
+		return "Check Code";
+	}
+}

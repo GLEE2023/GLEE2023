@@ -48,7 +48,10 @@ void ICM20602::initialize(void){
   writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
   writeByte(ICM20602_CONFIG, 0x01); 
   writeByte(ICM20602_GYRO_CONFIG, 0x00);    
-  writeByte(ICM20602_ACCEL_CONFIG, 0x10);   
+  writeByte(ICM20602_ACCEL_CONFIG, 0x00); 
+  // TODO: 0x10 - 8G sensitivity mode? 
+  // 0x00 - 2G Sensitivity mode?
+  // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
 /*
@@ -75,7 +78,7 @@ sensor_uint16_vec_t ICM20602::getRawAccel(){
 /*
 Parameters: none
 Returns: The acceleration in m/s^2 as a struct of sensor_float_vec_t type
-This function converts the raw acceleration in LSB/G to 
+This function converts the raw accelerations in LSB/G to 
 meters per second squared.
 */
 sensor_float_vec_t ICM20602::getMPSAccel(){
@@ -91,7 +94,7 @@ sensor_float_vec_t ICM20602::getMPSAccel(){
 /*
 Parameters: current scale of the sensor as the Ascale enumeration
 Returns: the sensitivity scale factor as a FLOAT 
-This function uses a switch statement to return the sensitivity scale facor
+This function uses a switch statement to return the sensitivity scale factor
 depending on the current sensing accuracy scale.
 */
 float ICM20602::getSensitivity(enum Ascale scaleA){
@@ -117,7 +120,7 @@ float ICM20602::getSensitivity(enum Ascale scaleA){
 
 /*
 Parameters: current scale of the sensor as the Ascale enumeration
-Returns: the acceleration in G's as a sensor_float_vec_t type
+Returns: the accelerations in G's as a sensor_float_vec_t type
 This function converts the raw acceleration in LSB/G to the acceleration in 
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
@@ -129,6 +132,11 @@ sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA){
 	return ICM20602::accelG;
 }
 
+/*
+Parameters: current scale of the sensor as the Ascale enumeration
+Returns: the accelerations in 
+
+*/
 sensor_float_vec_t ICM20602::getGAccel_fuzzed(enum Ascale scaleA){
   float factor = getSensitivity(scaleA);
   ICM20602::accelG.x = factor*1;

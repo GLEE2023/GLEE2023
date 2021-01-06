@@ -1,3 +1,5 @@
+// GLEE 2023 TMP117 Library
+
 #include <Arduino.h>
 #include <Wire.h>
 #include "TMP117.h"
@@ -12,13 +14,6 @@ TMP117::TMP117(int _id, bool _debug){
 
 uint8_t TMP117::getAddress(){
     return TMP117::info.address;
-}
-
-double TMP117::getTemperatureC_fuzzed(){
-  // Enter fuzzing function for temperature here
-  double finalTempC;
-  finalTempC = 999.99;
-  return finalTempC;
 }
 
 double TMP117::getTemperatureC(){
@@ -119,10 +114,20 @@ uint16_t TMP117::read2Byte(uint8_t registerAddress){
   	}
   	return datac;   //return the read data byte
 }
+
 void TMP117::write2Byte(uint8_t reg, uint16_t data){    
 	Wire.beginTransmission(TMP117::info.address);      
 	Wire.write(reg);
 	Wire.write(highByte(data)); // Write MSB (D15-D8)
 	Wire.write(lowByte(data));  // Write LSB (D7-D0)
 	Wire.endTransmission();	 // Stop transmitting data
+}
+
+// Functions for testing
+
+double TMP117::getTemperatureC_fuzzed(){
+  // Enter fuzzing function for temperature here
+  double finalTempC;
+  finalTempC = 999.99;
+  return finalTempC;
 }

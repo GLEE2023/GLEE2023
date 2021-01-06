@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <LunaSat.h>
 
-LunaSat lunaSat(0,true);
+LunaSat lunaSat(0,false);
 
 TMP117 tmp117(1,true); 
 ICM20602 icm20602(2,true);

@@ -1,4 +1,8 @@
+.gitignore
 .DS_Store
 .vscode
 
 .vs/slnx.sqlite
+GLEE_Data_Logger/GLEE_Data.csv_201130_151425
+GLEE_Data_Logger/GLEE_Data.csv_201130_153631
+RadioLib
