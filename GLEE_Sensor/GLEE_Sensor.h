@@ -40,6 +40,12 @@ typedef struct{
     uint16_t z;
 } sensor_uint16_vec_t;
 
+typedef struct{
+    int16_t x;
+    int16_t y;
+    int16_t z;
+} sensor_int16_vec_t;
+
 
 class Sensor {
     public:
