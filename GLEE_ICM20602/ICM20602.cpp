@@ -48,30 +48,42 @@ void ICM20602::initialize(void){
   writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
   writeByte(ICM20602_CONFIG, 0x01); 
   writeByte(ICM20602_GYRO_CONFIG, 0x00);    
-  writeByte(ICM20602_ACCEL_CONFIG, 0x00); 
+  writeByte(ICM20602_ACCEL_CONFIG, 0x10);   
   // TODO: 0x10 - 8G sensitivity mode? 
   // 0x00 - 2G Sensitivity mode?
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
+int16_t ICM20602::read2Byte(uint8_t registerAddress){
+    uint16_t readByte;              // byte to store data that is read
+    uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
+  	int16_t datac = 0;				// Declares the return variable to be 0
+    
+    Wire.beginTransmission(ICM20602::info.address);          //begins comms with sensor specified
+    Wire.write(registerAddress);                            //identifies register for data to be read from
+    Wire.endTransmission();                                 //end transmission
+    Wire.requestFrom(ICM20602::info.address, uint8_t(2) );   //request 2 bytes from the sensor address
+  	
+    if (Wire.available() <= 2){             // Don't read more than 2 bits
+  		data[0] = Wire.read();			    // Reads the first set of bits (D15-D8)
+  		data[1] = Wire.read();			    // Reads the second set of bits (D7-D0)
+  		datac = ((data[0] << 8) | data[1]); // Swap the LSB and the MSB
+  	}
+  	return datac;   //return the read data byte
+}
+
 /*
 Parameters: none
 Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
-This function reads in the high and low bytes of the accerl foreach of the three 
+This function reads in the high and low bytes of the accel for each of the three 
 axis, performs a bitwise operation, then saves and returns the raw acceleration
 struct.
 */
-sensor_uint16_vec_t ICM20602::getRawAccel(){
-  uint8_t hByteX,lByteX, hByteY,lByteY, hByteZ,lByteZ;
-  hByteX = readByte(ICM20602_ACCEL_XOUT_H);
-  lByteX = readByte(ICM20602_ACCEL_XOUT_L);
-  hByteY = readByte(ICM20602_ACCEL_YOUT_H);
-  lByteY = readByte(ICM20602_ACCEL_YOUT_L);
-  hByteZ = readByte(ICM20602_ACCEL_ZOUT_H);
-  lByteZ = readByte(ICM20602_ACCEL_ZOUT_L);
-  ICM20602::accelRaw.x = (hByteX<<8|lByteX);
-  ICM20602::accelRaw.y = (hByteY<<8|lByteY);
-  ICM20602::accelRaw.z = (hByteZ<<8|lByteZ);
+sensor_int16_vec_t ICM20602::getRawAccel(){
+  ICM20602::accelRaw.x = read2Byte(ICM20602_ACCEL_XOUT_H);
+  ICM20602::accelRaw.y = read2Byte(ICM20602_ACCEL_YOUT_H);
+  ICM20602::accelRaw.z = read2Byte(ICM20602_ACCEL_ZOUT_H);
+
   return ICM20602::accelRaw;
 }
 
@@ -89,7 +101,7 @@ sensor_float_vec_t ICM20602::getMPSAccel(){
   ICM20602::accelMPS.z = accelRaw.z * MPSScale;
   return ICM20602::accelMPS;    
 }
-//testing colaberative work
+//testing collaberative work
 
 /*
 Parameters: current scale of the sensor as the Ascale enumeration
@@ -135,6 +147,8 @@ sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA){
 /*
 Parameters: current scale of the sensor as the Ascale enumeration
 Returns: the accelerations in 
+debug mode set to true, if true data interfacing
+classes and everything working and responds to output for datalog
 
 */
 sensor_float_vec_t ICM20602::getGAccel_fuzzed(enum Ascale scaleA){
