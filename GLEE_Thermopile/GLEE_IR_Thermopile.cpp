@@ -16,9 +16,9 @@
 
 Thermopile::Thermopile()    //Constructor
 {
-    Thermopile::info.id = 0000;     
-    Thermopile::info.address = IR_THERMOPILE_I2C_ADDR;
-    Thermopile::info.name = "IR Thermopile";
+    //Thermopile::info.id = 0000;     
+    Thermopile::TEMPADDRESS = IR_THERMOPILE_I2C_ADDR;
+    //Thermopile::info.name = "IR Thermopile";
 
     // Add 0x00 Address Call and any accompanying functions or returns
       // Initalize Thermopile Sensor

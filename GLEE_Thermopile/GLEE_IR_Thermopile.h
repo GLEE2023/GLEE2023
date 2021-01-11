@@ -133,6 +133,7 @@ class Thermopile : public Sensor                   //inheritied class from the G
         CalibrationCoef sensorCalibration;              //structure containing the sensor Calibration Details
         rawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
         sensorADC sensorADC;
+        uint8_t TEMPADDRESS;
 };
 
 
