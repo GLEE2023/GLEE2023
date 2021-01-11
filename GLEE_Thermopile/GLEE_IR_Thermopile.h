@@ -73,7 +73,7 @@
 *End Register Definitions
 */
 
-#define IR_THERMOPILE_I2C_ADDR 0x0C             //I2C Sensor Address
+#define IR_THERMOPILE_I2C_ADDR 0x0D             //I2C Sensor Address
 
 
 struct CalibrationCoef

@@ -16,11 +16,27 @@
 
 Thermopile::Thermopile()    //Constructor
 {
-    //Thermopile::info.id = 0000;     
-    //Thermopile::info.address = IR_THERMOPILE_I2C_ADDR;
-    //Thermopile::info.name = "IR Thermopile";
+    Thermopile::info.id = 0000;     
+    Thermopile::info.address = IR_THERMOPILE_I2C_ADDR;
+    Thermopile::info.name = "IR Thermopile";
 
     // Add 0x00 Address Call and any accompanying functions or returns
+      // Initalize Thermopile Sensor
+    Wire.beginTransmission(0x00);     // Tx buffer
+    Wire.write(0x04);                 // Add Register Address to Tx buffer
+    if (Wire.endTransmission() == 0)
+    {
+            if (Thermopile::sensorDebug)
+            {
+                Serial.println("GENERAL CALL FOR THERMOPILE COMPLETED");
+            }
+            else
+            {
+                Serial.println("ERROR: THERMOPILE ADDRESS INITALIZATION NOT ACKNOWLEDGED");
+            }
+    }
+    delay(5);
+    
 }
 
 void Thermopile::getCalibration(void)
