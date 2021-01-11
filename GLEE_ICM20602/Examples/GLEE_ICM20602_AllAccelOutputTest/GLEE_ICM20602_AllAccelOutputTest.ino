@@ -5,8 +5,8 @@
 float startTime;    
 float endTime;
 
-ICM20602 accelerometer(1, true);
-sensor_uint16_vec_t accelRaw;
+ICM20602 accelerometer(1, false);
+sensor_int16_vec_t accelRaw;
 sensor_float_vec_t accelMPS;
 sensor_float_vec_t accelG; 
 
