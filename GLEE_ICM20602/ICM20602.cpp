@@ -20,7 +20,7 @@ ICM20602::ICM20602(int _id, bool _debug){
     ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
   	ICM20602::info.address = ICM20602_slave_addr;
   	ICM20602::sensorDebug = _debug;
-    ICM20602::scaleA = AFS_2G;
+    ICM20602::currentScale = AFS_2G;
 }
 
 /*
@@ -48,7 +48,7 @@ void ICM20602::initialize(void){
   writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
   writeByte(ICM20602_CONFIG, 0x01); 
   writeByte(ICM20602_GYRO_CONFIG, 0x00);    
-  writeByte(ICM20602_ACCEL_CONFIG, 0x10);   
+  writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
   // TODO: 0x10 - 8G sensitivity mode? 
   // 0x00 - 2G Sensitivity mode?
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
@@ -95,10 +95,9 @@ meters per second squared.
 */
 sensor_float_vec_t ICM20602::getMPSAccel(){
   // TODO: Apply sensitivity factor, currently hard coded
-  float MPSScale = 8.0/32768.0;
-  ICM20602::accelMPS.x = accelRaw.x * MPSScale;
-  ICM20602::accelMPS.y = accelRaw.y * MPSScale;
-  ICM20602::accelMPS.z = accelRaw.z * MPSScale;
+  ICM20602::accelMPS.x = accelG.x * sensor_gravity;
+  ICM20602::accelMPS.y = accelG.y * sensor_gravity;
+  ICM20602::accelMPS.z = accelG.z * sensor_gravity;
   return ICM20602::accelMPS;    
 }
 //testing collaberative work
@@ -109,11 +108,11 @@ Returns: the sensitivity scale factor as a FLOAT
 This function uses a switch statement to return the sensitivity scale factor
 depending on the current sensing accuracy scale.
 */
-float ICM20602::getSensitivity(enum Ascale scaleA){
+float ICM20602::getSensitivity(){
   // TODO: Write setter for sensity a variable, possibly private
   // TODO: Set sensitivity on initialization
   float factor;
-  switch (scaleA) {
+  switch (currentScale) {
     case (AFS_2G):
       factor = 16384.0;
       break;
@@ -127,6 +126,7 @@ float ICM20602::getSensitivity(enum Ascale scaleA){
       factor = 2048.0;
       break;
   }
+  currentFactor = factor;
   return factor;
 }
 
@@ -136,11 +136,10 @@ Returns: the accelerations in G's as a sensor_float_vec_t type
 This function converts the raw acceleration in LSB/G to the acceleration in 
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
-sensor_float_vec_t ICM20602::getGAccel(enum Ascale scaleA){
-  float factor = getSensitivity(scaleA);
-  ICM20602::accelG.x = accelRaw.x/ factor;
-  ICM20602::accelG.y = accelRaw.y/ factor;
-  ICM20602::accelG.z = accelRaw.z/ factor;
+sensor_float_vec_t ICM20602::getGAccel(){
+  ICM20602::accelG.x = accelRaw.x/ currentFactor;
+  ICM20602::accelG.y = accelRaw.y/ currentFactor;
+  ICM20602::accelG.z = accelRaw.z/ currentFactor;
 	return ICM20602::accelG;
 }
 
@@ -151,18 +150,36 @@ debug mode set to true, if true data interfacing
 classes and everything working and responds to output for datalog
 
 */
-sensor_float_vec_t ICM20602::getGAccel_fuzzed(enum Ascale scaleA){
-  float factor = getSensitivity(scaleA);
-  ICM20602::accelG.x = factor*1;
-  ICM20602::accelG.y = factor*2;
-  ICM20602::accelG.z = factor*3;
+sensor_float_vec_t ICM20602::getGAccel_fuzzed(){
+  ICM20602::accelG.x = currentFactor*1;
+  ICM20602::accelG.y = currentFactor*2;
+  ICM20602::accelG.z = currentFactor*3;
 	return ICM20602::accelG;
 }
 
 
 /*
-void setScale(enum Ascale newScale){
-   scaleA = newScale;
-   //writebyte??
-}
+Parameters: new scale of the sensor wished to be set to as an Ascale enumeration
+Returns: none
+This function allows a new scale to be passed in, with the global variable 
+current scale set to the new scale, and writing the accelration configuration
+based on the new scale.
 */
+void setScale(enum Ascale newScale){
+   currentScale = newScale;
+   switch (currentScale) {
+    case (AFS_2G):
+      writeByte(ICM20602_ACCEL_CONFIG, 0x00);
+      break;
+    case (AFS_4G):
+      writeByte(ICM20602_ACCEL_CONFIG, 0x01);
+      break;
+    case (AFS_8G):
+      writeByte(ICM20602_ACCEL_CONFIG, 0x10);
+      break;
+    case (AFS_16G):
+      writeByte(ICM20602_ACCEL_CONFIG, 0x11);
+      break;
+  }
+}
+

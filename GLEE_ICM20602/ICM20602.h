@@ -57,23 +57,24 @@ class ICM20602:public Sensor{
     public:
       ICM20602(int _id, bool _debug = true);
       
-      Ascale scaleA; //g-force range
+      Ascale currentScale; //g-force range
+      float currentFactor;
       sensor_int16_vec_t accelRaw;
       sensor_float_vec_t accelMPS;
       sensor_float_vec_t accelG;
 
       bool begin();
       void initialize();
-      float getSensitivity(enum Ascale scaleA);
+      float getSensitivity();
       int16_t read2Byte(uint8_t registerAddress);
       sensor_int16_vec_t getRawAccel();
       sensor_float_vec_t getMPSAccel();
-      sensor_float_vec_t getGAccel(enum Ascale scaleA);
+      sensor_float_vec_t getGAccel();
       
-      sensor_float_vec_t getGAccel_fuzzed(enum Ascale scaleA);
+      sensor_float_vec_t getGAccel_fuzzed();
 
 
-      //void ICM20602::setScale(enum Ascale scaleA);
+      void setScale(enum Ascale newScale);
       //impact function
 };
 #endif
