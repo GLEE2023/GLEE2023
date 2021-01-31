@@ -1,12 +1,12 @@
 // GLEE 2023 Module 2: Intro to Arduino - Blink Sketch
 
-// Welcome to Module 2, lets get some lights blinking!
+// Welcome to Module 2, let's get some lights blinking!
 
 // We begin by defining variables LED1 and LED2 to store output pin configuration
 int LED1 = 4;
 int LED2 = 5;
 
-// Next we define variables to configure time of and between blinks
+// Next we define variables to configure time off and between blinks
 int on_time = 1000;
 int off_time = 1000;
 
