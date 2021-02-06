@@ -12,7 +12,7 @@
 #include "AK09940.h"
 
 
-AK09940 ak09940 = AK09940();
+AK09940 ak09940 = AK09940(0, false);
 
 void setup ()
 {

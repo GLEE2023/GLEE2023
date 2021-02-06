@@ -11,7 +11,7 @@
 #include "GLEE_Sensor.h"
 #include "AK09940.h"
 
-AK09940 ak09940 = AK09940();
+AK09940 ak09940 = AK09940(0,false);
 
 void setup (){
     Serial.begin(9600);
