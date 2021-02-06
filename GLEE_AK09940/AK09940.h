@@ -114,7 +114,7 @@ class AK09940: public Sensor{
 		bool FIFOEnabled;
 
 		//Sensor Functions 
-		AK09940(int _id, bool _debug = true);						//constructor
+		AK09940(int _id = 0, bool _debug = true);						//constructor
 		
 		void getCalculatedData(void);		//get data data converted to nT and Celcius
 
