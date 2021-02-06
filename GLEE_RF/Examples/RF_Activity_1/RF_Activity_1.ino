@@ -6,7 +6,7 @@
 //only x-axis threshold implemented, but can add y and z if needed
 
 LunaRadio Rad;
-AK09940 ak09940 = AK09940();
+AK09940 ak09940 = AK09940(0,false); // Initalization Params: Sensor ID = 0, Debugging = False
 
 char MSG[16]; //for converting magnetometer values
 String msg;
@@ -35,7 +35,7 @@ void loop(){
         ak09940.setMeasurementMode(SINGLE_MEASURE); //changed to single measurement mode
         ak09940.getRawData();
         ak09940.getCalculatedData();
-        int32_t calcXMag = ak09940.calculatedData.xMag //saves the current calculated x-mag
+        int32_t calcXMag = ak09940.calculatedData.xMag; //saves the current calculated x-mag
 
         if(calcXMag >= xMagThreshold){ //checks if the current x-mag is greater than or equal to threshold
             msg = String(calcXMag); //converts x-mag to char* to be trasnmitted
