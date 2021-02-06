@@ -4,7 +4,7 @@
 LunaRadio Rad;
 
 void setup() {
-  
+  //Set the data rate to 9600 bits pere second
   Serial.begin(9600);
   
   //Initialize the radio settings by using the initialize_radio function
