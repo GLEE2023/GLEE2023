@@ -1,5 +1,10 @@
 # GLEE_ICM20602
-This library is intended for GLEE's Accelerometer Sensor, the ICM20602. Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control the ICM20602. GLEE_ICM20602 supports the basic functionality of the accelerometer with reading and saving the three-axis acceleration in different units depending on one of four sensing accuracies. However, the gyroscope is currently disabled as the GLEE team currently does not have a need for it.
+This library is intended for GLEE's Accelerometer Sensor, the ICM20602. 
+Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control 
+the ICM20602. GLEE_ICM20602 supports the basic functionality of the accelerometer with reading 
+and saving the three-axis acceleration in different units depending on one of four sensing 
+accuracies. However, the gyroscope is currently disabled as the GLEE team currently does not 
+have a need for it.
 
 ## Baseline Configuration Registers
 | Register Name | Register Value (Hex) | Comments  |
@@ -18,7 +23,7 @@ This library is intended for GLEE's Accelerometer Sensor, the ICM20602. Paired w
 | initialize | void | none | Sets the clock to auto, disables the gyroscope, and sets the configuration registrations |
 | getSensitivity | float | enum Ascale scaleA | Returns the sensitivity scale factor depending on the current sensing accuracy scale |
 | getRawAccel | sensor_uint16_vec_t | none | Converts the raw acceleration in LSB/G to the acceleration in G's |
-| getMPSAccel | sensor_float_vec_t | none | Converts the raw accelerations in LSB/G to meters per second squared
+| getMPSAccel | sensor_float_vec_t | none | Converts the raw accelerations in LSB/G to meters per second squared |
 | getGAccel | sensor_float_vec_t | enum Ascale scaleA | converts the raw acceleration in LSB/G to the acceleration in G's |
 
 ## Configuration Details
