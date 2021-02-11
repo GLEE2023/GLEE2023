@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "AK09940.h"
-#include "GLEE_Sensor.h"
 #include <GLEE_Radio.h>
 
 //only x-axis threshold implemented, but can add y and z if needed

@@ -7,23 +7,30 @@
 float startTime;    
 float endTime;
 
-ICM20602 accelerometer(1, true);
-sensor_uint16_vec_t accelRaw;
-sensor_float_vec_t accelMPS;
+ICM20602 accelerometer(2); // Initialize acclerometer with ID of 2
+ 
+// sensor_uint16_vec_t accelRaw;
+// sensor_float_vec_t accelMPS;
 sensor_float_vec_t accelG; 
 
 void setup(){
+    // Begin Serial Communications
     Serial.begin(9600);
+
+    // Begin communications with and initialize the accelerometer
     accelerometer.begin();
     accelerometer.initialize();
 
+    // Print Header row for line seperated data
     Serial.println("X-Axis (Gs), Y-Axis(Gs), Z-Axis(Gs)");
 };
 
 void loop(){
-    startTime = millis();
-    
-    accelG = accelerometer.getGAccel(AFS_2G);
+    // Loop for printing acceleration reading every second
+  
+    startTime = millis(); // Record start time for adjustment for processing time
+
+    accelG = accelerometer.getGAccel();
     
     Serial.print(accelG.x, 8);
     Serial.print(",");
@@ -32,5 +39,6 @@ void loop(){
     Serial.println(accelG.z, 8);
     
     endTime = millis();
-    delay(1000 - (endTime - startTime));
+    
+    delay(1000 - (endTime - startTime)); // Delay of 1000s between each readings
 };
