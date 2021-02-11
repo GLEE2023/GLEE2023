@@ -74,7 +74,7 @@ class ICM20602:public Sensor{
       sensor_float_vec_t getGAccel_fuzzed();
 
 
-      void setScale(enum Ascale newScale);
+      void setScale(Ascale newScale);
       //impact function
 };
 #endif

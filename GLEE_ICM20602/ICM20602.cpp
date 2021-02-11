@@ -95,9 +95,9 @@ meters per second squared.
 */
 sensor_float_vec_t ICM20602::getMPSAccel(){
   // TODO: Apply sensitivity factor, currently hard coded
-  ICM20602::accelMPS.x = accelG.x * GLEE_Sensor::sensor_gravity;
-  ICM20602::accelMPS.y = accelG.y * GLEE_Sensor::sensor_gravity;
-  ICM20602::accelMPS.z = accelG.z * GLEE_Sensor::sensor_gravity;
+  ICM20602::accelMPS.x = accelG.x * IMU_ONE_G;
+  ICM20602::accelMPS.y = accelG.y * IMU_ONE_G;
+  ICM20602::accelMPS.z = accelG.z * IMU_ONE_G;
   return ICM20602::accelMPS;    
 }
 //testing collaberative work
@@ -165,7 +165,7 @@ This function allows a new scale to be passed in, with the global variable
 current scale set to the new scale, and writing the accelration configuration
 based on the new scale.
 */
-void setScale(enum Ascale newScale){
+void ICM20602::setScale(enum Ascale newScale){
    currentScale = newScale;
    switch (currentScale) {
     case (AFS_2G):
