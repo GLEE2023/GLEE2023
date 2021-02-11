@@ -95,9 +95,9 @@ meters per second squared.
 */
 sensor_float_vec_t ICM20602::getMPSAccel(){
   // TODO: Apply sensitivity factor, currently hard coded
-  ICM20602::accelMPS.x = accelG.x * sensor_gravity;
-  ICM20602::accelMPS.y = accelG.y * sensor_gravity;
-  ICM20602::accelMPS.z = accelG.z * sensor_gravity;
+  ICM20602::accelMPS.x = accelG.x * GLEE_Sensor::sensor_gravity;
+  ICM20602::accelMPS.y = accelG.y * GLEE_Sensor::sensor_gravity;
+  ICM20602::accelMPS.z = accelG.z * GLEE_Sensor::sensor_gravity;
   return ICM20602::accelMPS;    
 }
 //testing collaberative work

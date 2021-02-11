@@ -20,7 +20,7 @@ universal funnctions required for I2C communication and LunaSat performance
 #include <string.h>
 #include <Arduino.h>
 
-#define sensor_gravity = (9.80665F);
+#define sensor_gravity (9.80665F);
 
 typedef struct{
     uint8_t id;

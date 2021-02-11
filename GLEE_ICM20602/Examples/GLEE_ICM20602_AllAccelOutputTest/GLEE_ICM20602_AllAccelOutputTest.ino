@@ -30,6 +30,15 @@ void loop(){
     Serial.println(accelRaw.z, 8);
     Serial.println();
 
+    accelG = accelerometer.getGAccel();
+    Serial.print("G, X-Axis: ");
+    Serial.println(accelG.x, 8);
+    Serial.print("G, Y-Axis: ");
+    Serial.println(accelG.y, 8);
+    Serial.print("G, Z-Axis: ");
+    Serial.println(accelG.z, 8);
+    Serial.println();
+
     accelMPS = accelerometer.getMPSAccel();
     Serial.print("MPS, X-Axis: ");
     Serial.println(accelMPS.x, 8);
@@ -37,15 +46,6 @@ void loop(){
     Serial.println(accelMPS.y, 8);
     Serial.print("MPS, Z-Axis: ");
     Serial.println(accelMPS.z, 8);
-    Serial.println();
-
-    accelG = accelerometer.getGAccel(AFS_2G);
-    Serial.print("G, X-Axis: ");
-    Serial.println(accelG.x, 8);
-    Serial.print("G, Y-Axis: ");
-    Serial.println(accelG.y, 8);
-    Serial.print("G, Z-Axis: ");
-    Serial.println(accelG.z, 8);
     Serial.println();
     
     endTime = millis();
