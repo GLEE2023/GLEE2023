@@ -20,6 +20,11 @@ central hub on the host lander with RF.
 | setBandwith | void | float bw | Sets bandwith |
 | setPWR | void | uint8_t pwr | Sets output power |
 
+## Common Variables Explained 
+
+freq - Frequency of radio waves recieved or transmitted by RF Module. Typically 915-928MHz which corresponds to LoRas opperation on unlicense ISM Radio Band in US
+pwr - Transmission power factor. 
+
 ## Configuration Details
 | Configuration Name | Default Setting |
 |---|---|
@@ -67,3 +72,6 @@ void loop() {
   delay(1000);  
 }
 ```
+
+## External LoRA Documentation Refrences
+[LoRA documentation Quick Refrence](https://lora.readthedocs.io/en/latest/#range-vs-power)
