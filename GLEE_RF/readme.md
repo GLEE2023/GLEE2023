@@ -23,7 +23,7 @@ central hub on the host lander with RF.
 ## Default Initialization
 | Configuration Name | Default Setting |
 |---|---|
-| Freqeuncy | 915.0 MGh |
+| Freqeuncy | 915.0 MHz |
 | Power | 17 |
 | Bandwith | 250 |
 | Spreading Factor | 12 |
@@ -38,6 +38,8 @@ sf - Spreading Factor dictacts number of chirps used to send a signal.
 cr - Coding Rate effects data encoding redundances. CR value is proportional to interfernce tollerence. (Higher - Able to handle more interference)
 
 ## ATMEGA 328 + SX1272 Pin Configuration Details
+| Configuration Name | Default Setting |
+|---|---|
 | NSS_PIN | 10 |
 | DIO1_PIN | 3 |
 | DIO0_PIN | 2 |
