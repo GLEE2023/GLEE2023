@@ -31,11 +31,11 @@ central hub on the host lander with RF.
 
 ### Argument Details
 
-freq - FREQuency of radio waves recieved or transmitted by RF Module. Typically 915-928MHz corresponding to LoRas opperation on unlicense ISM Radio Band in US
-pwr - PoWeR of transciever transmission. (TODO: Add refernce to relevent calculations given antenna parameters)
-bw - BandWidth is requence range of chirps used to transmit data. Typically 250kHz for terestiral usage in the US.
+freq - FREQuency of radio waves recieved or transmitted by RF Module. Typically 915-928MHz corresponding to LoRas opperation on unlicense ISM Radio Band in US\
+pwr - PoWeR of transciever transmission. (TODO: Add refernce to relevent calculations given antenna parameters)\
+bw - BandWidth is requence range of chirps used to transmit data. Typically 250kHz for terestiral usage in the US.\
 sf - Spreading Factor dictacts number of chirps used to send a signal.
-cr - Coding Rate effects data encoding redundances. CR value is proportional to interfernce tollerence. (Higher - Able to handle more interference)
+cr - Coding Rate effects data encoding redundances. CR value is proportional to interfernce tollerence. (Higher - Able to handle more interference)\
 
 ## ATMEGA 328 + SX1272 Pin Configuration Details
 | Configuration Name | Default Setting |
