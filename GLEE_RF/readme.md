@@ -1,5 +1,5 @@
 # GLEE RF
-This library is intended for GLEE's RF (radio frequency). 
+This library is intended for GLEE's RF (radio frequency) transmitter module (SX1272). 
 It is used to facilitate communication between LunaSats and the lander, where
 wireless communication will be used to transmit data from the LunaSat to the 
 central hub on the host lander with RF.
