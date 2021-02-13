@@ -73,7 +73,7 @@ void Thermopile::readADC(void)
     int8_t sensorTP_AMB_H = Thermopile :: readByte (TP_AMBIENT_HIGH);
     int8_t sensorTP_AMB_L = Thermopile :: readByte (TP_AMBIENT_LOW);
 
-    Thermopile :: sensorADC.TP_OBJ = ((sensorTP_AMB_H && 0b01111111) << 8 && sensorTP_AMB_L);  
+    Thermopile::sensorADC.TP_AMB = ((sensorTP_AMB_H && 0b01111111) << 8 && sensorTP_AMB_L);  
 }
 
 double Thermopile :: getSensorTemperature(void)

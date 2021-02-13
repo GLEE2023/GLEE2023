@@ -1,9 +1,7 @@
-#include <Arduino>
-
 #include "GLEE_IR_Thermopile.h"
 
 
-Thermopile IRsensor
+Thermopile IRsensor;
 void setup()
 {
     Serial.begin(9600);
@@ -15,7 +13,8 @@ void setup()
 
 void loop()
 {
-    Serial.print(IRsensor.readADC());
+    IRsensor.readADC();
+    Serial.print();
     Serial.print(IRsensor.getSensorTemperature());
     Serial.println(IRsensor.getObjectTemperature());
     delay(1000);
