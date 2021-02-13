@@ -39,8 +39,8 @@ void setup() {
 
   // Initalize Thermopile Sensor
   Wire.beginTransmission(0x00);     // Tx buffer
-  Wire.write(0x00);                 // Add Register Address to Tx buffer
-  Wire.write(0x04);                 // Add initialization data to Tx buffer
+  Wire.write(0x04);                 // Add Register Address to Tx buffer
+  Wire.write(0x00);                 // Add initialization data to Tx buffer
   Wire.endTransmission();           // Send
 
   delay(50);
