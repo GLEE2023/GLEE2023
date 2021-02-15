@@ -2,7 +2,7 @@
 // TODO: Refernce https://os.mbed.com/users/sarahbest/code/ICM20602_I2C/, 
 
 /*
-*Description: This is an Arduino (C++) .cpp file required for the ICM20602 Accelerometer
+*Description: This is an Arduino (C++) .h file required for the ICM20602 Accelerometer
 *Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
 *Library Author: John Walker Johnson
 *Library Created on: July 13th 2020

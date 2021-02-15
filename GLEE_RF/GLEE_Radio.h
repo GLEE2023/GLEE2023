@@ -1,6 +1,14 @@
 #ifndef _GLEE_Radio_H
 #define _GLEE_Radio_H
 
+/*
+*Description: This is an Arduino (C++) .h file required for the RF
+*Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
+*Resources Used in Creation:
+*RadioLib
+*Arduino Wire Library Reference Guide
+*/
+
 #include <RadioLib.h>
 #include <string.h>
 #include <Arduino.h>
@@ -12,8 +20,8 @@
 
 class LunaRadio{
 public:
-	String cr_buff;
-	int err_state;
+	String cr_buff; //buffer
+	int err_state; //error state
 	void initialize_radio(float freq = 915.0, uint8_t pwr = 17, float bw = 250.0, uint8_t sf = 12, uint8_t cr = 8);
 	void transmit_data(char* buff);
 	String receive_data_string(void);
@@ -25,8 +33,8 @@ public:
 	void setPWR(uint8_t pwr);
 
 private:
-	SX1272 radio = new Module(NSS_PIN, DIO0_PIN, RESET_PIN, DIO1_PIN);
-	char disp_buff[50];
+	SX1272 radio = new Module(NSS_PIN, DIO0_PIN, RESET_PIN, DIO1_PIN); //creates new module (from radiolib)
+	char disp_buff[50]; //display buffer for creating messages
 };
 
 #endif
