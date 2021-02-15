@@ -2,7 +2,7 @@
 
 /*
 Parameters: frequency as a float, power as an unsigned 8 bit integer, bandwith as a float
-			spreading factoctor as an unsigned 8 bit integer, and coding rate as an an unsigned 8 bit integer
+spreading factoctor as an unsigned 8 bit integer, and coding rate as an an unsigned 8 bit integer
 Returns: none
 This function begins communications with the radio and notifies if the communication
 was successful or not. Then, it sets the frequency, bandwith, output power, spreading
