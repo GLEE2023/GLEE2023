@@ -1,4 +1,4 @@
-# GLEE 2023 Library Collection
+# Great Lunar Expedition For Everyone 2023 Library Collection
 
 # Instillation Instructions
 Version Note: First draft/unverified instructions
