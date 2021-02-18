@@ -54,8 +54,7 @@ void ICM20602::initialize(void){
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
-int16_t ICM20602::read2Byte(uint8_t registerAddress){
-    uint16_t readByte;              // byte to store data that is read
+uint16_t ICM20602::read2Byte(uint8_t registerAddress){
     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
   	int16_t datac = 0;				// Declares the return variable to be 0
     
@@ -127,7 +126,7 @@ float ICM20602::getSensitivity(){
       break;
   }
   currentFactor = factor;
-  return factor;
+  return factor;  
 }
 
 /*
@@ -137,9 +136,9 @@ This function converts the raw acceleration in LSB/G to the acceleration in
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
 sensor_float_vec_t ICM20602::getGAccel(){
-  ICM20602::accelG.x = accelRaw.x/ currentFactor;
-  ICM20602::accelG.y = accelRaw.y/ currentFactor;
-  ICM20602::accelG.z = accelRaw.z/ currentFactor;
+  ICM20602::accelG.x = (float) accelRaw.x/ currentFactor;
+  ICM20602::accelG.y = (float) accelRaw.y/ currentFactor;
+  ICM20602::accelG.z = (float) accelRaw.z/ currentFactor;
 	return ICM20602::accelG;
 }
 
