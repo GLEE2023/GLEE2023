@@ -22,6 +22,15 @@ void loop(){
     startTime = millis();
     
     accelRaw = accelerometer.getRawAccel();
+    
+    Serial.print("Raw (Binary), X-Axis: ");
+    Serial.println(accelRaw.x, BIN);
+    Serial.print("Raw, (Binary): ");
+    Serial.println(accelRaw.y, BIN);
+    Serial.print("Raw, (Binary): ");
+    Serial.println(accelRaw.z, BIN);
+    Serial.println();
+    
     Serial.print("Raw, X-Axis: ");
     Serial.println(accelRaw.x, 8);
     Serial.print("Raw, Y-Axis: ");
