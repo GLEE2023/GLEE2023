@@ -21,6 +21,7 @@ ICM20602::ICM20602(int _id, bool _debug){
   	ICM20602::info.address = ICM20602_slave_addr;
   	ICM20602::sensorDebug = _debug;
     ICM20602::currentScale = AFS_2G;
+    ICM20602::currentFactor = 16384.0;
 }
 
 /*
@@ -94,9 +95,9 @@ meters per second squared.
 */
 sensor_float_vec_t ICM20602::getMPSAccel(){
   // TODO: Apply sensitivity factor, currently hard coded
-  ICM20602::accelMPS.x = accelG.x * IMU_ONE_G;
-  ICM20602::accelMPS.y = accelG.y * IMU_ONE_G;
-  ICM20602::accelMPS.z = accelG.z * IMU_ONE_G;
+  ICM20602::accelMPS.x = ICM20602::accelG.x * IMU_ONE_G;
+  ICM20602::accelMPS.y = ICM20602::accelG.y * IMU_ONE_G;
+  ICM20602::accelMPS.z = ICM20602::accelG.z * IMU_ONE_G;
   return ICM20602::accelMPS;    
 }
 //testing collaberative work
@@ -136,9 +137,9 @@ This function converts the raw acceleration in LSB/G to the acceleration in
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
 sensor_float_vec_t ICM20602::getGAccel(){
-  ICM20602::accelG.x = (float) accelRaw.x/ currentFactor;
-  ICM20602::accelG.y = (float) accelRaw.y/ currentFactor;
-  ICM20602::accelG.z = (float) accelRaw.z/ currentFactor;
+  ICM20602::accelG.x = (float) ICM20602::accelRaw.x/ currentFactor;
+  ICM20602::accelG.y = (float) ICM20602::accelRaw.y/ currentFactor;
+  ICM20602::accelG.z = (float) ICM20602::accelRaw.z/ currentFactor;
 	return ICM20602::accelG;
 }
 
