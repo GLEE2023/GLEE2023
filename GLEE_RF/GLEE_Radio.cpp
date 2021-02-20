@@ -237,3 +237,53 @@ String LunaRadio::receive_data_string_plotting(void){
 		return "Check Code";
 	}
 }
+
+/*
+Parameters: pointer to recieve interupt callback function
+Returns: none
+Sets recieve 
+*/
+void LunaRadio::enable_recieve_interupt(void (*func)){
+
+	radio.setDio0Action(func);
+
+	int state = radio.startReceive();
+  	if (state == ERR_NONE) {
+    	Serial.println(F("Now listening for transmissions"));
+  	} else {
+    	Serial.print(F("failed, code "));
+    	Serial.println(state);
+    while (true);
+  }
+}
+
+
+void LunaRadio::startRecieve(void){
+	int state = radio.startReceive();
+  	if (state == ERR_NONE) {
+    	Serial.println(F("Now listening for transmissions"));
+  	} else {
+    	Serial.print(F("failed, code "));
+    	Serial.println(state);
+    while (true);
+  }
+}
+
+void LunaRadio::readData(uint8_t* data, size_t len){
+	int state = radio.readData(data,len);
+	if (state == ERR_NONE) {
+      // packet was successfully received
+      Serial.println(F("Packet received!"));
+
+
+
+    } else if (state == ERR_CRC_MISMATCH) {
+      // malformed packet reception
+      Serial.println(F("Malformed Packet!"));
+
+    } else {
+      // Print unhandled error coad
+      Serial.print(F("Failed, code "));
+      Serial.println(state);
+    }
+}

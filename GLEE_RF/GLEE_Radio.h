@@ -31,6 +31,9 @@ public:
 	void setSF(uint8_t sf);
 	void setBandwidth(float bw);
 	void setPWR(uint8_t pwr);
+	void enable_recieve_interupt(void (*func));
+	void startRecieve(void);
+	void readData(uint8_t* data, size_t len);
 
 private:
 	SX1272 radio = new Module(NSS_PIN, DIO0_PIN, RESET_PIN, DIO1_PIN); //creates new module (from radiolib)
