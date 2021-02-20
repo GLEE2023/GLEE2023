@@ -66,7 +66,7 @@ class ICM20602:public Sensor{
       bool begin();
       void initialize();
       float getSensitivity();
-      int16_t read2Byte(uint8_t registerAddress);
+      uint16_t read2Byte(uint8_t registerAddress);
       sensor_int16_vec_t getRawAccel();
       sensor_float_vec_t getMPSAccel();
       sensor_float_vec_t getGAccel();
