@@ -181,5 +181,6 @@ void ICM20602::setScale(enum Ascale newScale){
       writeByte(ICM20602_ACCEL_CONFIG, 0x11);
       break;
   }
+  getSensitivity();
 }
 
