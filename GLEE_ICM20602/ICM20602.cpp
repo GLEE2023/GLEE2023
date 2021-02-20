@@ -54,7 +54,7 @@ void ICM20602::initialize(void){
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
-uint16_t ICM20602::read2Byte(uint8_t registerAddress){
+int16_t ICM20602::read2Byte(uint8_t registerAddress){
     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
   	int16_t datac = 0;				// Declares the return variable to be 0
     

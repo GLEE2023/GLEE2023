@@ -32,11 +32,11 @@ void loop(){
     Serial.println();
     
     Serial.print("Raw, X-Axis: ");
-    Serial.println(accelRaw.x, 8);
+    Serial.println(accelRaw.x, DEC);
     Serial.print("Raw, Y-Axis: ");
-    Serial.println(accelRaw.y, 8);
+    Serial.println(accelRaw.y, DEC);
     Serial.print("Raw, Z-Axis: ");
-    Serial.println(accelRaw.z, 8);
+    Serial.println(accelRaw.z, DEC);
     Serial.println();
 
     accelG = accelerometer.getGAccel();
