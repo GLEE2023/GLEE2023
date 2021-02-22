@@ -176,7 +176,7 @@ class AK09940: public Sensor{
 		bool dataReady(void);			
 
 		// Getter for Data Status which verifies that the data was correctly read, with no data overwrites or gaps in measurements 
-		// Note: Must be called after measuring data from registers, it 
+		// Note: Must be called after measuring data from registers
 		void getDataStatus(void);		
 
 		private:
