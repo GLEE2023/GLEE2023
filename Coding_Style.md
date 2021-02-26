@@ -14,6 +14,7 @@ This document is intended for everyone who contributes to the GLEE2023 code. The
 * Nested blocks of code should be properly indented with each new block adding an additional tab
 
 Example: 
+
 [[https://github.com/GLEE_2023/GLEE_2023/blob/main/IndentationExample.png|alt=EX]]
 
 ## Comments
