@@ -12,7 +12,9 @@ This document is intended for everyone who contributes to the GLEE2023 code. The
 ## Indentation 
 * One tab = four spaces
 * Nested blocks of code should be properly indented with each new block adding an additional tab
+
 Example: 
+[[https://github.com/GLEE_2023/GLEE_2023/blob/main/IndentationExample.png|alt=EX]]
 
 ## Comments
 * Block comments: There should be a block comment immediately before each function that lists the parameters, what this function returns, and the purpose of this function.
