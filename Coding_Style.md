@@ -21,7 +21,7 @@ class LunaSat{
 ```
 * Folders: nouns, first letter of each word capitalized with an underscore between each word e.g. GLEE_TMP117
 
-## Indentation and Brackets
+## Indentation, Spacing, and Brackets
 * One tab = four spaces
 ```cpp
 AK09940::AK09940(int _id, bool _debug){
@@ -39,6 +39,10 @@ int32_t AK09940::interpret18BitAs32Bit(int32_t input){
             bitWrite(input, i, 0);
         }
     }
+```
+* All commas should be followed by a space
+```cpp
+snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff), "Output Power set to %d, success!", pwr);
 ```
 * Open brackets should be on the same line as what precedes it; they should always be immediately after the close paranthesis
 ```cpp
