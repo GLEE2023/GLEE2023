@@ -4,6 +4,9 @@ This document is intended for everyone who contributes to the GLEE2023 code. The
 ## Naming Convention
 * We follow the standard C++ naming conventions
 * Variables: nouns, camel case with the first word in small case and the first letter of each consecutive word capitalized
+```cpp
+int firsLast = 0;
+```
 * Registers: nouns, all capitalized with an underscore between each word
 * Functions: verbs, camel case with the first word in small case and the first letter of each consecutive word capitalized
 * Classes: nouns, first letter of each word capitalized
