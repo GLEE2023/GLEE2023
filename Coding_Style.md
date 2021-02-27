@@ -32,12 +32,12 @@ AK09940::AK09940(int _id, bool _debug){
 int32_t AK09940::interpret18BitAs32Bit(int32_t input){
     // The output of the magnetometer is an 18 bit output, for ease of use it is converted to a 32bit output)
     if(bitRead(input, 17) == 0){
-	    // If the MSB of the 18 bit output is 0 - this means output is positive
+        // If the MSB of the 18 bit output is 0 - this means output is positive
 
-	    // Set all bits from [32:18] to 0 so that the output is positive and unchanged by the extra leading bits
-		for(int i = 31; i >= 17; i--){								
-		    bitWrite(input, i, 0);
-	    }
+        // Set all bits from [32:18] to 0 so that the output is positive and unchanged by the extra leading bits
+        for(int i = 31; i >= 17; i--){								
+        bitWrite(input, i, 0);
+        }
     }
 ```
 * Open brackets should be on the same line as what precedes it; they should always be immediately after the close paranthesis
