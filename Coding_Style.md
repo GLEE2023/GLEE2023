@@ -36,7 +36,7 @@ int32_t AK09940::interpret18BitAs32Bit(int32_t input){
 
         // Set all bits from [32:18] to 0 so that the output is positive and unchanged by the extra leading bits
         for(int i = 31; i >= 17; i--){								
-        bitWrite(input, i, 0);
+            bitWrite(input, i, 0);
         }
     }
 ```
