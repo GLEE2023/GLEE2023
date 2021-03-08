@@ -44,7 +44,7 @@ int32_t AK09940::interpret18BitAs32Bit(int32_t input){
 ```cpp
 snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff), "Output Power set to %d, success!", pwr);
 ```
-* Open brackets should be on the same line as what precedes it; they should always be immediately after the close paranthesis
+* Open brackets should be on the same line as what precedes it; they should always be immediately after the close parenthesis
 ```cpp
 Capacitive::Capacitive(int _id, bool _debug){
     Capacitive::info.id = _id;

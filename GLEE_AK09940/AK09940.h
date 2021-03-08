@@ -116,7 +116,7 @@ class AK09940: public Sensor{
 		//Sensor Functions 
 		AK09940(int _id = 0, bool _debug = true);						//constructor
 		
-		void getCalculatedData(void);		//get data data converted to nT and Celcius
+		void setCalculatedData(void);		//set data data converted to nT and Celcius
 
 		// Setter for measurement mode expects preconstructed sensor measurement mode configuration inform of the custom datatype
 		void setMeasurementMode(ak09940_Measurement_Mode_t sensorMeasurementMode);
@@ -175,9 +175,9 @@ class AK09940: public Sensor{
 		// Method which returns boolean signifying that data is ready
 		bool dataReady(void);			
 
-		// Getter for Data Status which verifies that the data was correctly read, with no data overwrites or gaps in measurements 
+		// verifies that the data was correctly read, with no data overwrites or gaps in measurements 
 		// Note: Must be called after measuring data from registers
-		void getDataStatus(void);		
+		void checkDataStatus(void);		
 
 		private:
 

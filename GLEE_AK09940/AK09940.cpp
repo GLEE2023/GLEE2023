@@ -91,7 +91,7 @@ bool AK09940::ak09940WAI(void){
  * This function converts raw data bytes to nT and Celcius using the
  * calcMag and calcTemp private functions.
 **/
-void AK09940::getCalculatedData(void){
+void AK09940::setCalculatedData(void){
 	// Converts raw data bytes to nT and Celcius, change function name??
 	// only converts data that was read with no errors, no overflow, no invalid data
 	AK09940::calculatedData.xMag=AK09940::calcMag( AK09940::rawData.xMagLow , AK09940::rawData.xMagMid , AK09940::rawData.xMagHigh );		
@@ -131,7 +131,7 @@ bool AK09940::getRawData(void){
 		ZMM = AK09940::readByte(AK09940_HZM);		//read X Middle byte
 		ZMH = AK09940::readByte(AK09940_HZH);		//read X High byte
 		tempRead = AK09940::readByte(AK09940_TMPS);	//read temperature data
-		AK09940::getDataStatus();					//get the data status -- Valid and No Overflow -- should these be saved to LunaSat if the data read isnt saved, data and status mismatch in LunaSat data???
+		AK09940::checkDataStatus();					//check the data status -- Valid and No Overflow -- should these be saved to LunaSat if the data read isnt saved, data and status mismatch in LunaSat data???
 
 
 		if (AK09940::dataStatus.dataValid && !AK09940::dataStatus.dataOverflow){
@@ -167,7 +167,7 @@ bool AK09940::getRawData(void){
 /**
  * Parameters: none 
  * Returns: the raw data as a sensor_float_vec_t 
- * This function get raw data returns raw data in sensor float structure for testing.
+ * This function gets raw data returns raw data in sensor float structure for testing.
 **/
 sensor_float_vec_t AK09940::getrawData(void){
 	// Suggested refactoring example, uses old style for getRawData (updates local rawData structure instance) Probably should refrence a local pointer to a struct
@@ -177,7 +177,7 @@ sensor_float_vec_t AK09940::getrawData(void){
 	AK09940::getRawData(); // By "get" it really means update
 
 	// updates calculated data instance
-	AK09940::getCalculatedData();
+	AK09940::setCalculatedData();
 
 	sensor_float_vec_t rawData_;
 	rawData_.x = 3.2;
@@ -197,7 +197,7 @@ sensor_float_vec_t AK09940::getRawData_fuzzed(void){
 	// get raw data returns raw data in sensor float structure for testing
 	
 	// AK09940::getRawData();
-	// AK09940::getCalculatedData();
+	// AK09940::setCalculatedData();
 
 	sensor_float_vec_t rawData_;
 	rawData_.x = 3.2;
@@ -346,7 +346,7 @@ ak09940_Measurement_Mode_t AK09940::getMeasurementMode(void){
 /**
  * Parameter: the desired water mark level as an unsigned 8-bit integer
  * Returns: void 
- * This function sets the wate rmark level with the level being between
+ * This function sets the water mark level with the level being between
  * 0 and 7.
 **/
 void AK09940::setWatermarkMode(uint8_t watermarkLevel){
@@ -450,7 +450,7 @@ void AK09940::setFIFO(bool FIFOState){
  * Parameters: none
  * Returns: the state of FIFO as a boolean
  * This function gets whether the FIFO state
- * is enabled of disabled.
+ * is enabled or disabled.
  **/
 bool AK09940::getFIFOState(void){
 	uint8_t byteRead = AK09940::readByte(AK09940_CNTL_3); //reads from control settings number 3 register
@@ -525,12 +525,12 @@ void AK09940::softReset(void){
 /**
  * Parameters: none
  * Returns: none
- * This function is a getter for Data Status which verifies 
+ * This function is for checking the Data Status which verifies 
  * that the data was correctly read, with no data overwrites 
  * or gaps in measurements. It must be called after measuring 
  * data from registers.
 **/
-void AK09940::getDataStatus (void){
+void AK09940::checkDataStatus (void){
 	// This function should be called after reading register data in order to read the Status 2 pin, as required, once data is read.
 	uint8_t dataStatusByte = AK09940::readByte(AK09940_ST_2);	//read the s
 	bool dataInvalidFlag, dataOverflowFlag;
