@@ -17,14 +17,14 @@
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
 
-typedef struct {
+typedef struct{
     float x;
     float y;
     float z;
 } vec_t;
 
 // This type represents the structure of lunasat info
-typedef struct {
+typedef struct{
 
     // Lunasat Info consists of 
         // ID - Identity of LunaSat
@@ -39,7 +39,7 @@ typedef struct {
 
 // This type represents the structure of lunasat observations
 // *Very useful for packeting by rf
-typedef struct {
+typedef struct{
 
     // This may also be expandaded to support 
     // Additional functionality added in future LS revs
@@ -57,7 +57,7 @@ typedef struct {
 
 } lunaSat_sample_t;
 
-class LunaSat {
+class LunaSat{
     public:
         // Constructor
         // The LunaSat constructor takes one argument
