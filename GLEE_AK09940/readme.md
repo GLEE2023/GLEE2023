@@ -30,7 +30,7 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 ## Configuration and Operation Mode Details
 # Sensor Modes (MODE[4:0]) 
 | Operation Mode | Name in Library | Setting | Description |
-|---|---|---|---|---|
+|---|---|---|---|
 | Power-Down | POWER_DOWN | 0b00000 | Power to almost all internal circuits is turned off |
 | Single Measurement | SINGLE_MEASURE | 0b00001 | Measures sensor for one time and data is output. Transits to power-down mode automatically after measurement ended. |
 | Continuous Measurement 1 | CONT_MEASURE_1 | 0b00010 | 10 Hz, Magnetic sensor measurement is started periodically and stored |
@@ -43,7 +43,7 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 
 # Drive Modes (MT[1:0])
 | Drive Mode Name | Name in Library | Setting | Description |
-|---|---|---|---|---|
+|---|---|---|---|
 | Low Noise 1 | LOW_NOISE_1 | 0b00 | Used to save the current consumption |
 | Low Noise 2 | LOW_NOISE_2 | 0b01 | Used to save the current consumption |
 | Low Power 1 | LOW_POWER_1 | 0b10 | Used to reduce the noise of the AK09940 |
@@ -60,9 +60,7 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | getrawData | sensor_float_vec_t | none | Gets raw data returns raw data in sensor float structure for testing |
 | getRawData_fuzzed | sensor_float_vec_t | none | Gets raw data returns raw data in sensor float structure for testing |
 | dataReady | bool | none | Checks whether or not the data is ready to be read in |
-| checkDataStatus | void | none | Verifies 
- that the data was correctly read, with no data overwrites 
- or gaps in measurements|
+| checkDataStatus | void | none | Verifies that the data was correctly read, with no data overwrites or gaps in measurements |
 | setCalcultedData | void | none | converts raw data bytes to nT and Celcius |
 | setMeasurementMode | void | ak09940_Measurement_Mode_t | sets the measurement mode |
 | getMeasurementMode | ak09940_Measurement_Mode_t | none | gets the current measurement mode |
