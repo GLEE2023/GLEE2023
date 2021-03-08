@@ -6,3 +6,7 @@
 GLEE_Data_Logger/GLEE_Data.csv_201130_151425
 GLEE_Data_Logger/GLEE_Data.csv_201130_153631
 RadioLib
+
+DHT
+DHT_sensor_library
+Adafruit_Unified_Sensor

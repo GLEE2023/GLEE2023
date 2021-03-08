@@ -35,7 +35,7 @@ AK09940::AK09940(int _id, bool _debug){
 	AK09940::sensorDebug= _debug;						//debug flag status
 	Wire.begin(AK09940::info.address);					//begin i2c comms with sensor, must be called once
 	
-	if (AK09940::sensorDebug) {							//Print Statements for debugging and visualization of what this sensor does!
+	if (AK09940::sensorDebug){							//Print Statements for debugging and visualization of what this sensor does!
 		Serial.print("Beginning Communication with AK09940");
 	}
 }
@@ -46,12 +46,14 @@ AK09940::AK09940(int _id, bool _debug){
  * This function is a Who Am I function for checking proper sensor initialization and will
  *  return true if all the expected registers are valid and if the data returned correctly.
 **/
+
+//Internal Who Am I Register verification, returns true if values given by data sheet are correct!
+//Function status: TBR
 bool AK09940::ak09940WAI(void){
-	//Internal Who Am I Register verification, returns true if values given by data sheet are correct!
-	//Function status: TBR
+
 	uint8_t whoAmI_1,whoAmI_2;
-	whoAmI_1=readByte(AK09940_WAI_1);				//read 1st Who Am I Register
-	whoAmI_2=readByte(AK09940_WAI_2);				//Read 2nd Who Am I register 
+	whoAmI_1 = readByte(AK09940_WAI_1);				//Read 1st Who Am I Register
+	whoAmI_2 = readByte(AK09940_WAI_2);				//Read 2nd Who Am I register 
 
 	if (AK09940::sensorDebug && (whoAmI_1 != 0x48 || whoAmI_2 != 0xA1)){
 		//check for debug and incorrect sensor values
@@ -78,7 +80,7 @@ bool AK09940::ak09940WAI(void){
 		// returns true if WAI registers are correctly read
 		return true;										
 	}
-	else{
+	else {
 		// return falst if not read correctly
 		return false;										
 	}
@@ -93,13 +95,13 @@ bool AK09940::ak09940WAI(void){
 **/
 void AK09940::setCalculatedData(void){
 	// Converts raw data bytes to nT and Celcius, change function name??
-	// only converts data that was read with no errors, no overflow, no invalid data
-	AK09940::calculatedData.xMag=AK09940::calcMag( AK09940::rawData.xMagLow , AK09940::rawData.xMagMid , AK09940::rawData.xMagHigh );		
-	AK09940::calculatedData.yMag=AK09940::calcMag( AK09940::rawData.yMagLow , AK09940::rawData.yMagMid , AK09940::rawData.yMagHigh );
-	AK09940::calculatedData.zMag=AK09940::calcMag( AK09940::rawData.zMagLow , AK09940::rawData.zMagMid , AK09940::rawData.zMagHigh );
+	// Only converts data that was read with no errors, no overflow, no invalid data
+	AK09940::calculatedData.xMag = AK09940::calcMag(AK09940::rawData.xMagLow, AK09940::rawData.xMagMid, AK09940::rawData.xMagHigh);		
+	AK09940::calculatedData.yMag = AK09940::calcMag( AK09940::rawData.yMagLow, AK09940::rawData.yMagMid, AK09940::rawData.yMagHigh);
+	AK09940::calculatedData.zMag = AK09940::calcMag( AK09940::rawData.zMagLow, AK09940::rawData.zMagMid, AK09940::rawData.zMagHigh);
 	
-	//assigns results to sensor data structure 
-	AK09940::calculatedData.temperature=AK09940::calcTemp( AK09940::rawData.tempByte);
+	//Assigns results to sensor data structure 
+	AK09940::calculatedData.temperature = AK09940::calcTemp(AK09940::rawData.tempByte);
 }
 
 
@@ -142,7 +144,7 @@ bool AK09940::getRawData(void){
 			AK09940::rawData.xMagHigh = XMH;
 			AK09940::rawData.yMagLow = YML;
 			AK09940::rawData.yMagMid = YMM;
-			AK09940::rawData.yMagHigh = YMH;					//stores to LunaSat data structure
+			AK09940::rawData.yMagHigh = YMH;		//stores to LunaSat data structure
 			AK09940::rawData.zMagLow = ZML;
 			AK09940::rawData.zMagMid = ZMM;
 			AK09940::rawData.zMagHigh = ZMH;
@@ -150,14 +152,14 @@ bool AK09940::getRawData(void){
 			return true;
 		}
 
-		else{
+		else {
 			// If things break
-			Serial.println(" ERROR in getRawData: Data invalid or data overflow.");				
+			Serial.println("ERROR in getRawData: Data invalid or data overflow.");				
 			return false;
 		}
 	}
 
-	else{
+	else {
 		// Data isnt ready to be read!
 		Serial.println("ERROR in getRawData: Data Not Ready.");						
 		return false;
@@ -174,9 +176,9 @@ sensor_float_vec_t AK09940::getrawData(void){
 	// get raw data returns raw data in sensor float structure for testing
 	
 	// Reads raw data and sets local instance 
-	AK09940::getRawData(); // By "get" it really means update
+	AK09940::getRawData();		// By "get" it really means update
 
-	// updates calculated data instance
+	// Updates calculated data instance
 	AK09940::setCalculatedData();
 
 	sensor_float_vec_t rawData_;
@@ -218,10 +220,9 @@ float AK09940::calcTemp(uint8_t tempByte){
 	float tOut;										
 	tOut = 30.0 - tempDec/1.72;
 
-	if (AK09940::sensorDebug) {
+	if (AK09940::sensorDebug){
 		Serial.println("Converting temperature byte to celcius");
 	}
-
 	return tOut;
 }
 
@@ -232,19 +233,19 @@ float AK09940::calcTemp(uint8_t tempByte){
 **/
 int32_t AK09940::interpret18BitAs32Bit(int32_t input){
 	// The output of the magnetometer is an 18 bit output, for ease of use it is converted to a 32bit output)
-	if (bitRead(input,17)==0){
+	if (bitRead(input, 17) == 0){
 		// If the MSB of the 18 bit output is 0 - this means output is positive
 
 		// Set all bits from [32:18] to 0 so that the output is positive and unchanged by the extra leading bits
-		for(int i=31;i>=17;i--) {								
-			bitWrite(input,i,0);
+		for (int i = 31; i >= 17; i--){								
+			bitWrite(input, i, 0);
 		}
 	}
-	else if (bitRead(input,17)==1){
+	else if (bitRead(input, 17) == 1){
 		// If the MSB of the 18 bit output is 1, the value is negative	
 		// so all prior bits [32:18] must be set to 1 to have a negative output with the value unchanged by the prior bits										
-		for(int i=31;i>=17;i--){
-			bitWrite(input,i,1);								 
+		for(int i = 31; i >= 17; i--){
+			bitWrite(input, i, 1);								 
 		}
 	}
 	else if (AK09940::sensorDebug){
@@ -258,7 +259,7 @@ int32_t AK09940::interpret18BitAs32Bit(int32_t input){
  * Returns: the magnetic field as a float in nano teslas
  * This function is private and calculates the magnetic field strength for one axis. 
 **/
-float AK09940::calcMag(uint8_t lowByte, uint8_t midByte, uint8_t highByte) {			
+float AK09940::calcMag(uint8_t lowByte, uint8_t midByte, uint8_t highByte){			
 	uint8_t corrected_hByte; //save the corrected high byte
 
 	// Remove all redundant data past the 18th bit, bits [18:24] all have the same value
@@ -268,10 +269,10 @@ float AK09940::calcMag(uint8_t lowByte, uint8_t midByte, uint8_t highByte) {
 	int32_t rawMag18, rawMag32;				
 	float mag;
 	corrected_hByte = (highByte && hByte_MSB_Remove); 
-	rawMag18 = (corrected_hByte<<16 | midByte<<8 | lowByte);		//Stores 18 bit int in 32 bit variable
-	rawMag32 = interpret18BitAs32Bit(rawMag18); 					//Converts from 18 bit to 32 bit decimal
-	mag = 10 * rawMag32; 											//output is in unit of nT
-	return mag;														//return magnetic field data
+	rawMag18 = (corrected_hByte << 16 | midByte << 8 | lowByte);		//Stores 18 bit int in 32 bit variable
+	rawMag32 = interpret18BitAs32Bit(rawMag18); 						//Converts from 18 bit to 32 bit decimal
+	mag = 10 * rawMag32; 												//output is in unit of nT
+	return mag;															//return magnetic field data
 }
 
 /**
@@ -281,10 +282,10 @@ float AK09940::calcMag(uint8_t lowByte, uint8_t midByte, uint8_t highByte) {
 **/
 void AK09940::setDriveMode(ak09940_Drive_Mode_t driveMode){
 	//writes to CNTRL 3 Register. Bits: [7] = FIFO, [6:5] = Drive Mode, [4:0] = Measurement Mode
-	uint8_t FIFOData = uint8_t(AK09940::FIFOEnabled); //gets FIFO data 
+	uint8_t FIFOData = uint8_t(AK09940::FIFOEnabled); 		//gets FIFO data 
 	uint8_t measurementMode = AK09940::getMeasurementMode();
-	uint8_t writeData = ( FIFOData <<7 | measurementMode << 5 | driveMode );
-	AK09940::writeByte( AK09940_CNTL_3 , writeData); //sets new measurement mode
+	uint8_t writeData = (FIFOData << 7 | measurementMode << 5 | driveMode);
+	AK09940::writeByte(AK09940_CNTL_3 , writeData); 		//sets new measurement mode
 }
 
 /**
@@ -294,7 +295,7 @@ void AK09940::setDriveMode(ak09940_Drive_Mode_t driveMode){
  * type (ak09940_Drive_Mode_t).
 **/
 ak09940_Drive_Mode_t AK09940::getDriveMode(void){
-	uint8_t byteRead = AK09940::readByte(AK09940_CNTL_3); //reads register control settings #3
+	uint8_t byteRead = AK09940::readByte(AK09940_CNTL_3); 		//reads register control settings #3
 	uint8_t removeByte = 0b01100000;
 	uint8_t driveMode = ((byteRead && removeByte) >> 5);
 	return driveMode;
@@ -310,16 +311,16 @@ void AK09940::setMeasurementMode(ak09940_Measurement_Mode_t measurementMode){
 	// Writes to CNTRL 3 Register. Bits: [7] = FIFO, [6:5] = Drive Mode, [4:0] = Measurement Mode
 	uint8_t driveMode = AK09940::getDriveMode();
 
-	uint8_t FIFOData = uint8_t (AK09940::FIFOEnabled); //gets FIFO data
-	uint8_t writeData = (FIFOData << 7 | measurementMode << 5 | driveMode );
+	uint8_t FIFOData = uint8_t (AK09940::FIFOEnabled); 		//gets FIFO data
+	uint8_t writeData = (FIFOData << 7 | measurementMode << 5 | driveMode);
 
-	if (AK09940::sensorDebug){ //if in debug mode
+	if (AK09940::sensorDebug){ 		//if in debug mode
 		Serial.println("Measurement Mode Set");
 		Serial.print("New Mode: ");
-		Serial.println( ak09940_Measurement_Mode_t (measurementMode) );
+		Serial.println(ak09940_Measurement_Mode_t (measurementMode));
 	}
 
-	AK09940::writeByte( AK09940_CNTL_3 , writeData );
+	AK09940::writeByte( AK09940_CNTL_3 , writeData);
 }
 
 /**
@@ -332,14 +333,13 @@ ak09940_Measurement_Mode_t AK09940::getMeasurementMode(void){
 	uint8_t byteRead = AK09940::readByte(AK09940_CNTL_3); //reads register control settings #3
 
 	uint8_t removeByte = 0b00011111; //this will delete FIFO and drive mode data, leaving only the measurement mode
-	uint8_t measurementMode = ( byteRead && removeByte ); //combine the data to remove and data recieved to get our final data
+	uint8_t measurementMode = ( byteRead && removeByte); //combine the data to remove and data recieved to get our final data
 
-	if (AK09940::sensorDebug){ //if in debug mode
+	if (AK09940::sensorDebug){ 		//if in debug mode
 		Serial.println("Measurement Mode Retreived");
 		Serial.print("Current mode set: ");
-		Serial.println( ak09940_Measurement_Mode_t (measurementMode) );
+		Serial.println( ak09940_Measurement_Mode_t (measurementMode));
 	}
-
 	return measurementMode;
 }
 
@@ -353,12 +353,11 @@ void AK09940::setWatermarkMode(uint8_t watermarkLevel){
 	// Must be between 0 && 7
 	ak09940_Measurement_Mode_t currentMeasurementMode = AK09940::getMeasurementMode();
 
-	if (currentMeasurementMode != POWER_DOWN ){
+	if (currentMeasurementMode != POWER_DOWN){
 		// Verify mode is POWER_DOWN
 
-		// must be in power down mode in order to write to this register
+		// Must be in power down mode in order to write to this register
 		AK09940::setMeasurementMode(POWER_DOWN);			
-
 		if (AK09940::sensorDebug){
 			//Debug for print statements
 			Serial.println("Sensor not in POWER_DOWN mode! Changing mode to POWER_DOWN mode in order to write to register");
@@ -366,7 +365,7 @@ void AK09940::setWatermarkMode(uint8_t watermarkLevel){
 	}
 
 	if (watermarkLevel >= 0 && watermarkLevel <= 7 ){
-		//verify input is between 1 and 8
+		//Verify input is between 1 and 8
 
 		// Set the watermark Level as requested
 		AK09940::writeByte(AK09940_CNTL_1, (watermarkLevel));		
@@ -384,8 +383,8 @@ void AK09940::setWatermarkMode(uint8_t watermarkLevel){
 	}
 	
 	else {
-		// if input is not between 0 and 7 - default watermark level = 1
-		AK09940::writeByte( AK09940_CNTL_1 , 0 );
+		// If input is not between 0 and 7 - default watermark level = 1
+		AK09940::writeByte(AK09940_CNTL_1, 0);
 
 		// Set measurement mode back to previous mode				
 		AK09940::setMeasurementMode(currentMeasurementMode);		
@@ -406,9 +405,9 @@ void AK09940::setWatermarkMode(uint8_t watermarkLevel){
 **/
 uint8_t AK09940::getWatermarkMode(void){
 	// Method to Print level of watermark
-
 	// Stores watermark level as 8 un-interger
 	uint8_t currentWatermarkMode;
+
 	// Read byte that stores the current water mark mode
 	currentWatermarkMode = AK09940::readByte(AK09940_CNTL_1);		
 
@@ -417,7 +416,7 @@ uint8_t AK09940::getWatermarkMode(void){
 		Serial.println(currentWatermarkMode);
 	}
 
-	// return water mark mode
+	// Return water mark mode
 	return currentWatermarkMode;									
 }
 
@@ -439,7 +438,7 @@ void AK09940::setFIFO(bool FIFOState){
 		if (FIFOState){
 			Serial.println("FIFO Enabled");
 		}
-		else{
+		else {
 			Serial.println("FIFO Disabled");
 		}
 	}
@@ -453,18 +452,19 @@ void AK09940::setFIFO(bool FIFOState){
  * is enabled or disabled.
  **/
 bool AK09940::getFIFOState(void){
-	uint8_t byteRead = AK09940::readByte(AK09940_CNTL_3); //reads from control settings number 3 register
-	uint8_t FIFOState = (byteRead >> 7); //7 bit right shift
+	uint8_t byteRead = AK09940::readByte(AK09940_CNTL_3);		//reads from control settings number 3 register
+	uint8_t FIFOState = (byteRead >> 7);		//7 bit right shift
 
 	if (AK09940::sensorDebug){
-		if (bool(FIFOState)){ //enabled if true
+		if (bool(FIFOState)){ 
+			//Enabled if true
 			Serial.println("FIFO Enabled");
 		}
-		else{ //disabled if false
+		else { 
+			//Disabled if false
 			Serial.println("FIFO Disabled");
 		}
 	}
-
 	return bool(FIFOState);
 }
 
@@ -478,16 +478,15 @@ bool AK09940::getFIFOState(void){
 **/
 uint8_t AK09940::getNumDataInBuffer(void){
 	// Gets the number of data points stored in the FIFO buffer
-	uint8_t byteRead = AK09940::readByte(AK09940_ST_1);		//reads register status 1
+	uint8_t byteRead = AK09940::readByte(AK09940_ST_1);		//Reads register status 1
 
-	uint8_t numData = (byteRead>>1); 	//shift right one bit to remove dataReady information
+	uint8_t numData = (byteRead >> 1);		//shift right one bit to remove dataReady information
 
 	if (AK09940::sensorDebug){
 		Serial.print("Current number of datasets available in buffer: ");
 		Serial.println(numData);
 
 	}
-
 	return numData;
 }
 
@@ -498,7 +497,7 @@ uint8_t AK09940::getNumDataInBuffer(void){
  * This function sets the sensor to debug mode.
 **/
 void AK09940::setDebugMode(bool state){
-	AK09940::sensorDebug = state; //sets sensor debug
+	AK09940::sensorDebug = state; //Sets sensor debug
 
 	if (AK09940::sensorDebug){
 		Serial.println("Sensor Debug mode now enabled");
@@ -514,11 +513,10 @@ void AK09940::setDebugMode(bool state){
  * the data sheet.
 **/
 void AK09940::softReset(void){
-	if (AK09940::sensorDebug){ //if in sensor debug mode
+	if (AK09940::sensorDebug){ 		//if in sensor debug mode
 		Serial.println("SOFT RESET COMMAND RECIEVED: RESETTING AK09940 NOW");
 	}
-
-	AK09940::writeByte(AK09940_CNTL_4 , 1);
+	AK09940::writeByte(AK09940_CNTL_4, 1);
 }
 
 
@@ -532,7 +530,7 @@ void AK09940::softReset(void){
 **/
 void AK09940::checkDataStatus (void){
 	// This function should be called after reading register data in order to read the Status 2 pin, as required, once data is read.
-	uint8_t dataStatusByte = AK09940::readByte(AK09940_ST_2);	//read the s
+	uint8_t dataStatusByte = AK09940::readByte(AK09940_ST_2);		//Read the s
 	bool dataInvalidFlag, dataOverflowFlag;
 
 	// Combine remove byte with the Status 2 byte in order to get only the Data Invalid bit. Shift right one bit for easy boolean assignment.
@@ -553,19 +551,17 @@ void AK09940::checkDataStatus (void){
 			// Prints if the data is invalid
 			Serial.println("ERROR: AK09940 Reports invalid data. "); 
 		}
-
 		if (dataOverflowFlag){
 			// Prints if FIFO buffer was overflowed
 			if (AK09940::FIFOEnabled){
 				// Overflow bit means different things if FIFO is on or off. Here it is on
 				Serial.println("Data Overflow! A new set of data was measured when the FIFO buffer was full. Data set over flowed from buffer.");
 			}
-			else{
+			else {
 				// Print Overflow  erro if FIFO is disabled
 				Serial.println("Data Overflow! FIFO Disabled. Data skipped in continious measurement.");
 			}
 		}
-
 		else if (!dataInvalidFlag && !dataOverflowFlag){
 			//Check for valid data and no data overflow
 			Serial.println("Data Valid -- No Data Overflow");
@@ -594,10 +590,10 @@ bool AK09940::dataReady(void){
 		if (dataReady){
 			Serial.println("Data ready to be read");		
 		}
-		else{
+		else {
 			Serial.println("Error: Data not ready to be read");
 		}
 	}
-	return dataReady; // return boolean statement
+	return dataReady; 		// return boolean statement
 }
 

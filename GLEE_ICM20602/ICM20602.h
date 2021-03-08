@@ -20,7 +20,7 @@
 // Following are registers currently utilized
 // ICM20602 Register Constants 
 
-#define ICM20602_slave_addr       0x69
+#define ICM20602_SLAVE_ADDR       0x69
 #define ICM20602_PWR_MGMT_1       0x6B  // Device defaults to the SLEEP mode
 #define ICM20602_PWR_MGMT_2       0x6C
 #define ICM20602_CONFIG           0x1A
@@ -55,27 +55,27 @@ enum Gscale{
 
 class ICM20602:public Sensor{
     public:
-      ICM20602(int _id, bool _debug = true);
-      
-      Ascale currentScale; //g-force range
-      float currentFactor;
-      sensor_int16_vec_t accelRaw;
-      sensor_float_vec_t accelMPS;
-      sensor_float_vec_t accelG;
+        ICM20602(int _id, bool _debug = true);
+        
+        Ascale currentScale; //g-force range
+        float currentFactor;
+        sensor_int16_vec_t accelRaw;
+        sensor_float_vec_t accelMPS;
+        sensor_float_vec_t accelG;
 
-      bool begin();
-      void initialize();
-      float getSensitivity();
-      int16_t read2Byte(uint8_t registerAddress);
-      sensor_int16_vec_t getRawAccel();
-      sensor_float_vec_t getMPSAccel();
-      sensor_float_vec_t getGAccel();
-      
-      sensor_float_vec_t getGAccel_fuzzed();
+        bool begin();
+        void initialize();
+        float getSensitivity();
+        int16_t read2Byte(uint8_t registerAddress);
+        sensor_int16_vec_t getRawAccel();
+        sensor_float_vec_t getMPSAccel();
+        sensor_float_vec_t getGAccel();
+        
+        sensor_float_vec_t getGAccel_fuzzed();
 
 
-      void setScale(Ascale newScale);
-      //impact function
+        void setScale(Ascale newScale);
+        //impact function
 };
 #endif
 
