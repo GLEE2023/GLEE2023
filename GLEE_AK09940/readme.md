@@ -61,11 +61,11 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | getRawData_fuzzed | sensor_float_vec_t | none | Gets raw data returns raw data in sensor float structure for testing |
 | dataReady | bool | none | Checks whether or not the data is ready to be read in |
 | checkDataStatus | void | none | Verifies that the data was correctly read, with no data overwrites or gaps in measurements |
-| setCalcultedData | void | none | converts raw data bytes to nT and Celcius |
-| setMeasurementMode | void | ak09940_Measurement_Mode_t | sets the measurement mode |
-| getMeasurementMode | ak09940_Measurement_Mode_t | none | gets the current measurement mode |
+| setCalcultedData | void | none | Converts raw data bytes to nT and Celcius |
+| setMeasurementMode | void | ak09940_Measurement_Mode_t | Sets the measurement mode |
+| getMeasurementMode | ak09940_Measurement_Mode_t | none | Gets the current measurement mode |
 | setWatermarkMode | void | uint8_t | Sets water mark level (between 0 and 7) |
-| getWatermarkMode | uint8_t | none | Gets currrent ater mark mode |
+| getWatermarkMode | uint8_t | none | Gets currrent water mark mode |
 | setDriveMode | void | ak09940_Drive_Mode_t | Sets the drive mode |
 | getDriveMode | ak09940_Drive_Mode_t | none | Gets the current drive mode |
 | setFIFO | void | bool | Sets the state of the FIFO buffer |
