@@ -18,8 +18,8 @@ basic variables to get started.
 */
 ICM20602::ICM20602(int _id, bool _debug){
     ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
-  	ICM20602::info.address = ICM20602_slave_addr;
-  	ICM20602::sensorDebug = _debug;
+    ICM20602::info.address = ICM20602_SLAVE_ADDR;
+    ICM20602::sensorDebug = _debug;
     ICM20602::currentScale = AFS_2G;
     ICM20602::currentFactor = 16384.0;
 }
@@ -32,9 +32,9 @@ device with the given address and notifies the user
 that communication with the sensor has begun.
 */
 bool ICM20602::begin(void){
-  Wire.begin();
-  Serial.println("Beginning Communication With ICM20602");
-  return true;
+    Wire.begin();
+    Serial.println("Beginning Communication With ICM20602");
+    return true;
 }
 
 /*
@@ -44,17 +44,22 @@ This function sets the clock to auto, disables the gyroscope, and sets a
 couple of the other registers.
 */
 void ICM20602::initialize(void){
-  Wire.setClock(100000);
-  writeByte(ICM20602_PWR_MGMT_1, 0x01);   // Set clock set to auto
-  writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
-  writeByte(ICM20602_CONFIG, 0x01); 
-  writeByte(ICM20602_GYRO_CONFIG, 0x00);    
-  writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
-  // TODO: 0x10 - 8G sensitivity mode? 
-  // 0x00 - 2G Sensitivity mode?
-  // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
+    Wire.setClock(100000);
+    writeByte(ICM20602_PWR_MGMT_1, 0x01);   // Set clock set to auto
+    writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
+    writeByte(ICM20602_CONFIG, 0x01); 
+    writeByte(ICM20602_GYRO_CONFIG, 0x00);    
+    writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
+    // TODO: 0x10 - 8G sensitivity mode? 
+    // 0x00 - 2G Sensitivity mode?
+    // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
+/*
+Parameters: Register address as an unsigned byte
+Returns: The data byte being read
+This function requests 2 bytes from the sensor register address and returns an unsigned integer that represents the read data bytes
+*/
 int16_t ICM20602::read2Byte(uint8_t registerAddress){
     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
   	int16_t datac = 0;				// Declares the return variable to be 0
@@ -80,11 +85,11 @@ axis, performs a bitwise operation, then saves and returns the raw acceleration
 struct.
 */
 sensor_int16_vec_t ICM20602::getRawAccel(){
-  ICM20602::accelRaw.x = read2Byte(ICM20602_ACCEL_XOUT_H);
-  ICM20602::accelRaw.y = read2Byte(ICM20602_ACCEL_YOUT_H);
-  ICM20602::accelRaw.z = read2Byte(ICM20602_ACCEL_ZOUT_H);
+    ICM20602::accelRaw.x = read2Byte(ICM20602_ACCEL_XOUT_H);
+    ICM20602::accelRaw.y = read2Byte(ICM20602_ACCEL_YOUT_H);
+    ICM20602::accelRaw.z = read2Byte(ICM20602_ACCEL_ZOUT_H);
 
-  return ICM20602::accelRaw;
+    return ICM20602::accelRaw;
 }
 
 /*
@@ -94,11 +99,11 @@ This function converts the raw accelerations in LSB/G to
 meters per second squared.
 */
 sensor_float_vec_t ICM20602::getMPSAccel(){
-  // TODO: Apply sensitivity factor, currently hard coded
-  ICM20602::accelMPS.x = ICM20602::accelG.x * IMU_ONE_G;
-  ICM20602::accelMPS.y = ICM20602::accelG.y * IMU_ONE_G;
-  ICM20602::accelMPS.z = ICM20602::accelG.z * IMU_ONE_G;
-  return ICM20602::accelMPS;    
+    // TODO: Apply sensitivity factor, currently hard coded
+    ICM20602::accelMPS.x = ICM20602::accelG.x * IMU_ONE_G;
+    ICM20602::accelMPS.y = ICM20602::accelG.y * IMU_ONE_G;
+    ICM20602::accelMPS.z = ICM20602::accelG.z * IMU_ONE_G;
+    return ICM20602::accelMPS;    
 }
 //testing collaberative work
 
@@ -109,25 +114,25 @@ This function uses a switch statement to return the sensitivity scale factor
 depending on the current sensing accuracy scale.
 */
 float ICM20602::getSensitivity(){
-  // TODO: Write setter for sensity a variable, possibly private
-  // TODO: Set sensitivity on initialization
-  float factor;
-  switch (currentScale) {
-    case (AFS_2G):
-      factor = 16384.0;
-      break;
-    case (AFS_4G):
-      factor = 8192.0;
-      break;
-    case (AFS_8G):
-      factor = 4096.0;
-      break;
-    case (AFS_16G):
-      factor = 2048.0;
-      break;
-  }
-  currentFactor = factor;
-  return factor;  
+    // TODO: Write setter for sensity a variable, possibly private
+    // TODO: Set sensitivity on initialization
+    float factor;
+    switch (currentScale) {
+        case (AFS_2G):
+            factor = 16384.0;
+            break;
+        case (AFS_4G):
+            factor = 8192.0;
+            break;
+        case (AFS_8G):
+            factor = 4096.0;
+            break;
+        case (AFS_16G):
+            factor = 2048.0;
+            break;
+    }
+    currentFactor = factor;
+    return factor;  
 }
 
 /*
@@ -137,10 +142,10 @@ This function converts the raw acceleration in LSB/G to the acceleration in
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
 sensor_float_vec_t ICM20602::getGAccel(){
-  ICM20602::accelG.x = (float) ICM20602::accelRaw.x/ currentFactor;
-  ICM20602::accelG.y = (float) ICM20602::accelRaw.y/ currentFactor;
-  ICM20602::accelG.z = (float) ICM20602::accelRaw.z/ currentFactor;
-	return ICM20602::accelG;
+    ICM20602::accelG.x = (float) ICM20602::accelRaw.x/ currentFactor;
+    ICM20602::accelG.y = (float) ICM20602::accelRaw.y/ currentFactor;
+    ICM20602::accelG.z = (float) ICM20602::accelRaw.z/ currentFactor;
+    return ICM20602::accelG;
 }
 
 /*
@@ -151,10 +156,10 @@ classes and everything working and responds to output for datalog
 
 */
 sensor_float_vec_t ICM20602::getGAccel_fuzzed(){
-  ICM20602::accelG.x = currentFactor*1;
-  ICM20602::accelG.y = currentFactor*2;
-  ICM20602::accelG.z = currentFactor*3;
-	return ICM20602::accelG;
+    ICM20602::accelG.x = currentFactor*1;
+    ICM20602::accelG.y = currentFactor*2;
+    ICM20602::accelG.z = currentFactor*3;
+    return ICM20602::accelG;
 }
 
 
@@ -166,21 +171,21 @@ current scale set to the new scale, and writing the accelration configuration
 based on the new scale.
 */
 void ICM20602::setScale(enum Ascale newScale){
-   currentScale = newScale;
-   switch (currentScale) {
-    case (AFS_2G):
-      writeByte(ICM20602_ACCEL_CONFIG, 0x00);
-      break;
-    case (AFS_4G):
-      writeByte(ICM20602_ACCEL_CONFIG, 0x01);
-      break;
-    case (AFS_8G):
-      writeByte(ICM20602_ACCEL_CONFIG, 0x10);
-      break;
-    case (AFS_16G):
-      writeByte(ICM20602_ACCEL_CONFIG, 0x11);
-      break;
-  }
-  getSensitivity();
+    currentScale = newScale;
+    switch (currentScale) {
+        case (AFS_2G):
+            writeByte(ICM20602_ACCEL_CONFIG, 0x00);
+            break;
+        case (AFS_4G):
+            writeByte(ICM20602_ACCEL_CONFIG, 0x01);
+            break;
+        case (AFS_8G):
+            writeByte(ICM20602_ACCEL_CONFIG, 0x10);
+            break;
+        case (AFS_16G):
+            writeByte(ICM20602_ACCEL_CONFIG, 0x11);
+            break;
+    }
+    getSensitivity();
 }
 
