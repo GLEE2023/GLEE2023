@@ -9,10 +9,10 @@
 #include <GLEE_Radio.h> // Library containing pertiant radio functionality
 
 // Include Sensor Libraries
-#include "AK09940.h"            // Magnetometer Library
-#include "ICM20602.h"           // IMU Library
-#include "TMP117.h"             // Temperature Sensor Library
-#include "GLEE_IR_Thermopile.h" // Thermopile Library
+#include "AK09940.h"                // Magnetometer Library
+#include "ICM20602.h"               // IMU Library
+#include "TMP117.h"                 // Temperature Sensor Library
+#include "GLEE_IR_Thermopile.h"     // Thermopile Library
 
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
@@ -23,8 +23,8 @@ typedef struct {
     float z;
 } vec_t;
 
+// This type represents the structure of lunasat info
 typedef struct {
-    // This type represents the structure of lunasat info
 
     // Lunasat Info consists of 
         // ID - Identity of LunaSat
@@ -37,13 +37,12 @@ typedef struct {
     // TODO: Find optimal structure packing    
 } lunaSat_info_t;
 
-
+// This type represents the structure of lunasat observations
+// *Very useful for packeting by rf
 typedef struct {
-    // This type represents the structure of lunasat observations
-    // *Very useful for packeting by rf
 
     // This may also be expandaded to support 
-    // additional functionality added in future LS revs
+    // Additional functionality added in future LS revs
 
     // The LunaSata sample type consists of
         // Time stamp, 
