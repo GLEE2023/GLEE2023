@@ -27,7 +27,7 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | ak09940_Measurement_Mode_t | enum | Holds measurement modes |
 | ak09940_Drive_Mode_ | enum | Holds drive mode options |
 
-# Sensor Mode Configuration Details (MODE[4:0]) 
+## Sensor Mode Configuration Details (MODE[4:0]) 
 | Operation Mode | Name in Library | Setting | Description |
 |---|---|---|---|
 | Power-Down | POWER_DOWN | 0b00000 | Power to almost all internal circuits is turned off |
@@ -40,7 +40,7 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | Continuous Measurement 6 | CONT_MEASURE_6 | 0b01100 | 400 Hz, Magnetic sensor measurement is started periodically and stored |
 | Self Test | SELF_TEST | 0b10000 | Used to check if the magnetic sensor is working normally |
 
-# Drive Mode Configuration Details (MT[1:0])
+## Drive Mode Configuration Details (MT[1:0])
 | Drive Mode Name | Name in Library | Setting | Description |
 |---|---|---|---|
 | Low Noise 1 | LOW_NOISE_1 | 0b00 | Used to save the current consumption |
