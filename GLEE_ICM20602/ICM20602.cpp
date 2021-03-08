@@ -56,9 +56,9 @@ void ICM20602::initialize(void){
 }
 
 /*
-Parameters: Register address as an unsigned byte
-Returns: The data byte being read
-This function requests 2 bytes from the sensor register address and returns an unsigned integer that represents the read data bytes
+Parameters: 
+Returns: 
+Description
 */
 int16_t ICM20602::read2Byte(uint8_t registerAddress){
     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
