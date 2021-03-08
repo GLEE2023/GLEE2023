@@ -1,3 +1,16 @@
+/*
+*Description: This is an Arduino (C++) .h file required for the Capacitive Sensor
+*Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
+*Library Author: Andres Montealegre
+*Library Created on: November 23rd, 2020
+*Last Modified on: Nov 23rd, 2020
+*Resources Used in Creation:
+*Capacitive Datasheet
+*Arduino Wire Library Reference Guide
+*/
+
+
+
 #ifndef Capacitive_H
 #define Capacitive_H
 
