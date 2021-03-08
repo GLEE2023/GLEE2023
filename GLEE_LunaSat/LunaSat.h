@@ -6,9 +6,13 @@
 #include <Wire.h>
 #include <String.h>
 
-#include "AK09940.h"
-#include "ICM20602.h"
-#include "TMP117.h"
+#include <GLEE_Radio.h> // Library containing pertiant radio functionality
+
+// Include Sensor Libraries
+#include "AK09940.h"            // Magnetometer Library
+#include "ICM20602.h"           // IMU Library
+#include "TMP117.h"             // Temperature Sensor Library
+#include "GLEE_IR_Thermopile.h" // Thermopile Library
 
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
@@ -23,8 +27,9 @@ typedef struct {
     // This type represents the structure of lunasat info
 
     // Lunasat Info consists of 
-        // ID
+        // ID - Identity of LunaSat
         // Name (5 character limit)
+        // Conf - Array containing active functionality
 
     int id;
     String name;
@@ -71,9 +76,14 @@ class LunaSat {
 
         void blink(int _pin, int _delay);
 
+        // Transciever Initializations
+        LunaRadio *Rad;
+
+        // Sensor Initializations
         TMP117 *tmp117; 
         ICM20602 *icm20602;
         AK09940 *ak09940;
+        Thermopile *tpis1385;
         
     private:
         bool debug;

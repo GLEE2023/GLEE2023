@@ -28,6 +28,10 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
     if(info.conf[2]){
         ak09940 = new AK09940(3,_debug);
     }
+
+    if(info.conf[3]){
+        tpis1385 = new Thermopile();
+    }
     
 
     // Set indicator LED pin modes
@@ -52,6 +56,12 @@ void LunaSat::begin(int baudRate){
         icm20602->initialize();
     }
     
+    if(info.conf[2]){
+        ak09940->setDebugMode(true);
+        ak09940->ak09940WAI();
+        ak09940->setDriveMode(LOW_NOISE_1);
+        ak09940->setMeasurementMode(POWER_DOWN);
+    }
 
     // TODO: Implement sensor begin outside of constructor classes implement
     // tmp begin
