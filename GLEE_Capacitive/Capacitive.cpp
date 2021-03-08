@@ -10,10 +10,10 @@ Capacitive::Capacitive(int _id, bool _debug){
   Wire.begin(Capacitive::info.address);
 }
 uint8_t Capacitive::getAddress(){
-    return Capacitive::info.address;
+  return Capacitive::info.address;
 }
 int Capacitive::getRawData(int pin){
-    analogRead(pin);
+  analogRead(pin);
 }
 // double Capacitive::getDieletricConstant(int analogReadIn){
 // In Progress
