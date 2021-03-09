@@ -35,6 +35,7 @@ typedef struct{
     String name;
     int conf[5];
     // TODO: Find optimal structure packing    
+    
 } lunaSat_info_t;
 
 // This type represents the structure of lunasat observations
