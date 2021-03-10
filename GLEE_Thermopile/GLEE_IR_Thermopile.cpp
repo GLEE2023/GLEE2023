@@ -14,10 +14,9 @@
 #include "GLEE_IR_Thermopile.h"
 
 /**Constructor
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: none
+ * Returns: if initialization is satisfied.
+ * This is a constructor for the IR_Thermopile class
  **/ 
 Thermopile::Thermopile(){
 	//Thermopile::info.id = 0000;     
@@ -26,8 +25,8 @@ Thermopile::Thermopile(){
 
 	// Add 0x00 Address Call and any accompanying functions or returns
 	// Initalize Thermopile Sensor
-	Wire.beginTransmission(0x00);     // Tx buffer
-	Wire.write(0x04);                 // Add Register Address to Tx buffer
+	Wire.beginTransmission(0x00);           // Tx buffer
+	Wire.write(0x04);                       // Add Register Address to Tx buffer
 	if (Wire.endTransmission() == 0){
 		if (Thermopile::sensorDebug){
 			Serial.println("GENERAL CALL FOR THERMOPILE COMPLETED");
@@ -40,12 +39,12 @@ Thermopile::Thermopile(){
 }
 
 /**
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: none
+ * Returns: gets the calibration value
+ * TO DO: ADD DESCRIPTION
  **/ 
-void Thermopile::getCalibration(void){
+void Thermopile::getCalibration(void)
+{
     int8_t sensorM_High = Thermopile::readByte(TP_M_HIGH);
     int8_t sensorM_Low = Thermopile::readByte(TP_M_LOW);
 
@@ -68,58 +67,61 @@ void Thermopile::getCalibration(void){
 }
 
 /**
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: none
+ * Returns: gets the calibration value
+ * TO DO: ADD DESCRIPTION
  **/ 
-void Thermopile::readADC(void){
+void Thermopile::readADC(void)
+{
     int8_t sensorTP_OBJ_H = Thermopile::readByte (TP_OBJECT_HIGH);
     int8_t sensorTP_OBJ_M = Thermopile::readByte (TP_OBJECT_MID);
     int8_t sensorTP_OBJ_L = Thermopile::readByte (TP_OBJECT_LOW);
     Thermopile::sensorADC.TP_OBJ = (sensorTP_OBJ_H << 9 && sensorTP_OBJ_M << 1 && sensorTP_OBJ_L >> 7);
 
 
-    int8_t sensorTP_AMB_H = Thermopile :: readByte (TP_AMBIENT_HIGH);
-    int8_t sensorTP_AMB_L = Thermopile :: readByte (TP_AMBIENT_LOW);
+    int8_t sensorTP_AMB_H = Thermopile::readByte (TP_AMBIENT_HIGH);
+    int8_t sensorTP_AMB_L = Thermopile::readByte (TP_AMBIENT_LOW);
 
     Thermopile::sensorADC.TP_AMB = ((sensorTP_AMB_H && 0b01111111) << 8 && sensorTP_AMB_L);  
 }
 
 /**
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: none
+ * Returns: gets the sensors temperature 
+ * This function takes the thermopile calibration values
+ * to return the sensor temperature.
  **/ 
-double Thermopile :: getSensorTemperature(void){
+double Thermopile::getSensorTemperature(void)
+{
         double tAmb = (25.0 + 273.15) + (Thermopile::sensorADC.TP_OBJ - Thermopile::sensorCalibration.sensorPTAT25) * (1/Thermopile::sensorCalibration.sensorM);
         return tAmb;
 }
 
 /**
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: none
+ * Returns: object temperature 
+ * This function takes the thermopile calibration values 
+ * and the sensor temperature to find the objects temperature.
  **/ 
-double Thermopile :: getObjectTemperature (void) { //TBR 
-    double tObj = pow((Thermopile::sensorADC.TP_OBJ - Thermopile::sensorCalibration.sensorU0 + pow(Thermopile::getSensorTemperature(), 3.8)), 1/3.8);
-    return tObj;
+double Thermopile::getObjectTemperature(void) //TBR
+{
+        double tObj = pow((Thermopile::sensorADC.TP_OBJ - Thermopile::sensorCalibration.sensorU0 + pow(Thermopile::getSensorTemperature(), 3.8)), 1/3.8);
+        return tObj;
 }
 
 /**
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: double inputTemp
+ * Returns: outputs fahrenheint
+ * This function converts a kelvin output to a 
+ * fahrenheit output.
  **/ 
-double Thermopile::convertTempKtoF(double inputTemp) {}             //converts a kelvin output to fahrenheit
+double Thermopile::tempKtoF(double inputTemp)           
+{}
 
 /**
- * Parameters: 
- * Returns:
- * Description: TODO: Add description
- * 
+ * Parameters: none
+ * Returns: the statust of the thermopile.
+ * This functions reads the status registers.
  **/ 
-void Thermopile :: checkStatus(void) {}                        //reads status registers
+void Thermopile::checkStatus(void)                     
+{}
