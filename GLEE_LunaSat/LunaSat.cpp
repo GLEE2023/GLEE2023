@@ -3,7 +3,15 @@
 #include <Wire.h>
 #include "LunaSat.h"
 
-//Constructor: Initializes lunasat and subsequent sensors
+
+/**
+ * Constructor
+ * Parameters: the sensor ID as an integer, array containg active functionality,
+ * and the debug mode as a booelan
+ * Returns: none
+ * This is the constructor for the Capacitive class. 
+ * Initializes lunsat and subsequent sensors.
+**/
 LunaSat::LunaSat(int _id, int _conf[5], bool _debug){                             
     // Set lunaSat info
     info.id = _id;
@@ -42,6 +50,12 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
 }
 
+/**
+ * Parameters: int baudRate
+ * Returns: if serial communications have began.
+ * This function starts serial communication at 
+ * given baud rate then sensor begins initialization.
+**/
 void LunaSat::begin(int baudRate){
     // The begin function starts serial communications at the given baud rate.
     Serial.begin(baudRate);
@@ -67,6 +81,12 @@ void LunaSat::begin(int baudRate){
     // mag begin 
 }
 
+/**
+ * Parameters: none
+ * Returns: sample
+ * This function gets the sample through testing 
+ * functionality otherwise set acceleration and magnetic.
+**/
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
     if (debug){
@@ -103,7 +123,12 @@ lunaSat_sample_t LunaSat::getSample(void){
     return sample;
 }
 
-
+/**
+ * Parameters: lunaSat_sample_t sample
+ * Returns: display of sample
+ * This function displays the sample including
+ * temperature, acceleration, and magnetic.
+**/
 void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(sample.timeStamp);
     Serial.print(',');
@@ -129,6 +154,12 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.println("");
 }
 
+/**
+ * Parameters: int _LED and int _delay
+ * Returns: none
+ * This function to make the lunasat blink
+ * given delays between high and low. 
+**/
 void LunaSat::blink(int _LED, int _delay){
     int pin;
     
