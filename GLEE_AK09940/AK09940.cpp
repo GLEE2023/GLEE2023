@@ -528,13 +528,13 @@ void AK09940::softReset(void){
  * or gaps in measurements. It must be called after measuring 
  * data from registers.
 **/
-void AK09940::checkDataStatus (void){
+void AK09940::checkDataStatus(void){
 	// This function should be called after reading register data in order to read the Status 2 pin, as required, once data is read.
 	uint8_t dataStatusByte = AK09940::readByte(AK09940_ST_2);		//Read the s
 	bool dataInvalidFlag, dataOverflowFlag;
 
 	// Combine remove byte with the Status 2 byte in order to get only the Data Invalid bit. Shift right one bit for easy boolean assignment.
-	dataInvalidFlag = (bool ((dataStatusByte && 0b00000010) >> 1 ));
+	dataInvalidFlag = (bool((dataStatusByte && 0b00000010) >> 1 ));
 
 	// default sensor data is "data invalid", we flipped to "data Valid" for ease of code reading and writing	
 	AK09940::dataStatus.dataValid = !dataInvalidFlag;					
