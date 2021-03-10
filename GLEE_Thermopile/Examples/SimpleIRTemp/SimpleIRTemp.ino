@@ -2,21 +2,16 @@
 
 
 Thermopile IRsensor;
-void setup()
-{
+
+void setup(){
     Serial.begin(9600);
     IRsensor.getCalibration();
-
 }
 
-
-
-void loop()
-{
+void loop(){
     IRsensor.readADC();
     Serial.print();
     Serial.print(IRsensor.getSensorTemperature());
     Serial.println(IRsensor.getObjectTemperature());
     delay(1000);
-
 }

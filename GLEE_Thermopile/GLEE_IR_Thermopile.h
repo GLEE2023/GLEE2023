@@ -75,18 +75,16 @@
 
 #define IR_THERMOPILE_I2C_ADDR 0x0D             //I2C Sensor Address
 
-
-struct CalibrationCoef
-{
+//Description of struct
+struct CalibrationCoef{
     int16_t sensorM;
     int16_t sensorPTAT25;
     int16_t sensorU0;
     int16_t sensorUOut1;
-
 };
 
-struct rawADC
-{
+//Description of struct
+struct RawADC{
     int8_t TP_OBJ_ADC_H;
     int8_t TP_OBJ_ADC_M;       //Raw 17 bit ADC output of Object Temp
     int8_t TP_OBJ_ADC_L;
@@ -106,17 +104,16 @@ struct rawADC
     int8_t TP_AMB_LP3_ADC_L;
 };
 
-struct sensorADC
-{
+//Description of struct
+struct SensorADC{
     int32_t TP_OBJ;
     int32_t TP_AMB;
 };
 
 
-class Thermopile : public Sensor                   //inheritied class from the GLEE_Sensor
-{
+class Thermopile : public Sensor{                   //Inheritied class from the GLEE_Sensor
     public:
-        Thermopile();                                //constructor
+        Thermopile();                                //Constructor
 
         void getCalibration(void);                      //Retreive and store calibration info to calibration data structure
 
@@ -125,14 +122,14 @@ class Thermopile : public Sensor                   //inheritied class from the G
         double getSensorTemperature(void);              //Retreive most recent ADC Values and store in temperature data structure
         double getObjectTemperature(void);              //Retreive most recent ADC Values and store in temperature data structure
 
-        double tempKtoF(double inputTemp);              //converts a kelvin output to fahrenheit
+        double convertTempKtoF(double inputTemp);              //Converts a kelvin output to fahrenheit
 
-        void checkStatus(void);                         //reads status registers
+        void checkStatus(void);                         //Reads status registers
 
     private:
-        CalibrationCoef sensorCalibration;              //structure containing the sensor Calibration Details
-        rawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
-        sensorADC sensorADC;
+        CalibrationCoef sensorCalibration;              //Structure containing the sensor Calibration Details
+        RawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
+        SensorADC sensorADC;
         uint8_t TEMPADDRESS;
 };
 

@@ -1,6 +1,7 @@
 #include "GLEE_IR_Thermopile.h"
 
 Thermopile IRsensor;
+
 void setup(){
     Serial.begin(9600);
     IRsensor.getCalibration();

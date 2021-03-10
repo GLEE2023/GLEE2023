@@ -15,7 +15,7 @@
 
 /**Constructor
  * Parameters: 
- * Retruns:
+ * Returns:
  * Description: TODO: Add description
  * 
  **/ 
@@ -39,8 +39,13 @@ Thermopile::Thermopile(){
 	delay(5);
 }
 
-void Thermopile::getCalibration(void)
-{
+/**
+ * Parameters: 
+ * Returns:
+ * Description: TODO: Add description
+ * 
+ **/ 
+void Thermopile::getCalibration(void){
     int8_t sensorM_High = Thermopile::readByte(TP_M_HIGH);
     int8_t sensorM_Low = Thermopile::readByte(TP_M_LOW);
 
@@ -62,8 +67,13 @@ void Thermopile::getCalibration(void)
     Thermopile :: sensorCalibration.sensorUOut1 = (sensorUOut1_High << 8 && sensorUOut1_Low) * 2;
 }
 
-void Thermopile::readADC(void)
-{
+/**
+ * Parameters: 
+ * Returns:
+ * Description: TODO: Add description
+ * 
+ **/ 
+void Thermopile::readADC(void){
     int8_t sensorTP_OBJ_H = Thermopile::readByte (TP_OBJECT_HIGH);
     int8_t sensorTP_OBJ_M = Thermopile::readByte (TP_OBJECT_MID);
     int8_t sensorTP_OBJ_L = Thermopile::readByte (TP_OBJECT_LOW);
@@ -76,20 +86,40 @@ void Thermopile::readADC(void)
     Thermopile::sensorADC.TP_AMB = ((sensorTP_AMB_H && 0b01111111) << 8 && sensorTP_AMB_L);  
 }
 
-double Thermopile :: getSensorTemperature(void)
-{
+/**
+ * Parameters: 
+ * Returns:
+ * Description: TODO: Add description
+ * 
+ **/ 
+double Thermopile :: getSensorTemperature(void){
         double tAmb = (25.0 + 273.15) + (Thermopile::sensorADC.TP_OBJ - Thermopile::sensorCalibration.sensorPTAT25) * (1/Thermopile::sensorCalibration.sensorM);
         return tAmb;
 }
 
-double Thermopile :: getObjectTemperature (void) //TBR
-{
-        double tObj = pow((Thermopile::sensorADC.TP_OBJ - Thermopile::sensorCalibration.sensorU0 + pow(Thermopile::getSensorTemperature(),3.8)),1/3.8);
-        return tObj;
+/**
+ * Parameters: 
+ * Returns:
+ * Description: TODO: Add description
+ * 
+ **/ 
+double Thermopile :: getObjectTemperature (void) { //TBR 
+    double tObj = pow((Thermopile::sensorADC.TP_OBJ - Thermopile::sensorCalibration.sensorU0 + pow(Thermopile::getSensorTemperature(), 3.8)), 1/3.8);
+    return tObj;
 }
 
-double Thermopile::tempKtoF(double inputTemp)              //converts a kelvin output to fahrenheit
-{}
+/**
+ * Parameters: 
+ * Returns:
+ * Description: TODO: Add description
+ * 
+ **/ 
+double Thermopile::convertTempKtoF(double inputTemp) {}             //converts a kelvin output to fahrenheit
 
-void Thermopile :: checkStatus(void)                         //reads status registers
-{}
+/**
+ * Parameters: 
+ * Returns:
+ * Description: TODO: Add description
+ * 
+ **/ 
+void Thermopile :: checkStatus(void) {}                        //reads status registers
