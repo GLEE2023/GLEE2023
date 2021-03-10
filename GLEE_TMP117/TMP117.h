@@ -19,7 +19,7 @@ enum TMP117_Register{
   TMP117_DEVICE_ID = 0X0F
 };
 
-class TMP117 : public Sensor{
+class TMP117:public Sensor{
   public:
     TMP117(int _id, bool _debug = false);                       // Constructor
     bool dataReady();              
