@@ -34,8 +34,8 @@ void loop ()
         Serial.print("Current Measurement Mode: ");
         Serial.println("Transitioning from POWER_DOWN to SINGLE_MEASURE");        
         ak09940.setMeasurementMode(SINGLE_MEASURE);
-        ak09940.getRawData();
-        ak09940.getCalculatedData();
+        ak09940.updateRawData();
+        ak09940.updateCalculatedData();
         Serial.println("===== START DATA =====");
         Serial.print("X-Axis Magnetic Field (nT): ");
         Serial.println(ak09940.calculatedData.xMag);
