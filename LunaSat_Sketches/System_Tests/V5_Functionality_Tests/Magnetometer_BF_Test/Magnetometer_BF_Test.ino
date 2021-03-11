@@ -2,9 +2,9 @@
 #include "GLEE_Sensor.h"
 #include "AK09940.h"
 
-AK09940 ak09940 = AK09940(0, false);
+AK09940 ak09940 = AK09940(0,false);
 
-void setup(){
+void setup (){
     Serial.begin(9600);
     ak09940.setDebugMode(true);
     ak09940.ak09940WAI();
@@ -12,15 +12,15 @@ void setup(){
     ak09940.setMeasurementMode(POWER_DOWN);
 };
 
-void loop(){   
+void loop (){   
     Serial.print("Current Measurement Mode: ");
     Serial.println(ak09940.getMeasurementMode());
     if (ak09940.getMeasurementMode() == POWER_DOWN){
         Serial.print("Current Measurement Mode: ");
         Serial.println("Transitioning from POWER_DOWN to SINGLE_MEASURE");        
         ak09940.setMeasurementMode(SINGLE_MEASURE);
-        ak09940.getRawData();
-        ak09940.getCalculatedData();
+        ak09940.updateRawData();
+        ak09940.updateCalculatedData();
         Serial.println("===== START DATA =====");
         Serial.print("X-Axis Magnetic Field (nT): ");
         Serial.println(ak09940.calculatedData.xMag);
@@ -33,5 +33,6 @@ void loop(){
         Serial.println("===== END DATA =====");
         Serial.println();
     }
+
     delay(1000);
 };
