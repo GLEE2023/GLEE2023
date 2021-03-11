@@ -23,7 +23,7 @@ Version Note: First draft/unverified instructions
   * LunaSat analog capacitance functionality
 
 * GLEE_TMP117: 
-  * Lunasat temnperature sensing functionality
+  * Lunasat temperature sensing functionality
 
 ## LunaSat Classes
 * LunaSat: 
