@@ -114,7 +114,7 @@ class AK09940: public Sensor{
 		//Sensor Functions 
 		AK09940(int _id = 0, bool _debug = true);		//constructor
 		
-		void setCalculatedData(void);		//set data data converted to nT and Celcius
+		void updateCalculatedData(void);		//set data data converted to nT and Celcius
 
 		// Setter for measurement mode expects preconstructed sensor measurement mode configuration inform of the custom datatype
 		void setMeasurementMode(ak09940_Measurement_Mode_t sensorMeasurementMode);
@@ -158,10 +158,10 @@ class AK09940: public Sensor{
 
 		// TODO: Suggestion that getRawData returns raw data as appropriate data type, possible redundancy in get data status
 		// Getter that reads the registers and returns true if data is read and stored in the sensors raw data data structure
-		bool getRawData(void);
+		bool updateRawData(void);
 
-		// Refactoring raw data here
-		sensor_float_vec_t getrawData(void);
+		// Currently Depricated Raw Data
+		// sensor_float_vec_t getRawData(void);
 
 		// Method for library structure testing
 		sensor_float_vec_t getRawData_fuzzed(void);		

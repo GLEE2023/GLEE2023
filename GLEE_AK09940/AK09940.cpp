@@ -93,7 +93,7 @@ bool AK09940::ak09940WAI(void){
  * This function converts raw data bytes to nT and Celcius using the
  * calcMag and calcTemp private functions.
 **/
-void AK09940::setCalculatedData(void){
+void AK09940::updateCalculatedData(void){
 	// Converts raw data bytes to nT and Celcius, change function name??
 	// Only converts data that was read with no errors, no overflow, no invalid data
 	AK09940::calculatedData.xMag = AK09940::calcMag(AK09940::rawData.xMagLow, AK09940::rawData.xMagMid, AK09940::rawData.xMagHigh);		
@@ -111,7 +111,7 @@ void AK09940::setCalculatedData(void){
  * This function reads the raw data. New function is defined below using
  * the new sensor data type.
 **/
-bool AK09940::getRawData(void){
+bool AK09940::updateRawData(void){
 	// TBR -- Redundancy?? 
 	uint8_t XML, XMM , XMH;			//variables to hold low, mid, and high bytes for X-axis magnetic field 
 	uint8_t YML, YMM , YMH;			//variables to hold low, mid, and high bytes for Y-axis magnetic field 
@@ -170,13 +170,14 @@ bool AK09940::getRawData(void){
  * Parameters: none 
  * Returns: the raw data as a sensor_float_vec_t 
  * This function gets raw data returns raw data in sensor float structure for testing.
-**/
-sensor_float_vec_t AK09940::getrawData(void){
+ * CURRENTLY Depricated
+
+sensor_float_vec_t AK09940::getRawData(void){
 	// Suggested refactoring example, uses old style for getRawData (updates local rawData structure instance) Probably should refrence a local pointer to a struct
 	// get raw data returns raw data in sensor float structure for testing
 	
 	// Reads raw data and sets local instance 
-	AK09940::getRawData();		// By "get" it really means update
+	AK09940::updateRawData();		// By "get" it really means update
 
 	// Updates calculated data instance
 	AK09940::setCalculatedData();
@@ -188,6 +189,7 @@ sensor_float_vec_t AK09940::getrawData(void){
 
 	return rawData_;
 }
+**/
 
 /**
  * Parameters: none
