@@ -7,7 +7,7 @@ GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of abou
 This repo contains the Arduino libraries and sketches wich are used to control the lunasats. 
 
 
-# Instillation Instructions
+# Installation Instructions
 Version Note: First draft/unverified instructions
 1. Download Zipped GLEE2023 folder
 2. Locate your arduino custom libraries folder 
@@ -39,11 +39,11 @@ Version Note: First draft/unverified instructions
 * GLEE_RF: 
 
 # README TODOS
-* TODO: Instellation Instructions
+* TODO: Installation Instructions
 * TODO: Example pointouts
 * TODO: Add contributor Names
-* TODO: Emmbed links to libraries
+* TODO: Embedded links to libraries
 * TODO: GLEE_RF library instructions
 
 # Development TODOS
-* TODO: Iron out RF library dependencies/file structuring/ instillation
+* TODO: Iron out RF library dependencies/file structuring/ installation 
