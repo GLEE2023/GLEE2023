@@ -55,6 +55,7 @@ typedef struct{
     double temperature;
     sensor_float_vec_t acceleration;
     sensor_float_vec_t magnetic;
+    float ObjTemperature;
 
 } lunaSat_sample_t;
 
@@ -72,8 +73,8 @@ class LunaSat{
         void begin(int baudRate);                      
         lunaSat_sample_t getSample();
         void dispSample(lunaSat_sample_t sample);
+        void transmitSample(lunaSat_sample_t sample);
         lunaSat_info_t info;
-
         void blink(int _pin, int _delay);
 
         // Transciever Initializations

@@ -115,13 +115,11 @@ double Thermopile::getObjectTemperature(void) //TBR
  * This function converts a kelvin output to a 
  * fahrenheit output.
  **/ 
-double Thermopile::tempKtoF(double inputTemp)           
-{}
+//double Thermopile::tempKtoF(double inputTemp){}
 
 /**
  * Parameters: none
  * Returns: the statust of the thermopile.
  * This functions reads the status registers.
  **/ 
-void Thermopile::checkStatus(void)                     
-{}
+//void Thermopile::checkStatus(void){}

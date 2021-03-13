@@ -10,7 +10,6 @@ void setup(){
 
 void loop(){
     IRsensor.readADC();
-    Serial.print();
     Serial.print(IRsensor.getSensorTemperature());
     Serial.println(IRsensor.getObjectTemperature());
     delay(1000);

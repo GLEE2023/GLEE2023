@@ -104,6 +104,16 @@ void AK09940::updateCalculatedData(void){
 	AK09940::calculatedData.temperature = AK09940::calcTemp(AK09940::rawData.tempByte);
 }
 
+sensor_float_vec_t AK09940::getCalculatedData(void){
+	sensor_float_vec_t calcData;
+
+	calcData.x = AK09940::calculatedData.xMag;
+	calcData.y = AK09940::calculatedData.yMag;
+	calcData.z = AK09940::calculatedData.zMag;
+
+	return calcData;
+}
+
 
 /**
  * Parameters: none

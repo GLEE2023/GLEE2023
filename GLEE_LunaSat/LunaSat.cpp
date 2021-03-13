@@ -40,6 +40,10 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
     if (info.conf[3]){
         tpis1385 = new Thermopile();
     }
+
+    if (info.conf[4]==1){
+        Rad = new LunaRadio();
+    }
     
 
     // Set indicator LED pin modes
@@ -68,12 +72,16 @@ void LunaSat::begin(int baudRate){
         icm20602->begin();
         icm20602->initialize();
     }
-    
+
     if (info.conf[2]){
         ak09940->setDebugMode(true);
         ak09940->ak09940WAI();
         ak09940->setDriveMode(LOW_NOISE_1);
         ak09940->setMeasurementMode(POWER_DOWN);
+    }
+
+    if (info.conf[3]==1) { 
+        Rad->initialize_radio();
     }
 
     // TODO: Implement sensor begin outside of constructor classes implement
@@ -94,30 +102,51 @@ lunaSat_sample_t LunaSat::getSample(void){
 
         sample.timeStamp = millis();
         sample.temperature = tmp117->getTemperatureC_fuzzed();
-        sample.acceleration = icm20602->getGAccel_fuzzed(AFS_2G);
+        sample.acceleration = icm20602->getGAccel_fuzzed();
         sample.magnetic = ak09940->getRawData_fuzzed();
-
     }
-    else{
+    else {
         sample.timeStamp = millis();
-        sample.temperature = (info.conf[0] == 1) ? tmp117->getTemperatureC() : 0;
-        
-        if (info.conf[1]){
-            sample.acceleration = icm20602->getGAccel(AFS_2G);
+
+        // Handle Temperature Sensor Sample base on configuration
+        if (info.conf[0] == 1){
+            sample.temperature = tmp117->getTemperatureC();
+        }else{
+            sample.temperature = 0;
         }
-        else{
+        
+        // Hangle Acceleration Sample based on configuration
+        if (info.conf[1] == 1){
+            sample.acceleration = icm20602->getGAccel();
+        } else {
             sample.acceleration.x = 0;
             sample.acceleration.y = 0;
             sample.acceleration.z = 0;
         }
         
-        if (info.conf[2]){
-            sample.magnetic = ak09940->getrawData();
-        }
-        else{
+        // Handle Magnetic Sample based on configuration
+        if (info.conf[2] == 1){
+            // Get standard single magnetometer measurement. 
+            // TODO: Generalize with respect to magnetometer mode
+            if(ak09940->getMeasurementMode() == POWER_DOWN){
+                ak09940->setMeasurementMode(SINGLE_MEASURE);
+                ak09940->updateRawData();
+                ak09940->updateCalculatedData();
+            }else if(ak09940->getMeasurementMode() == SINGLE_MEASURE){
+                ak09940->updateRawData();
+                ak09940->updateCalculatedData();
+            }
+
+            sample.magnetic = ak09940->getCalculatedData();
+        } else {
             sample.magnetic.x = 0;
             sample.magnetic.y = 0;
             sample.magnetic.z = 0;
+        }
+
+        // Handle Thermopile Sample based on configuration
+        if (info.conf[3] == 1){
+            sample.ObjTemperature = tpis1385->getObjectTemperature();
         }
     }
     return sample;
@@ -175,4 +204,8 @@ void LunaSat::blink(int _LED, int _delay){
     delay(_delay);
     digitalWrite(pin, LOW);
     delay(_delay);
+}
+
+void LunaSat::transmitSample(lunaSat_sample_t sample){
+    Rad->transmit_data((char*)&sample);
 }

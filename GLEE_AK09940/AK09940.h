@@ -173,6 +173,8 @@ class AK09940: public Sensor{
 		// Note: Must be called after measuring data from registers
 		void checkDataStatus(void);		
 
+		sensor_float_vec_t getCalculatedData(void);
+
 		private:
 			// Method for Calculating magnetic field strength.
 			// Returns mag field strength in units of nT given low, mid, and high bytes from one axis' sample
