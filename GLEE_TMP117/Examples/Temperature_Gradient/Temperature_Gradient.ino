@@ -20,7 +20,7 @@ float gradientMargin; //Variable to store margin for what is considered an uncha
 float startTime; // Variables for timing offset calculations
 float endTime;
 
-//For storing output pin configuration of LED
+//For storing output pin configuration of LEDs
 int LED1 = 4; //Used for when a positive temperature gradient exceeds the threshold
 int LED2 = 5; //Used for when a negative temperature gradient exceeds the threshold
 
@@ -40,7 +40,7 @@ void setup(){
     //Set temperature gradient threshold to a positive value (1 degree per second by default)
     gradientThreshold = 1;
 
-    //Set margin for unchanging temperature gradient (.001 degrees per second by default)
+    //Set margin for unchanging temperature gradient to a positive value smaller than the threshold (.001 degrees per second by default)
     gradientMargin = 0.001;
 
     // Set sample rate to 1 sample per second (1Hz)
@@ -65,25 +65,13 @@ void loop(){
     temperatureGradient = (temperatureCurrentC - temperaturePastC) * sampleRate; 
 
     //Print a detection state if the temperature gradient is unchanging within a small margin, or meeting or exceeding the gradient threshold
-    if(abs(temperatureGradient) < gradientMargin){
+    if(abs(temperatureGradient) <= gradientMargin){
 
-        if(temperatureGradient >= 0){
-
-            Serial.print("Temperature is stable and is rising by ");
-            Serial.print(temperatureGradient);
-            Serial.print("degrees (Celsius) per second for ");
-            Serial.print((1/sampleRate));
-            Serial.println(" second(s)");
-
-        } else {
-
-            Serial.print("Temperature is stable and is falling by ");
-            Serial.print(temperatureGradient);
-            Serial.print("degrees (Celsius) per second for ");
-            Serial.print((1/sampleRate));
-            Serial.println(" second(s)");
-
-        }
+        Serial.print("Temperature is stable and is changing by no more than ");
+        Serial.print(gradientMargin);
+        Serial.print(" degrees (Celsius) per second for ");
+        Serial.print((1/sampleRate));
+        Serial.println(" second(s)");
 
     } else if(abs(temperatureGradient) >= gradientThreshold){ 
 
@@ -91,7 +79,7 @@ void loop(){
 
             Serial.print("Temperature rising by ");
             Serial.print(temperatureGradient);
-            Serial.print("degrees (Celsius) per second for ");
+            Serial.print(" degrees (Celsius) per second for ");
             Serial.print((1/sampleRate));
             Serial.println(" second(s)");
 
@@ -103,7 +91,7 @@ void loop(){
 
             Serial.print("Temperature falling by ");
             Serial.print(temperatureGradient);
-            Serial.print("degrees (Celsius) per second for ");
+            Serial.print(" degrees (Celsius) per second for ");
             Serial.print((1/sampleRate));
             Serial.println(" second(s)");
 
