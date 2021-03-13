@@ -296,3 +296,11 @@ void LunaRadio::readData(uint8_t* data, size_t len){
     	Serial.println(state);
     }
 }
+
+int LunaRadio::getRSSI(void){
+	return(LunaRadio::radio.getRSSI());
+}
+
+int LunaRadio::getSNR(void){
+	return(LunaRadio::radio.getSNR());
+}
