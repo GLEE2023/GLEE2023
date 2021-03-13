@@ -20,6 +20,7 @@ float startTime; // Variables for timing offset calculations
 float endTime;
 
 int LED1 = 4; //For storing output pin configuration of LED
+int LED2 = 5;
 
 void setup(){
     // Begin Serial Communications (Lunasat baud rate set to 9600)
@@ -40,12 +41,12 @@ void setup(){
     // Set sample rate to 1 sample per second (1Hz)
     sampleRate = 1; 
 
-    //Set pin LED1 as output
+    //Set pins LED1 and LED2 as output
     pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
 };
 
 void loop(){
-    // Record start time for letter offseting of delay to make the loop run once per second
     startTime = millis();
    
     // Set value to last recorded temperature
@@ -66,22 +67,25 @@ void loop(){
             Serial.print("degrees (Celsius) per second for ");
             Serial.print((1/sampleRate));
             Serial.println(" second(s)");
+
+            digitalWrite(LED1, HIGH); //Turn LED on
+            delay(((1/sampleRate)*1000)/10); //Keep LED on for a delay of on_time milliseconds based on sampleRate
+            digitalWrite(LED1, LOW); //Turn LED off
         } else {
             Serial.print("Temperature falling by ");
             Serial.print(temperatureGradient);
             Serial.print("degrees (Celsius) per second for ");
             Serial.print((1/sampleRate));
             Serial.println(" second(s)");
-        }
 
-        digitalWrite(LED1, HIGH); //Turn LED on
-        delay(((1/sampleRate)*1000)/10); //Keep LED on for a delay of on_time milliseconds based on sampleRate
-        digitalWrite(LED1, LOW); //Turn LED off
+            digitalWrite(LED2, HIGH);
+            delay(((1/sampleRate)*1000)/10); 
+            digitalWrite(LED2, LOW); 
+        }
+   
     }
 
-    // Record the end time so we know how long it took to record the measurement
     endTime = millis();
 
-    // Delay each loop by the sample rate off set by the time it took to get the temperature
     delay(sampleRate * 1000 - (endTime - startTime));
 };
