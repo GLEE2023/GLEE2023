@@ -15,12 +15,14 @@ float temperatureCurrentC; //Variable to store a currently observed temperature 
 
 float temperatureGradient; //Variable to store change in temperature per second
 float gradientThreshold; //Variable to store threshold for the temperature gradient
+float gradientMargin; //Variable to store margin for what is considered an unchanging temperature gradient
 
 float startTime; // Variables for timing offset calculations
 float endTime;
 
-int LED1 = 4; //For storing output pin configuration of LED
-int LED2 = 5;
+//For storing output pin configuration of LED
+int LED1 = 4; //Used for when a positive temperature gradient exceeds the threshold
+int LED2 = 5; //Used for when a negative temperature gradient exceeds the threshold
 
 void setup(){
     // Begin Serial Communications (Lunasat baud rate set to 9600)
@@ -38,6 +40,9 @@ void setup(){
     //Set temperature gradient threshold to a positive value (1 degree per second by default)
     gradientThreshold = 1;
 
+    //Set margin for unchanging temperature gradient (.001 degrees per second by default)
+    gradientMargin = 0.001;
+
     // Set sample rate to 1 sample per second (1Hz)
     sampleRate = 1; 
 
@@ -47,6 +52,7 @@ void setup(){
 };
 
 void loop(){
+    //Record start time
     startTime = millis();
    
     // Set value to last recorded temperature
@@ -58,10 +64,31 @@ void loop(){
     //Calculate change in temperature per second
     temperatureGradient = (temperatureCurrentC - temperaturePastC) * sampleRate; 
 
-    //Print a detection state and blink LED if magnitude of temperature gradient meets or exceeds threshold
-    if(abs(temperatureGradient) >= gradientThreshold){
+    //Print a detection state if the temperature gradient is unchanging within a small margin, or meeting or exceeding the gradient threshold
+    if(abs(temperatureGradient) < gradientMargin){
+
+        if(temperatureGradient >= 0){
+
+            Serial.print("Temperature is stable and is rising by ");
+            Serial.print(temperatureGradient);
+            Serial.print("degrees (Celsius) per second for ");
+            Serial.print((1/sampleRate));
+            Serial.println(" second(s)");
+
+        } else {
+
+            Serial.print("Temperature is stable and is falling by ");
+            Serial.print(temperatureGradient);
+            Serial.print("degrees (Celsius) per second for ");
+            Serial.print((1/sampleRate));
+            Serial.println(" second(s)");
+
+        }
+
+    } else if(abs(temperatureGradient) >= gradientThreshold){ 
 
         if(temperatureGradient >= 0 ){
+
             Serial.print("Temperature rising by ");
             Serial.print(temperatureGradient);
             Serial.print("degrees (Celsius) per second for ");
@@ -71,7 +98,9 @@ void loop(){
             digitalWrite(LED1, HIGH); //Turn LED on
             delay(((1/sampleRate)*1000)/10); //Keep LED on for a delay of on_time milliseconds based on sampleRate
             digitalWrite(LED1, LOW); //Turn LED off
+
         } else {
+
             Serial.print("Temperature falling by ");
             Serial.print(temperatureGradient);
             Serial.print("degrees (Celsius) per second for ");
@@ -81,11 +110,14 @@ void loop(){
             digitalWrite(LED2, HIGH);
             delay(((1/sampleRate)*1000)/10); 
             digitalWrite(LED2, LOW); 
+
         }
    
     }
 
+    //Record end time
     endTime = millis();
 
+    //Delay the loop based on the length of the measurement and the sampleRate
     delay(sampleRate * 1000 - (endTime - startTime));
 };
