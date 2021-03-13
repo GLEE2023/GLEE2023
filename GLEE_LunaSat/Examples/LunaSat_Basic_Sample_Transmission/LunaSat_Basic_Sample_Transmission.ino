@@ -8,7 +8,7 @@ int lunaSatConfig[5] = {1,1,1,1,1};
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 // Can be easily expanded to account for different axes of LunaSat configuration
-LunaSat lunaSat(0, lunaSatConfig, true);
+LunaSat lunaSat(0, lunaSatConfig, false);
 
 // Custom datatypes allow for sample specialization, user can craft their own ideal sample
 lunaSat_sample_t sample;  
