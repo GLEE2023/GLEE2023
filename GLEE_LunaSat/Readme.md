@@ -30,3 +30,13 @@ This library puts all the basic functionality of the lunasat in one place. The l
 
 ### LunaSat Sample Types
 
+### LunaSat Configuration
+Default Configuration: {1,1,1,1,1}
+Configuration Description: All sensors enabled and in default single measurement mode 
+
+#Configuration Format
+[0] - TMP117 
+[1] - ICM20602
+[2] - AK09940
+[3] - TPiS1385
+[4] - Radio
