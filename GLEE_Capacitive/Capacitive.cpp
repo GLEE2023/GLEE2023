@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <vector>
+#include <math.h>
 #include <Wire.h>
 #include "Capacitive.h"
 
