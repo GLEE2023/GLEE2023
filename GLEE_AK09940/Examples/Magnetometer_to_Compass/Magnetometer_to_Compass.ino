@@ -16,13 +16,21 @@ float declination;
 //Used for storing the true north bearing (not currently incorporated)
 float trueHeading;
 
+//For storing output pin configuration of LED
+int LED = 4;
+
 void setup (){
     // Begin Serial Communications (Lunasat baud rate set to 9600)
     Serial.begin(9600);
+    
     ak09940.setDriveMode(LOW_NOISE_1); //Might change later, unsure of what drive mode is best
     ak09940.setMeasurementMode(POWER_DOWN);
 
-    declination = 0.0; //Should be changed depending on location of LunaSat on Earth or the Moon
+    //Set pins LED1 and LED2 as output
+    pinMode(LED, OUTPUT);
+
+    //Should be changed depending on location of LunaSat on Earth or the Moon
+    declination = 0.0;
 };
 
 void loop (){
@@ -58,12 +66,21 @@ void loop (){
             Serial.println(heading);
         }
 
+        if(heading<=180.0){
+            digitalWrite(LED, HIGH);
+            delay(50 + (heading*4)); //Delay blink of LED based on value of heading
+            digitalWrite(LED, LOW);
+        } else {
+            digitalWrite(LED, HIGH);
+            delay(50 + ((360-heading)*4)); 
+            digitalWrite(LED, LOW);
+        }
+        
         //TODO: Determine true north heading and print to serial
         trueHeading = heading + declination;
 
-
     }
-    delay(1000);
 
-   
+    delay(1000);
+  
 };
