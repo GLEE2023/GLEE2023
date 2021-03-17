@@ -10,9 +10,6 @@ AK09940 ak09940 = AK09940(1,true);
 //Magnetic compass heading (calculated later)
 float heading;
 
-//Used for calculating the true north bearing
-float declination;
-
 //Used for storing the true north bearing (not currently incorporated)
 float trueHeading;
 
@@ -29,8 +26,6 @@ void setup (){
     //Set pins LED1 and LED2 as output
     pinMode(LED, OUTPUT);
 
-    //Should be changed depending on location of LunaSat on Earth or the Moon
-    declination = 0.0;
 };
 
 void loop (){
@@ -75,9 +70,6 @@ void loop (){
             delay(50 + ((360-heading)*4)); 
             digitalWrite(LED, LOW);
         }
-        
-        //TODO: Determine true north heading and print to serial
-        trueHeading = heading + declination;
 
     }
 
