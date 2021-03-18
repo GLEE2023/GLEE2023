@@ -3,6 +3,7 @@
 #include "GLEE_Sensor.h"
 #include "AK09940.h"
 #include <math.h>
+#include <String.h>
 
 // Instantiate AKO9940 class with id of one and debugging set to true
 AK09940 ak09940 = AK09940(1,true);
