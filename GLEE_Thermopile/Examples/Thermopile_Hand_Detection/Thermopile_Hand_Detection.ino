@@ -8,22 +8,22 @@
  * after calibration.
  **/
 
-
 Thermopile IRsensor; // Calling the thermopile class
 
-float startTime = 0;
-float endTime = 0;
+// float startTime = 0.0;
+// float endTime = 0.0;
 
 double sensorTemperature = 0.0; // Initialize sensor temperature to zero
 
-// For storing output pin configuration of LED
-const int LED = 4;
+const int LED = 4; // For storing output pin configuration of LED
 
-int accumulator = 0;
-double sumObjectTemperature = 0.0;
-double sumSensorTemperature = 0.0;
-double error = 0.5;
+int accumulator = 0; // Counter for average loops
 
+double sumObjectTemperature = 0.0; // Total to calculate Object Temperature average
+
+double sumSensorTemperature = 0.0; // Total to calculate Sensor Temperature average
+
+double error = 0.5; // The bubble of certainty allowed between average Sensor and average Object
 
 void setup(){
     // Begin Serial Communications
@@ -38,28 +38,28 @@ void setup(){
 
 void loop(){
 
-    IRsensor.readADC(); 
+    IRsensor.readADC(); // Read in the Analog to Digital Converter
 
-    accumulator++;
+    accumulator++; // Begin counting total accumulation
 
-    sumObjectTemperature+= IRsensor.getObjectTemperature();
-    sumSensorTemperature+= IRsensor.getSensorTemperature();
+    sumObjectTemperature+= IRsensor.getObjectTemperature(); // Get the sum of Object Temperatures
+    sumSensorTemperature+= IRsensor.getSensorTemperature(); // Get the sum of Sensor Temperatures
 
-    if(accumulator == 100){
-        accumulator = 0;
-        double object_averageLoop = sumObjectTemperature / 100.0;
-        double sensor_averageLoop = sumSensorTemperature / 100.0;
+    if(accumulator == 1000){ // Once accumulated a specific number of samples to average
+        accumulator = 0; // Reset accumulator
+        double object_averageLoop = sumObjectTemperature / 1000.0; // Calculate Object Temeprature average
+        double sensor_averageLoop = sumSensorTemperature / 1000.0; // Calculate Sensor Temperature average
 
-        if(abs(object_averageLoop) < abs(sensor_averageLoop - error){
+        if(abs(object_averageLoop) < abs(sensor_averageLoop - error){ // If Object and Sensor are the same
             Serial.println("Hand is detected.");
             digitalWrite(LED, HIGH); // Turn LED on
         }
-        else{
+        else{ // If Object and Sensor are NOT the same
             Serial.println("Hand is NOT detected.");
             digitalWrite(LED, LOW); // Turn LED off
         }
 
-        sumSensorTemperature = 0.0;
-        sumObjectTemperature = 0.0;
+        sumSensorTemperature = 0.0; // Reset Sensor sum
+        sumObjectTemperature = 0.0; // Reset Object sum
     }
 };
