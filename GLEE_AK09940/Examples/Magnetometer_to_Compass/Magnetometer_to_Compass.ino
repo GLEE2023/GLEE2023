@@ -16,6 +16,9 @@ float trueHeading;
 //For storing output pin configuration of LED
 int LED = 4;
 
+//Direction of compass as determined by heading
+String direction;
+
 void setup (){
     // Begin Serial Communications (Lunasat baud rate set to 9600)
     Serial.begin(9600);
@@ -53,14 +56,58 @@ void loop (){
             }
         }
 
-        //Determine if heading is indicative of magnetic north
-        if(heading==0.0){
-            Serial.println("Facing magnetic north");
+        //Set to Error in order to determine what information should be printed
+        direction = "Error";
+
+        //Determine if heading is valid and print general direction of compass
+        if(heading < 0.0 || heading > 360.0){
+            Serial.print("Error. Heading should be between 0 and 360 degrees. Your heading is: ");
+            Serial.print(heading);
+            Serial.println(" degrees");
         } else {
-            Serial.print("Compass Heading (Magnetic): ");
-            Serial.println(heading);
+            if(heading==0.0 || heading==360.0){
+                Serial.println("Facing due magnetic north (Heading of 0.0 degrees)");
+            } else if (heading == 45.0){
+                Serial.println("Facing due magnetic northeast (Heading of 45.0 degrees)");
+            } else if (heading == 90.0){
+                Serial.println("Facing due magnetic east (Heading of 90.0 degrees)");
+            } else if (heading == 135.0){
+                Serial.println("Facing due magnetic southeast (Heading of 135.0 degrees)");
+            } else if (heading == 180.0){
+                Serial.println("Facing due magnetic south (Heading of 180.0 degrees)");
+            } else if (heading == 225.0){
+                Serial.println("Facing due magnetic southwest (Heading of 225.0 degrees)");
+            } else if (heading == 270.0){
+                Serial.println("Facing due magnetic west (Heading of 270.0 degrees)");
+            } else if (heading == 315.0){
+                Serial.println("Facing due magnetic northwest (Heading of 315.0 degrees)");
+            } else if (heading <= 22.5 || heading > 337.5){
+                direction = "north";
+            } else if (heading <= 67.5 || heading > 22.5){
+                direction = "northeast";
+            } else if (heading <= 112.5 || heading > 67.5){
+                direction = "east";
+            } else if (heading <= 157.5 || heading > 112.5){
+                direction = "southeast";
+            } else if (heading <= 202.5 || heading > 157.5){
+                direction = "south";
+            } else if (heading <= 247.5 || heading > 202.5){
+                direction = "southwest";
+            } else if (heading <= 292.5 || heading > 247.5){
+                direction = "west";
+            } else if (heading <= 337.5 || heading > 292.5){
+                direction = "northwest";
+            }
         }
 
+        if(direction != "Error"){
+            Serial.print("Direction: ");
+            Serial.println(direction);
+            Serial.print("Compass Heading: ");
+            Serial.print(heading);
+            Serial.println(" degrees");
+        }
+        
         if(heading<=180.0){
             digitalWrite(LED, HIGH);
             delay(50 + (heading*4)); //Delay blink of LED based on value of heading
