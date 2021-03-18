@@ -32,6 +32,12 @@
 #define ICM20602_ACCEL_YOUT_L     0x3E
 #define ICM20602_ACCEL_ZOUT_H     0x3F
 #define ICM20602_ACCEL_ZOUT_L     0x40
+#define ICM20602_GYRO_XOUT_H      0x43
+#define ICM20602_GYRO_XOUT_L      0x44
+#define ICM20602_GYRO_YOUT_H      0x45
+#define ICM20602_GYRO_YOUT_L      0x46
+#define ICM20602_GYRO_ZOUT_H      0x47
+#define ICM20602_GYRO_ZOUT_L      0x48
 
 #define IMU_ONE_G 9.80665
 
@@ -47,10 +53,10 @@ enum Ascale{
 
 // Gyro Full Scale Range +-250 500 1000 2000 Degrees per second
 enum Gscale{
-    GFS_250DPS=0,   
-    GFS_500DPS,
-    GFS_1000DPS,
-    GFS_2000DPS
+    GFS_250DPS = 0,   
+    GFS_500DPS = 1,
+    GFS_1000DPS = 2,
+    GFS_2000DPS = 3
 };
 
 class ICM20602:public Sensor{
@@ -58,24 +64,32 @@ class ICM20602:public Sensor{
         ICM20602(int _id, bool _debug = true);
         
         Ascale currentScale; //g-force range
+        Gscale currentGyroScale; //DPS range
         float currentFactor;
+        flat currentGyroFactor;
         sensor_int16_vec_t accelRaw;
         sensor_float_vec_t accelMPS;
         sensor_float_vec_t accelG;
+        sensor_int16_vec_t angVelRaw;
+        sensor_float_vec_t angVelDPS;
+
 
         bool begin();
         void initialize();
-        float getSensitivity();
         int16_t read2Byte(uint8_t registerAddress);
         sensor_int16_vec_t getRawAccel();
+        sensor_int16_vec_t getRawAngVel();
         sensor_float_vec_t getMPSAccel();
         sensor_float_vec_t getGAccel();
+        sensor_float_vec_t getDPSAngVel();
         
         sensor_float_vec_t getGAccel_fuzzed();
 
 
         void setScale(Ascale newScale);
-        //impact function
+        void setGyroScale(Gscale newScale);
+        float getSensitivity();
+        float getGyroSensitivity();
 };
 #endif
 
