@@ -11,12 +11,19 @@
 
 Thermopile IRsensor; // Calling the thermopile class
 
-// Variables to store the sensor and object temperature 
-double sensorTemperature = 0.0; // Initialize sensor temperature to zero
-double objectTemperature = 0.0; // Initialize object temperature to zero
+float startTime = 0;
+float endTime = 0;
 
-// For storing output pin configuration of LED's
-int LED = 9;
+double sensorTemperature = 0.0; // Initialize sensor temperature to zero
+
+// For storing output pin configuration of LED
+const int LED = 4;
+
+int accumulator = 0;
+double sumObjectTemperature = 0.0;
+double sumSensorTemperature = 0.0;
+double error = 0.5;
+
 
 void setup(){
     // Begin Serial Communications
@@ -25,34 +32,34 @@ void setup(){
     // Get the beginning calibration value
     IRsensor.getCalibration();
     
-    // Set pinMode as LED_low and LED_high as output
-    pinMode(LED_low, OUTPUT);
-    pinMode(LED_high, OUTPUT);
-}
+    // Set pinMode for LED
+    pinMode(LED, OUTPUT);
+};
 
 void loop(){
-    // Read the ADC Dialectric Sensor
-    // IRsensor.readADC(); 
 
-    sensorTemperature = IRsensor.getSensorTemperature();
-    objectTemperature = IRsensor.getObjectTemperature();
+    IRsensor.readADC(); 
 
-    // If statement to check if object temperature is the same to background temperature
-    if(objectTemperature != sensorTemperature){ //hand is detected
-        
-        Serial.print("Hand is detected.");
-        digitalWrite(LED, HIGH); // Turn LED on
-        delay(1000);
-        digitalWrite(LED, LOW); // Turn LED off
-        
-    } else {
+    accumulator++;
 
-        Serial.print("No hand detected.");
-        Serial.print("The sensor temperature ");
-        Serial.print(IRsensor.getSensorTemperature);
-        Serial.print(" equals object temperature ");
-        Serial.print(IRsensor.getObjectTemperature);
-        delay(1000);
+    sumObjectTemperature+= IRsensor.getObjectTemperature();
+    sumSensorTemperature+= IRsensor.getSensorTemperature();
 
+    if(accumulator == 100){
+        accumulator = 0;
+        double object_averageLoop = sumObjectTemperature / 100.0;
+        double sensor_averageLoop = sumSensorTemperature / 100.0;
+
+        if(abs(object_averageLoop) < abs(sensor_averageLoop - error){
+            Serial.println("Hand is detected.");
+            digitalWrite(LED, HIGH); // Turn LED on
+        }
+        else{
+            Serial.println("Hand is NOT detected.");
+            digitalWrite(LED, LOW); // Turn LED off
+        }
+
+        sumSensorTemperature = 0.0;
+        sumObjectTemperature = 0.0;
     }
-}
+};
