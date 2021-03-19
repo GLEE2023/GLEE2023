@@ -21,6 +21,11 @@ void loop() {
   //Store Results in a string variable
   String output = Rad.receive_data_string();
   
+  
+
   //Output the results 
   Serial.println(output);
+
+  // Output Recieved Signal Strength indicator value
+  Serial.println(Rad.getRSSI());
 }
