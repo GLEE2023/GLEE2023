@@ -23,4 +23,7 @@ void loop() {
   
   //Output the results 
   Serial.println(output);
+
+  // Print recieved signal strength indicator
+  Serial.println(Rad.getRSSI());
 }
