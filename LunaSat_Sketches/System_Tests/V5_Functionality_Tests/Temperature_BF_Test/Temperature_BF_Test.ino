@@ -3,8 +3,8 @@
 #include "GLEE_Sensor.h"
 #include "TMP117.h"
 
-// Instantiate TMP117 class with id of one and debugging set to true
-TMP117 thermometer(1,true);
+// Instantiate TMP117 class with id of one and debugging set to false
+TMP117 thermometer(1,false);
 
 // Observation configuration
 int sampleRate; // Sample rate in samples per second (Hz)

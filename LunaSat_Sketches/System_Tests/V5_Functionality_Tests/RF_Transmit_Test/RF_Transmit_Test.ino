@@ -5,7 +5,7 @@ LunaRadio Rad;
 
 void setup() {
   Serial.begin(9600);
-  Rad.initialize_radio();
+  Rad.initialize_radio(915.0,17,250.0,12,8);
 }
 
 void loop() {
