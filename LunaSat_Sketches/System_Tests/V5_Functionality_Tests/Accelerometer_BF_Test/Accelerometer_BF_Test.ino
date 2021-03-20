@@ -17,7 +17,7 @@ void setup(){
 
     accelerometer.initialize();
 
-    accelerometer.setScale(1);
+    accelerometer.setScale(0);
 };
 
 void loop(){
