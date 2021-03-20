@@ -33,6 +33,11 @@ AK09940::AK09940(int _id, bool _debug){
 	AK09940::info.name = "AK09940 Magnetometer";		//assign sensor name
 	AK09940::info.address = AK09940_SENSOR_ADDR;		//assign sensor i2c address
 	AK09940::sensorDebug= _debug;						//debug flag status
+	
+	// Enable 1.8v-3.3v, pin pc3 set to high, level shift on initialization 
+	pinMode(3,OUTPUT);
+  	digitalWrite(3,HIGH);
+	
 	Wire.begin(AK09940::info.address);					//begin i2c comms with sensor, must be called once
 	
 	if (AK09940::sensorDebug){							//Print Statements for debugging and visualization of what this sensor does!

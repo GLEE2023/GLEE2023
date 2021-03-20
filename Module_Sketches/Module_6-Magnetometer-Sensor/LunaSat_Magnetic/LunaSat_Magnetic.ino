@@ -14,8 +14,7 @@
 
 AK09940 ak09940 = AK09940(0, false);
 
-void setup ()
-{
+void setup (){
     Serial.begin(9600);
     ak09940.setDebugMode(true);
     ak09940.ak09940WAI();
@@ -24,8 +23,7 @@ void setup ()
 
 };
 
-void loop ()
-{   
+void loop (){   
     
     Serial.print("Current Measurement Mode: ");
     Serial.println(ak09940.getMeasurementMode());
