@@ -38,13 +38,14 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
     }
 
     if (info.conf[3]){
-        tpis1385 = new Thermopile();
+        tpis1385 = new Thermopile(4, _debug);
     }
 
     if (info.conf[4]==1){
         Rad = new LunaRadio();
     }
     
+    Serial.println(F("Done initalization"));
 
     // Set indicator LED pin modes
     pinMode(LED1, OUTPUT);
@@ -71,6 +72,7 @@ void LunaSat::begin(int baudRate){
     if (info.conf[1]){
         icm20602->begin();
         icm20602->initialize();
+        Serial.println(F("Accel Initialized"));
     }
 
     if (info.conf[2]){
@@ -80,8 +82,10 @@ void LunaSat::begin(int baudRate){
         ak09940->setMeasurementMode(POWER_DOWN);
     }
 
-    if (info.conf[3]==1) { 
+    if (info.conf[4]==1) { 
         Rad->initialize_radio();
+        Serial.println(F("Radio Initialized"));
+        delay(50);
     }
 
     // TODO: Implement sensor begin outside of constructor classes implement
@@ -161,11 +165,11 @@ lunaSat_sample_t LunaSat::getSample(void){
 void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(sample.timeStamp);
     Serial.print(',');
-    if (info.conf[0]){
+    if (info.conf[0]==1){
         Serial.print(sample.temperature);
         Serial.print(',');
     }
-    if (info.conf[1]){
+    if (info.conf[1]==1){
         Serial.print(sample.acceleration.x);
         Serial.print(',');
         Serial.print(sample.acceleration.y);
@@ -173,7 +177,7 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
         Serial.print(sample.acceleration.z);
         Serial.print(',');
     }
-    if (info.conf[2]){
+    if (info.conf[2]==1){
         Serial.print(sample.magnetic.x);
         Serial.print(',');
         Serial.print(sample.magnetic.y);
