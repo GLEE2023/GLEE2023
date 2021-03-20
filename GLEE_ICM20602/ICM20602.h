@@ -66,7 +66,7 @@ class ICM20602:public Sensor{
         Ascale currentScale; //g-force range
         Gscale currentGyroScale; //DPS range
         float currentFactor;
-        flat currentGyroFactor;
+        float currentGyroFactor;
         sensor_int16_vec_t accelRaw;
         sensor_float_vec_t accelMPS;
         sensor_float_vec_t accelG;

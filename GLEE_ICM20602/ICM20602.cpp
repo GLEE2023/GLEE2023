@@ -18,12 +18,12 @@ basic variables to get started.
 */
 ICM20602::ICM20602(int _id, bool _debug){
     ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
-  	ICM20602::info.address = ICM20602_slave_addr;
+  	ICM20602::info.address = ICM20602_SLAVE_ADDR;
   	ICM20602::sensorDebug = _debug;
     ICM20602::currentScale = AFS_2G;
     ICM20602::currentGyroScale = GFS_1000DPS;
     ICM20602::currentFactor = 16384.0;
-    ICM20602::currentGyroScale = 131.0;
+    ICM20602::currentGyroFactor = 131.0;
 }
 
 /*
