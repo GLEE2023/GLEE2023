@@ -23,6 +23,6 @@ class Capacitive:public Sensor{
       int getRawData(int pin);
       double getDieletricConstant(int analogReadIn);
       void addCalibrationPoint(int correctDielectricValue);
-      void linearRgression(vector <vector<int>> v);
+      //void linearRgression(vector <vector<int>> v);
   };
 #endif

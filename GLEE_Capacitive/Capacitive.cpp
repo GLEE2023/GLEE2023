@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <vector>
-#include <math.h>
+//#include <vector.h>
+//#include <math.h>
 #include <Wire.h>
 #include "Capacitive.h"
 
@@ -35,7 +35,7 @@ uint8_t Capacitive::getAddress(){
 int Capacitive::getRawData(int pin){
   analogRead(pin);
 }
-
+/**
 void Capacitive::linearRgression(vector <vector<int>> v){
     double xAvg = 0;
     double yAvg = 0;
@@ -61,3 +61,4 @@ void Capacitive::linearRgression(vector <vector<int>> v){
     yIntercept = yAvg - b*xAvg;
     cout<<"y = "<<yIntercept<<" + "<< b<<"x"<<endl;
 }
+**/
