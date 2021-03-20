@@ -113,7 +113,7 @@ struct SensorADC{
 
 class Thermopile : public Sensor{                   //Inheritied class from the GLEE_Sensor
     public:
-        Thermopile();                                //Constructor
+        Thermopile(int _id, bool _debug = false);                                //Constructor
 
         void getCalibration(void);                      //Retreive and store calibration info to calibration data structure
 
