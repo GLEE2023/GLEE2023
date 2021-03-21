@@ -51,9 +51,10 @@ class Sensor {
     public:
         bool isConnected(void);             //Using the wire interface we check to see if we can communicate with the sensor
         void whoAmI(void);                  //Returns info about the sensor!
-        void setDebugMode(bool);
         bool sensorDebug;
+        void setDebugMode(bool);
         uint8_t readByte(uint8_t registerAddress);
+        void readBytes(uint8_t registerAddress, uint8_t len, uint8_t *data);
         void writeByte(uint8_t registerAddress, uint8_t writeData);
 
         sensor_info_t info;

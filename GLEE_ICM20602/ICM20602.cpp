@@ -17,6 +17,7 @@ This is the constructor for this sensor that sets the
 basic variables to get started.
 */
 ICM20602::ICM20602(int _id, bool _debug){
+	ICM20602::info.id = _id;
     ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
   	ICM20602::info.address = ICM20602_SLAVE_ADDR;
   	ICM20602::sensorDebug = _debug;
@@ -52,7 +53,7 @@ void ICM20602::initialize(void){
     writeByte(ICM20602_CONFIG, 0x01); 
     writeByte(ICM20602_GYRO_CONFIG, 0x00);    
     writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
-  // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
+  	// TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
 int16_t ICM20602::read2Byte(uint8_t registerAddress){
@@ -122,9 +123,9 @@ This function converts the raw acceleration in LSB/G to the acceleration in
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
 sensor_float_vec_t ICM20602::getGAccel(){
-    ICM20602::accelG.x = (float) ICM20602::accelRaw.x/ currentFactor;
-    ICM20602::accelG.y = (float) ICM20602::accelRaw.y/ currentFactor;
-    ICM20602::accelG.z = (float) ICM20602::accelRaw.z/ currentFactor;
+    ICM20602::accelG.x = (float) ICM20602::accelRaw.x/ ICM20602::currentFactor;
+    ICM20602::accelG.y = (float) ICM20602::accelRaw.y/ ICM20602::currentFactor;
+    ICM20602::accelG.z = (float) ICM20602::accelRaw.z/ ICM20602::currentFactor;
 	return ICM20602::accelG;
 }
 
@@ -216,23 +217,21 @@ for the acceleration depending on the current sensing accuracy scale.
 */
 float ICM20602::getSensitivity(){
   // TODO: Write setter for sensity a variable, possibly private
-  	float factor;
 	switch (currentScale) {
 		case (AFS_2G):
-      		factor = 16384.0;
+      		ICM20602::currentFactor = 16384.0;
       		break;
     	case (AFS_4G):
-      		factor = 8192.0;
+      		ICM20602::currentFactor = 8192.0;
       		break;
     	case (AFS_8G):
-     		factor = 4096.0;
+     		ICM20602::currentFactor = 4096.0;
       		break;
     	case (AFS_16G):
-      		factor = 2048.0;
+      		ICM20602::currentFactor = 2048.0;
       		break;
 	}
-	currentFactor = factor;
-	return factor;  
+	return ICM20602::currentFactor;  
 }
 
 /*
@@ -242,22 +241,20 @@ This function uses a switch statement to return the sensitivity scale factor
 for the gyroscope depending on the current sensing accuracy scale.
 */
 float ICM20602::getGyroSensitivity(){
-    float factor;
     switch (currentGyroScale) {
     	case (GFS_250DPS):
-      		factor = 131.0;
+      		ICM20602::currentGyroFactor = 131.0;
       		break;
     	case (GFS_500DPS):
-      		factor = 65.5;
+      		ICM20602::currentGyroFactor = 65.5;
       		break;
     	case (GFS_1000DPS):
-      		factor = 32.8;
+      		ICM20602::currentGyroFactor = 32.8;
       		break;
     	case (GFS_2000DPS):
-      		factor = 16.4;
+      		ICM20602::currentGyroFactor = 16.4;
       		break;
 	}
-	currentGyroFactor = factor;
-	return factor;  
+	return ICM20602::currentGyroFactor;  
 }
 
