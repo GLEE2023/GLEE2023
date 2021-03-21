@@ -135,7 +135,6 @@ void TPIS1385::readEEprom(void){
 
     TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x80); // Set eeprom control to read
 
-
     data[0] = TPIS1385::readByte(TP_PROTOCOL);
     Serial.print(F("EEPROM Protocol: "));
     Serial.println(data[0]);
@@ -149,6 +148,7 @@ void TPIS1385::readEEprom(void){
     Serial.print(F("PTAT25 Value: "));
     Serial.println(TPIS1385::sensorCalibration.PTAT25);
 
+    // Read M calibration value
     readBytes(TP_M, 2, &data[0]);
     TPIS1385::sensorCalibration.M = ((uint16_t) data[0] << 8) | data[1]; 
     TPIS1385::sensorCalibration.M /= 100; // Apply appropriate offset
@@ -156,6 +156,7 @@ void TPIS1385::readEEprom(void){
     Serial.print(F("M Value: "));
     Serial.println(TPIS1385::sensorCalibration.M);
 
+    // Read U0 calibration value
     readBytes(TP_U0, 2, &data[0]);
     TPIS1385::sensorCalibration.U0 = ((uint16_t) data[0] << 8) | data[1];
     TPIS1385::sensorCalibration.U0 += 32768;
@@ -163,6 +164,7 @@ void TPIS1385::readEEprom(void){
     Serial.print(F("U0 Value: "));
     Serial.println(TPIS1385::sensorCalibration.U0);
 
+    // Read Uout1 calibration value
     readBytes(TP_UOUT1, 2, &data[0]);
     TPIS1385::sensorCalibration.UOut1 = ((uint16_t) data[0] << 8) | data[1];
     TPIS1385::sensorCalibration.UOut1 *= 2;
@@ -170,10 +172,12 @@ void TPIS1385::readEEprom(void){
     Serial.print(F("UOut1 Value: "));
     Serial.println(TPIS1385::sensorCalibration.UOut1);
 
+    // Read Tobject 1 cal value
     TPIS1385::sensorCalibration.TObj1 = TPIS1385::readByte(TP_T_OBJ_1);
     Serial.print(F("T_obj_1 Value: "));
     Serial.println(TPIS1385::sensorCalibration.TObj1);
 
+    writeByte(TP_I2C_ADDR, TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
 
     TPIS1385::sensorCalibration.K = ((float) (TPIS1385::sensorCalibration.UOut1 - TPIS1385::sensorCalibration.U0)/ (pow((float) (TPIS1385::sensorCalibration.TObj1 + 273.15f),3.8f) - pow(25.0f + 273.15f,3.8f)));
 }
@@ -200,5 +204,5 @@ uint32_t TPIS1385::getTPobj(){
 float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
     float temp0 = pow(Tamb, 3.8f);
     float temp1 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K;
-    return pow((temp0 + temp1), 0.2631578947f); 
+    return pow((temp0 + temp1), 0.2631578947f); // Magic constant (1/3.8 = 0.2631578947f)
 }
