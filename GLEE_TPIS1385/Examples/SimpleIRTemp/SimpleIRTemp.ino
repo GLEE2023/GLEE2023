@@ -1,4 +1,4 @@
-#include "GLEE_IR_Thermopile.h"
+#include "TPIS1385.h"
 
 
 Thermopile IRsensor;
