@@ -10,32 +10,45 @@
 
 TPIS1385 thermopile(1); // Instantiate thermopile object
 
-// float startTime = 0.0;
-// float endTime = 0.0;
-
-double sensorTemperature = 0.0; // Initialize sensor temperature to zero
-
 const int LED = 4; // For storing output pin configuration of LED
 
 int accumulator = 0; // Counter for average loops
 
-double sumObjectTemperature = 0.0; // Total to calculate Object Temperature average
+float sumTempDiff;
+float avgTempDiff;
+float tempDiff;
 
-double sumSensorTemperature = 0.0; // Total to calculate Sensor Temperature average
+double thresh = 0.4; // The bubble of certainty allowed between average Sensor and average Object
 
-double error = 0.5; // The bubble of certainty allowed between average Sensor and average Object
-
-TPsample_t temperatures;
+TPsample_t temperatures; // Initialize sensor temperature to zero
 
 void setup(){
     // Begin Serial Communications
     Serial.begin(9600);
+
+    thermopile.begin();
 
     // set calibration values from by reading eeprom
     thermopile.readEEprom();
     
     // Set pinMode for LED
     pinMode(LED, OUTPUT);
+
+    delay(50);
+
+    for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds
+
+        temperatures = thermopile.getSample();
+        
+        Serial.print("Object: "); Serial.println(temperatures.object, 4);
+        Serial.print("Ambient: "); Serial.println(temperatures.ambient, 4);
+
+        sumTempDiff += abs(temperatures.object - temperatures.ambient);
+    
+        delay(200);
+    };
+
+    avgTempDiff = sumTempDiff/3;
 };
 
 void loop(){
@@ -44,24 +57,23 @@ void loop(){
 
     accumulator++; // Begin counting total accumulation
 
-    sumObjectTemperature+= temperatures.object; // Get the sum of Object Temperatures
-    sumSensorTemperature+= temperatures.ambient; // Get the sum of Sensor Temperatures
-
-    if(accumulator == 1000){ // Once accumulated a specific number of samples to average
+    if(accumulator == 500){ // Once accumulated a specific number of samples to average
         accumulator = 0; // Reset accumulator
-        double object_averageLoop = sumObjectTemperature / 1000.0; // Calculate Object Temeprature average
-        double sensor_averageLoop = sumSensorTemperature / 1000.0; // Calculate Sensor Temperature average
 
-        if(abs(object_averageLoop) < abs(sensor_averageLoop - error)){ // If Object and Sensor are the same
+        tempDiff = abs(temperatures.object - temperatures.ambient);
+
+        Serial.print("Object: "); Serial.println(temperatures.object, 4);
+        Serial.print("Ambient: "); Serial.println(temperatures.ambient, 4);
+        Serial.print("Diveation from Avg Difference: "); Serial.println(abs(tempDiff-avgTempDiff));
+
+        if(abs(tempDiff-avgTempDiff) > thresh){ // If Object and Sensor are the same
             Serial.println("Hand is detected.");
-            digitalWrite(LED, HIGH); // Turn LED on
+            digitalWrite(LED, HIGH);
+            delay(500);
+            digitalWrite(LED, LOW);
         }
         else{ // If Object and Sensor are NOT the same
             Serial.println("Hand is NOT detected.");
-            digitalWrite(LED, LOW); // Turn LED off
         }
-
-        sumSensorTemperature = 0.0; // Reset Sensor sum
-        sumObjectTemperature = 0.0; // Reset Object sum
     }
 };
