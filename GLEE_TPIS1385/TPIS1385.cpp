@@ -215,14 +215,17 @@ float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
 }
 
 TPsample_t TPIS1385::getSample(){
-    uint16_t TPamb = getTPamb();
-    uint16_t Tamb = getTamb(TPamb);
+    TPsample_t sample; // observation sample to be returned
     
+    // Build Sample
+    uint16_t TPamb = getTPamb();
     uint32_t TPobj = getTPobj();
+    uint16_t Tamb = getTamb(TPamb);
     float Tobj = getTobj(TPobj, Tamb);
-    TPsample_t sample;
+    
     sample.object = Tobj - SENSOR_CONV_K_to_C; 
     sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
+    
     return sample;
 }
 

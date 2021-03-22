@@ -24,26 +24,6 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
 
     // Set private variables
     debug = _debug;
-
-    if (info.conf[0]){
-        tmp117 = new TMP117(1, _debug);
-    }
-
-    if (info.conf[1]){
-        icm20602 = new ICM20602(2, _debug);
-    }
-    
-    if (info.conf[2]){
-        ak09940 = new AK09940(3, _debug);
-    }
-
-    if (info.conf[3]){
-        tpis1385 = new Thermopile(4, _debug);
-    }
-
-    if (info.conf[4]==1){
-        Rad = new LunaRadio();
-    }
     
     Serial.println(F("Done initalization"));
 
@@ -53,6 +33,7 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
 
     //TODO: Handle passing modes/configurations as arguments into sensor constructors
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
+
 }
 
 /**
@@ -70,28 +51,37 @@ void LunaSat::begin(int baudRate){
 
     // Sensor specific begins and initializations
     if (info.conf[1]){
-        icm20602->begin();
-        icm20602->initialize();
+        LunaSat::icm20602->begin();
+        LunaSat::icm20602->initialize();
         Serial.println(F("Accel Initialized"));
     }
 
+    if (info.conf[3]==1){
+        LunaSat::tpis1385->readEEprom();
+    }
+
+    /*
     if (info.conf[2]){
-        ak09940->setDebugMode(true);
-        ak09940->ak09940WAI();
-        ak09940->setDriveMode(LOW_NOISE_1);
-        ak09940->setMeasurementMode(POWER_DOWN);
+        LunaSat::ak09940.setDebugMode(true);
+        LunaSat::ak09940.ak09940WAI();
+        LunaSat::ak09940.setDriveMode(LOW_NOISE_1);
+        LunaSat::ak09940.setMeasurementMode(POWER_DOWN);
     }
+    */
 
+    /*
     if (info.conf[4]==1) { 
-        Rad->initialize_radio();
+        Rad->initialize_radio(915.0,17,250.0,12,8);
         Serial.println(F("Radio Initialized"));
-        delay(50);
+        delay(50); 
     }
-
+    */
     // TODO: Implement sensor begin outside of constructor classes implement
     // tmp begin
     // mag begin 
 }
+
+
 
 /**
  * Parameters: none
@@ -99,27 +89,34 @@ void LunaSat::begin(int baudRate){
  * This function gets the sample through testing 
  * functionality otherwise set acceleration and magnetic.
 **/
+/*
+lunaSat_sample_t LunaSat::getFuzzSample(void){
+    sample.timeStamp = millis();
+    sample.TMPtemperature = tmp117->getTemperatureC_fuzzed();
+    sample.acceleration = icm20602->getGAccel_fuzzed();
+    sample.magnetic = ak09940->getRawData_fuzzed();
+    sample.ObjTemperature = 0;
+}
+*/
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
-    if (debug){
-        // Debug test functonality passes appropriatley type values for testing library interfacing
-
-        sample.timeStamp = millis();
-        sample.temperature = tmp117->getTemperatureC_fuzzed();
-        sample.acceleration = icm20602->getGAccel_fuzzed();
-        sample.magnetic = ak09940->getRawData_fuzzed();
-    }
-    else {
+    if (!debug){
         sample.timeStamp = millis();
 
         // Handle Temperature Sensor Sample base on configuration
         if (info.conf[0] == 1){
-            sample.temperature = tmp117->getTemperatureC();
+            sample.TMPtemperature = LunaSat::tmp117->getTemperatureC();
         }else{
-            sample.temperature = 0;
+            sample.TMPtemperature = 0;
+        }
+
+        if (info.conf[1] == 1){
+            LunaSat::icm20602->getRawAccel();
+            sample.acceleration = LunaSat::icm20602->getGAccel();
         }
         
         // Hangle Acceleration Sample based on configuration
+        /*
         if (info.conf[1] == 1){
             sample.acceleration = icm20602->getGAccel();
         } else {
@@ -127,8 +124,10 @@ lunaSat_sample_t LunaSat::getSample(void){
             sample.acceleration.y = 0;
             sample.acceleration.z = 0;
         }
-        
+        */
+
         // Handle Magnetic Sample based on configuration
+        /*
         if (info.conf[2] == 1){
             // Get standard single magnetometer measurement. 
             // TODO: Generalize with respect to magnetometer mode
@@ -147,14 +146,18 @@ lunaSat_sample_t LunaSat::getSample(void){
             sample.magnetic.y = 0;
             sample.magnetic.z = 0;
         }
+        */
 
         // Handle Thermopile Sample based on configuration
         if (info.conf[3] == 1){
-            sample.ObjTemperature = tpis1385->getObjectTemperature();
+            sample.TPTemperature = LunaSat::tpis1385->getSample();
         }
+        
     }
+
     return sample;
 }
+
 
 /**
  * Parameters: lunaSat_sample_t sample
@@ -165,16 +168,17 @@ lunaSat_sample_t LunaSat::getSample(void){
 void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.print(sample.timeStamp);
     Serial.print(',');
+    
     if (info.conf[0]==1){
-        Serial.print(sample.temperature);
+        Serial.print(sample.TMPtemperature,3);
         Serial.print(',');
     }
     if (info.conf[1]==1){
-        Serial.print(sample.acceleration.x);
+        Serial.print(sample.acceleration.x,5);
         Serial.print(',');
-        Serial.print(sample.acceleration.y);
+        Serial.print(sample.acceleration.y,5);
         Serial.print(',');
-        Serial.print(sample.acceleration.z);
+        Serial.print(sample.acceleration.z,5);
         Serial.print(',');
     }
     if (info.conf[2]==1){
@@ -183,6 +187,12 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
         Serial.print(sample.magnetic.y);
         Serial.print(',');
         Serial.print(sample.magnetic.z);
+    }
+    if (info.conf[3]==1){
+        Serial.print(',');
+        Serial.print(sample.TPTemperature.object,5);
+        Serial.print(',');
+        Serial.print(sample.TPTemperature.ambient,5);
     }
     Serial.println("");
 }
@@ -210,6 +220,15 @@ void LunaSat::blink(int _LED, int _delay){
     delay(_delay);
 }
 
+/**
+ * Parameters: 
+ * Returns: 
+ * Transmit full sample with sx1272 transciever 
+ * 
+**/
+
+/*
 void LunaSat::transmitSample(lunaSat_sample_t sample){
     Rad->transmit_data((char*)&sample);
 }
+*/

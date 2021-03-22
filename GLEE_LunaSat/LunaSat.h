@@ -17,6 +17,7 @@
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
 
+
 typedef struct{
     float x;
     float y;
@@ -34,8 +35,6 @@ typedef struct{
     int id;
     String name;
     int conf[5];
-    // TODO: Find optimal structure packing    
-    
 } lunaSat_info_t;
 
 // This type represents the structure of lunasat observations
@@ -52,10 +51,10 @@ typedef struct{
         // Acceleratio/ Magnetic Field (x,y,z)
 
     unsigned long timeStamp;
-    double temperature;
+    double TMPtemperature;
     sensor_float_vec_t acceleration;
     sensor_float_vec_t magnetic;
-    float ObjTemperature;
+    TPsample_t TPTemperature;
 
 } lunaSat_sample_t;
 
@@ -67,11 +66,11 @@ class LunaSat{
         // This controlls whether debug messages are 
         // printed to serial
 
-        LunaSat(int _id, int _conf[5], bool _debug = false);    
+        LunaSat(int _id, int _conf[5], bool _debug = false);
 
         // Sensor Initializations
         // Methods
-        void begin(int baudRate);                      
+        void begin(int baudRate);
         lunaSat_sample_t getSample();
         void dispSample(lunaSat_sample_t sample);
         void transmitSample(lunaSat_sample_t sample);
@@ -80,15 +79,16 @@ class LunaSat{
     
     private:
         // Radio class instance
-        LunaRadio Rad;
+        LunaRadio *rad = new LunaRadio();
     
         // Sensor class instances
-        TMP117 tmp117;
-        AK09940 ak09940;
-        TPIS1385 tpis1385;
-    
+        TMP117 *tmp117 = new TMP117(0);
+        ICM20602 *icm20602 = new ICM20602(1);
+        AK09940 *ak09940 = new AK09940(2);
+        TPIS1385 *tpis1385 = new TPIS1385(3);
+        //Capacitive capacitive
+
         bool debug;
-    
 };
 #endif
 

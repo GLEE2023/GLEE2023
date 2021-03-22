@@ -18,7 +18,11 @@ enum TMP117_Register{
   TMP117_EEPROM3_REG = 0X08,
   TMP117_DEVICE_ID = 0X0F
 };
-
+/*
+typedef struct{
+  
+} TMP117_sample_t;
+*/
 class TMP117:public Sensor{
   public:
     TMP117(int _id, bool _debug = false);                       // Constructor

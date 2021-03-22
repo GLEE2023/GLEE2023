@@ -4,7 +4,7 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[5] = {1,1,1,1,1};
+int lunaSatConfig[5] = {1,0,0,0,1};
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 // Can be easily expanded to account for different axes of LunaSat configuration
@@ -25,6 +25,6 @@ void loop() {
 
     // Simple examples of interacting with an observation sample
     lunaSat.dispSample(sample); // Observation samples can be directly displayed via serial
-    lunaSat.transmitSample(sample);  // Observation samples can be just as easily transmitted to a reciever
+    //lunaSat.transmitSample(sample);  // Observation samples can be just as easily transmitted to a reciever
     delay(3000);
 }
