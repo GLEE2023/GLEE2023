@@ -12,7 +12,7 @@
 #include "AK09940.h"                // Magnetometer Library
 #include "ICM20602.h"               // IMU Library
 #include "TMP117.h"                 // Temperature Sensor Library
-#include "GLEE_IR_Thermopile.h"     // Thermopile Library
+#include "TPIS1385.h"               // Thermopile Library
 
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
