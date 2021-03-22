@@ -15,14 +15,16 @@ void setup(){
 
     accelerometer.begin();
 
-    accelerometer.initialize();
+    accelerometer.initialize(); //Default scale is AFS_2G
 };
 
 void loop(){
     startTime = millis();
     
     accelRaw = accelerometer.getRawAccel();
-    
+    accelG = accelerometer.getGAccel(accelRaw);
+    accelMPS = accelerometer.getMPSAccel(accelG);
+
     Serial.print("Raw (Binary), X-Axis: ");
     Serial.println(accelRaw.x, BIN);
     Serial.print("Raw, (Binary): ");
@@ -39,7 +41,6 @@ void loop(){
     Serial.println(accelRaw.z, 8);
     Serial.println();
 
-    accelG = accelerometer.getGAccel();
     Serial.print("G, X-Axis: ");
     Serial.println(accelG.x, 8);
     Serial.print("G, Y-Axis: ");
@@ -48,7 +49,6 @@ void loop(){
     Serial.println(accelG.z, 8);
     Serial.println();
 
-    accelMPS = accelerometer.getMPSAccel();
     Serial.print("MPS, X-Axis: ");
     Serial.println(accelMPS.x, 8);
     Serial.print("MPS, Y-Axis: ");
