@@ -8,7 +8,7 @@
  * after calibration.
  **/
 
-TPIS1385 thermopile; // Calling the thermopile class
+TPIS1385 thermopile(1); // Instantiate thermopile object
 
 // float startTime = 0.0;
 // float endTime = 0.0;
@@ -52,7 +52,7 @@ void loop(){
         double object_averageLoop = sumObjectTemperature / 1000.0; // Calculate Object Temeprature average
         double sensor_averageLoop = sumSensorTemperature / 1000.0; // Calculate Sensor Temperature average
 
-        if(abs(object_averageLoop) < abs(sensor_averageLoop - error){ // If Object and Sensor are the same
+        if(abs(object_averageLoop) < abs(sensor_averageLoop - error)){ // If Object and Sensor are the same
             Serial.println("Hand is detected.");
             digitalWrite(LED, HIGH); // Turn LED on
         }
