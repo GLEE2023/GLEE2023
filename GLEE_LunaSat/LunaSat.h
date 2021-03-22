@@ -76,6 +76,8 @@ class LunaSat{
         void transmitSample(lunaSat_sample_t sample);
         lunaSat_info_t info;
         void blink(int _pin, int _delay);
+
+        void dispAccel(sensor_float_vec_t accel);
     
     private:
         // Radio class instance

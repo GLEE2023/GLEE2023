@@ -197,6 +197,14 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.println("");
 }
 
+void LunaSat::dispAccel(sensor_float_vec_t accel){
+    Serial.print(accel.x,5);
+    Serial.print(" ");
+    Serial.print(accel.y,5);
+    Serial.print(' ');
+    Serial.println(accel.z,5);
+}
+
 /**
  * Parameters: int _LED and int _delay
  * Returns: none
