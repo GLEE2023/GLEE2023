@@ -6,11 +6,15 @@ float startTime;
 float endTime;
 float staticAcceleration = 0;
 float dynamicAcceleration;
-float impactThreshold = 0.001; // Defines impact threshold to be 0.001 m/s^2
+float accelDif;
+float impactThreshold = 0.1; // Defines impact threshold to be 0.001 m/s^2
 int LED = 4;
 
 ICM20602 accelerometer(1, false);
+
 sensor_float_vec_t accelMPS;
+sensor_float_vec_t accelG;
+sensor_int16_vec_t accelRaw;
 
 void setup(){
     Serial.begin(9600);
@@ -19,17 +23,19 @@ void setup(){
 
     accelerometer.initialize();
 
-    accelerometer.setScale(1);
+    accelerometer.setScale(0); // Scale: AFS_2G - 0
 
     pinMode(LED, OUTPUT);
-};
-
-void loop(){
+    
+    delay(50); // Allow time for sensor initialization to complete
 
     for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds
         startTime = millis();
 
-        accelMPS = accelerometer.getMPSAccel();
+        accelRaw = accelerometer.getRawAccel();
+        accelG = accelerometer.getGAccel(accelRaw);
+        accelMPS = accelerometer.getMPSAccel(accelG);
+        
         Serial.print("MPS, X-Axis: ");
         Serial.println(accelMPS.x, 8);
         Serial.print("MPS, Y-Axis: ");
@@ -43,12 +49,18 @@ void loop(){
         endTime = millis();
         delay(1000 - (endTime - startTime));
     };
-
     staticAcceleration = staticAcceleration/3;
+    Serial.print(F("Calculated Static Acceleration: ")); Serial.println(staticAcceleration);
+};
 
-    startTime = millis();
+void loop(){
 
-    accelMPS = accelerometer.getMPSAccel();
+    //startTime = millis();
+
+    accelRaw = accelerometer.getRawAccel();
+    accelG = accelerometer.getGAccel(accelRaw);
+    accelMPS = accelerometer.getMPSAccel(accelG);
+
     Serial.print("MPS, X-Axis: ");
     Serial.println(accelMPS.x, 8);
     Serial.print("MPS, Y-Axis: ");
@@ -59,14 +71,18 @@ void loop(){
 
     dynamicAcceleration = sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2));
 
-    if(dynamicAcceleration >= impactThreshold){
-         Serial.print("Impact detected");
+    accelDif = abs(dynamicAcceleration - staticAcceleration);
+
+    Serial.print(F("Calculated Static Acceleration: ")); Serial.println(accelDif);
+
+    if( accelDif >= impactThreshold){
+         Serial.println("Impact detected");
 
          digitalWrite(LED, HIGH);
-         delay(100);
+         delay(500);
          digitalWrite(LED, LOW);
     };
     
-    endTime = millis();
-    delay(100 - (endTime - startTime)); // get measurements every 0.1 second
+    //endTime = millis();
+    delay(100); // get measurements every 0.1 second
 };
