@@ -75,20 +75,6 @@ int16_t ICM20602::read2Byte(uint8_t registerAddress){
 
 /*
 Parameters: none
-Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
-This function reads in the high bytes of the accel for each of the three 
-axis, performs a bitwise operation, then saves and returns the raw acceleration
-struct.
-*/
-sensor_int16_vec_t ICM20602::getRawAccel(){
-	ICM20602::accelRaw.x = read2Byte(ICM20602_ACCEL_XOUT_H);
-    ICM20602::accelRaw.y = read2Byte(ICM20602_ACCEL_YOUT_H);
-    ICM20602::accelRaw.z = read2Byte(ICM20602_ACCEL_ZOUT_H);
-    return ICM20602::accelRaw;
-}
-
-/*
-Parameters: none
 Returns: The raw angular velocity in LSB/DPS as a struct of sensor_uint16_vec_t type
 This function reads in the high bytes of the angular velocity for each of the three 
 axis, performs a bitwise operation, then saves and returns the raw angular velocity
@@ -103,16 +89,31 @@ sensor_int16_vec_t ICM20602::getRawAngVel(){
 
 /*
 Parameters: none
+Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
+This function reads in the high bytes of the accel for each of the three 
+axis, performs a bitwise operation, then saves and returns the raw acceleration
+struct.
+*/
+sensor_int16_vec_t ICM20602::getRawAccel(){
+	sensor_int16_vec_t RawAccel;
+	RawAccel.x = read2Byte(ICM20602_ACCEL_XOUT_H);
+	RawAccel.y = read2Byte(ICM20602_ACCEL_YOUT_H);
+	RawAccel.z = read2Byte(ICM20602_ACCEL_ZOUT_H);
+    return RawAccel;
+}
+
+/*
+Parameters: none
 Returns: The acceleration in m/s^2 as a struct of sensor_float_vec_t type
 This function converts the raw accelerations in LSB/G to 
 meters per second squared.
 */
-sensor_float_vec_t ICM20602::getMPSAccel(){
-  // TODO: Apply sensitivity factor, currently hard coded
-	ICM20602::accelMPS.x = ICM20602::accelG.x * IMU_ONE_G;
-	ICM20602::accelMPS.y = ICM20602::accelG.y * IMU_ONE_G;
-	ICM20602::accelMPS.z = ICM20602::accelG.z * IMU_ONE_G;
-	return ICM20602::accelMPS;    
+sensor_float_vec_t ICM20602::getMPSAccel(sensor_float_vec_t GAccel){
+	sensor_float_vec_t accelMPS;
+	accelMPS.x = GAccel.x * IMU_ONE_G;
+	accelMPS.y = GAccel.y * IMU_ONE_G;
+	accelMPS.z = GAccel.z * IMU_ONE_G;
+	return accelMPS;    
 }
 //testing collaberative work
 
@@ -122,12 +123,27 @@ Returns: the accelerations in G's as a sensor_float_vec_t type
 This function converts the raw acceleration in LSB/G to the acceleration in 
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
-sensor_float_vec_t ICM20602::getGAccel(){
-    ICM20602::accelG.x = (float) ICM20602::accelRaw.x/ ICM20602::currentFactor;
-    ICM20602::accelG.y = (float) ICM20602::accelRaw.y/ ICM20602::currentFactor;
-    ICM20602::accelG.z = (float) ICM20602::accelRaw.z/ ICM20602::currentFactor;
-	return ICM20602::accelG;
+sensor_float_vec_t ICM20602::getGAccel(sensor_int16_vec_t rawAccel){
+	sensor_float_vec_t accelG;
+	accelG.x = (float) rawAccel.x / ICM20602::currentFactor;
+    accelG.y = (float) rawAccel.y / ICM20602::currentFactor;
+    accelG.z = (float) rawAccel.z / ICM20602::currentFactor;
+	return accelG;
 }
+
+void ICM20602::updateRawAccel(sensor_int16_vec_t rawAccel){
+	ICM20602::accelRaw = rawAccel;
+}
+
+void ICM20602::updateMPSAccel(sensor_float_vec_t MPSAccel){
+	ICM20602::accelMPS = MPSAccel;
+}
+
+void ICM20602::updateGAccel(sensor_float_vec_t GAccel){
+	ICM20602::accelG = GAccel;
+}
+
+
 
 /*
 Parameters: current scale of the sensor as the Ascale enumeration

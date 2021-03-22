@@ -67,9 +67,7 @@ class ICM20602:public Sensor{
         Gscale currentGyroScale; //DPS range
         float currentFactor;
         float currentGyroFactor;
-        sensor_int16_vec_t accelRaw;
-        sensor_float_vec_t accelMPS;
-        sensor_float_vec_t accelG;
+        
         sensor_int16_vec_t angVelRaw;
         sensor_float_vec_t angVelDPS;
 
@@ -79,17 +77,26 @@ class ICM20602:public Sensor{
         int16_t read2Byte(uint8_t registerAddress);
         sensor_int16_vec_t getRawAccel();
         sensor_int16_vec_t getRawAngVel();
-        sensor_float_vec_t getMPSAccel();
-        sensor_float_vec_t getGAccel();
-        sensor_float_vec_t getDPSAngVel();
         
+        sensor_float_vec_t getMPSAccel(sensor_float_vec_t GAccel);
+        sensor_float_vec_t getGAccel(sensor_int16_vec_t rawAccel);
+        
+        sensor_float_vec_t getDPSAngVel();
         sensor_float_vec_t getGAccel_fuzzed();
 
+        void updateRawAccel(sensor_int16_vec_t rawAccel);
+        void updateMPSAccel(sensor_float_vec_t MPSAccel);
+        void updateGAccel(sensor_float_vec_t GAccel);
 
         void setScale(Ascale newScale);
         void setGyroScale(Gscale newScale);
         float getSensitivity();
         float getGyroSensitivity();
+
+    private:
+        sensor_int16_vec_t accelRaw;
+        sensor_float_vec_t accelMPS;
+        sensor_float_vec_t accelG;
 };
 #endif
 
