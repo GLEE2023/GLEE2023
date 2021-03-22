@@ -69,6 +69,7 @@ class LunaSat{
 
         LunaSat(int _id, int _conf[5], bool _debug = false);    
 
+        // Sensor Initializations
         // Methods
         void begin(int baudRate);                      
         lunaSat_sample_t getSample();
@@ -76,17 +77,16 @@ class LunaSat{
         void transmitSample(lunaSat_sample_t sample);
         lunaSat_info_t info;
         void blink(int _pin, int _delay);
-
-        // Transciever Initializations
-        LunaRadio *Rad;
-
-        // Sensor Initializations
-        TMP117 *tmp117; 
-        ICM20602 *icm20602;
-        AK09940 *ak09940;
-        Thermopile *tpis1385;
-        
+    
     private:
+        // Radio class instance
+        LunaRadio Rad;
+    
+        // Sensor class instances
+        TMP117 tmp117;
+        AK09940 ak09940;
+        TPIS1385 tpis1385;
+    
         bool debug;
     
 };
