@@ -73,12 +73,12 @@ void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
     Wire.endTransmission();                                     //end communication
 }
 
-void Sensor::readBytes(uint8_t registerAddress, uint8_t len, uint8_t * data){
-    uint8_t readByte;                                       // byte to store data that is read
-    Wire.beginTransmission(Sensor::info.address);           // begins comms with sensor specified
-    Wire.write(registerAddress);                          
-    Wire.endTransmission();                                 // end transmission
-    Wire.requestFrom(Sensor::info.address, len);            // request len byte from the sensor address
+void Sensor::readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
+    Wire.beginTransmission(Sensor::info.address);           // begins forming transmission to sensor
+    Wire.write(registerAddress);                            // Add register address to transmission
+    Wire.endTransmission();                                 
+    Wire.requestFrom(Sensor::info.address, nBytes);            // Request and listen for response
+    // Record response, wire will be available until nBytes are read
     int i = 0;
     while(Wire.available()){
         data[i] = Wire.read();

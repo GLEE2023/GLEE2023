@@ -103,6 +103,11 @@ struct SensorADC{
     int32_t TP_AMB;
 };
 
+typedef struct{
+    float object;
+    float ambient;
+}TPsample_t;
+
 
 class TPIS1385 : public Sensor{                       //Inheritied class from the GLEE_Sensor
     public:
@@ -126,12 +131,15 @@ class TPIS1385 : public Sensor{                       //Inheritied class from th
         uint32_t getTPobj(void);
         float getTobj(uint32_t TPobj, float Tamb);
 
-    private:
+        TPsample_t getSample(void);
+        void updateSample(void);
 
+    private:
         CalibrationCoef sensorCalibration;              //Structure containing the sensor Calibration Details
         //RawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
         SensorADC sensorADC;
         uint8_t TEMPADDRESS;
+        TPsample_t staticSample;
 };
 
 

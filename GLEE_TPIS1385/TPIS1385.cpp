@@ -41,6 +41,7 @@ void TPIS1385::begin(void){
 }
 
 /**
+ * Depricated
  * Parameters: none
  * Returns: gets the calibration value
  * TODO: ADD DESCRIPTION
@@ -70,6 +71,7 @@ void TPIS1385::readCalibration(void){
 }
 */
 /**
+ * Depricated
  * Parameters: none
  * Returns: gets the calibration value
  * TODO: ADD DESCRIPTION
@@ -91,6 +93,7 @@ void TPIS1385::readADC(void){
 */
 
 /**
+ * Depricated
  * Parameters: none
  * Returns: gets the sensors temperature 
  * This function takes the TPIS1385 calibration values
@@ -103,6 +106,7 @@ double TPIS1385::getSensorTemperature(void){
 }
 */
 /**
+ * Depricated
  * Parameters: none
  * Returns: object temperature 
  * This function takes the TPIS1385 calibration values 
@@ -116,6 +120,7 @@ double TPIS1385::getObjectTemperature(void){
 */
 
 /**
+ * Depricated
  * Parameters: double inputTemp
  * Returns: outputs fahrenheint
  * This function converts a kelvin output to a 
@@ -124,6 +129,7 @@ double TPIS1385::getObjectTemperature(void){
 //double Thermopile::tempKtoF(double inputTemp){}
 
 /**
+ * Depricated
  * Parameters: none
  * Returns: the statust of the thermopile.
  * This functions reads the status registers.
@@ -177,20 +183,20 @@ void TPIS1385::readEEprom(void){
     Serial.print(F("T_obj_1 Value: "));
     Serial.println(TPIS1385::sensorCalibration.TObj1);
 
-    writeByte(TP_I2C_ADDR, TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
+    TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
 
     TPIS1385::sensorCalibration.K = ((float) (TPIS1385::sensorCalibration.UOut1 - TPIS1385::sensorCalibration.U0)/ (pow((float) (TPIS1385::sensorCalibration.TObj1 + 273.15f),3.8f) - pow(25.0f + 273.15f,3.8f)));
-}
-
-float TPIS1385::getTamb(uint16_t TPamb){
-    float temp = 298.15f + ((float) TPamb - (float) TPIS1385::sensorCalibration.PTAT25) * (1.0f/(float) TPIS1385::sensorCalibration.M);
-    return temp;
 }
 
 uint16_t TPIS1385::getTPamb(){
     uint8_t data[2] = {0,0};
     readBytes(TP_AMBIENT, 2, &data[0]);
     uint16_t temp = ( (uint16_t)(data[0] & 0x7F) << 8) | data[1] ; // See data sheet for calc
+    return temp;
+}
+
+float TPIS1385::getTamb(uint16_t TPamb){
+    float temp = 298.15f + ((float) TPamb - (float) TPIS1385::sensorCalibration.PTAT25) * (1.0f/(float) TPIS1385::sensorCalibration.M);
     return temp;
 }
 
@@ -202,7 +208,24 @@ uint32_t TPIS1385::getTPobj(){
 }
 
 float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
-    float temp0 = pow(Tamb, 3.8f);
-    float temp1 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K;
-    return pow((temp0 + temp1), 0.2631578947f); // Magic constant (1/3.8 = 0.2631578947f)
+
+    float f1 = pow(Tamb, 3.8f);
+    float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K;
+    return pow((f1 + f2), 0.2631578947f); // Magic constant for inverse root efficency (1/3.8 = 0.2631578947f)
+}
+
+TPsample_t TPIS1385::getSample(){
+    uint16_t TPamb = getTPamb();
+    uint16_t Tamb = getTamb(TPamb);
+    
+    uint32_t TPobj = getTPobj();
+    float Tobj = getTobj(TPobj, Tamb);
+    TPsample_t sample;
+    sample.object = Tobj - SENSOR_CONV_K_to_C; 
+    sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
+    return sample;
+}
+
+void TPIS1385::updateSample(){
+    staticSample = TPIS1385::getSample();
 }

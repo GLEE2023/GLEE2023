@@ -8,7 +8,7 @@
  * after calibration.
  **/
 
-Thermopile IRsensor; // Calling the thermopile class
+TPIS1385 thermopile; // Calling the thermopile class
 
 // float startTime = 0.0;
 // float endTime = 0.0;
@@ -25,12 +25,14 @@ double sumSensorTemperature = 0.0; // Total to calculate Sensor Temperature aver
 
 double error = 0.5; // The bubble of certainty allowed between average Sensor and average Object
 
+TPsample_t temperatures;
+
 void setup(){
     // Begin Serial Communications
     Serial.begin(9600);
 
-    // Get the beginning calibration value
-    IRsensor.getCalibration();
+    // set calibration values from by reading eeprom
+    thermopile.readEEprom();
     
     // Set pinMode for LED
     pinMode(LED, OUTPUT);
@@ -38,12 +40,12 @@ void setup(){
 
 void loop(){
 
-    IRsensor.readADC(); // Read in the Analog to Digital Converter
+    temperatures = thermopile.getSample(); // Read in the Analog to Digital Converter
 
     accumulator++; // Begin counting total accumulation
 
-    sumObjectTemperature+= IRsensor.getObjectTemperature(); // Get the sum of Object Temperatures
-    sumSensorTemperature+= IRsensor.getSensorTemperature(); // Get the sum of Sensor Temperatures
+    sumObjectTemperature+= temperatures.object; // Get the sum of Object Temperatures
+    sumSensorTemperature+= temperatures.ambient; // Get the sum of Sensor Temperatures
 
     if(accumulator == 1000){ // Once accumulated a specific number of samples to average
         accumulator = 0; // Reset accumulator
