@@ -45,6 +45,7 @@ LunaSat::LunaSat(int _id, int _conf[5], bool _debug){
 void LunaSat::begin(int baudRate){
     // The begin function starts serial communications at the given baud rate.
     Serial.begin(baudRate);
+    delay(5);
     if (debug){
         Serial.println("LunaSat has begun serial communications");
     }
@@ -57,6 +58,7 @@ void LunaSat::begin(int baudRate){
     }
 
     if (info.conf[3]==1){
+        LunaSat::tpis1385->begin();
         LunaSat::tpis1385->readEEprom();
     }
 
@@ -111,8 +113,8 @@ lunaSat_sample_t LunaSat::getSample(void){
         }
 
         if (info.conf[1] == 1){
-            LunaSat::icm20602->getRawAccel();
-            sample.acceleration = LunaSat::icm20602->getGAccel();
+            sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
+            sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
         }
         
         // Hangle Acceleration Sample based on configuration

@@ -6,10 +6,13 @@ AK09940 ak09940 = AK09940(0,false);
 
 void setup (){
     Serial.begin(9600);
+    Serial.println("testing");
+    delay(3000);
     ak09940.setDebugMode(true);
     ak09940.ak09940WAI();
     ak09940.setDriveMode(LOW_NOISE_1);
     ak09940.setMeasurementMode(POWER_DOWN);
+    
 };
 
 void loop (){   

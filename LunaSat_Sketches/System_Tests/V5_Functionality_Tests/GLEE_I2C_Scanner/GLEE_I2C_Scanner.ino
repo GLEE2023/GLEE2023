@@ -46,6 +46,8 @@ void setup() {
   delay(50);
 
   Serial.println("Sensor initialization Initialization Succsessful\n");
+  pinMode(A3,OUTPUT);
+  digitalWrite(A3,HIGH);
 }
 
 void loop() {
