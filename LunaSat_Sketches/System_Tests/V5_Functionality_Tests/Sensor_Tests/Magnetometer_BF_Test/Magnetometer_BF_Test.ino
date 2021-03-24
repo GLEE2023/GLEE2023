@@ -1,4 +1,4 @@
-#include "AK09940_2.h"
+#include "AK09940.h"
 
 AK09940 magnetometer = AK09940(0,false);
 
