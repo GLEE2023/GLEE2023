@@ -208,9 +208,8 @@ uint32_t TPIS1385::getTPobj(){
 }
 
 float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
-
     float f1 = pow(Tamb, 3.8f);
-    float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K;
+    float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K; // EQ. from datasheet
     return pow((f1 + f2), 0.2631578947f); // Magic constant for inverse root efficency (1/3.8 = 0.2631578947f)
 }
 
