@@ -72,8 +72,6 @@ Note: This directory can also be found via add library from Arduino IDE
 * GLEE_TMP117: 
   * Dedicated Temperature Sesnor
     - Board temperature observations
-
-  * Observation Example
     ```C++
     #include "TMP117.h"
 
@@ -98,7 +96,6 @@ Note: This directory can also be found via add library from Arduino IDE
 * GLEE_ICM20602: 
   * Accelerometer functionality 
     - acceleration observations
-  * Basic Acceleration Observation Example
     ```C++
     #include "ICM20602.h"
 
@@ -130,13 +127,55 @@ Note: This directory can also be found via add library from Arduino IDE
     };
     ```
 
-* GLEE_Capacitive: 
-  * Analog capacitance Sensor
-    - material dielectric behavior observations
-
 * GLEE_TPIS1385
   * Thermopile sensor
     - Object temperature observations
+    ```C++
+    #include "TPIS1385.h"
+
+    TPIS1385 thermopile(1);
+
+    TPsample_t temperatures;
+
+    void setup(){
+        Serial.begin(9600);
+        thermopile.begin();
+        thermopile.readEEprom(); // Prints eeprom and updates calibration constants
+    }
+
+    void loop(){
+        temperatures = thermopile.getSample();
+        Serial.print("Object temperature (F): "); Serial.println(temperatures.object);
+        Serial.print("Ambient temperature (F): "); Serial.println(temperatures.ambient);
+        delay(1000);
+    }
+
+    ```
+
+* GLEE_Capacitive: 
+  * Analog capacitance Sensor
+    - Analog sensor output observation
+
+    ```C++
+    // Include dependencies (libraries)
+    #include "Capacitive.h"
+
+    Capacitive cap(1);
+
+    int rawData = 0;
+
+    void setup() {
+      Serial.begin(9600); // open serial port, set the baud rate to 9600 bps
+      cap.begin();
+    }
+
+    void loop(){
+        rawData = cap.getRawData();
+        
+        Serial.println(rawData); //Print raw data
+        delay(500);
+    };
+    ```
 
 * GLEE_AK09940: 
   * Magnetometer Functionality
@@ -175,23 +214,78 @@ Note: This directory can also be found via add library from Arduino IDE
 * GLEE_LunaSat: 
   * This library brings all lunasat functionality into one place
     - Dynamic sampling of observations from all sensors
-    - Transmition of observations over lora 
+    ```C++
+    #include <LunaSat.h>    
+
+    // Set lunasat configuration (1's equates to default mode)
+    int lunaSatConfig[6] = {1,1,0,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+
+    // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
+    LunaSat lunaSat(0, lunaSatConfig, false);
+
+    // Custom datatypes allow for sample specialization, user can craft their own ideal sample
+    lunaSat_sample_t sample;  
+
+    void setup() {
+        // The GLEE library architecture enables easy, interpretable and familiar programming of the lunasat
+        lunaSat.begin(9600);    // Direct serial communications with computer
+        delay(5000);
+    }
+
+    void loop() {
+        // Simple fetching of sensor observation using lunasat class 
+        // Later versions will allow for dynamic sampling based on user defined config
+        sample = lunaSat.getSample(); 
+
+        // Simple examples of interacting with an observation sample
+        lunaSat.dispSample(sample); // Observation samples can be directly displayed via serial
+        
+        delay(100);
+    }
+    ```
 
 * GLEE_RF: 
-  * SX1272 radiolib implementation
+  - SX1272 radiolib implementation/integration
+  - Basic Transmission Example
+    ```C++
+    #include <GLEE_Radio.h>
 
+    LunaRadio Rad;
+
+    void setup() {
+      Serial.begin(9600);
+      Rad.initialize_radio();
+    }
+
+    void loop() {
+      Rad.transmit_data("Hello World!");
+      delay(1000);  
+    }
+    ```
+  - Basic Reception Example
+    ```C++
+    #include <GLEE_Radio.h>
+
+    LunaRadio Rad;
+
+    void setup() {
+      Serial.begin(9600);
+      
+      Rad.initialize_radio();
+    }
+
+    void loop() {
+      String output = Rad.receive_data_string();
+      
+      Serial.println(output);
+    }
+    ```
 
 # Social Media
 - [GLEE2023 Website](https://www.glee2023.org/)
 - [Youtube](https://www.youtube.com/channel/UC7olPe8j-Idpru-aBO6vDRA)
 - [Instagram](https://www.instagram.com/gleemission2023/)
 
-
-
 # README TODOS
-* TODO: Add contributor Names
 * TODO: Embedded links to libraries
-* TODO: GLEE_RF library instructions
 
-# Development TODOS
-* TODO: Iron out RF library dependencies/file structuring/ installation 
