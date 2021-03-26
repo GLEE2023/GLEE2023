@@ -51,7 +51,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 # How To Use
 ## Installation Instructions
 1. Download and unzip GLEE2023 folder
-2. Move these folders
+2. Select the following library folders
   >GLEE_LunaSat\
   >GLEE_Sensor\
   >GLEE_TMP117\
@@ -60,10 +60,14 @@ This repo contains the Arduino libraries and sketches wich are used to control t
   >GLEE_AK09940\
   >GLEE_CAP
 >
-3. To the following location
+3. Move to the following directory
 >Documents\Arduino\Libraries\
 >
-Note: This directory can also be found via add library from Arduino IDE
+Note: Arduino must be installed and previously ran before arduino libraries forlder apears. This directory can also be found via add library from Arduino IDE
+4. Move Module Sketches folder to the following directory
+>Documents\Arduino\
+
+Module sketches can now be accsessed directly within arduino ide (File > Sketch Book). Librarie examples will also appear. 
 
 ## Sensor Libraries
 * GLEE_Sensor: 

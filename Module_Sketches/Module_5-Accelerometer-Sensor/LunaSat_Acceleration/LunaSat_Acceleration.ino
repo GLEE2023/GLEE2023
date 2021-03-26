@@ -35,7 +35,6 @@ void loop(){
     accelRaw = accelerometer.getRawAccel();
     accelG = accelerometer.getGAccel(accelRaw);
         
-    
     Serial.print(accelG.x, 8);
     Serial.print(",");
     Serial.print(accelG.y, 8);
