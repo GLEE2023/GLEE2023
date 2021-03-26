@@ -98,6 +98,37 @@ Note: This directory can also be found via add library from Arduino IDE
 * GLEE_ICM20602: 
   * Accelerometer functionality 
     - acceleration observations
+  * Basic Acceleration Observation Example
+    ```C++
+    #include "ICM20602.h"
+
+    ICM20602 accelerometer(0);
+
+    sensor_int16_vec_t accelRaw;
+    sensor_float_vec_t acceleration; 
+
+    void setup(){
+        Serial.begin(9600);
+
+        accelerometer.begin();
+
+        accelerometer.initialize();
+
+        accelerometer.setScale(AFS_2G);
+    };
+
+    void loop(){
+        
+        accelRaw = accelerometer.getRawAccel();
+        acceleration = accelerometer.getGAccel(accelRaw);
+
+        Serial.print("G, X-Axis: "); Serial.println(acceleration.x, 8);
+        Serial.print("G, Y-Axis: "); Serial.println(acceleration.y, 8);
+        Serial.print("G, Z-Axis: "); Serial.println(acceleration.z, 8);
+
+        delay(200);
+    };
+    ```
 
 * GLEE_Capacitive: 
   * Analog capacitance Sensor
