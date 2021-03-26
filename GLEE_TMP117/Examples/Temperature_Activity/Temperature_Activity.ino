@@ -3,11 +3,11 @@
 #include "GLEE_Sensor.h"
 #include "TMP117.h"
 
-// Instantiate TMP117 class with id of one and debugging set to true
-TMP117 thermometer(1,true);
+// Instantiate TMP117 class with id of one and debugging set to false
+TMP117 thermometer(1,false);
 
 // Observation configuration
-int sampleRate; // Sample rate in samples per second (Hz)
+int timeBetweenSample; // Time between samples in ms 
 
 // Dynamic Variable 
 float temperatureC;  // Variable to store an observed temperature in Celsius
@@ -19,8 +19,8 @@ void setup(){
     // Begin Serial Communications (Lunasat baud rate set to 9600)
     Serial.begin(9600);
 
-    // Set sample rate to 1 sample per second (1Hz)
-    sampleRate = 1;
+    // Set time between samples to 1000ms (1s)
+    timeBetweenSample = 500;
 };
 
 void loop(){
@@ -38,5 +38,5 @@ void loop(){
     endTime = millis();
 
     // Delay each loop by the sample rate off set by the time it took to get the temperature
-    delay(sampleRate * 1000 - (endTime - startTime));
+    delay(timeBetweenSample - (endTime - startTime));
 };
