@@ -25,7 +25,11 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
 ![Project Image](./Docs/Images/GLEE_concept_art_small.png) 
 
 ## LunaSat - LUNAr Sensing ArchiTecture
->GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
+GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
+
+This repo contains the Arduino libraries and sketches wich are used to control the lunasats. 
+### This is a v4 LunaSat
+![LunaSat Front](./Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./Docs/Images/LunaSat_back.jpg)
 
 ### LunaSat Tech (Data Sheets Linked)
 * Microprocessor
@@ -42,10 +46,6 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
   - [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
 * Other
   - Camera and radiation sensos are also currently in development. 
-
-This repo contains the Arduino libraries and sketches wich are used to control the lunasats. 
-### This is a v4 LunaSat
-![LunaSat Front](./Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./Docs/Images/LunaSat_back.jpg)
 
 
 # How To Use
