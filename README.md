@@ -52,13 +52,13 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 ## Installation Instructions
 1. Download and unzip GLEE2023 folder
 2. Move these folders
->GLEE_LunaSat\
->GLEE_Sensor\
->GLEE_TMP117\
->GLEE_TPIS1385\
->GLEE_ICM20602\
->GLEE_AK09940\
->GLEE_CAP
+  >GLEE_LunaSat\
+  >GLEE_Sensor\
+  >GLEE_TMP117\
+  >GLEE_TPIS1385\
+  >GLEE_ICM20602\
+  >GLEE_AK09940\
+  >GLEE_CAP
 >
 3. To the following location
 >Documents\Arduino\Libraries\
@@ -145,7 +145,7 @@ Note: This directory can also be found via add library from Arduino IDE
     ```C++
     #include "AK09940.h"
 
-    AK09940 magnetometer = AK09940(0); // (Sensor ID = 0, Debugging = False);
+    AK09940 magnetometer = AK09940(0);
 
     AK_Sample_t sample;
 
@@ -181,13 +181,14 @@ Note: This directory can also be found via add library from Arduino IDE
   * SX1272 radiolib implementation
 
 
-# Media
+# Social Media
+- [GLEE2023 Website](https://www.glee2023.org/)
+- [Youtube](https://www.youtube.com/channel/UC7olPe8j-Idpru-aBO6vDRA)
+- [Instagram](https://www.instagram.com/gleemission2023/)
 
 
 
 # README TODOS
-* TODO: Installation Instructions
-* TODO: Example pointouts
 * TODO: Add contributor Names
 * TODO: Embedded links to libraries
 * TODO: GLEE_RF library instructions
