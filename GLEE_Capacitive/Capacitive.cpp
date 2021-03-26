@@ -1,7 +1,5 @@
-#include <Arduino.h>
 //#include <vector.h>
 //#include <math.h>
-#include <Wire.h>
 #include "Capacitive.h"
 
 /**
@@ -11,11 +9,15 @@
  * This is the constructor for the Capacitive class. 
 **/
 Capacitive::Capacitive(int _id, bool _debug){
-  Capacitive::info.id = _id;
-  Capacitive::info.name = "Capacitive Sensor";
-  Capacitive::info.address = 0x01;
-  Capacitive::sensorDebug = _debug;
-  Wire.begin(Capacitive::info.address);
+	Capacitive::info.id = _id;
+	Capacitive::info.name = "Capacitive Sensor";
+	Capacitive::info.address = 0x01;
+	Capacitive::sensorDebug = _debug;
+	Capacitive::pin = A0; 
+}
+
+void Capacitive::begin(){
+	pinMode(Capacitive::pin,INPUT);
 }
 
 /**
@@ -24,7 +26,7 @@ Capacitive::Capacitive(int _id, bool _debug){
  * This functions gets the address for the sensor. 
 **/
 uint8_t Capacitive::getAddress(){
-  return Capacitive::info.address;
+	return Capacitive::info.address;
 }
 
 /**
@@ -32,8 +34,8 @@ uint8_t Capacitive::getAddress(){
  * Returns: none
  * This function gets the raw data for the capacitive.
 **/
-int Capacitive::getRawData(int pin){
-  analogRead(pin);
+int Capacitive::getRawData(){
+	return analogRead(Capacitive::pin);
 }
 /**
 void Capacitive::linearRgression(vector <vector<int>> v){

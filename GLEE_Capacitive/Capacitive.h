@@ -13,16 +13,19 @@
 #ifndef Capacitive_H
 #define Capacitive_H
 
-#include <Arduino.h>
 #include "GLEE_Sensor.h"
 
 class Capacitive:public Sensor{
-  public:
-      Capacitive(int _id, bool _debug = false);
-      uint8_t getAddress();
-      int getRawData(int pin);
-      double getDieletricConstant(int analogReadIn);
-      void addCalibrationPoint(int correctDielectricValue);
-      //void linearRgression(vector <vector<int>> v);
-  };
+	public:
+		Capacitive(int _id, bool _debug = false);
+		uint8_t getAddress();
+		int getRawData();
+		double getDieletricConstant(int analogReadIn);
+		void addCalibrationPoint(int correctDielectricValue);
+		//void linearRgression(vector <vector<int>> v);
+
+		void begin();
+	private:
+		int pin;
+};
 #endif
