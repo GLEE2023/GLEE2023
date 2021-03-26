@@ -32,8 +32,12 @@ void loop(){
     // Call the getTemperatureF() function of the TMP117 thermometer 
     temperatureF = thermometer.getTemperatureF();
     // Output the temperature via seiral
-    Serial.println(temperatureC);
-    Serial.println(temperatureF);
+    Serial.print("Temperature: "); 
+    Serial.print(temperatureC);
+    Serial.print(" (degrees C), ");
+    Serial.print(temperatureF);
+    Serial.println(" (degrees F)");
+
     // Record the end time so we know how long it took to record the measurement
     endTime = millis();
 
