@@ -27,7 +27,7 @@ void loop(){
     // Record start time for letter offseting of delay to make the loop run once per second
     startTime = millis();
 
-    // Call the getTemperatureC() function of the TMP117 thermometer  
+    // Sample temperature in C
     temperatureC = thermometer.getTemperatureC();
 
     // Output the temperature via seiral
