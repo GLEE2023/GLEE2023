@@ -4,7 +4,7 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[5] = {1,1,0,1,1}; // {TMP117, ICM20602, AK09940, TIPS1385, SX1272} Need to add cap
+int lunaSatConfig[6] = {1,1,0,1,1,1}; // {TMP117, ICM20602, AK09940, TIPS1385, Cap, SX1272} Need to add cap
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 // Can be easily expanded to account for different axes of LunaSat configuration

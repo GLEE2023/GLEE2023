@@ -62,6 +62,10 @@ void LunaSat::begin(int baudRate){
         LunaSat::tpis1385->readEEprom();
     }
 
+    if (info.conf[4]==1){
+        LunaSat::capacitive->begin();
+    }
+
     /*
     if (info.conf[2]){
         LunaSat::ak09940.setDebugMode(true);
@@ -154,6 +158,10 @@ lunaSat_sample_t LunaSat::getSample(void){
         if (info.conf[3] == 1){
             sample.TPTemperature = LunaSat::tpis1385->getSample();
         }
+
+        if (info.conf[4] == 1){
+            sample.cap = LunaSat::capacitive->getRawData();
+        }
         
     }
 
@@ -181,7 +189,6 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
         Serial.print(sample.acceleration.y,5);
         Serial.print(',');
         Serial.print(sample.acceleration.z,5);
-        Serial.print(',');
     }
     if (info.conf[2]==1){
         Serial.print(sample.magnetic.x);
@@ -195,6 +202,10 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
         Serial.print(sample.TPTemperature.object,5);
         Serial.print(',');
         Serial.print(sample.TPTemperature.ambient,5);
+    }
+    if (info.conf[4]==1){
+        Serial.print(',');
+        Serial.print(sample.cap);
     }
     Serial.println("");
 }
