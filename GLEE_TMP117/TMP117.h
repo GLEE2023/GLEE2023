@@ -1,7 +1,6 @@
 #ifndef TMP117_H
 #define TMP117_H
 
-#include <Arduino.h>
 #include "GLEE_Sensor.h"
 
 #define TMP117_RESOLUTION (double)0.0078125

@@ -1,7 +1,5 @@
 // GLEE 2023 TMP117 Library
 
-#include <Arduino.h>
-#include <Wire.h>
 #include "TMP117.h"
 
 
