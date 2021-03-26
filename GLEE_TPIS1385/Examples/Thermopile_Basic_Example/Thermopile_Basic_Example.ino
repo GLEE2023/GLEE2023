@@ -1,6 +1,6 @@
 #include "TPIS1385.h"
 
-TPIS1385 thermopile(1,false);
+TPIS1385 thermopile(1);
 TPsample_t temperatures;
 
 void setup(){
