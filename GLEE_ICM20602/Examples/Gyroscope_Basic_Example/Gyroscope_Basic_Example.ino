@@ -17,7 +17,7 @@ void setup(){
 
     gyroscope.initialize();
 
-    gyroscope.setGyroScale(GFS_2G);
+    gyroscope.setGyroScale(GFS_250DPS);
 };
 
 void loop(){

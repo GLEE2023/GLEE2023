@@ -69,9 +69,6 @@ class ICM20602:public Sensor{
         float currentAccelFactor;
         float currentGyroFactor;
         
-        sensor_int16_vec_t angVelRaw;
-        sensor_float_vec_t angVelDPS;
-
 
         bool begin();
         void initialize();

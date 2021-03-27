@@ -48,9 +48,10 @@ couple of the other registers.
 void ICM20602::initialize(void){
     Wire.setClock(100000);
     writeByte(ICM20602_PWR_MGMT_1, 0x01);   // Set clock set to auto
-    writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Disable gyro
+    writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Configuration with Gyro disabled 
+	//writeByte(ICM20602_PWR_MGMT_2, 0x00);    // Configuration with Gyro enabled 
     writeByte(ICM20602_CONFIG, 0x01); 
-    writeByte(ICM20602_GYRO_CONFIG, 0x00);    
+    writeByte(ICM20602_GYRO_CONFIG, 0x10);    
     writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
@@ -96,9 +97,9 @@ struct.
 */
 sensor_int16_vec_t ICM20602::getRawAngVel(){
 	sensor_int16_vec_t RawAngVel;
-	ICM20602::RawAngVel.x = read2Byte(ICM20602_GYRO_XOUT_H);
-	ICM20602::RawAngVel.y = read2Byte(ICM20602_GYRO_YOUT_H);
-	ICM20602::RawAngVel.z = read2Byte(ICM20602_GYRO_ZOUT_H);
+	RawAngVel.x = read2Byte(ICM20602_GYRO_XOUT_H);
+	RawAngVel.y = read2Byte(ICM20602_GYRO_YOUT_H);
+	RawAngVel.z = read2Byte(ICM20602_GYRO_ZOUT_H);
 	return RawAngVel;
 }
 
@@ -152,9 +153,9 @@ sensitivity scale.
 */
 sensor_float_vec_t ICM20602::getDPSAngVel(sensor_int16_vec_t rawAngVel){
 	sensor_float_vec_t angVelDPS;
-    angVelDPS.x = (float) ICM20602::getRawAngVel.x/ currentGyroFactor;
-    angVelDPS.y = (float) ICM20602::getRawAngVel.y/ currentGyroFactor;
-    angVelDPS.z = (float) ICM20602::getRawAngVel.z/ currentGyroFactor;
+    angVelDPS.x = (float) rawAngVel.x/ currentGyroFactor;
+    angVelDPS.y = (float) rawAngVel.y/ currentGyroFactor;
+    angVelDPS.z = (float) rawAngVel.z/ currentGyroFactor;
 	return angVelDPS;
 }
 
@@ -185,7 +186,7 @@ This function allows a new scale to be passed in, with the global variable
 current scale set to the new scale, and writing the accelration configuration
 based on the new scale.
 */
-void ICM20602::setScale(enum Ascale newScale){
+void ICM20602::setAccelScale(enum Ascale newScale){
     currentAccelScale = newScale;
     switch (currentAccelScale) {
 		case (AFS_2G):
