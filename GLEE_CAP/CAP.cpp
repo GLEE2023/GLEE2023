@@ -15,7 +15,7 @@ CAP::CAP(int _id, bool _debug){
 	CAP::pin = A0; // Hardcoded analog pin on LunaSat
 }
 
-void Capacitive::begin(){
+void CAP::begin(){
 	pinMode(CAP::pin,INPUT);
 }
 
