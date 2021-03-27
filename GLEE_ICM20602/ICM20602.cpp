@@ -1,4 +1,6 @@
+#include <Arduino.h>
 #include "ICM20602.h"
+#include <Wire.h>
 
 bool ICM_DEBUG = false;
 
