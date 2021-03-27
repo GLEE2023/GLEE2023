@@ -11,7 +11,7 @@ void setup(){
 
     accelerometer.initialize();
 
-    accelerometer.setScale(AFS_2G);
+    accelerometer.setAccelScale(AFS_2G);
 };
 
 void loop(){

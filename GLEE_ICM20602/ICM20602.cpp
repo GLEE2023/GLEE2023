@@ -1,4 +1,6 @@
+#include <Arduino.h>
 #include "ICM20602.h"
+#include <Wire.h>
 
 bool ICM_DEBUG = false;
 
@@ -15,13 +17,12 @@ This is the constructor for this sensor that sets the
 basic variables to get started.
 */
 ICM20602::ICM20602(int _id, bool _debug){
-	ICM20602::info.id = _id;
     ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
   	ICM20602::info.address = ICM20602_SLAVE_ADDR;
   	ICM20602::sensorDebug = _debug;
-    ICM20602::currentScale = AFS_2G;
+    ICM20602::currentAccelScale = AFS_2G;
     ICM20602::currentGyroScale = GFS_1000DPS;
-    ICM20602::currentFactor = 16384.0;
+    ICM20602::currentAccelFactor = 16384.0;
     ICM20602::currentGyroFactor = 131.0;
 }
 
@@ -47,11 +48,11 @@ couple of the other registers.
 void ICM20602::initialize(void){
     Wire.setClock(100000);
     writeByte(ICM20602_PWR_MGMT_1, 0x01);   // Set clock set to auto
-    writeByte(ICM20602_PWR_MGMT_2,0x07);    // Disable gyro
+    writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Disable gyro
     writeByte(ICM20602_CONFIG, 0x01); 
     writeByte(ICM20602_GYRO_CONFIG, 0x00);    
     writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
-  	// TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
+  // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
 int16_t ICM20602::read2Byte(uint8_t registerAddress){
@@ -73,20 +74,6 @@ int16_t ICM20602::read2Byte(uint8_t registerAddress){
 
 /*
 Parameters: none
-Returns: The raw angular velocity in LSB/DPS as a struct of sensor_uint16_vec_t type
-This function reads in the high bytes of the angular velocity for each of the three 
-axis, performs a bitwise operation, then saves and returns the raw angular velocity
-struct.
-*/
-sensor_int16_vec_t ICM20602::getRawAngVel(){
-	ICM20602::angVelRaw.x = read2Byte(ICM20602_GYRO_XOUT_H);
-	ICM20602::angVelRaw.y = read2Byte(ICM20602_GYRO_YOUT_H);
-	ICM20602::angVelRaw.z = read2Byte(ICM20602_GYRO_ZOUT_H);
-	return ICM20602::angVelRaw;
-}
-
-/*
-Parameters: none
 Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
 This function reads in the high bytes of the accel for each of the three 
 axis, performs a bitwise operation, then saves and returns the raw acceleration
@@ -102,6 +89,21 @@ sensor_int16_vec_t ICM20602::getRawAccel(){
 
 /*
 Parameters: none
+Returns: The raw angular velocity in LSB/DPS as a struct of sensor_uint16_vec_t type
+This function reads in the high bytes of the angular velocity for each of the three 
+axis, performs a bitwise operation, then saves and returns the raw angular velocity
+struct.
+*/
+sensor_int16_vec_t ICM20602::getRawAngVel(){
+	sensor_int16_vec_t RawAngVel;
+	ICM20602::RawAngVel.x = read2Byte(ICM20602_GYRO_XOUT_H);
+	ICM20602::RawAngVel.y = read2Byte(ICM20602_GYRO_YOUT_H);
+	ICM20602::RawAngVel.z = read2Byte(ICM20602_GYRO_ZOUT_H);
+	return RawAngVel;
+}
+
+/*
+Parameters: none
 Returns: The acceleration in m/s^2 as a struct of sensor_float_vec_t type
 This function converts the raw accelerations in LSB/G to 
 meters per second squared.
@@ -113,7 +115,6 @@ sensor_float_vec_t ICM20602::getMPSAccel(sensor_float_vec_t GAccel){
 	accelMPS.z = GAccel.z * IMU_ONE_G;
 	return accelMPS;    
 }
-//testing collaberative work
 
 /*
 Parameters: current scale of the sensor as the Ascale enumeration
@@ -123,10 +124,38 @@ G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
 sensor_float_vec_t ICM20602::getGAccel(sensor_int16_vec_t rawAccel){
 	sensor_float_vec_t accelG;
-	accelG.x = (float) rawAccel.x / ICM20602::currentFactor;
-    accelG.y = (float) rawAccel.y / ICM20602::currentFactor;
-    accelG.z = (float) rawAccel.z / ICM20602::currentFactor;
+	accelG.x = (float) rawAccel.x / ICM20602::currentAccelFactor;
+    accelG.y = (float) rawAccel.y / ICM20602::currentAccelFactor;
+    accelG.z = (float) rawAccel.z / ICM20602::currentAccelFactor;
 	return accelG;
+}
+
+/*
+Parameters: current scale of the sensor as the Ascale enumeration
+Returns: the accelerations in 
+debug mode set to true, if true data interfacing
+classes and everything working and responds to output for datalog
+*/
+sensor_float_vec_t ICM20602::getGAccel_fuzzed(){
+    ICM20602::accelG.x = currentAccelFactor*1;
+    ICM20602::accelG.y = currentAccelFactor*2;
+    ICM20602::accelG.z = currentAccelFactor*3;
+	return ICM20602::accelG;
+}
+
+/*
+Parameters: none
+Returns: the angular velocity in degrees per second as a sensor_float_vec_t type 
+This function converts the raw gyroscope reading in LSB/DPS to the angular
+velocity in DPS by diving the sensitivity factor based on the current gyroscope
+sensitivity scale.
+*/
+sensor_float_vec_t ICM20602::getDPSAngVel(sensor_int16_vec_t rawAngVel){
+	sensor_float_vec_t angVelDPS;
+    angVelDPS.x = (float) ICM20602::getRawAngVel.x/ currentGyroFactor;
+    angVelDPS.y = (float) ICM20602::getRawAngVel.y/ currentGyroFactor;
+    angVelDPS.z = (float) ICM20602::getRawAngVel.z/ currentGyroFactor;
+	return angVelDPS;
 }
 
 void ICM20602::updateRawAccel(sensor_int16_vec_t rawAccel){
@@ -141,35 +170,13 @@ void ICM20602::updateGAccel(sensor_float_vec_t GAccel){
 	ICM20602::accelG = GAccel;
 }
 
-
-
-/*
-Parameters: current scale of the sensor as the Ascale enumeration
-Returns: the accelerations in 
-debug mode set to true, if true data interfacing
-classes and everything working and responds to output for datalog
-*/
-sensor_float_vec_t ICM20602::getGAccel_fuzzed(){
-    ICM20602::accelG.x = currentFactor*1;
-    ICM20602::accelG.y = currentFactor*2;
-    ICM20602::accelG.z = currentFactor*3;
-	return ICM20602::accelG;
+void ICM20602::updateRawAngVel(sensor_int16_vec_t rawAngVel){
+	ICM20602::angVelRaw = rawAngVel;
 }
 
-/*
-Parameters: none
-Returns: the angular velocity in degrees per second as a sensor_float_vec_t type 
-This function converts the raw gyroscope reading in LSB/DPS to the angular
-velocity in DPS by diving the sensitivity factor based on the current gyroscope
-sensitivity scale.
-*/
-sensor_float_vec_t ICM20602::getDPSAngVel(){
-    ICM20602::angVelDPS.x = (float) ICM20602::angVelRaw.x/ currentGyroFactor;
-    ICM20602::angVelDPS.y = (float) ICM20602::angVelRaw.y/ currentGyroFactor;
-    ICM20602::angVelDPS.z = (float) ICM20602::angVelRaw.z/ currentGyroFactor;
-	return ICM20602::angVelDPS;
+void ICM20602::updateDPSAngVel(sensor_float_vec_t DPSAngVel){
+	ICM20602::angVelDPS = DPSAngVel;
 }
-
 
 /*
 Parameters: new scale of the sensor wished to be set to as an Ascale enumeration
@@ -179,8 +186,8 @@ current scale set to the new scale, and writing the accelration configuration
 based on the new scale.
 */
 void ICM20602::setScale(enum Ascale newScale){
-    currentScale = newScale;
-    switch (currentScale) {
+    currentAccelScale = newScale;
+    switch (currentAccelScale) {
 		case (AFS_2G):
         	writeByte(ICM20602_ACCEL_CONFIG, 0x00);
         	break;
@@ -194,7 +201,7 @@ void ICM20602::setScale(enum Ascale newScale){
       		writeByte(ICM20602_ACCEL_CONFIG, 0x11);
       		break;
   }
-  getSensitivity();
+  getAccelSensitivity();
 }
 
 /*
@@ -229,23 +236,25 @@ Returns: the accelerometer sensitivity scale factor as a FLOAT
 This function uses a switch statement to return the sensitivity scale factor
 for the acceleration depending on the current sensing accuracy scale.
 */
-float ICM20602::getSensitivity(){
+float ICM20602::getAccelSensitivity(){
   // TODO: Write setter for sensity a variable, possibly private
-	switch (currentScale) {
+  	float factor;
+	switch (currentAccelScale) {
 		case (AFS_2G):
-      		ICM20602::currentFactor = 16384.0;
+      		factor = 16384.0;
       		break;
     	case (AFS_4G):
-      		ICM20602::currentFactor = 8192.0;
+      		factor = 8192.0;
       		break;
     	case (AFS_8G):
-     		ICM20602::currentFactor = 4096.0;
+     		factor = 4096.0;
       		break;
     	case (AFS_16G):
-      		ICM20602::currentFactor = 2048.0;
+      		factor = 2048.0;
       		break;
 	}
-	return ICM20602::currentFactor;  
+	currentAccelFactor = factor;
+	return factor;  
 }
 
 /*
@@ -255,20 +264,22 @@ This function uses a switch statement to return the sensitivity scale factor
 for the gyroscope depending on the current sensing accuracy scale.
 */
 float ICM20602::getGyroSensitivity(){
+    float factor;
     switch (currentGyroScale) {
     	case (GFS_250DPS):
-      		ICM20602::currentGyroFactor = 131.0;
+      		factor = 131.0;
       		break;
     	case (GFS_500DPS):
-      		ICM20602::currentGyroFactor = 65.5;
+      		factor = 65.5;
       		break;
     	case (GFS_1000DPS):
-      		ICM20602::currentGyroFactor = 32.8;
+      		factor = 32.8;
       		break;
     	case (GFS_2000DPS):
-      		ICM20602::currentGyroFactor = 16.4;
+      		factor = 16.4;
       		break;
 	}
-	return ICM20602::currentGyroFactor;  
+	currentGyroFactor = factor;
+	return factor;  
 }
 
