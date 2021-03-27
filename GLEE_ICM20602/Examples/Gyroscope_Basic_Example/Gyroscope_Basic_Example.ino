@@ -11,6 +11,7 @@ sensor_int16_vec_t angVelRaw;
 sensor_float_vec_t angVelDPS; 
 
 void setup(){
+    // Git test
     Serial.begin(9600);
 
     gyroscope.begin();
