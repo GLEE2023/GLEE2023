@@ -7,7 +7,6 @@ AK_Sample_t sample;
 void setup (){
     Serial.begin(9600);
     delay(3000);
-    Serial.println("initializing");
     magnetometer.begin();
     magnetometer.readWAI();
     magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
