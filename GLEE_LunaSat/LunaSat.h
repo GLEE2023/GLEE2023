@@ -13,7 +13,7 @@
 #include "ICM20602.h"               // IMU Library
 #include "TMP117.h"                 // Temperature Sensor Library
 #include "TPIS1385.h"               // Thermopile Library
-#include "Capacitive.h"             // Capacitive Sesnor Library
+#include "CAP.h"             // Capacitive Sesnor Library
 
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
@@ -90,7 +90,7 @@ class LunaSat{
         ICM20602 *icm20602 = new ICM20602(1);
         AK09940 *ak09940 = new AK09940(2);
         TPIS1385 *tpis1385 = new TPIS1385(3);
-        Capacitive *capacitive = new Capacitive(4);
+        CAP *cap = new CAP(4);
 
         bool debug;
 };

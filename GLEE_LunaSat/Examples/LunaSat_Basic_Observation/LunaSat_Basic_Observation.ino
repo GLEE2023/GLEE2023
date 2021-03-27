@@ -1,13 +1,9 @@
-#include <Arduino.h>
-
-// The GLEE team is developing library architecture to enable easy programming of the lunasat 
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[6] = {1,1,0,1,1,1}; // {TMP117, ICM20602, AK09940, TIPS1385, Cap, SX1272} Need to add cap
+int lunaSatConfig[6] = {1,1,0,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
-// Can be easily expanded to account for different axes of LunaSat configuration
 LunaSat lunaSat(0, lunaSatConfig, false);
 
 // Custom datatypes allow for sample specialization, user can craft their own ideal sample
@@ -26,10 +22,6 @@ void loop() {
 
     // Simple examples of interacting with an observation sample
     lunaSat.dispSample(sample); // Observation samples can be directly displayed via serial
-    
-    //lunaSat.transmitSample(sample);  // Observation samples can be just as easily transmitted to a reciever
-    
-    //lunaSat.dispAccel(sample.acceleration);
     
     delay(100);
 }

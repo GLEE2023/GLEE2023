@@ -21,8 +21,7 @@ AK09940::AK09940(int _id, bool _debug){
     AK09940::info.name = "AK09940 Magnetometer";		// assign sensor name
     AK09940::info.address = AK09940_SENSOR_ADDR;		// assign sensor i2c address
     AK09940::sensorDebug= _debug;						// debug flag status
-
-	AK09940::FIFO = true;
+	AK09940::FIFO = true;                               // FIFO true by default (enables dataready pin on sensor)
 }
 
 /**

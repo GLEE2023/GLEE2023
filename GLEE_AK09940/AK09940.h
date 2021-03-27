@@ -1,15 +1,15 @@
-/*
-*Description: This is an Arduino (C++) Header file required for the AK09940 Magnetometer
-*Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
-*Library Author: John Walker Johnson
-*Library Contributors: Lawson Nerenberg
-*Library Created on: July 13th 2020
-*Last Modified on: Nov 21 2020
-*Primary Resources Used in Creation:
-*AK09940 Datasheet
-*Arduino Wire Library Reference Guide
+/**
+ * Description: This is an Arduino (C++) Header file required for the AK09940 Magnetometer
+ * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
+ * Library Author: John Walker Johnson
+ * Library Contributors: Lawson Nerenberg
+ * Library Created on: July 13th 2020
+ * Last Modified on: Nov 21 2020
+ * Primary Resources Used in Creation:
+ * AK09940 Datasheet
+ * Arduino Wire Library Reference Guide
 *
-*/
+**/
 
 #ifndef AK09940_H
 #define AK09940_H
@@ -38,14 +38,12 @@
 #define AK09940_SENSOR_ADDR 0x0C				
 
 // The sensor Class defines the following data types
-// TODO: Readme documentation for use of each type
-
 // This structure represents raw sensor readings: temp, and magnetic x,y,z output 
 typedef struct{
-	uint32_t x;	
+    uint32_t x;	
     uint32_t y;
     uint32_t z;
-	uint8_t temp;	//Temperature output - Temperature byte
+    uint8_t temp;	//Temperature output - Temperature byte
 }AK_RawData_t;
 
 typedef struct{
@@ -54,31 +52,17 @@ typedef struct{
     float temp;
 }AK_Sample_t;
 
-// This structure represents processesed temperature, and magnetic (x,y,z) output 
-// typedef struct ak09940_CalculatedData_s{
-// 	int32_t xMag;
-// 	int32_t yMag;
-// 	int32_t zMag;
-// 	float temperature;
-// };
-
-// typedef struct ak09940_DataStatus_s{
-// 	bool dataValid;
-// 	bool dataOverflow;
-// };
-
 // Sensor Modes From DataSheet
-// TODO: Write readme documentation for measurement mode (what each bit represents)
 enum ak09940_Measurement_Mode_t{
-	POWER_DOWN = 0b00000,						// These sensor modes and values
-	SINGLE_MEASURE = 0b00001,					// represent bits [4:0] of the CNTL3 Byte
-	CONT_MEASURE_1 = 0b00010,
-	CONT_MEASURE_2 = 0b00100,
-	CONT_MEASURE_3 = 0b00110,
-	CONT_MEASURE_4 = 0b01000,
-	CONT_MEASURE_5 = 0b01010,
-	CONT_MEASURE_6 = 0b01100,
-	SELF_TEST = 0b10000,
+    POWER_DOWN = 0b00000,						// These sensor modes and values
+    SINGLE_MEASURE = 0b00001,					// represent bits [4:0] of the CNTL3 Byte
+    CONT_MEASURE_1 = 0b00010,
+    CONT_MEASURE_2 = 0b00100,
+    CONT_MEASURE_3 = 0b00110,
+    CONT_MEASURE_4 = 0b01000,
+    CONT_MEASURE_5 = 0b01010,
+    CONT_MEASURE_6 = 0b01100,
+    SELF_TEST = 0b10000,
 };
 
 // Drive mode options from data sheet
@@ -90,7 +74,6 @@ enum ak09940_Drive_Mode_t{
 	LOW_NOISE_2 = 0b11,
 };
 
-// TODO: Some of these discriptions need to be revisited (What is watermark level?)
 // Primary Magnetometor class inharents parent sensor class variables and methods
 class AK09940: public Sensor{
 	// Initialization for Sensor Data, Sensor Info and Data Structures 
@@ -100,19 +83,18 @@ class AK09940: public Sensor{
         void begin(void);
         void readWAI(void);
         void setOpMode(bool fifo, ak09940_Drive_Mode_t driveMode, ak09940_Measurement_Mode_t measureMode);
-		AK_RawData_t getRawData(void);
+        bool dataReady(void);
 
+        // Getters
+        AK_RawData_t getRawData(void);
+        
         float getTemperature(uint8_t rawTemp);
         sensor_float_vec_t getMagnetic(AK_RawData_t rawData);
         float getMagFieldStrength(sensor_float_vec_t magnetic);
 
-        bool dataReady(void);
-
         AK_Sample_t getSample(void);
 
     private:
-        // ak09940_Measurement_Mode_t measurementMode;
-        // ak09940_Drive_Mode_t driveMode; 
         bool FIFO;
         uint8_t watermarkLevel;  
         ak09940_Measurement_Mode_t measurementMode;

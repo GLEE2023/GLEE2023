@@ -13,14 +13,14 @@ TMP117::TMP117(int _id, bool _debug){
     TMP117::info.id = _id;
     TMP117::info.name = "TMP117 Temperature Sensor";
   	TMP117::info.address = 0x48;
-  	TMP117::sensorDebug = _debug;
+    TMP117::sensorDebug = _debug;
     Wire.begin(TMP117::info.address);     // Might need to move this out of the initializer
 }
 
 /**
  * Parameters: none
  * Returns: TMP117 address
- * This function returns the TMP117 information address.
+ * This function returns the TMP117 I2C address.
 **/
 uint8_t TMP117::getAddress(){
     return TMP117::info.address;
@@ -211,19 +211,4 @@ void TMP117::write2Byte(uint8_t reg, uint16_t data){
 	Wire.write(highByte(data));   // Write MSB (D15-D8)
 	Wire.write(lowByte(data));   // Write LSB (D7-D0)
 	Wire.endTransmission();	    // Stop transmitting data
-}
-
-// Functions for testing
-
-/**
- * Parameters: none
- * Returns: final temperature in celcius
- * This function uses fuzzed data to check
- * the temperature in celcius function on.
-**/
-double TMP117::getTemperatureC_fuzzed(){
-  // Enter fuzzing function for temperature here
-  double finalTempC;
-  finalTempC = 999.99;
-  return finalTempC;
 }
