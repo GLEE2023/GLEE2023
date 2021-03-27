@@ -25,7 +25,7 @@ void loop(){
     angVelRaw = gyroscope.getRawAngVel();
     angVelDPS = gyroscope.getDPSAngVel(angVelRaw);
 
-    Serial.print("Angular Velocity in Gs, X-Axis: "); Serial.print(angVelDPS.x, 8);
+    Serial.print("Angular Velocity in DPS, X-Axis: "); Serial.print(angVelDPS.x, 8);
     Serial.print(" Y-Axis: "); Serial.print(angVelDPS.y, 8);
     Serial.print(" Z-Axis: "); Serial.print(angVelDPS.z, 8);
     Serial.println();
