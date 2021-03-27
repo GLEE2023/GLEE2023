@@ -76,11 +76,11 @@ void loop(){
     Serial.print(F("Calculated Static Acceleration: ")); Serial.println(accelDif);
 
     if( accelDif >= impactThreshold){
-         Serial.println("Impact detected");
+        Serial.println("Impact detected");
 
-         digitalWrite(LED, HIGH);
-         delay(500);
-         digitalWrite(LED, LOW);
+        digitalWrite(LED, HIGH);
+        delay(500);
+        digitalWrite(LED, LOW);
     };
     
     //endTime = millis();

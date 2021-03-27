@@ -13,7 +13,7 @@ TMP117::TMP117(int _id, bool _debug){
     TMP117::info.id = _id;
     TMP117::info.name = "TMP117 Temperature Sensor";
   	TMP117::info.address = 0x48;
-  	TMP117::sensorDebug = _debug;
+    TMP117::sensorDebug = _debug;
     Wire.begin(TMP117::info.address);     // Might need to move this out of the initializer
 }
 

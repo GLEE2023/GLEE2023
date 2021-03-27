@@ -1,9 +1,9 @@
 /*
-*Description: This is an Arduino (C++) .cpp file required for the TPiS 1S 1385 IR Thermopile
-*Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
-*Base Library Author: John Walker Johnson 
-*Resources Used in Creation:
-*TPiS 1S 1385 Datasheet: https://www.pacer-usa.com/Assets/User/2077-CaliPile_TPiS_1S_1385_5029_27.04.2017.pdf
+* Description: This is an Arduino (C++) .cpp file required for the TPiS 1S 1385 IR Thermopile
+* Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
+* Base Library Author: John Walker Johnson and Lawson Nerenberg
+* Resources Used in Creation:
+* TPiS 1S 1385 Datasheet: https://www.pacer-usa.com/Assets/User/2077-CaliPile_TPiS_1S_1385_5029_27.04.2017.pdf
 *
 */
 
@@ -40,101 +40,6 @@ void TPIS1385::begin(void){
     Serial.println(F("TPIS coms Init complete"));
 }
 
-/**
- * Depricated
- * Parameters: none
- * Returns: gets the calibration value
- * TODO: ADD DESCRIPTION
- **/ 
-
-/*
-void TPIS1385::readCalibration(void){
-    
-
-    
-    TPIS1385::sensorCalibration.sensorM = (sensorM_High << 8 && sensorM_Low)/100;
-
-    int8_t sensorPTAT_High = TPIS1385::readByte(TP_PTAT25_HIGH);
-    int8_t sensorPTAT_Low = TPIS1385::readByte(TP_PTAT25_LOW);
-
-    TPIS1385::sensorCalibration.sensorPTAT25 = (sensorPTAT_High << 8 && sensorPTAT_Low);
-
-    int8_t sensorU0_High = TPIS1385::readByte(TP_U0_HIGH);
-    int8_t sensorU0_Low = TPIS1385::readByte(TP_U0_LOW);
-
-    TPIS1385::sensorCalibration.sensorU0 = (sensorU0_High << 8 && sensorU0_Low) + 32768;
-
-    int8_t sensorUOut1_High = TPIS1385 :: readByte (TP_UOUT1_HIGH);
-    int8_t sensorUOut1_Low = TPIS1385 :: readByte (TP_UOUT1_LOW);
-
-    TPIS1385 :: sensorCalibration.sensorUOut1 = (sensorUOut1_High << 8 && sensorUOut1_Low) * 2;
-}
-*/
-/**
- * Depricated
- * Parameters: none
- * Returns: gets the calibration value
- * TODO: ADD DESCRIPTION
- **/ 
-
-/*
-void TPIS1385::readADC(void){
-    int8_t sensorTP_OBJ_H = TPIS1385::readByte (TP_OBJECT_HIGH);
-    int8_t sensorTP_OBJ_M = TPIS1385::readByte (TP_OBJECT_MID);
-    int8_t sensorTP_OBJ_L = TPIS1385::readByte (TP_OBJECT_LOW);
-    TPIS1385::sensorADC.TP_OBJ = (sensorTP_OBJ_H << 9 && sensorTP_OBJ_M << 1 && sensorTP_OBJ_L >> 7);
-
-
-    int8_t sensorTP_AMB_H = TPIS1385::readByte (TP_AMBIENT_HIGH);
-    int8_t sensorTP_AMB_L = TPIS1385::readByte (TP_AMBIENT_LOW);
-
-    TPIS1385::sensorADC.TP_AMB = ((sensorTP_AMB_H && 0b01111111) << 8 && sensorTP_AMB_L);  
-}
-*/
-
-/**
- * Depricated
- * Parameters: none
- * Returns: gets the sensors temperature 
- * This function takes the TPIS1385 calibration values
- * to return the sensor temperature.
- **/ 
-/*
-double TPIS1385::getSensorTemperature(void){
-        double tAmb = (25.0 + 273.15) + (TPIS1385::sensorADC.TP_OBJ - TPIS1385::sensorCalibration.sensorPTAT25) * (1/TPIS1385::sensorCalibration.sensorM);
-        return tAmb;
-}
-*/
-/**
- * Depricated
- * Parameters: none
- * Returns: object temperature 
- * This function takes the TPIS1385 calibration values 
- * and the sensor temperature to find the objects temperature.
- **/ 
-/*
-double TPIS1385::getObjectTemperature(void){
-        double tObj = pow((TPIS1385::sensorADC.TP_OBJ - TPIS1385::sensorCalibration.sensorU0 + pow(TPIS1385::getSensorTemperature(), 3.8)), 1/3.8);
-        return tObj;
-}
-*/
-
-/**
- * Depricated
- * Parameters: double inputTemp
- * Returns: outputs fahrenheint
- * This function converts a kelvin output to a 
- * fahrenheit output.
- **/ 
-//double Thermopile::tempKtoF(double inputTemp){}
-
-/**
- * Depricated
- * Parameters: none
- * Returns: the statust of the thermopile.
- * This functions reads the status registers.
- **/ 
-//void Thermopile::checkStatus(void){}
 
 void TPIS1385::readEEprom(void){
     uint8_t data[2] = {0,0};
