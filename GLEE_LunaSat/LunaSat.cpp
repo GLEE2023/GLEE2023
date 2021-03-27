@@ -1,5 +1,8 @@
 // LunaSat Class contains core lunasat functionality such as transmission and sensing
+#include <Arduino.h>
+#include <Wire.h>
 #include "LunaSat.h"
+
 
 /**
  * Constructor
@@ -60,10 +63,47 @@ void LunaSat::begin(int baudRate){
     }
 
     if (info.conf[4]==1){
-        LunaSat::cap->begin();
+        LunaSat::capacitive->begin();
     }
+
+    /*
+    if (info.conf[2]){
+        LunaSat::ak09940.setDebugMode(true);
+        LunaSat::ak09940.ak09940WAI();
+        LunaSat::ak09940.setDriveMode(LOW_NOISE_1);
+        LunaSat::ak09940.setMeasurementMode(POWER_DOWN);
+    }
+    */
+
+    /*
+    if (info.conf[4]==1) { 
+        Rad->initialize_radio(915.0,17,250.0,12,8);
+        Serial.println(F("Radio Initialized"));
+        delay(50); 
+    }
+    */
+    // TODO: Implement sensor begin outside of constructor classes implement
+    // tmp begin
+    // mag begin 
 }
 
+
+
+/**
+ * Parameters: none
+ * Returns: sample
+ * This function gets the sample through testing 
+ * functionality otherwise set acceleration and magnetic.
+**/
+/*
+lunaSat_sample_t LunaSat::getFuzzSample(void){
+    sample.timeStamp = millis();
+    sample.TMPtemperature = tmp117->getTemperatureC_fuzzed();
+    sample.acceleration = icm20602->getGAccel_fuzzed();
+    sample.magnetic = ak09940->getRawData_fuzzed();
+    sample.ObjTemperature = 0;
+}
+*/
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
     if (!debug){
@@ -76,11 +116,43 @@ lunaSat_sample_t LunaSat::getSample(void){
             sample.TMPtemperature = 0;
         }
 
-        // Handle acceleration sample based on configuration
         if (info.conf[1] == 1){
             sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
             sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
         }
+        
+        // Hangle Acceleration Sample based on configuration
+        /*
+        if (info.conf[1] == 1){
+            sample.acceleration = icm20602->getGAccel();
+        } else {
+            sample.acceleration.x = 0;
+            sample.acceleration.y = 0;
+            sample.acceleration.z = 0;
+        }
+        */
+
+        // Handle Magnetic Sample based on configuration
+        /*
+        if (info.conf[2] == 1){
+            // Get standard single magnetometer measurement. 
+            // TODO: Generalize with respect to magnetometer mode
+            if(ak09940->getMeasurementMode() == POWER_DOWN){
+                ak09940->setMeasurementMode(SINGLE_MEASURE);
+                ak09940->updateRawData();
+                ak09940->updateCalculatedData();
+            }else if(ak09940->getMeasurementMode() == SINGLE_MEASURE){
+                ak09940->updateRawData();
+                ak09940->updateCalculatedData();
+            }
+
+            sample.magnetic = ak09940->getCalculatedData();
+        } else {
+            sample.magnetic.x = 0;
+            sample.magnetic.y = 0;
+            sample.magnetic.z = 0;
+        }
+        */
 
         // Handle Thermopile Sample based on configuration
         if (info.conf[3] == 1){
@@ -88,7 +160,7 @@ lunaSat_sample_t LunaSat::getSample(void){
         }
 
         if (info.conf[4] == 1){
-            sample.cap = LunaSat::cap->getRawData();
+            sample.cap = LunaSat::capacitive->getRawData();
         }
         
     }
@@ -169,3 +241,15 @@ void LunaSat::blink(int _LED, int _delay){
     delay(_delay);
 }
 
+/**
+ * Parameters: 
+ * Returns: 
+ * Transmit full sample with sx1272 transciever 
+ * 
+**/
+
+/*
+void LunaSat::transmitSample(lunaSat_sample_t sample){
+    Rad->transmit_data((char*)&sample);
+}
+*/
