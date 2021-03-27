@@ -38,7 +38,7 @@ void setup(){
     temperatureGradient = 0.0;
 
     //Set temperature gradient threshold to a positive value (1 degree per second by default)
-    gradientThreshold = 1;
+    gradientThreshold = 0.05;
 
     //Set margin for unchanging temperature gradient to a positive value smaller than the threshold (.001 degrees per second by default)
     gradientMargin = 0.01;
@@ -49,6 +49,31 @@ void setup(){
     //Set pins LED1 and LED2 as output
     pinMode(LED1, OUTPUT);
     pinMode(LED2, OUTPUT);
+
+    // Calibration
+    int calPeriod = 5; // Calibration period in secs
+    float calTemps[calPeriod];
+    for (int i = 0; i<calPeriod; i++){
+       startTime = millis();
+       
+       calTemps[i] = thermometer.getTemperatureC();
+       Serial.println(calTemps[i]);
+       
+       endTime = millis();
+       
+       delay(1000-(endTime - startTime));
+    }
+    float calGrads[calPeriod - 1];
+    float avgCalGrad = 0;
+    for (int i = 1; i<calPeriod; i++){
+      calGrads[i-1] = calTemps[i] - calTemps[i-1]; 
+      Serial.println(calGrads[i-1]);
+      avgCalGrad += calGrads[i-1];
+    }
+    avgCalGrad /= (calPeriod-1);
+    gradientMargin = avgCalGrad + 0.001;
+    Serial.println(avgCalGrad);
+    
 };
 
 void loop(){
@@ -64,9 +89,12 @@ void loop(){
     //Calculate change in temperature per second
     temperatureGradient = ((temperatureCurrentC - temperaturePastC) / (sampleRate/1000)); 
 
+    Serial.print("Past Temp:    "); Serial.println(temperaturePastC,5);
+    Serial.print("Current Temp: "); Serial.println(temperatureCurrentC,5);
+
     //Print temperatuere gradient
     Serial.print("Temperature gradient in degrees per second: ");
-    Serial.println(temperatureGradient);
+    Serial.println(temperatureGradient, 5);
 
     //Print a detection state if the temperature gradient is unchanging within a small margin, or meeting or exceeding the gradient threshold
     if(abs(temperatureGradient) <= gradientMargin){
@@ -77,36 +105,37 @@ void loop(){
         Serial.print(sampleRate/1000);
         Serial.println(" second(s)");
 
-    } else if(abs(temperatureGradient) >= gradientThreshold){ 
-
+    }else{
+        // Gradient exceeds detection margin
         if(temperatureGradient >= 0 ){
 
             Serial.print("Temperature rising by ");
-            Serial.print(temperatureGradient);
+            Serial.print(temperatureGradient, 5);
             Serial.print(" degrees (Celsius) per second for ");
             Serial.print(sampleRate/1000);
             Serial.println(" second(s)");
 
-            digitalWrite(LED1, HIGH); //Turn LED on
-            delay(sampleRate/2); //Keep LED on for a delay of half of the time of the sampleRate in milliseconds
-            digitalWrite(LED1, LOW); //Turn LED off
+            if(abs(temperatureGradient) >= gradientThreshold){
+                digitalWrite(LED1, HIGH);   //Turn LED on
+                delay(sampleRate/2);        //Keep LED on for a delay of half of the time of the sampleRate in milliseconds
+                digitalWrite(LED1, LOW);    //Turn LED off
+            }
 
         } else {
 
             Serial.print("Temperature falling by ");
-            Serial.print(temperatureGradient);
+            Serial.print(temperatureGradient, 5);
             Serial.print(" degrees (Celsius) per second for ");
             Serial.print(sampleRate/1000);
             Serial.println(" second(s)");
 
-            digitalWrite(LED2, HIGH);
-            delay(sampleRate/2); 
-            digitalWrite(LED2, LOW); 
-
-        }
-   
-    }
-
+            if(abs(temperatureGradient) >= gradientThreshold){
+                digitalWrite(LED2, HIGH);   //Turn LED on
+                delay(sampleRate/2);        //Keep LED on for a delay of half of the time of the sampleRate in milliseconds
+                digitalWrite(LED2, LOW);    //Turn LED off
+            }
+        }  
+    } 
     //Record end time
     endTime = millis();
 
