@@ -211,35 +211,35 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 * GLEE_LunaSat - Integrated sensor, RF and IO functionality 
     * This library brings all lunasat functionality into one place
     - Dynamic sampling of observations from all sensors
-    ```C++
-    #include <LunaSat.h>    
+      ```C++
+      #include <LunaSat.h>    
 
-    // Set lunasat configuration (1's equates to default mode)
-    int lunaSatConfig[6] = {1,1,0,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+      // Set lunasat configuration (1's equates to default mode)
+      int lunaSatConfig[6] = {1,1,0,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
-    // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
-    LunaSat lunaSat(0, lunaSatConfig, false);
+      // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
+      LunaSat lunaSat(0, lunaSatConfig, false);
 
-    // Custom datatypes allow for sample specialization, user can craft their own ideal sample
-    lunaSat_sample_t sample;  
+      // Custom datatypes allow for sample specialization, user can craft their own ideal sample
+      lunaSat_sample_t sample;  
 
-    void setup() {
-        // The GLEE library architecture enables easy, interpretable and familiar programming of the lunasat
-        lunaSat.begin(9600);    // Direct serial communications with computer
-        delay(5000);
-    }
+      void setup() {
+          // The GLEE library architecture enables easy, interpretable and familiar programming of the lunasat
+          lunaSat.begin(9600);    // Direct serial communications with computer
+          delay(5000);
+      }
 
-    void loop() {
-        // Simple fetching of sensor observation using lunasat class 
-        // Later versions will allow for dynamic sampling based on user defined config
-        sample = lunaSat.getSample(); 
+      void loop() {
+          // Simple fetching of sensor observation using lunasat class 
+          // Later versions will allow for dynamic sampling based on user defined config
+          sample = lunaSat.getSample(); 
 
-        // Simple examples of interacting with an observation sample
-        lunaSat.dispSample(sample); // Observation samples can be directly displayed via serial
-        
-        delay(100);
-    }
-    ```
+          // Simple examples of interacting with an observation sample
+          lunaSat.dispSample(sample); // Observation samples can be directly displayed via serial
+          
+          delay(100);
+      }
+      ```
 
 * GLEE_RF - SX1272 radiolib implementation/integration
   - Basic Transmission Example
