@@ -1,5 +1,5 @@
 // Include dependencies (libraries)
-#include "Capacitive.h"
+#include "CAP.h"
 
 Capacitive cap(1);
 
