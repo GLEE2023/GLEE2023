@@ -1,6 +1,6 @@
 # Great Lunar Expedition For Everyone
 ![Project Image](./Docs/Images/GLEE_banner.png)
-
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 > "We are going to the moon and we'd like to take you along for the ride."
 
 ### Table of Contents
@@ -9,9 +9,7 @@ You're sections headers will be used to reference location of destination.
 - [Project Description](#Project-Description)
 - [Library Descriptions](#Library-Descriptions)
 - [How To Use](#how-to-use)
-- [References](#references)
-- [License](#license)
-- [Author Info](#author-info)
+- [Social Media](#social-media)
 
 # Project Description
 
@@ -51,89 +49,89 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 # How To Use
 ## Installation Instructions
 1. Download and unzip GLEE2023 folder
-2. Select the following library folders
-  >GLEE_LunaSat\
-  >GLEE_Sensor\
-  >GLEE_TMP117\
-  >GLEE_TPIS1385\
-  >GLEE_ICM20602\
-  >GLEE_AK09940\
-  >GLEE_CAP
->
-3. Move to the following directory
->Documents\Arduino\Libraries\
->
-Note: Arduino must be installed and previously ran before arduino libraries forlder apears. This directory can also be found via add library from Arduino IDE
-4. Move Module Sketches folder to the following directory
->Documents\Arduino\
 
-Module sketches can now be accsessed directly within arduino ide (File > Sketch Book). Librarie examples will also appear. 
+2. Select the following library folders
+    >GLEE_LunaSat\
+    >GLEE_Sensor\
+    >GLEE_TMP117\
+    >GLEE_TPIS1385\
+    >GLEE_ICM20602\
+    >GLEE_AK09940\
+    >GLEE_CAP
+    >
+
+3. Move to the following directory
+    >Documents\Arduino\Libraries\
+    >
+    Note: Arduino must be installed and previously ran before arduino libraries forlder apears. This directory can also be found via add library from Arduino IDE
+
+4. Move Module Sketches folder to the following directory
+    >Documents\Arduino\
+
+    Module sketches can now be accsessed directly within arduino ide (File > Sketch Book). Library examples will also appear. 
 
 ## Sensor Libraries
 * GLEE_Sensor: 
   * Parent library providing standard sensor interfacing methods for use by other sensor libraries
 
-* GLEE_TMP117: 
-  * Dedicated Temperature Sesnor
+* GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
     - Board temperature observations
-    ```C++
-    #include "TMP117.h"
+        ```C++
+        #include "TMP117.h"
 
-    // Instantiate TMP117 class with id of 1
-    TMP117 thermometer(1);
+        // Instantiate TMP117 class with id of 1
+        TMP117 thermometer(1);
 
-    float temperature; 
+        float temperature; 
 
-    void setup(){
-        Serial.begin(9600);
-    };
+        void setup(){
+            Serial.begin(9600);
+        };
 
-    void loop(){
-        temperature = thermometer.getTemperatureF();
-        
-        Serial.print("Temperature (C): "); Serial.println(temperature);
+        void loop(){
+            temperature = thermometer.getTemperatureF();
+            
+            Serial.print("Temperature (C): "); Serial.println(temperature);
 
-        delay(1000);
-    };
-    ```
+            delay(1000);
+        };
+        ```
 
-* GLEE_ICM20602: 
-  * Accelerometer functionality 
-    - acceleration observations
-    ```C++
-    #include "ICM20602.h"
+* GLEE_ICM20602 - Accelerometer functionality 
+    - Acceleration observations
+        ```C++
+        #include "ICM20602.h"
 
-    ICM20602 accelerometer(0);
+        ICM20602 accelerometer(0);
 
-    sensor_int16_vec_t accelRaw;
-    sensor_float_vec_t acceleration; 
+        sensor_int16_vec_t accelRaw;
+        sensor_float_vec_t acceleration; 
 
-    void setup(){
-        Serial.begin(9600);
+        void setup(){
+            Serial.begin(9600);
 
-        accelerometer.begin();
+            accelerometer.begin();
 
-        accelerometer.initialize();
+            accelerometer.initialize();
 
-        accelerometer.setScale(AFS_2G);
-    };
+            accelerometer.setScale(AFS_2G);
+        };
 
-    void loop(){
-        
-        accelRaw = accelerometer.getRawAccel();
-        acceleration = accelerometer.getGAccel(accelRaw);
+        void loop(){
+            
+            accelRaw = accelerometer.getRawAccel();
+            acceleration = accelerometer.getGAccel(accelRaw);
 
-        Serial.print("G, X-Axis: "); Serial.println(acceleration.x, 8);
-        Serial.print("G, Y-Axis: "); Serial.println(acceleration.y, 8);
-        Serial.print("G, Z-Axis: "); Serial.println(acceleration.z, 8);
+            Serial.print("G, X-Axis: "); Serial.println(acceleration.x, 8);
+            Serial.print("G, Y-Axis: "); Serial.println(acceleration.y, 8);
+            Serial.print("G, Z-Axis: "); Serial.println(acceleration.z, 8);
 
-        delay(200);
-    };
-    ```
+            delay(200);
+        };
+        ```
 
 * GLEE_TPIS1385
-  * Thermopile sensor
-    - Object temperature observations
+  * Thermopile sensor - Object temperature observations
     ```C++
     #include "TPIS1385.h"
 
@@ -153,70 +151,65 @@ Module sketches can now be accsessed directly within arduino ide (File > Sketch 
         Serial.print("Ambient temperature (F): "); Serial.println(temperatures.ambient);
         delay(1000);
     }
-
     ```
 
-* GLEE_Capacitive: 
-  * Analog capacitance Sensor
+* GLEE_CAP - Analog capacitance Sensor
     - Analog sensor output observation
+        ```C++
+        // Include dependencies (libraries)
+        #include "Capacitive.h"
 
-    ```C++
-    // Include dependencies (libraries)
-    #include "Capacitive.h"
+        Capacitive cap(1);
 
-    Capacitive cap(1);
+        int rawData = 0;
 
-    int rawData = 0;
+        void setup() {
+        Serial.begin(9600); // open serial port, set the baud rate to 9600 bps
+        cap.begin();
+        }
 
-    void setup() {
-      Serial.begin(9600); // open serial port, set the baud rate to 9600 bps
-      cap.begin();
-    }
+        void loop(){
+            rawData = cap.getRawData();
+            
+            Serial.println(rawData); //Print raw data
+            delay(500);
+        };
+        ```
 
-    void loop(){
-        rawData = cap.getRawData();
-        
-        Serial.println(rawData); //Print raw data
-        delay(500);
-    };
-    ```
-
-* GLEE_AK09940: 
-  * Magnetometer Functionality
+* GLEE_AK09940 - Magnetometer Functionality
     - magnetic field observations
-  * Observation Example
-    ```C++
-    #include "AK09940.h"
+        ```C++
+        #include "AK09940.h"
 
-    AK09940 magnetometer = AK09940(0);
+        AK09940 magnetometer = AK09940(0);
 
-    AK_Sample_t sample;
+        AK_Sample_t sample;
 
-    void setup (){
-        Serial.begin(9600);
-        magnetometer.begin();
-        magnetometer.readWAI();
-        magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
-    };
+        void setup (){
+            Serial.begin(9600);
+            magnetometer.begin();
+            magnetometer.readWAI();
+            magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
+        };
 
-    void loop (){   
-        Serial.print(F("Data Ready Pin Showing: ")); Serial.println(magnetometer.dataReady());
+        void loop (){   
+            Serial.print(F("Data Ready Pin Showing: ")); Serial.println(magnetometer.dataReady());
 
-        sample = magnetometer.getSample();
+            sample = magnetometer.getSample();
 
-        Serial.print(F("Magnetometer Temp: ")); Serial.println(sample.temp,5);
-        Serial.print(F("Mag X (nT): ")); Serial.println(sample.magnetic.x,5);
-        Serial.print(F("Mag Y (nT): ")); Serial.println(sample.magnetic.y,5);
-        Serial.print(F("Mag Z (nT): ")); Serial.println(sample.magnetic.z,5);
-        Serial.print(F("Magnetic Field Magnitude: ")); Serial.println(sample.strength);
+            Serial.print(F("Magnetometer Temp: ")); Serial.println(sample.temp,5);
+            Serial.print(F("Mag X (nT): ")); Serial.println(sample.magnetic.x,5);
+            Serial.print(F("Mag Y (nT): ")); Serial.println(sample.magnetic.y,5);
+            Serial.print(F("Mag Z (nT): ")); Serial.println(sample.magnetic.z,5);
+            Serial.print(F("Magnetic Field Magnitude: ")); Serial.println(sample.strength);
 
-        delay(1000); // Take samples every one sec
-    };
-    ```
+            delay(1000); // Take samples every one sec
+        };
+        ```
 
 ## Integrated Library
-* GLEE_LunaSat: 
-  * This library brings all lunasat functionality into one place
+* GLEE_LunaSat - Integrated sensor, RF and IO functionality 
+    * This library brings all lunasat functionality into one place
     - Dynamic sampling of observations from all sensors
     ```C++
     #include <LunaSat.h>    
@@ -248,8 +241,7 @@ Module sketches can now be accsessed directly within arduino ide (File > Sketch 
     }
     ```
 
-* GLEE_RF: 
-  - SX1272 radiolib implementation/integration
+* GLEE_RF - SX1272 radiolib implementation/integration
   - Basic Transmission Example
     ```C++
     #include <GLEE_Radio.h>

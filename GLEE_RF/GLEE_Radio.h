@@ -1,13 +1,12 @@
+/**
+ * Description: This is an Arduino (C++) .h file required for the RF
+ * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
+ * Resources Used in Creation:
+ * RadioLib (Base functionality) ()
+**/
+
 #ifndef _GLEE_Radio_H
 #define _GLEE_Radio_H
-
-/*
-*Description: This is an Arduino (C++) .h file required for the RF
-*Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
-*Resources Used in Creation:
-*RadioLib
-*Arduino Wire Library Reference Guide
-*/
 
 #include <RadioLib.h>
 #include <string.h>

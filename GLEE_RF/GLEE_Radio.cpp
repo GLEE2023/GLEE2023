@@ -1,6 +1,5 @@
 #include "GLEE_Radio.h"
 
-
 /**
  * Parameters: frequency as a float, power as an unsigned 8 bit integer, bandwith as a float,
  * spreading factoctor as an unsigned 8 bit integer, and coding rate as an an unsigned 8 bit integer
@@ -154,31 +153,26 @@ void LunaRadio::setPWR(uint8_t pwr){
  * out the  easured data rate if successful and the error message if unsuccessful.
 **/
 void LunaRadio::transmit_data(char* buff){
-  Serial.println("Transmitting Data");
-  LunaRadio::err_state = LunaRadio::radio.transmit(buff); 		//saves error state when trasnmitting
-  if (LunaRadio::err_state == ERR_NONE){
-    // the packet was successfully transmitted
-    Serial.println(F("Tranmission success!"));
-
-    // print measured data rate
-    Serial.print(F("Datarate: "));
-    Serial.print(LunaRadio::radio.getDataRate());
-    Serial.println(F(" bps"));
-
-  } else if (LunaRadio::err_state == ERR_PACKET_TOO_LONG){
-    // the supplied packet was longer than 256 bytes
-    Serial.println(F("too long!"));
-
-  } else if (LunaRadio::err_state == ERR_TX_TIMEOUT){
-    // timeout occurred while transmitting packet
-	Serial.println(F("timeout!"));
-
-  } else {
-    // some other error occurred
-    Serial.print(F("failed, code "));
-    Serial.println(LunaRadio::err_state);
-
-  }
+	Serial.println("Transmitting Data");
+	LunaRadio::err_state = LunaRadio::radio.transmit(buff); 		//saves error state when trasnmitting
+	if (LunaRadio::err_state == ERR_NONE){
+		// the packet was successfully transmitted
+		Serial.println(F("Tranmission success!"));
+		// print measured data rate
+		Serial.print(F("Datarate: "));
+		Serial.print(LunaRadio::radio.getDataRate());
+		Serial.println(F(" bps"));
+	} else if (LunaRadio::err_state == ERR_PACKET_TOO_LONG){
+		// the supplied packet was longer than 256 bytes
+		Serial.println(F("too long!"));
+	} else if (LunaRadio::err_state == ERR_TX_TIMEOUT){
+		// timeout occurred while transmitting packet
+		Serial.println(F("timeout!"));
+	} else {
+		// some other error occurred
+		Serial.print(F("failed, code "));
+		Serial.println(LunaRadio::err_state);
+	}
 }
 
 /**

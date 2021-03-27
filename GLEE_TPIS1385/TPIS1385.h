@@ -1,14 +1,11 @@
 /*
-*Description: This is an Arduino (C++) Header file required for the TPiS 1S 1385 Infrared Thermopile
-*Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
-*Library Author: John Walker Johnson
-*Library Contributors:
-*Library Created on: November 13th 2020
-*Last Modified on: November 30th 2020
-*Primary Resources Used in Creation:
-*TPiS 1S 1385 Datasheet
-*Arduino Wire Library Reference Guide
-*
+* Description: TPiS 1S 1385 Infrared Thermopile Class Header
+* Project Info: Created in support of LunaSat as part of the GLEE (The Great Lunar Expedition for Everyone) mission and Artemis student challange.
+* Library Contributors: John Walker Johnson, Lawson Nerenberg
+* Primary Resources Used in Creation:
+* TPiS 1S 1385 Datasheet (https://media.digikey.com/pdf/Data%20Sheets/Excelitas%20PDFs/TPiS_1S_1385.pdf)
+* Arduino Wire Library Reference Guide
+* Special Thanks to Kriswiners for CalPile Library inspiration 
 */
 
 #ifndef TPIS1385_H
@@ -16,11 +13,12 @@
 
 #include "GLEE_Sensor.h"
 
-/*
-*All definitions below allow us to use variable names, rather than integers, to 
-*adress the sensors internal memory registers. These registers are found on the data 
-*sheet and used to 
-*/
+/**
+ * All definitions below allow us to use variable names, 
+ * rather than integers, to adress the sensors internal memory registers. 
+ * These registers are found on the data sheet and used to obtain readings 
+ * an calibration constants from the TPIS sensor 
+**/
 
 // Ref: Page 12 of datasheet
 #define TP_OBJECT 1                             // Object Temperature reg               (3xBytes) 17bit value [read] 
