@@ -33,7 +33,7 @@ void AK09940::begin(){
     pinMode(A3,OUTPUT);
     digitalWrite(A3,HIGH);
     
-	pinMode(7, INPUT); // Data ready signal pin
+    pinMode(7, INPUT); // Data ready signal pin
 
 	Wire.begin(AK09940::info.address);  // Begin i2c comms with sensor, only called once
 }

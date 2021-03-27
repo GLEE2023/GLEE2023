@@ -1,14 +1,11 @@
 /**
  * Description: This is an Arduino (C++) Header file required for the AK09940 Magnetometer
  * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
- * Library Author: John Walker Johnson
- * Library Contributors: Lawson Nerenberg
- * Library Created on: July 13th 2020
- * Last Modified on: Nov 21 2020
+ * Library Contributors: John Walker Johnson, Lawson Nerenberg
  * Primary Resources Used in Creation:
- * AK09940 Datasheet
+ * AK09940 Datasheet (https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
  * Arduino Wire Library Reference Guide
-*
+ *
 **/
 
 #ifndef AK09940_H

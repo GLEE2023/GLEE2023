@@ -2,7 +2,6 @@
 
 #include "TMP117.h"
 
-
 /**
  * Constructor
  * Parameters: the sensor ID as an integer and the debug mode as a booelan
@@ -57,19 +56,19 @@ double TMP117::getTemperatureF(){
 float TMP117::getUncertainty(float inputTemperature){
     double temp = inputTemperature;
     if(temp >= -20 &&  temp <= 50){
-      return 0.1;
+        return 0.1;
     }
     else if(temp >= -40 &&  temp <= 70){
-      return 0.15;
+        return 0.15;
     }
     else if(temp >= -55 &&  temp <= 100){
-      return 0.2;
+        return 0.2;
     }
     else if(temp >= -55 &&  temp <= 125){
-      return 0.25;
+        return 0.25;
     }
     else if(temp >= -55 &&  temp <= 150){
-      return 0.3;
+        return 0.3;
     }
 }
 
@@ -129,7 +128,7 @@ bool TMP117::getHighAlert(){
     uint16_t config = read2Byte(TMP117_CONFIG_REG);
     uint8_t configBit = bitRead(config, 15);
     if(configBit == 1){
-      return true;
+        return true;
     }
     return false;
 }
@@ -144,7 +143,7 @@ bool TMP117::getLowAlert(){
     uint16_t config = read2Byte(TMP117_CONFIG_REG);
     uint8_t configBit = bitRead(config, 14);
     if(configBit == 1){
-      return true;
+        return true;
     }
     return false;
 }
@@ -170,7 +169,7 @@ void TMP117::reset(){
 bool TMP117::dataReady(){
     uint16_t config = read2Byte(TMP117_CONFIG_REG);
     if(config & 1 << 13){
-      return true;
+        return true;
     }
     return false;
 }
