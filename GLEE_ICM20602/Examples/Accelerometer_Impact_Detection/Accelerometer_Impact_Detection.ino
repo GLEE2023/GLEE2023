@@ -1,5 +1,3 @@
-#include <Arduino.h>
-#include "GLEE_Sensor.h"
 #include "ICM20602.h"
 
 float startTime;    
