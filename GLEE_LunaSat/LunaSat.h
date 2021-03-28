@@ -68,7 +68,9 @@ class LunaSat{
         // This controlls whether debug messages are 
         // printed to serial
 
-        LunaSat(int _id, int _conf[5], bool _debug = false);
+        LunaSat(int _id, int _conf[6], bool _debug = false);
+
+        
 
         // Sensor Initializations
         // Methods
@@ -80,10 +82,11 @@ class LunaSat{
         void blink(int _pin, int _delay);
 
         void dispAccel(sensor_float_vec_t accel);
+        void transmit_data(char *buff);
     
     private:
         // Radio class instance
-        LunaRadio *rad = new LunaRadio();
+        LunaRadio rad;
     
         // Sensor class instances
         TMP117 *tmp117 = new TMP117(0);

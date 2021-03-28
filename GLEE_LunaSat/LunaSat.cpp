@@ -9,11 +9,11 @@
  * This is the constructor for the Capacitive class. 
  * Initializes lunsat and subsequent sensors.
 **/
-LunaSat::LunaSat(int _id, int _conf[5], bool _debug){                             
+LunaSat::LunaSat(int _id, int _conf[6], bool _debug){                             
     // Set lunaSat info
     info.id = _id;
     
-    for(int i = 0; i < 5; i++){ // Might need to replace this with more optimal refrencing
+    for(int i = 0; i < 6; i++){ // Might need to replace this with more optimal refrencing
         info.conf[i] = _conf[i];
     }
 
@@ -61,6 +61,11 @@ void LunaSat::begin(int baudRate){
 
     if (info.conf[4]==1){
         LunaSat::cap->begin();
+    }
+    if(info.conf[5]==1){
+        // Default radio initialization
+        LunaSat::rad.initialize_radio();
+        delay(50);
     }
 }
 
@@ -147,9 +152,50 @@ void LunaSat::dispAccel(sensor_float_vec_t accel){
 }
 
 void LunaSat::transmitSample(lunaSat_sample_t sample){
-    char dataBuffer[sizeof(sample)];
-    memcpy(&dataBuffer, &sample, sizeof(sample));
-    LunaSat::rad->transmit_data(dataBuffer);
+    char dataBuffer[46];
+    String sampleString = String(sample.timeStamp);
+    String sep = ",";
+
+    if (info.conf[0]==1){
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.TMPtemperature);
+    }
+    if (info.conf[1]==1){
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.acceleration.x);
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.acceleration.y);
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.acceleration.z);
+    }
+    if (info.conf[2]==1){
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.magnetic.x);
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.magnetic.y);
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.magnetic.z);
+
+    }
+    if (info.conf[3]==1){
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.TPTemperature.ambient);
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.TPTemperature.object);
+    }
+    if (info.conf[4]==1){
+        sampleString = sampleString + sep;
+        sampleString = sampleString + String(sample.cap);
+    }
+
+    sampleString.toCharArray(dataBuffer, 46);
+    Serial.print("Sample: "); Serial.println(sampleString);
+    LunaSat::rad.transmit_data(dataBuffer);
+    delay(5);
+}
+
+void LunaSat::transmit_data(char *buff){
+    LunaSat::rad.transmit_data(buff);
 }
 
 /**
@@ -174,4 +220,3 @@ void LunaSat::blink(int _LED, int _delay){
     digitalWrite(pin, LOW);
     delay(_delay);
 }
-
