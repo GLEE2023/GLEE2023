@@ -6,6 +6,9 @@ central hub on the host lander with RF.
 
 This library is a port of Radiolib. Make sure to install radiolib via Arduino Libraries manager before using this library. (Huge thank you to Jgromes for that amazing lora library)
 
+PCB antenna and SX1272 pictured below\
+![PCB Antenna](/Docs/Images/SX1272_antenna_close_up.jpg) ![SX1272 Chip](/Docs/Images/SX1272_close_up.jpg) 
+
 ## RF Receive Example
 ```C++
 #include <GLEE_Radio.h>
@@ -40,6 +43,14 @@ void loop() {
   delay(1000);  
 }
 ```
+## ATMEGA 328 + SX1272 Pin Configuration Details
+| Configuration Name | Default Setting |
+|---|---|
+| NSS_PIN | 10 |
+| DIO1_PIN | 3 |
+| DIO0_PIN | 2 |
+| RESET_PIN | 9 |
+
 ## Default Initialization
 | Configuration Name | Default Setting |
 |---|---|
@@ -71,13 +82,7 @@ void loop() {
 
   Coding Rate effects data encoding redundances. CR value is proportional to interfernce tollerence. (Higher - Able to handle more interference)
 
-## ATMEGA 328 + SX1272 Pin Configuration Details
-| Configuration Name | Default Setting |
-|---|---|
-| NSS_PIN | 10 |
-| DIO1_PIN | 3 |
-| DIO0_PIN | 2 |
-| RESET_PIN | 9 |
+
 
 # Library Details
 
