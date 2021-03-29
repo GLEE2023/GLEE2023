@@ -1,6 +1,6 @@
 # GLEE_TMP117 Sensor Library
 
-[![High Precision Temperature Sensor Datasheet- TMP117](https://www.digikey.com/-/media/Images/Product%20Highlights/T/Texas%20Instruments/TMP117%20Digital%20Temperature%20Sensor/ti-tmp117-digital-temp-sensor-200.jpg?ts=27501a08-04eb-4c59-8cad-756afe4e53b8&la=en-US)](https://cdn.sparkfun.com/assets/9/e/5/1/8/tmp117.pdf)
+[![High Precision Temperature Sensor Datasheet- TMP117](./Docs/Images/TMP117_close_up.jpg)
 
 [High Precision Temperature Sensor Datasheet- TMP117](https://cdn.sparkfun.com/assets/9/e/5/1/8/tmp117.pdf)
 
