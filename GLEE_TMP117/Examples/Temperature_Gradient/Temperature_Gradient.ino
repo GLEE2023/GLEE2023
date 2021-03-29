@@ -91,7 +91,7 @@ void setup(){
     //Calculate initial temperature gradients based on initial temperature measurements
     for (int i = 1; i < calPeriod; i++){
 
-        calGrads[i-1] = calTemps[i] - calTemps[i-1]; 
+        calGrads[i-1] = abs(calTemps[i] - calTemps[i-1]); 
         Serial.print("Sample Gradient: ");
         Serial.println(calGrads[i-1]);
         avgCalGrad += calGrads[i-1];
