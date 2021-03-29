@@ -20,7 +20,7 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
 [![Announcement Video](https://img.youtube.com/vi/24ujpW5nN5Q/1.jpg)](https://www.youtube.com/watch?v=24ujpW5nN5Q)
 
 ## Mission Concept
-![Project Image](./Docs/Images/GLEE_concept_art_small.png) 
+![Project Image](./Docs/Images/GLEE_concept_art_small.png) Art by Daedalus Muse
 
 ## LunaSat - LUNAr Sensing ArchiTecture
 GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
