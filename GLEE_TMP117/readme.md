@@ -1,8 +1,4 @@
-# GLEE_TMP117 Sensor Library
-
-[![High Precision Temperature Sensor Datasheet- TMP117](./Docs/Images/TMP117_close_up.jpg)
-
-[High Precision Temperature Sensor Datasheet- TMP117](https://cdn.sparkfun.com/assets/9/e/5/1/8/tmp117.pdf)
+# GLEE_TMP117
 
 This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with the GLEE's LunaSat object class, it can be used to monitor, configure and control the TMP117. GLEE_TMP117 supports basic functionality such as Celsius/Fahrenheit temperature readouts and low/high temperature alerts. 
 
@@ -38,28 +34,3 @@ This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with 
 | getAddress | uint8_t | void | Returns the I2C address of the temperature sensor |
 | read2Byte | uint16_t | uint8 Register Address | Reads and returns 2 bytes as subg 16bit unsigned integer. |
 | right2Byte | uint16_t | uint8 Register Address, uint16_t Data | Sets bits of data at 8bit register address. |
-
-## Examples
-
-GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
-- Board temperature observations
-```C++
-        #include "TMP117.h"
-
-        // Instantiate TMP117 class with id of 1
-        TMP117 thermometer(1);
-
-        float temperature; 
-
-        void setup(){
-            Serial.begin(9600);
-        };
-
-        void loop(){
-            temperature = thermometer.getTemperatureF();
-            
-            Serial.print("Temperature (C): "); Serial.println(temperature);
-
-            delay(1000);
-        };
-```
