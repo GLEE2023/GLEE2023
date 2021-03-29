@@ -1,4 +1,4 @@
-# GLEE_TPIS1385
+# GLEE - LunaSat Infrared (IR) Thermopile Sensor - GLEE_TPIS1385
 
 This library is intended for GLEE's Thermopile Sensor, the TPIS1385. Paired with the GLEE's LunaSat object class, it can be used to monitor, configure and control the TPIS1385. GLEE_TPIS1385 supports basic functionality such as object temperature observations.
 

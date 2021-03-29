@@ -1,5 +1,6 @@
+#include <Arduino.h>
 #include "ICM20602.h"
-
+#include <Wire.h>
 
 bool ICM_DEBUG = false;
 
@@ -88,21 +89,6 @@ sensor_int16_vec_t ICM20602::getRawAccel(){
 }
 
 /*
-Parameters: none
-Returns: The raw angular velocity in LSB/DPS as a struct of sensor_uint16_vec_t type
-This function reads in the high bytes of the angular velocity for each of the three 
-axis, performs a bitwise operation, then saves and returns the raw angular velocity
-struct.
-*/
-sensor_int16_vec_t ICM20602::getRawAngVel(){
-	sensor_int16_vec_t RawAngVel;
-	RawAngVel.x = read2Byte(ICM20602_GYRO_XOUT_H);
-	RawAngVel.y = read2Byte(ICM20602_GYRO_YOUT_H);
-	RawAngVel.z = read2Byte(ICM20602_GYRO_ZOUT_H);
-	return RawAngVel;
-}
-
-/*
 Parameters: the current raw acceleration to be saved as a struct of sensor_int16_vec_t type
 Returns: none
 This function saves the the raw acceleration given by the argument into
@@ -173,6 +159,20 @@ void ICM20602::updateGAccel(sensor_float_vec_t GAccel){
 	ICM20602::accelG = GAccel;
 }
 
+/*
+Parameters: none
+Returns: The raw angular velocity in LSB/DPS as a struct of sensor_uint16_vec_t type
+This function reads in the high bytes of the angular velocity for each of the three 
+axis, performs a bitwise operation, then saves and returns the raw angular velocity
+struct.
+*/
+sensor_int16_vec_t ICM20602::getRawAngVel(){
+	sensor_int16_vec_t RawAngVel;
+	RawAngVel.x = read2Byte(ICM20602_GYRO_XOUT_H);
+	RawAngVel.y = read2Byte(ICM20602_GYRO_YOUT_H);
+	RawAngVel.z = read2Byte(ICM20602_GYRO_ZOUT_H);
+	return RawAngVel;
+}
 
 /*
 Parameters: the current raw angular velocity to be saved as a struct of sensor_int16_vec_t type
@@ -198,9 +198,6 @@ sensor_float_vec_t ICM20602::getDPSAngVel(sensor_int16_vec_t rawAngVel){
     angVelDPS.z = (float) rawAngVel.z/ currentGyroFactor;
 	return angVelDPS;
 }
-
-
-
 
 /*
 Parameters: the current angular velocity in degrees per second to be saved as a struct of sensor_float_vec_t type

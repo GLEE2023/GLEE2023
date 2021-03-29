@@ -1,4 +1,4 @@
-# GLEE_TMP117 Sensor Library
+# GLEE - LunaSat Dedicated Temperature Sensor Library - GLEE_TMP117
 
 ![High Precision Temperature Sensor Datasheet- TMP117](/Docs/Images/TMP117_close_up.jpg)
 
@@ -63,3 +63,4 @@ GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
 | getAddress | uint8_t | void | Returns the I2C address of the temperature sensor |
 | read2Byte | uint16_t | uint8 Register Address | Reads and returns 2 bytes as subg 16bit unsigned integer. |
 | right2Byte | uint16_t | uint8 Register Address, uint16_t Data | Sets bits of data at 8bit register address. |
+
