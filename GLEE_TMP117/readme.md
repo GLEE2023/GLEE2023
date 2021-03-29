@@ -1,6 +1,6 @@
 # GLEE_TMP117 Sensor Library
 
-[![High Precision Temperature Sensor Datasheet- TMP117](./Docs/Images/TMP117_close_up.jpg)
+[![High Precision Temperature Sensor Datasheet- TMP117](/Docs/Images/TMP117_close_up.jpg)
 
 [High Precision Temperature Sensor Datasheet- TMP117](https://cdn.sparkfun.com/assets/9/e/5/1/8/tmp117.pdf)
 
