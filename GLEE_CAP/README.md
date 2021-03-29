@@ -7,6 +7,7 @@
 This library is intended for GLEE's Capacitive Sensor. 
 
 ## Examples
+Capacitive Sensor Analog Read
 ```C++
 #include "CAP.h"
 
