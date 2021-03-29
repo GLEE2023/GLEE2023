@@ -1,6 +1,35 @@
-# GLEE_TMP117
+# GLEE_TMP117 Sensor Library
+
+![High Precision Temperature Sensor Datasheet- TMP117](/Docs/Images/TMP117_close_up.jpg)
+
+[High Precision Temperature Sensor Datasheet- TMP117](https://cdn.sparkfun.com/assets/9/e/5/1/8/tmp117.pdf)
 
 This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with the GLEE's LunaSat object class, it can be used to monitor, configure and control the TMP117. GLEE_TMP117 supports basic functionality such as Celsius/Fahrenheit temperature readouts and low/high temperature alerts. 
+
+## Examples
+
+GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
+- Board temperature observations
+```C++
+        #include "TMP117.h"
+
+        // Instantiate TMP117 class with id of 1
+        TMP117 thermometer(1);
+
+        float temperature; 
+
+        void setup(){
+            Serial.begin(9600);
+        };
+
+        void loop(){
+            temperature = thermometer.getTemperatureF();
+            
+            Serial.print("Temperature (C): "); Serial.println(temperature);
+
+            delay(1000);
+        };
+```
 
 ## Registers
 	
@@ -10,12 +39,12 @@ This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with 
 | TMP117_CONFIG_REG     | 0x01 | Configuration register |   
 | TMP117_HIGH_LIMIT_REG | 0X02 | High limit register for monitoring specific states |
 | TMP117_LOW_LIMIT_REG  | 0X03 | Low Limit Register |
-| TMP117_EEPROM_UL_REG 	| 0X04 | TODO |
-| TMP117_EEPROM1_REG  	| 0X05 | TODO |
-| TMP117_EEPROM2_REG  	| 0X06 | TODO |
-| TMP117_TEMP_OFFSET_REG| 0X07 | TODO |
-| TMP117_EEPROM3_REG  	| 0X08 | TODO |
-| TMP117_DEVICE_ID  		| 0X0F | TODO |
+| TMP117_EEPROM_UL_REG 	| 0X04 | EEPROM unlock register |
+| TMP117_EEPROM1_REG  	| 0X05 | EEPROM1 register |
+| TMP117_EEPROM2_REG  	| 0X06 | EEPROM2 register |
+| TMP117_TEMP_OFFSET_REG| 0X07 | Offset register |
+| TMP117_EEPROM3_REG  	| 0X08 | EEPROM3 register |
+| TMP117_DEVICE_ID  	| 0X0F | Device ID register |)
 
 ## Methods 
 

@@ -1,11 +1,56 @@
-# GLEE_AK09940
+# GLEE_AK09940 Sensor Library
 This library is intended for GLEE's Magnetometer Sensor, the 
 AK09940.
 Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control 
 the AK09940. GLEE_AK09940 supports the basic functionality of the magnetometer with reading 
 and saving the three-axis magnetic field. It has nine operation modes, including: power-down mode, single measurement mode, continuous measurement modes 1 through 6, and self-test mode and four drive modes with to of each of low noise mode and low power mode. More details about these sensor modes can be found below.
 
+![Magnetometer](/Docs/Images/AK09940_close_up.jpg)
+
+## Magnetometer Data Sheet
+[AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
+
+## Magnetometer Example
+This example is for making basic magnetic field observations.
+```c++
+#include "AK09940.h"
+
+AK09940 magnetometer = AK09940(0);
+
+AK_Sample_t sample;
+
+void setup (){
+    Serial.begin(9600);
+    magnetometer.begin();
+    magnetometer.readWAI();
+    magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
+};
+
+void loop (){   
+    Serial.print(F("Data Ready Pin Showing: ")); 
+    Serial.println(magnetometer.dataReady());
+
+    sample = magnetometer.getSample();
+
+    Serial.print(F("Magnetometer Temp: ")); 
+    Serial.println(sample.temp,5);
+    Serial.print(F("Mag X (nT): ")); 
+    Serial.println(sample.magnetic.x,5);
+    Serial.print(F("Mag Y (nT): ")); 
+    Serial.println(sample.magnetic.y,5);
+    Serial.print(F("Mag Z (nT): ")); 
+    Serial.println(sample.magnetic.z,5);
+    Serial.print(F("Magnetic Field Magnitude: ")); 
+    Serial.println(sample.strength);
+
+    delay(1000); // Take samples every one sec
+    };
+```
+# Registers
+
 ## Baseline Configuration Registers
+These registers are used for device information and control settings.
+
 | Register Name | Register Value (Hex) | Comments |
 |---|---|---|
 | AK09940_WAI_1 | 0x00 | Who Am I Register #1- Company ID |
@@ -17,6 +62,8 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | AK09940_CNTL_2 | 0x31 | Control Settings #2- Temperature Measurement Setting |
 | AK09940_CNTL_3 | 0x32 | Control Settings #3- Operation Mode Setting, FIFO, Sensor Drive Setting |
 | AK09940_CNTL_4 | 0x33 | Control Settings #4- Soft Reset |
+
+# Modes
 
 ## Sensor Mode Configuration Details (MODE[4:0]) 
 | Operation Mode | Name in Library | Setting | Description |
@@ -31,6 +78,7 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | Continuous Measurement 6 | CONT_MEASURE_6 | 0b01100 | 400 Hz, Magnetic sensor measurement is started periodically and stored |
 | Self Test | SELF_TEST | 0b10000 | Used to check if the magnetic sensor is working normally |
 
+
 ## Drive Mode Configuration Details (MT[1:0])
 | Drive Mode Name | Name in Library | Setting | Description |
 |---|---|---|---|
@@ -39,7 +87,8 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | Low Power 1 | LOW_POWER_1 | 0b10 | 0.03 mA, Used to save the current consumption |
 | Low Power 2 | LOW_POWER_2 | 0b11 | 0.06 mA, Used to save the current consumption |
 
-## Customized Data Types
+
+# Customized Data Types
 | Data Type Name | Data Structure | Usage |
 |---|---|---|
 | ak09940_RawData_s | struct | Holds raw sensors readings of temperature and the magnetic field in all three axis |
@@ -48,7 +97,8 @@ and saving the three-axis magnetic field. It has nine operation modes, including
 | ak09940_Measurement_Mode_t | enum | Holds measurement modes |
 | ak09940_Drive_Mode_ | enum | Holds drive mode options |
 
-## Methods 
+
+# Methods 
 | Method Name | return type | args | Comments |
 |---|---|---|---|
 | ak09940WAI | bool | none | Who Am I function to check or proper sensor initialition |

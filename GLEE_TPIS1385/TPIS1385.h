@@ -21,8 +21,8 @@
 **/
 
 // Ref: Page 12 of datasheet
-#define TP_OBJECT 1                             // Object Temperature reg               (3xBytes) 17bit value [read] 
-#define TP_AMBIENT 3                            // Ambient Temp Reg                     (2xBytes) 15bit value [read]
+#define TP_OBJECT 1                             // Object Temperature reg                         (3xBytes) 17bit value [read] 
+#define TP_AMBIENT 3                            // Ambient Temp Reg                               (2xBytes) 15bit value [read]
 #define TP_OBJECT_LP1 5                         // Low Pass filter of object signal value 1 reg   (3xBytes) 20bit value [read] comparison: 8
 #define TP_OBJECT_LP2 7                         // Low Pass filter of object signal value 2 reg   (3xBytes) 20bit value [read] comparison: 8
 #define TP_AMBIENT_LP3 10                       // Low Pass filter of ambient signal value 3 reg  (2xBytes) 16bit value [read] comparison: 2
