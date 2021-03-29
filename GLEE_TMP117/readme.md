@@ -39,12 +39,12 @@ GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
 | TMP117_CONFIG_REG     | 0x01 | Configuration register |   
 | TMP117_HIGH_LIMIT_REG | 0X02 | High limit register for monitoring specific states |
 | TMP117_LOW_LIMIT_REG  | 0X03 | Low Limit Register |
-| TMP117_EEPROM_UL_REG 	| 0X04 | TODO |
-| TMP117_EEPROM1_REG  	| 0X05 | TODO |
-| TMP117_EEPROM2_REG  	| 0X06 | TODO |
-| TMP117_TEMP_OFFSET_REG| 0X07 | TODO |
-| TMP117_EEPROM3_REG  	| 0X08 | TODO |
-| TMP117_DEVICE_ID  		| 0X0F | TODO |
+| TMP117_EEPROM_UL_REG 	| 0X04 | EEPROM unlock register |
+| TMP117_EEPROM1_REG  	| 0X05 | EEPROM1 register |
+| TMP117_EEPROM2_REG  	| 0X06 | EEPROM2 register |
+| TMP117_TEMP_OFFSET_REG| 0X07 | Offset register |
+| TMP117_EEPROM3_REG  	| 0X08 | EEPROM3 register |
+| TMP117_DEVICE_ID  	| 0X0F | Device ID register |)
 
 ## Methods 
 
