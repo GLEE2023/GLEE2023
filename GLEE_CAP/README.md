@@ -1,10 +1,9 @@
 # GLEE_CAP Sensor Library
-
+This library is intended for GLEE's Capacitive Sensor. (pictured below)\
 ![Capacitive Sensor](/Docs/Images/CAP_close_up.jpg)
 
 [Capacitive Sensor]()
 
-This library is intended for GLEE's Capacitive Sensor. 
 
 ## Examples
 Capacitive Sensor Analog Read
