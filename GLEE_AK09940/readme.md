@@ -1,4 +1,4 @@
-# GLEE_AK09940 Sensor Library
+# GLEE - LunaSat Magnetometer Sensor Library - GLEE_AK09940 
 This library is intended for GLEE's Magnetometer Sensor, the 
 AK09940.
 Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control 

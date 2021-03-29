@@ -1,4 +1,4 @@
-# GLEE_CAP Sensor Library
+# GLEE - LunaSat Capacitance Sensor Library - GLEE_CAP
 This library is intended for GLEE's Capacitive Sensor. (pictured below)\
 ![Capacitive Sensor](/Docs/Images/CAP_close_up.jpg)
 

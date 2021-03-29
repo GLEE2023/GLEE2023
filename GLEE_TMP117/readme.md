@@ -1,4 +1,4 @@
-# GLEE_TMP117 Sensor Library
+# GLEE - LunaSat Dedicated Temperature Sensor Library - GLEE_TMP117
 
 ![High Precision Temperature Sensor Datasheet- TMP117](/Docs/Images/TMP117_close_up.jpg)
 
