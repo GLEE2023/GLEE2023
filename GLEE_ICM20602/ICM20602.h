@@ -61,7 +61,7 @@ enum Gscale{
 
 class ICM20602:public Sensor{
     public:
-        ICM20602(int _id, bool _debug = false);
+        ICM20602(int _id, bool _gyroOn, bool _debug = false);
         
         Ascale currentAccelScale; //g-force range
         Gscale currentGyroScale; //DPS range
@@ -69,6 +69,7 @@ class ICM20602:public Sensor{
         float currentAccelFactor;
         float currentGyroFactor;
         
+        bool gyroOn;
 
         bool begin();
         void initialize();

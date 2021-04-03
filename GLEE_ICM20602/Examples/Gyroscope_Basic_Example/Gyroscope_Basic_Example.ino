@@ -5,7 +5,7 @@
 float startTime;    
 float endTime;
 
-ICM20602 gyroscope(2);
+ICM20602 gyroscope(1, true);
 
 sensor_int16_vec_t angVelRaw;
 sensor_float_vec_t angVelDPS; 

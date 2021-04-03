@@ -11,12 +11,12 @@ float aRes, gRes;
 
 /*
 Constructor
-Parameters: sensor ID as an INT, debug mode as a BOOL
+Parameters: sensor ID as an INT, gyroscope enabled as a BOOL, debug mode as a BOOL
 Returns: none
 This is the constructor for this sensor that sets the
 basic variables to get started.
 */
-ICM20602::ICM20602(int _id, bool _debug){
+ICM20602::ICM20602(int _id, bool _gyroOn, bool _debug){
     ICM20602::info.name = "ICM20602 Inertial Measurement Unit";
   	ICM20602::info.address = ICM20602_SLAVE_ADDR;
   	ICM20602::sensorDebug = _debug;
@@ -24,6 +24,7 @@ ICM20602::ICM20602(int _id, bool _debug){
     ICM20602::currentGyroScale = GFS_1000DPS;
     ICM20602::currentAccelFactor = 16384.0;
     ICM20602::currentGyroFactor = 131.0;
+	ICM20602::gyroOn = _gyroOn;
 }
 
 /*
@@ -42,17 +43,20 @@ bool ICM20602::begin(void){
 /*
 Parameters: none
 Returns: none
-This function sets the clock to auto, disables the gyroscope, and sets a
+This function sets the clock to auto, disables or enables the gyroscope, and sets a
 couple of the other registers.
 */
 void ICM20602::initialize(void){
     Wire.setClock(100000);
     writeByte(ICM20602_PWR_MGMT_1, 0x01);   // Set clock set to auto
-    writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Configuration with Gyro disabled 
-	//writeByte(ICM20602_PWR_MGMT_2, 0x00);    // Configuration with Gyro enabled 
     writeByte(ICM20602_CONFIG, 0x01); 
     writeByte(ICM20602_GYRO_CONFIG, 0x10);    
     writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
+	if(gyroOn){
+		writeByte(ICM20602_PWR_MGMT_2, 0x00);    // Configuration with Gyro enabled 
+	}else{
+		writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Configuration with Gyro disabled 
+	}
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 

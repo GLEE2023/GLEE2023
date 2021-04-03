@@ -1,6 +1,6 @@
 #include "ICM20602.h"
 
-ICM20602 accelerometer(1);
+ICM20602 accelerometer(1, false);
 sensor_int16_vec_t accelRaw;
 sensor_float_vec_t accelG; 
 
