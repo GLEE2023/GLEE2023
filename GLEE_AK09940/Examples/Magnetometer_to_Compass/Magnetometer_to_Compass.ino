@@ -44,11 +44,11 @@ void loop (){
     //Determine compass heading (relative to magnetic north)
     if(yMag > 0){
 
-        heading = 90 - (atan(xMag/yMag))*(180/M_PI); //M_PI = 3.141...
+        heading = 90 - (atan(xMag/-yMag))*(180/M_PI); //M_PI = 3.141...
 
     } else if (yMag < 0){
 
-        heading = 270 - (atan(xMag/yMag))*(180/M_PI);
+        heading = 270 - (atan(xMag/-yMag))*(180/M_PI);
 
     } else {
 
