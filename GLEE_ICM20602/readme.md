@@ -101,6 +101,7 @@ void loop(){
 |---|---|---|---|
 | begin | bool | none | Returns true or false based on whether communication was successful with the sensor |
 | initialize | void | none | Sets the clock to auto and sets the configuration registrations |
+| disableGyro | void | bool disableGyro | write configuration of gyroscope depending on whether the gyroscope is getting disabled or enabled
 | getRawAccel | sensor_uint16_vec_t | none | Gets and returns the current raw acceleration in LSB/G |
 | getRawAngVel | sensor_int16_vec_t | none | Gets and returns the current raw angular velocity |
 | getMPSAccel | sensor_float_vec_t | sensor_float_vec_t GAccel | Converts the raw acceleration in LSB/G to meters per second squared |

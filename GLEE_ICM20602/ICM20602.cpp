@@ -53,11 +53,28 @@ void ICM20602::initialize(void){
     writeByte(ICM20602_GYRO_CONFIG, 0x10);    
     writeByte(ICM20602_ACCEL_CONFIG, 0x00);   
 	if(gyroOn){
-		writeByte(ICM20602_PWR_MGMT_2, 0x00);    // Configuration with Gyro enabled 
+		disableGyro(false);    // Configuration with Gyro enabled 
 	}else{
-		writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Configuration with Gyro disabled 
+		disableGyro(true);  // Configuration with Gyro disabled 
 	}
   // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
+}
+
+/*
+Parameters: to disable or enable the gyroscope as a boolean
+Returns: none
+This function writes the configuration of the sensor depending on whether the 
+gyroscope is to be enabled or disabled.
+*/
+void ICM20602::disableGyro(bool disableGyro){
+	if(disableGyro){
+		gyroOn = false;
+		writeByte(ICM20602_PWR_MGMT_2, 0x07);    // Configuration with Gyro disabled 
+
+	}else{
+		gyroOn = true;
+		writeByte(ICM20602_PWR_MGMT_2, 0x00);    // Configuration with Gyro enabled
+	}
 }
 
 int16_t ICM20602::read2Byte(uint8_t registerAddress){

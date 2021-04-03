@@ -73,6 +73,7 @@ class ICM20602:public Sensor{
 
         bool begin();
         void initialize();
+        void disableGyro(bool disableGyro);
         int16_t read2Byte(uint8_t registerAddress);
         sensor_int16_vec_t getRawAccel();
         sensor_int16_vec_t getRawAngVel();
