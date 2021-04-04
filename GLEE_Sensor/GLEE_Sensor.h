@@ -58,6 +58,7 @@ class Sensor {
         uint8_t readByte(uint8_t registerAddress);
         void readBytes(uint8_t registerAddress, uint8_t len, uint8_t *data);
         void writeByte(uint8_t registerAddress, uint8_t writeData);
+        // change
 
         sensor_info_t info;
 
