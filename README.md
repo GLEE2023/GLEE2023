@@ -43,7 +43,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 * Magnetometer
   - [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
 * Other
-  - Camera and radiation sensos are also currently in development. 
+  - Camera and radiation sensors are also currently in development. 
 
 
 # How To Use
