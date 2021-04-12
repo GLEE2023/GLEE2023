@@ -298,3 +298,16 @@ int LunaRadio::getRSSI(void){
 int LunaRadio::getSNR(void){
 	return(LunaRadio::radio.getSNR());
 }
+
+
+
+
+
+/* Clock Synchronization methods */
+
+void LunaRadio::estimateClockSlew(float timeClientSent, float timeServerReceived, float timeServerSent, float timeClientReceived){
+	float networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
+	float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
+	float clockSlew = serverTimeWhenClientReceived - timeClientReceived;
+	return clockSlew;
+}
