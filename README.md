@@ -4,10 +4,8 @@
 > "We are going to the moon and we'd like to take you along for the ride."
 
 ### Table of Contents
-You're sections headers will be used to reference location of destination.
-
 - [Project Description](#Project-Description)
-- [Library Descriptions](#Library-Descriptions)
+- [Library Contents](#Library-Descriptions)
 - [How To Use](#how-to-use)
 - [Social Media](#social-media)
 
@@ -17,28 +15,36 @@ You're sections headers will be used to reference location of destination.
 The Great Lunar Expedition for Everyone mission will provide accessible opportunities for students to directly participate in Lunar exploration. GLEE will educate, inspire and enable the next generation of explorers with its easy to use LunaSat platform. GLEE's LunaSats, post-it note size wireless enabled sensing nodes, offer a range of functionalities relevant to both Lunar and Earth based scientific investigations. GLEE believes that providing students with LunasSats and associated education content will foster deep learning of many STEM fundamentals. Furthermore, challenging students to identify investigations which utilize standalone and networked LunaSats will foster novel crowdsourced approaches to Lunar exploration while also promoting innovations beneficial to life on Earth. The major goal of GLEE is to deliver and disperse 500 student team owned LunaSats as part of a distributed environmental sensing network on the surface of the moon. The prototyping of LunaSat and creation of educational modules is funded by NASA's Artemis Student Challenge initiative. 
 
 ### Announcement Video
-[![Announcement Video](https://img.youtube.com/vi/24ujpW5nN5Q/1.jpg)](https://www.youtube.com/watch?v=24ujpW5nN5Q)
+<center>
+<href="https://www.youtube.com/watch?v=24ujpW5nN5Q"> <img height=300 src="https://img.youtube.com/vi/24ujpW5nN5Q/0.jpg">
+</center>
+
+
 
 ## Mission Concept
-![Project Image](./Docs/Images/GLEE_concept_art_small.png) Art by Daedalus Muse
+ 
+<center>
+<img height=300 src="./Docs/Images/GLEE_concept_art_small.png">
+</center> 
+Art by Daedalus Muse
 
 ## LunaSat - LUNAr Sensing ArchiTecture
 GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
 
-This repo contains the Arduino libraries and sketches wich are used to control the lunasats. 
+This repo contains the Arduino libraries and sketches wich are used to control the LunaSats. 
 ### This is a v4 LunaSat
 ![LunaSat Front](./Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./Docs/Images/LunaSat_back.jpg)
 
 ### LunaSat Tech (Data Sheets Linked)
 * Microprocessor
   - [Atmel ATmega328 (3.3v 16Mhz)](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf)
-* Transciever (LoRA)
+* Transceiver (LoRA)
   - [Semtech SX1272](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/440000001NCE/v_VBhk1IolDgxwwnOpcS_vTFxPfSEPQbuneK3mWsXlU) 
-* Ineretial Measurement Unit (IMU)
+* Inertial Measurement Unit (IMU)
   - [InvenSense ICM20602](https://invensense.tdk.com/wp-content/uploads/2016/10/DS-000176-ICM-20602-v1.0.pdf)
 * Dedicated Temperature Sensor 
   - [Texas Inst. TMP117](https://www.ti.com/lit/ds/symlink/tmp117.pdf?ts=1616690356997&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FTMP117)
-* Thermopile (IR Sensor) 
+* Infrared Temperature Sensor
   - [CalPile TPIS 1S 1385](https://media.digikey.com/pdf/Data%20Sheets/Excelitas%20PDFs/TPiS_1S_1385.pdf)
 * Magnetometer
   - [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
@@ -48,9 +54,9 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 
 # How To Use
 ## Installation Instructions
-1. Download and unzip GLEE2023 folder
+1. Download and unzip GLEE2023 folder.
 
-2. Select the following library folders
+2. Select the following library folders.
     >GLEE_LunaSat\
     >GLEE_Sensor\
     >GLEE_TMP117\
@@ -60,10 +66,10 @@ This repo contains the Arduino libraries and sketches wich are used to control t
     >GLEE_CAP
     >
 
-3. Move to the following directory
+3. Move to the following directory (Same directories for Mac and PC).
     >Documents\Arduino\Libraries\
     >
-    Note: Arduino must be installed and previously ran before arduino libraries forlder apears. This directory can also be found via add library from Arduino IDE
+    Note: Arduino must be installed and previously ran before arduino libraries forlder appears. <!-- TODO: This directory can also be found via Tools>"Add Librarie" from Arduino IDE -->
 
 4. Move Module Sketches folder to the following directory
     >Documents\Arduino\
@@ -72,10 +78,10 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 
 ## Sensor Libraries
 * GLEE_Sensor: 
-  * Parent library providing standard sensor interfacing methods for use by other sensor libraries
+  * Parent library providing standard sensor interfacing methods for use by other sensor libraries.
 
-* GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
-    - Board temperature observations
+* GLEE_TMP117 - Dedicated Temperature Sensor Functionality
+    - Board Temperature Observations
         ```C++
         #include "TMP117.h"
 
@@ -97,8 +103,8 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         };
         ```
 
-* GLEE_ICM20602 - Accelerometer functionality 
-    - Acceleration observations
+* GLEE_ICM20602 - Accelerometer Functionality 
+    - Acceleration Observations
         ```C++
         #include "ICM20602.h"
 
@@ -130,8 +136,8 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         };
         ```
 
-* GLEE_TPIS1385
-  * Thermopile sensor - Object temperature observations
+* GLEE_TPIS1385 - Thermopile Functionality
+  * Thermopile sensor - Object Temperature Observations
     ```C++
     #include "TPIS1385.h"
 
@@ -153,7 +159,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
     }
     ```
 
-* GLEE_CAP - Analog capacitance Sensor
+* GLEE_CAP - Capacitance Functionality
     - Analog sensor output observation
         ```C++
         // Include dependencies (libraries)
@@ -177,7 +183,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         ```
 
 * GLEE_AK09940 - Magnetometer Functionality
-    - magnetic field observations
+    - Magnetic Field Observations
         ```C++
         #include "AK09940.h"
 
@@ -208,8 +214,8 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         ```
 
 ## Integrated Library
-* GLEE_LunaSat - Integrated sensor, RF and IO functionality 
-    * This library brings all lunasat functionality into one place
+* GLEE_LunaSat - Integrated Sensor, RF and IO Functionality 
+    * This library brings all LunaSat functionality into one place
     - Dynamic sampling of observations from all sensors
       ```C++
       #include <LunaSat.h>    
@@ -241,7 +247,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
       }
       ```
 
-* GLEE_RF - SX1272 radiolib implementation/integration
+* GLEE_RF - SX1272 Radiolib Implementation/Integration
   - Basic Transmission Example
     ```C++
     #include <GLEE_Radio.h>
