@@ -305,9 +305,9 @@ int LunaRadio::getSNR(void){
 
 /* Clock Synchronization methods */
 
-void LunaRadio::estimateClockSlew(float timeClientSent, float timeServerReceived, float timeServerSent, float timeClientReceived){
+void LunaRadio::estimateClockSkew(float timeClientSent, float timeServerReceived, float timeServerSent, float timeClientReceived){
 	float networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
-	float clockSlew = serverTimeWhenClientReceived - timeClientReceived;
-	return clockSlew;
+	float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
+	return clockSkew;
 }

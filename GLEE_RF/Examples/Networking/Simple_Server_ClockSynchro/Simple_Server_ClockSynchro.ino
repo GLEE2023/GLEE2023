@@ -50,14 +50,18 @@ void setup() {
 void loop(){
     if(messageRecieved){
         // Disable interrupts during reception processing
-        timeReceived = millis();
-        timeReceived_string = String(timeReceived);
         interruptEnabled = false;
 
+        //Set time at which request was received
+        timeReceived = millis();
+        timeReceived_string = String(timeReceived);
+        
         // reset reception flag 
         messageRecieved = false;
 
-        byte data_buffer[8];
+        //Read data from request
+
+        /*byte data_buffer[8];
 
         Rad.readData(data_buffer, 8);
         rqst = String((char*)data_buffer);
@@ -65,9 +69,10 @@ void loop(){
         // print data of the packet
         Serial.print(F("Recieved Request:\t\t"));
         
-        Serial.println(rqst);
+        Serial.println(rqst);*/
         
-        if(rqst==clockRequest){
+        //If the request matches the time request flag, send back time received and time sent
+        if(rqst=="...Time Request Flag"){
             // If the data_buffer is the lunasat ID, then respond to the request
             Serial.println(F("Recieved request, sending response"));
 

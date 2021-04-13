@@ -29,15 +29,19 @@ void recieve_callback(void) {
   messageRecieved = true;
 }
 
-//Clock Slew Variables
+//Clock skew and time variables
 unsigned long localTime;
 String localTime_string;
+
 unsigned long timeClientReceived;
 String timeClientRecieved_string;
+
 unsigned long timeServerReceived;
 String timeServerRecieved_string;
+
 unsigned long timeClientSent;
 String timeClientSent_string;
+
 unsigned long timeServerSent;
 String timeServerSent_string;
 
@@ -58,6 +62,7 @@ void setup() {
 }
 
 void loop(){
+    //Request a packet from the server ever hour
     if(millis() % 3600000){
         timeClientSent = millis();
         timeClientSent_string = String(timeClientSent);
@@ -66,26 +71,30 @@ void loop(){
         rsp.toCharArray(RSP,16);
         Rad.transmit_data(RSP);
     }
+    //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
-        timeReceived = millis();
+        timeClientReceived = millis();
         interruptEnabled = false;
 
         // reset reception flag 
         messageRecieved = false;
 
-        byte data_buffer[8];
+        //Get times from packet
+
+        /*byte data_buffer[8];
 
         Rad.readData(data_buffer, 8);
         rqst = String((char*)data_buffer);
         // print data of the packet
         Serial.print(F("Recieved Request:\t\t"));
         Serial.println(rqst);
+        */
         
         if(rqst==lunaSatID){
-            // If the data_buffer is the lunasat ID, then respond to the request
+            // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
-            float clockSlew = estimateClockSlew(time1,time2,time3,timeReceived);
+            float clockSkew = estimateClockSkew(time1,time2,time3,timeReceived);
         }
 
         // return to listening for transmissions 
