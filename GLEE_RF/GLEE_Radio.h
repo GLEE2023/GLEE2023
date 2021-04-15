@@ -37,8 +37,6 @@ class LunaRadio{
 		int getRSSI(void);
 		int getSNR(void);
 
-		LunaRadio::estimateClockSkew(float timeClientSent, float timeServerReceived, float timeServerSent, float timeClientReceived);
-
 	private:
 		SX1272 radio = new Module(NSS_PIN, DIO0_PIN, RESET_PIN, DIO1_PIN); //creates new module (from radiolib)
 		char disp_buff[50]; //display buffer for creating messages

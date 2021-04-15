@@ -36,14 +36,16 @@ String localTime_string;
 unsigned long timeClientReceived;
 String timeClientRecieved_string;
 
-unsigned long timeServerReceived;
+int timeServerReceived;
 String timeServerRecieved_string;
 
 unsigned long timeClientSent;
 String timeClientSent_string;
 
-unsigned long timeServerSent;
+int timeServerSent;
 String timeServerSent_string;
+
+String sendID;
 
 void setup() {
     //Set the data rate to 9600 bits pere second
@@ -66,10 +68,7 @@ void loop(){
     if(millis() % 3600000){
         timeClientSent = millis();
         timeClientSent_string = String(timeClientSent);
-
-        rsp = String("R" + "...ID..." + ","+ timeClientSent_string);
-        rsp.toCharArray(RSP,16);
-        Rad.transmit_data(RSP);
+        Rad.transmit_data("0");
     }
     //Process packet from server
     if(messageRecieved){
@@ -82,19 +81,31 @@ void loop(){
 
         //Get times from packet
 
-        /*byte data_buffer[8];
+        byte data_buffer[24];
 
-        Rad.readData(data_buffer, 8);
+        Rad.readData(data_buffer, 24);
         rqst = String((char*)data_buffer);
-        // print data of the packet
-        Serial.print(F("Recieved Request:\t\t"));
-        Serial.println(rqst);
-        */
+
+        //Get data from packet
+        int commaPosition = rqst.find(",");
+        sendID = rqst.substring(0,commaPosition);
+        int nextCommaPosition = rqst.find(",",commaPosition+1);
+        timeServerRecieved_string = rqst.substring(commaPosition+1,nextCommaPosition);
+        timeServerSent_string = rqst.substring(nextCommaPosition+1);
         
-        if(rqst==lunaSatID){
+        timeServerReceived = stoi(timeServerRecieved_string);
+        timeServerSent = stoi(timeServerSent_string);
+
+        if(sendID==lunaSatID){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
-            float clockSkew = estimateClockSkew(time1,time2,time3,timeReceived);
+            float networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
+	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
+	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
+	        /* Adjust clock accordingly.... 
+            //
+            //
+            */
         }
 
         // return to listening for transmissions 
