@@ -14,16 +14,18 @@
 class CAP:public Sensor{
 	public:
 		CAP(int _id, bool _debug = false);
+		void begin();
 		uint8_t getAddress();
 		int getRawData();
 		double getDieletricConstant(double analogReadIn);
-		void addCalibrationPoint(int correctDielectricValue);
-		void begin();
-		void getLinearRegression(double v[10][2]);
+		void addCalibrationPoint(double x, double y);
+		void getLinearRegression();
 
 	private:
 		int pin;
-
-
+		int index=0;
+		double calibrationPoints[15][2];
+		double m;
+		double b;
 };
 #endif

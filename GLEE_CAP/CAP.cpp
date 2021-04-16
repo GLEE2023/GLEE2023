@@ -37,8 +37,8 @@ int CAP::getRawData(){
 	return analogRead(CAP::pin);
 }
 
-void CAP::getLinearRegression(double v[10][2]){
-    int size = 10;
+void CAP::getLinearRegression(){
+	  int size = CAP::index;
     double xAvg = 0;
     double yAvg = 0;
     double stdProductSum = 0;
@@ -48,17 +48,42 @@ void CAP::getLinearRegression(double v[10][2]){
     double b =0;
     double yIntercept=0;
     for(int i =0; i < size;i++){
-        xAvg = xAvg+ v[i][0];
-        yAvg = yAvg+ v[i][1];
+        xAvg = xAvg+ CAP::calibrationPoints[i][0];
+        yAvg = yAvg+ CAP::calibrationPoints[i][1];
     }
     xAvg= xAvg/size;
     yAvg= yAvg/size;
     for(int j =0; j < size;j++){
-        stdProductSum=stdProductSum+((v[j][0]-xAvg)*(v[j][1]-yAvg));
-        xStdSquared = xStdSquared+pow((v[j][0]-xAvg),2);
-        yStdSquared = yStdSquared+pow((v[j][1]-yAvg),2);
+        stdProductSum=stdProductSum+((CAP::calibrationPoints[j][0]-xAvg)*(CAP::calibrationPoints[j][1]-yAvg));
+        xStdSquared = xStdSquared+pow((CAP::calibrationPoints[j][0]-xAvg),2);
+        yStdSquared = yStdSquared+pow((CAP::calibrationPoints[j][1]-yAvg),2);
     }
     r = stdProductSum/sqrt((xStdSquared*yStdSquared));
     b= r*(sqrt((yStdSquared/(size-1))/(xStdSquared/(size-1))));
     yIntercept = yAvg - b*xAvg;
+		CAP::m = b;
+		CAP::b = yIntercept;
+		Serial.println("LINEAR REGRESSION");
+		Serial.println("-----------------");
+		Serial.print("y = ");
+    Serial.print(b);
+		Serial.print("x + (");
+		Serial.print(yIntercept);
+		Serial.print(")");
+
+}
+
+void CAP::addCalibrationPoint(double x, double y){
+		if(CAP::index+1!=15){
+			CAP::calibrationPoints[CAP::index][0] = x;
+			CAP::calibrationPoints[CAP::index][1] = y;
+			CAP::index = CAP::index+1;
+		}
+		else{
+			Serial.println("You have reached the max of 15 calibration points");
+		}
+}
+
+double CAP::getDieletricConstant(double ADCvalue){
+		return (CAP::m * ADCvalue) + CAP::b;
 }
