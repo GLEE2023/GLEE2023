@@ -99,11 +99,12 @@ void loop(){
         if(sendID==lunaSatID){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
-            float networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
+            unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
 	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
 	        /* Adjust clock accordingly.... 
             //
+            //localTime = localTime + clockSkew
             //
             */
         }
