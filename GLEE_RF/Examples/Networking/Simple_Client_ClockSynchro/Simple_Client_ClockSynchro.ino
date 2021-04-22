@@ -102,11 +102,8 @@ void loop(){
             unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
 	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
-	        /* Adjust clock accordingly.... 
-            //
-            //localTime = localTime + clockSkew
-            //
-            */
+	        // Adjust clock accordingly.... 
+            localTime = localTime + clockSkew
         }
 
         // return to listening for transmissions 
