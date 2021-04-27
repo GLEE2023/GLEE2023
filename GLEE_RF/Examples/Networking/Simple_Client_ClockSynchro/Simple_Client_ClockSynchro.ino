@@ -64,6 +64,7 @@ void setup() {
 }
 
 void loop(){
+    localTime = millis();
     //Request a packet from the server ever hour
     if(millis() % 3600000){
         timeClientSent = millis();

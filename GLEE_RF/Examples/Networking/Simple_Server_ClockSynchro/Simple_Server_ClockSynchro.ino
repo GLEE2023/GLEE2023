@@ -13,6 +13,8 @@ volatile bool interruptEnabled = true;
 
 String rqst;
 
+// Assemble LunaSat Packet
+// Response char array and string variables
 char RSP[16];
 String rsp;
 
@@ -49,13 +51,9 @@ void setup() {
 
 void loop(){
     if(messageRecieved){
-
-        timeReceived = millis();
-        timeReceived_string = string(timeReceived);
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
-        //Set time at which request was received
         timeReceived = millis();
         timeReceived_string = String(timeReceived);
         
@@ -77,8 +75,8 @@ void loop(){
             localTime = millis();
             localTime_string = String(localTime);
 
-            rsp = String("1" + "," + timeReceived_string + "," + localTime_string);
-            rsp.toCharArray(RSP,24);
+            rsp = String("R" + lunaSatID + "," + timeReceived_string + "," + localTime_string);
+            rsp.toCharArray(RSP,16);
             Rad.transmit_data(RSP);
         }
 

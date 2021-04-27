@@ -15,6 +15,13 @@ volatile bool messageRecieved = false;
 // disable interrupt when it's not needed
 volatile bool interruptEnabled = true;
 
+bool alreadySynchronized = false;
+bool setTimeDirectly = true;
+
+char RSP[24];
+String rsp;
+
+
 // Time variables
 
 unsigned long localTime;
@@ -26,13 +33,13 @@ String syncTime_string;
 
 
 void recieve_callback(void) {
-  // don't set flag if interrupt isn't enabled
-  if(!interruptEnabled) {
-    return;
-  }
+    // don't set flag if interrupt isn't enabled
+    if(!interruptEnabled) {
+      return;
+    }
 
-  // set flag signifying message was recieved
-  messageRecieved = true;
+    // set flag signifying message was recieved
+    messageRecieved = true;
 }
 
 void setup() {
@@ -49,16 +56,16 @@ void setup() {
 
     Rad.enable_recieve_interupt(recieve_callback);
     localTime = millis();
+    syncTime = getNtpTime();
+    
 }
 
 void loop() {
     localTime = millis();
     //Request a packet from the server ever hour
-    if(millis() % 3600000){
-        /*timeClientSent = millis();
-        timeClientSent_string = String(timeClientSent);
-        Rad.transmit_data("0");*/
-        syncTime = getNtpTime();
+    if(millis() % 3600000 || ((millis() > initialWaitTime) && (alreadySynchronized==false)){
+        alreadySynchronized = true;
+        getNtpTime();
     }
     if(messageRecieved){
         // Disable interrupts during reception processing
@@ -72,8 +79,7 @@ void loop() {
         byte packetReceived[48];
 
         Rad.readData(packetReceived, 48);
-        
-
+      
         //Get data from packet
         /*
         //
@@ -84,15 +90,31 @@ void loop() {
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
 
-            /*Calculate clock skew and adjust clock / clock rate
-            //
-            //
-            */
+            unsigned long secsSince1900;
+            // convert four bytes starting at location 40 to a long integer
+            secsSince1900 =  (unsigned long)packetReceived[40] << 24;
+            secsSince1900 |= (unsigned long)packetReceived[41] << 16;
+            secsSince1900 |= (unsigned long)packetReceived[42] << 8;
+            secsSince1900 |= (unsigned long)packetReceived[43];
+            //syncTime = secsSince1900 - 2208988800UL;
+
+            if(setTimeDirectly){
+                localTime = syncTime;
+                setTimeDirectly = false;
+            } else {
+                
+              /*Calculate clock skew and adjust clock / clock rate
+              //
+              //
+              */
+            }
 
            /*Send accurate time to all other LunaSats
            //
            //
            */
+
+          broadcastNTPPacket();
         }
 
         // return to listening for transmissions 
@@ -112,46 +134,54 @@ byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 
 time_t getNtpTime()
 {
-  Serial.println("Transmit NTP Request");
-  sendNTPpacket(landerID);
-  /*
-  //
-  //
-  */
+    Serial.println("Transmit NTP Request");
+    sendNTPpacketToLander(landerID);
 }
 
 // send an NTP request to the time server at the given address
-void sendNTPpacket(string landerID)
-{
-  // set all bytes in the buffer to 0
-  memset(packetBuffer, 0, NTP_PACKET_SIZE);
+void sendNTPpacketToLander(string landerID){
+    // set all bytes in the buffer to 0
+    memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
+    packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+    packetBuffer[1] = 0;     // Stratum, or type of clock
+    packetBuffer[2] = 12;     // Polling Interval - 2^12 seconds is 4096 seconds, or about 1.14 hours
+    packetBuffer[3] = ;  // Peer Clock Precision
 
-  /*
-  // Initialize values needed to form NTP request
-  // (see URL above for details on the packets)
-  packetBuffer[0] = 0b11100011;   // LI, Version, Mode
-  packetBuffer[1] = 0;     // Stratum, or type of clock
-  packetBuffer[2] = 6;     // Polling Interval
-  packetBuffer[3] = 0xEC;  // Peer Clock Precision
+    // 8 bytes of zero for Root Delay & Root Dispersion
+    packetBuffer[12]  = 49;
+    packetBuffer[13]  = 0x4E;
+    packetBuffer[14]  = 49;
+    packetBuffer[15]  = 52;
 
-  // 8 bytes of zero for Root Delay & Root Dispersion
-  packetBuffer[12]  = 49;
-  packetBuffer[13]  = 0x4E;
-  packetBuffer[14]  = 49;
-  packetBuffer[15]  = 52;
-  */
+    //Send NTP Request Packet
+    Rad.transmit_data(packetBuffer);
+}
 
+void broadcastNTPpacket(){
+    // set all bytes in the buffer to 0
+    memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
-  // all NTP fields have been given values, now
-  // you can send a packet requesting a timestamp:                 
-  
-  /*Send NTP Packet
-  //
-  //Rad.transmit_data(packetBuffer);
-  //
-  */
+    packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+    packetBuffer[1] = 1;     // Stratum, or type of clock
+    packetBuffer[2] = 12;     // Polling Interval - 2^12 seconds is 4096 seconds, or about 1.14 hours
+    packetBuffer[3] = ;  // Peer Clock Precision
 
+    // 8 bytes of zero for Root Delay & Root Dispersion
+
+    //Change these
+    packetBuffer[12]  = 49; 
+    packetBuffer[13]  = 0x4E; 
+    packetBuffer[14]  = 49; 
+    packetBuffer[15]  = 52;
+
+    //Timestamps below (32 bytes)
+    /*
+    //
+    */
+
+    Rad.transmit_data(packetBuffer);
+    
 }
 
 
