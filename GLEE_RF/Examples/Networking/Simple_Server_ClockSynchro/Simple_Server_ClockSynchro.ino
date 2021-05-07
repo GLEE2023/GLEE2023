@@ -3,7 +3,7 @@
 //Initialize RF Object
 LunaRadio Rad;
 
-String serverID = "0";
+String serverID = "5";
 
 // flag to indicate that a packet was received
 volatile bool messageRecieved = false;
@@ -15,7 +15,7 @@ String rqst;
 
 // Assemble LunaSat Packet
 // Response char array and string variables
-char RSP[16];
+char RSP[80];
 String rsp;
 
 unsigned long localTime;
@@ -50,33 +50,32 @@ void setup() {
 }
 
 void loop(){
+    localTime = millis();
     if(messageRecieved){
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
-        timeReceived = millis();
+        timeReceived = millis(); //Change to seconds or microseconds for different tests
         timeReceived_string = String(timeReceived);
         
         // reset reception flag 
         messageRecieved = false;
 
         //Read data from request
+        byte data_buffer[16];
 
-        byte data_buffer[8];
-
-        Rad.readData(data_buffer, 8);
+        Rad.readData(data_buffer, 16);
         rqst = String((char*)data_buffer);
         
         //If the request matches the time request flag, send back time received and time sent
         if(rqst==serverID){
-            // If the data_buffer is the lunasat ID, then respond to the request
             Serial.println(F("Recieved request, sending response"));
 
-            localTime = millis();
+            localTime = millis(); //Change to seconds or microseconds for different tests
             localTime_string = String(localTime);
 
-            rsp = String("R" + lunaSatID + "," + timeReceived_string + "," + localTime_string);
-            rsp.toCharArray(RSP,16);
+            rsp = String("R1," + timeReceived_string + "," + localTime_string);
+            rsp.toCharArray(RSP,80);
             Rad.transmit_data(RSP);
         }
 

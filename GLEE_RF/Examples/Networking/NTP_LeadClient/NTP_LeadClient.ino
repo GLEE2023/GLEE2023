@@ -43,7 +43,7 @@ void recieve_callback(void) {
 }
 
 void setup() {
-    //Set the data rate to 9600 bits pere second
+    //Set the data rate to 9600 bits per second
     Serial.begin(9600);
 
     //Initialize the radio settings by using the initialize_radio function
@@ -143,16 +143,21 @@ void sendNTPpacketToLander(string landerID){
     // set all bytes in the buffer to 0
     memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
-    packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+    packetBuffer[0] = 0000000011;   // Mode (3 for client)
     packetBuffer[1] = 0;     // Stratum, or type of clock
     packetBuffer[2] = 12;     // Polling Interval - 2^12 seconds is 4096 seconds, or about 1.14 hours
-    packetBuffer[3] = ;  // Peer Clock Precision
+    packetBuffer[3] = 0;  //Buffer
 
-    // 8 bytes of zero for Root Delay & Root Dispersion
-    packetBuffer[12]  = 49;
-    packetBuffer[13]  = 0x4E;
-    packetBuffer[14]  = 49;
-    packetBuffer[15]  = 52;
+    //Timestamps below (32 bytes)
+    /*
+    //
+    */
+
+    packetBuffer[4] = ; //Reference Timestamp (seconds/milliseconds/microseconds)
+    packetBuffer[8] = ; //Originate Timestamp
+    packetBuffer[12] = ; //Receive Timestamp
+    packetBuffer[16] = ; //Transmit Timestamp
+
 
     //Send NTP Request Packet
     Rad.transmit_data(packetBuffer);
@@ -162,23 +167,19 @@ void broadcastNTPpacket(){
     // set all bytes in the buffer to 0
     memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
-    packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+    packetBuffer[0] = 0000000101;   // Mode (5 for broadcast)
     packetBuffer[1] = 1;     // Stratum, or type of clock
     packetBuffer[2] = 12;     // Polling Interval - 2^12 seconds is 4096 seconds, or about 1.14 hours
-    packetBuffer[3] = ;  // Peer Clock Precision
-
-    // 8 bytes of zero for Root Delay & Root Dispersion
-
-    //Change these
-    packetBuffer[12]  = 49; 
-    packetBuffer[13]  = 0x4E; 
-    packetBuffer[14]  = 49; 
-    packetBuffer[15]  = 52;
 
     //Timestamps below (32 bytes)
     /*
     //
     */
+
+    packetBuffer[4] = ; //Reference Timestamp (seconds/milliseconds/microseconds)
+    packetBuffer[8] = ; //Originate Timestamp
+    packetBuffer[12] = ; //Receive Timestamp
+    packetBuffer[16] = ; //Transmit Timestamp
 
     Rad.transmit_data(packetBuffer);
     

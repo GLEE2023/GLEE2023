@@ -67,14 +67,16 @@ void loop(){
     localTime = millis();
     //Request a packet from the server ever hour
     if(millis() % 3600000){
-        timeClientSent = millis();
-        timeClientSent_string = String(timeClientSent);
-        Rad.transmit_data("0");
+        timeClientSent = millis(); //Change to seconds or microseconds for different tests
+
+        rsp = String("R5");
+        rsp.toCharArray(RSP,16);
+        Rad.transmit_data(RSP);
     }
     //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
-        timeClientReceived = millis();
+        timeClientReceived = millis(); //Change to seconds or microseconds for different tests
         interruptEnabled = false;
 
         // reset reception flag 
@@ -82,29 +84,29 @@ void loop(){
 
         //Get times from packet
 
-        byte data_buffer[24];
+        byte data_buffer[80];
 
-        Rad.readData(data_buffer, 24);
+        Rad.readData(data_buffer, 80);
         rqst = String((char*)data_buffer);
 
         //Get data from packet
-        int commaPosition = rqst.find(",");
-        sendID = rqst.substring(0,commaPosition);
-        int nextCommaPosition = rqst.find(",",commaPosition+1);
-        timeServerRecieved_string = rqst.substring(commaPosition+1,nextCommaPosition);
-        timeServerSent_string = rqst.substring(nextCommaPosition+1);
+        sendID = rqst.substring(0,2);
+        timeServerRecieved_string = rqst.substring(2,100);
+        timeServerSent_string = rqst.substring(100);
         
-        timeServerReceived = stoi(timeServerRecieved_string);
-        timeServerSent = stoi(timeServerSent_string);
+        timeServerReceived = std::stoi(timeServerRecieved_string);
+        timeServerSent = std::stoi(timeServerSent_string);
 
-        if(sendID==lunaSatID){
+        if(sendID=="R1"){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
+
             unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
 	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
-	        // Adjust clock accordingly.... 
-            localTime = localTime + clockSkew
+
+	        // Print clock skew
+            Serial.print("Clock Skew: "); Serial.println(clockSkew);
         }
 
         // return to listening for transmissions 
