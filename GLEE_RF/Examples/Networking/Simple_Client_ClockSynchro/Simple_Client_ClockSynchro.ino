@@ -73,6 +73,8 @@ void loop(){
         rsp.toCharArray(RSP,16);
         Rad.transmit_data(RSP);
     }
+
+
     //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
@@ -82,20 +84,23 @@ void loop(){
         // reset reception flag 
         messageRecieved = false;
 
-        //Get times from packet
-
+        //Get data from packet
         byte data_buffer[80];
 
         Rad.readData(data_buffer, 80);
         rqst = String((char*)data_buffer);
 
-        //Get data from packet
         sendID = rqst.substring(0,2);
-        timeServerRecieved_string = rqst.substring(2,100);
-        timeServerSent_string = rqst.substring(100);
+
+        int i = 3;
+        while (rqst.substring(i,i+1)!=","){
+            i = i + 1;
+        }
+        timeServerRecieved_string = rqst.substring(3,i);
+        timeServerSent_string = rqst.substring(i+1);
         
-        timeServerReceived = std::stoi(timeServerRecieved_string);
-        timeServerSent = std::stoi(timeServerSent_string);
+        timeServerReceived = atoi(timeServerRecieved_string.c_str());
+        timeServerSent = atoi(timeServerSent_string.c_str());
 
         if(sendID=="R1"){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
@@ -106,7 +111,7 @@ void loop(){
 	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
 
 	        // Print clock skew
-            Serial.print("Clock Skew: "); Serial.println(clockSkew);
+            Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
         }
 
         // return to listening for transmissions 
