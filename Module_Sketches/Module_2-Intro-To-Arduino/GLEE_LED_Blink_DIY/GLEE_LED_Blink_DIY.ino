@@ -16,11 +16,15 @@ void loop() {
   digitalWrite(LED1, HIGH);
   digitalWrite(LED2, HIGH);
 
+  Serial.println("LED 1 and LED 2 are ON"); // prints LED on message to serial monitor
+  
   delay(1000); // Wait for 1s (1000ms)
 
   // Turn off LEDs
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, LOW);
+
+  Serial.println("LED 1 and LED 2 are OFF"); // prints LED off message to serial monitor
 
   delay(1000); // Wait for another second before restarting loop
 
