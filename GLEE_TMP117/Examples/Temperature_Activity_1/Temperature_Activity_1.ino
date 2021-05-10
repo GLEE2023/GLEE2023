@@ -27,16 +27,11 @@ void loop(){
     // Record start time for letter offseting of delay to make the loop run once per second
     startTime = millis();
 
-    // Call the getTemperatureC() function of the TMP117 thermometer  
+    // Sample temperature in C
     temperatureC = thermometer.getTemperatureC();
-    // Call the getTemperatureF() function of the TMP117 thermometer 
-    temperatureF = thermometer.getTemperatureF();
+
     // Output the temperature via seiral
-    Serial.print("Temperature: "); 
-    Serial.print(temperatureC);
-    Serial.print(" (degrees C), ");
-    Serial.print(temperatureF);
-    Serial.println(" (degrees F)");
+    Serial.println(temperatureC);
 
     // Record the end time so we know how long it took to record the measurement
     endTime = millis();
