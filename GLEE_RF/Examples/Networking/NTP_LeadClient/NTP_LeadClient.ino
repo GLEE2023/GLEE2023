@@ -15,12 +15,14 @@ volatile bool messageRecieved = false;
 // disable interrupt when it's not needed
 volatile bool interruptEnabled = true;
 
-bool alreadySynchronized = false;
-bool setTimeDirectly = true;
+bool alreadySynchronized = false; //False on wakeup, true after wait time is over
+bool setTimeDirectly = true; //True for first synchronization, false otherwise
 
 char RSP[24];
 String rsp;
 
+//Wait time (in milliseconds) before first synchronization after wakeup
+int initialWaitTime = 10000;
 
 // Time variables
 
@@ -62,8 +64,8 @@ void setup() {
 
 void loop() {
     localTime = millis();
-    //Request a packet from the server ever hour
-    if(millis() % 3600000 || ((millis() > initialWaitTime) && (alreadySynchronized==false)){
+    //Request a packet from the server ever hour, or after wait time is completed after wakeup
+    if(millis() % 3600000 || ((millis() > initialWaitTime) && (!alreadySynchronized)){
         alreadySynchronized = true;
         getNtpTime();
     }
@@ -90,7 +92,7 @@ void loop() {
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
 
-            unsigned long secsSince1900;
+            //unsigned long secsSince1900;
             // convert four bytes starting at location 40 to a long integer
             /*
             secsSince1900 =  (unsigned long)packetReceived[40] << 24;
@@ -100,23 +102,18 @@ void loop() {
             */
             //syncTime = secsSince1900 - 2208988800UL;
 
-            if(setTimeDirectly){
+            if(!setTimeDirectly){
                 localTime = syncTime;
                 setTimeDirectly = false;
-            } else {
-                
-              /*Calculate clock skew and adjust clock / clock rate
-              //
-              //
-              */
+            } else { 
+                /*Calculate clock skew and adjust clock / clock rate
+                //
+                //
+                */
             }
 
-           /*Send accurate time to all other LunaSats
-           //
-           //
-           */
-
-          broadcastNTPPacket();
+            //Send accurate time to all other LunaSats
+            broadcastNTPPacket();
         }
 
         // return to listening for transmissions 
@@ -131,7 +128,7 @@ void loop() {
 /*-------- NTP code ----------*/
 //Similar to https://forum.arduino.cc/t/ntp-sntp-request/355504/7
 
-const int NTP_PACKET_SIZE = 48; // NTP time is in the first 48 bytes of message
+const int NTP_PACKET_SIZE = 36; // NTP time is in the first 48 bytes of message
 byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 
 time_t getNtpTime()
@@ -146,7 +143,7 @@ void sendNTPpacketToLander(string landerID){
     memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
     packetBuffer[0] = 011;   // Mode (3 for client)
-    packetBuffer[1] = 2;     // Stratum, or type of clock
+    packetBuffer[1] = 1;     // Stratum, or type of clock
 
     //Timestamps below (32 bytes)
 
@@ -165,7 +162,7 @@ void broadcastNTPpacket(){
     memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
     packetBuffer[0] = 101;   // Mode (5 for broadcast)
-    packetBuffer[1] = 1;     // Stratum, or type of clock
+    packetBuffer[1] = 2;     // Stratum, or type of clock
 
     //Timestamps below (x bytes)
 
