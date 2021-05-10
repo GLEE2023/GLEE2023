@@ -50,12 +50,12 @@ void setup() {
 }
 
 void loop(){
-    localTime = millis();
+    localTime = micros();
     if(messageRecieved){
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
-        timeReceived = millis(); //Change to seconds or microseconds for different tests
+        timeReceived = micros(); //Change to seconds or microseconds for different tests
         timeReceived_string = String(timeReceived);
         
         // reset reception flag 
@@ -71,7 +71,7 @@ void loop(){
         if(rqst==serverID){
             Serial.println(F("Recieved request, sending response"));
 
-            localTime = millis(); //Change to seconds or microseconds for different tests
+            localTime = micros(); //Change to seconds or microseconds for different tests
             localTime_string = String(localTime);
 
             rsp = String("R1," + timeReceived_string + "," + localTime_string);

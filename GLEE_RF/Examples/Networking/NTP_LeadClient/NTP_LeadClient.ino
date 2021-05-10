@@ -92,10 +92,12 @@ void loop() {
 
             unsigned long secsSince1900;
             // convert four bytes starting at location 40 to a long integer
+            /*
             secsSince1900 =  (unsigned long)packetReceived[40] << 24;
             secsSince1900 |= (unsigned long)packetReceived[41] << 16;
             secsSince1900 |= (unsigned long)packetReceived[42] << 8;
             secsSince1900 |= (unsigned long)packetReceived[43];
+            */
             //syncTime = secsSince1900 - 2208988800UL;
 
             if(setTimeDirectly){
@@ -143,20 +145,15 @@ void sendNTPpacketToLander(string landerID){
     // set all bytes in the buffer to 0
     memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
-    packetBuffer[0] = 0000000011;   // Mode (3 for client)
-    packetBuffer[1] = 0;     // Stratum, or type of clock
-    packetBuffer[2] = 12;     // Polling Interval - 2^12 seconds is 4096 seconds, or about 1.14 hours
-    packetBuffer[3] = 0;  //Buffer
+    packetBuffer[0] = 011;   // Mode (3 for client)
+    packetBuffer[1] = 2;     // Stratum, or type of clock
 
     //Timestamps below (32 bytes)
-    /*
-    //
-    */
 
-    packetBuffer[4] = ; //Reference Timestamp (seconds/milliseconds/microseconds)
-    packetBuffer[8] = ; //Originate Timestamp
-    packetBuffer[12] = ; //Receive Timestamp
-    packetBuffer[16] = ; //Transmit Timestamp
+    packetBuffer[4] = ; //Reference Timestamp - last time clock was corrected 
+    packetBuffer[12] = ; //Originate Timestamp - time this request is sent
+    packetBuffer[20] = ; //Receive Timestamp - time server receives request (should be blank here)
+    packetBuffer[28] = ; //Transmit Timestamp - time request departs server (should be blank here)
 
 
     //Send NTP Request Packet
@@ -167,19 +164,13 @@ void broadcastNTPpacket(){
     // set all bytes in the buffer to 0
     memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
-    packetBuffer[0] = 0000000101;   // Mode (5 for broadcast)
+    packetBuffer[0] = 101;   // Mode (5 for broadcast)
     packetBuffer[1] = 1;     // Stratum, or type of clock
-    packetBuffer[2] = 12;     // Polling Interval - 2^12 seconds is 4096 seconds, or about 1.14 hours
 
-    //Timestamps below (32 bytes)
-    /*
-    //
-    */
+    //Timestamps below (x bytes)
 
-    packetBuffer[4] = ; //Reference Timestamp (seconds/milliseconds/microseconds)
-    packetBuffer[8] = ; //Originate Timestamp
-    packetBuffer[12] = ; //Receive Timestamp
-    packetBuffer[16] = ; //Transmit Timestamp
+    packetBuffer[4] = ; //Reference Timestamp (last time clock was corrected)
+    packetBuffer[28] = ; //Transmit Timestamp (time at which broadcast will be sent out)
 
     Rad.transmit_data(packetBuffer);
     

@@ -60,14 +60,14 @@ void setup() {
     Rad.initialize_radio(915.0,17,250.0,12,8);
 
     Rad.enable_recieve_interupt(recieve_callback);
-    localTime = millis();
+    localTime = micros();
 }
 
 void loop(){
-    localTime = millis();
+    localTime = micros();
     //Request a packet from the server ever hour
-    if(millis() % 3600000){
-        timeClientSent = millis(); //Change to seconds or microseconds for different tests
+    if(micros() % 3600000000 == 0){
+        timeClientSent = micros(); //Change to seconds or milliseconds for different tests
 
         rsp = String("R5");
         rsp.toCharArray(RSP,16);
@@ -78,7 +78,7 @@ void loop(){
     //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
-        timeClientReceived = millis(); //Change to seconds or microseconds for different tests
+        timeClientReceived = micros(); //Change to seconds or microseconds for different tests
         interruptEnabled = false;
 
         // reset reception flag 
@@ -111,7 +111,7 @@ void loop(){
 	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
 
 	        // Print clock skew
-            Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
+            Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" microseconds");
         }
 
         // return to listening for transmissions 
