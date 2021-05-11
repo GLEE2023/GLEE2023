@@ -90,7 +90,7 @@ class LunaSat{
     
         // Sensor class instances
         TMP117 *tmp117 = new TMP117(0);
-        ICM20602 *icm20602 = new ICM20602(1);
+        ICM20602 *icm20602 = new ICM20602(1,true,false);
         AK09940 *ak09940 = new AK09940(2);
         TPIS1385 *tpis1385 = new TPIS1385(3);
         CAP *cap = new CAP(4);
