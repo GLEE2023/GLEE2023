@@ -21,7 +21,7 @@ void setup(){
 
     accelerometer.initialize();
 
-    accelerometer.setScale(0); // Scale: AFS_2G - 0
+    accelerometer.setAccelScale(0); // Scale: AFS_2G - 0
 
     pinMode(LED, OUTPUT);
     
