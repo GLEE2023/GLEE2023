@@ -92,10 +92,8 @@ void loop(){
 
         sendID = rqst.substring(0,2);
 
-        int i = 3;
-        while (rqst.substring(i,i+1)!=","){
-            i = i + 1;
-        }
+        int i = rqst.indexOf(',',3);
+
         timeServerRecieved_string = rqst.substring(3,i);
         timeServerSent_string = rqst.substring(i+1);
         
@@ -112,6 +110,9 @@ void loop(){
 
 	        // Print clock skew
             Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" microseconds");
+
+            //Adjust clock
+            //localTime = micros() + clockSkew;
         }
 
         // return to listening for transmissions 
