@@ -1,15 +1,15 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[6] = {1,0,0,0,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+int lunaSatConfig[6] = {0,0,0,0,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 LunaSat lunaSat(0, lunaSatConfig, false);
 
-// Custom datatypes allow for sample specialization, user can craft their own ideal sample
+// Sample
 lunaSat_sample_t sample;  
 
-//Time variables
+// Time variables for calculating sample time
 float startTime; 
 float endTime;
 
@@ -19,7 +19,6 @@ void setup() {
 }
 
 void loop() {
-
     Serial.print("LunaSat Configuration: ");
     Serial.print("{");
     Serial.print(lunaSatConfig[0]);
@@ -28,6 +27,17 @@ void loop() {
     Serial.print(lunaSatConfig[3]);
     Serial.print(lunaSatConfig[4]);
     Serial.print(lunaSatConfig[5]); Serial.println("}");
+
+    delay(1000);
+
+    Serial.println("Getting 1 Samples...");
+    delay(1000);
+
+    startTime = micros();
+    sample = lunaSat.getSample(); 
+    endTime = micros();
+
+    Serial.print("Time (in us) to get 1 sample: "); Serial.println(endTime-startTime);
 
     Serial.println("Getting 5 Samples...");
     delay(1000);
@@ -72,6 +82,5 @@ void loop() {
     endTime = micros();
 
     Serial.print("Time (in us) to get 100 samples: "); Serial.println(endTime-startTime);
-    Serial.print("Average time (in us) to get 1 sample: "); Serial.println((endTime-startTime)/100);
-       
+    Serial.print("Average time (in us) to get 1 sample: "); Serial.println((endTime-startTime)/100);    
 }
