@@ -97,13 +97,14 @@ void loop(){
         timeServerRecieved_string = rqst.substring(3,i);
         timeServerSent_string = rqst.substring(i+1);
         
-        timeServerReceived = atoi(timeServerRecieved_string.c_str());
-        timeServerSent = atoi(timeServerSent_string.c_str());
+        timeServerReceived = atol(timeServerRecieved_string.c_str());
+        timeServerSent = atol(timeServerSent_string.c_str());
 
         if(sendID=="R1"){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
 
+            //Calculate clock skew
             unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
 	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
