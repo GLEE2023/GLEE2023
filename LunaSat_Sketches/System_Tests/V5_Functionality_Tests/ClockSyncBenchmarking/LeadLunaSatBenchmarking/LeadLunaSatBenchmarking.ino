@@ -16,7 +16,7 @@ String requestPacket;
 char RSP[80];
 String rsp;
 
-//Time variables
+// Time variables
 unsigned long localTime;
 String localTime_string;
 

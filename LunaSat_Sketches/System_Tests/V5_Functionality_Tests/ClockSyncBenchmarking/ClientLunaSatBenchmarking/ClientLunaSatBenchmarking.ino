@@ -10,6 +10,8 @@ String rsp;
 unsigned long localTime;
 String localTime_string;
 
+unsigned long timeSinceLastLocaltimeUpdate;
+
 unsigned long timeClientReceived;
 String timeClientReceived_string;
 
@@ -24,7 +26,7 @@ String timeServerSent_string;
 
 long clockSkew = 0;
 
-// Uncomment for Benchmarking Application 4
+// Uncomment for Benchmarking Application 4, leave commented for Benchmarking Application 3
 //long temperingConstant = 0;
 //bool findConstant = false;
 
@@ -52,6 +54,15 @@ void setup() {
 }
 
 void loop(){
+    // Get time
+    timeSinceLastLocaltimeUpdate = micros() - localTime; // Change for different tests [micros(), millis(), or millis()/1000 for seconds]
+
+    // Uncomment for Benchmarking Application 4, leave commented for Benchmarking Application 3
+    //localTime = micros() + clockSkew + (temperingConstant * timeSinceLastLocaltimeUpdate);
+
+    // Uncomment for Benchmarking Application 3, leave commented for Benchmarking Application 4
+    localTime = micros() + clockSkew;
+
     // Request a packet from the server every [interval]
     if((micros() + clockSkew) % interval <= 50){
         timeClientSent = micros(); // Change for different tests [micros(), millis(), or millis()/1000 for seconds]
@@ -67,7 +78,7 @@ void loop(){
 
         //Serial.print("\nServer response received");
 
-        //Get data from packet
+        // Get data from packet
 
         packet = Serial.readString();
         //Serial.print(", read");
@@ -97,16 +108,16 @@ void loop(){
         Serial.print("Clock skew in microseconds: "); // Change units for different tests
         Serial.println(clockSkew);
 
-        Serial.print("Clock skew in microseconds (w/ processing time factored in): "); //Change units for different tests
+        Serial.print("Clock skew in microseconds (w/ processing time factored in): "); // Change units for different tests
         Serial.println(clockSkew + (processingTimeEnd - processingTimeStart));
 
 
-        // Uncomment for Benchmarking Application 4
+        // Uncomment for Benchmarking Application 4, leave commented for Benchmarking Application 3
         /*
         if(!findConstant){
             findConstant = true;
         } else {
-            temperingConstant = (clockSkew / (interval/1000000)); // Make sure the correct units are being used, currently this is the constant for every second
+            temperingConstant = (clockSkew / (interval)); // Make sure the correct units are being used, currently this is the constant for a single microsecond
             Serial.print("New tempering constant (in microseconds): ");
             Serial.println(temperingConstant);
         }*/
