@@ -4,7 +4,7 @@
 LunaRadio Rad;
 
 //Lead LunaSat ID
-String lunaSatID = "1";
+int lunaSatID = 1;
 
 //Lander ID
 String landerID = "";
@@ -34,6 +34,60 @@ String syncTime_string;
 
 
 
+/*-------- NTP code ----------*/
+//Similar to https://forum.arduino.cc/t/ntp-sntp-request/355504/7
+
+const int NTP_PACKET_SIZE = 36; // NTP time is in the first 48 bytes of message
+byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
+
+void getNtpTime(void){
+    Serial.println("Transmit NTP Request");
+    sendNTPpacketToLander(landerID);
+}
+
+// send an NTP request to the time server at the given address
+void sendNTPpacketToLander(String landerID){
+    // set all bytes in the buffer to 0
+    memset(packetBuffer, 0, NTP_PACKET_SIZE);
+
+    packetBuffer[0] = 011;   // Mode (3 for client)
+    packetBuffer[1] = 1;     // Stratum, or type of clock
+    packetBuffer[2] = lunaSatID;    // THIS LunaSat's ID, not a typical NTP field
+
+    //Timestamps below (32 bytes)
+
+    packetBuffer[4] = 0;     //Reference Timestamp - last time clock was corrected 
+    packetBuffer[12] = 0;    //Originate Timestamp - time this request is sent
+    packetBuffer[20] = 0;    //Receive Timestamp - time server receives request (should be blank here)
+    packetBuffer[28] = 0;    //Transmit Timestamp - time request departs server (should be blank here)
+
+
+    //Send NTP Request Packet
+    Rad.transmit_data(packetBuffer);
+}
+
+void broadcastNTPpacket(void){
+    // set all bytes in the buffer to 0
+    memset(packetBuffer, 0, NTP_PACKET_SIZE);
+
+    packetBuffer[0] = 101;   // Mode (5 for broadcast)
+    packetBuffer[1] = 1;     // Stratum, or type of clock
+    packetBuffer[2] = lunaSatID;    // THIS LunaSat's ID, not a typical NTP field
+
+    //Timestamps below (x bytes)
+
+    packetBuffer[4] = 0; //Reference Timestamp (last time clock was corrected)
+    packetBuffer[28] = 0; //Transmit Timestamp (time at which broadcast will be sent out)
+
+    Rad.transmit_data(packetBuffer);
+    
+}
+
+
+
+
+
+
 void recieve_callback(void) {
     // don't set flag if interrupt isn't enabled
     if(!interruptEnabled) {
@@ -58,14 +112,14 @@ void setup() {
 
     Rad.enable_recieve_interupt(recieve_callback);
     localTime = millis();
-    syncTime = getNtpTime();
+    getNtpTime();
     
 }
 
 void loop() {
     localTime = millis();
     //Request a packet from the server ever hour, or after wait time is completed after wakeup
-    if(millis() % 3600000 || ((millis() > initialWaitTime) && (!alreadySynchronized)){
+    if((millis() % 3600000) || ((millis() > initialWaitTime) && (!alreadySynchronized))){
         alreadySynchronized = true;
         getNtpTime();
     }
@@ -88,7 +142,7 @@ void loop() {
         //
         */
 
-        if(/* */){
+        if(rsp == "..."){ // TODO
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
             Serial.println(F("Recieved request."));
 
@@ -113,7 +167,7 @@ void loop() {
             }
 
             //Send accurate time to all other LunaSats
-            broadcastNTPPacket();
+            broadcastNTPpacket();
         }
 
         // return to listening for transmissions 
@@ -121,56 +175,7 @@ void loop() {
         // we're ready to receive more packets,
         // enable interrupt service routine
         interruptEnabled = true;
-}
-
-
-
-/*-------- NTP code ----------*/
-//Similar to https://forum.arduino.cc/t/ntp-sntp-request/355504/7
-
-const int NTP_PACKET_SIZE = 36; // NTP time is in the first 48 bytes of message
-byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
-
-time_t getNtpTime()
-{
-    Serial.println("Transmit NTP Request");
-    sendNTPpacketToLander(landerID);
-}
-
-// send an NTP request to the time server at the given address
-void sendNTPpacketToLander(string landerID){
-    // set all bytes in the buffer to 0
-    memset(packetBuffer, 0, NTP_PACKET_SIZE);
-
-    packetBuffer[0] = 011;   // Mode (3 for client)
-    packetBuffer[1] = 1;     // Stratum, or type of clock
-
-    //Timestamps below (32 bytes)
-
-    packetBuffer[4] = ; //Reference Timestamp - last time clock was corrected 
-    packetBuffer[12] = ; //Originate Timestamp - time this request is sent
-    packetBuffer[20] = ; //Receive Timestamp - time server receives request (should be blank here)
-    packetBuffer[28] = ; //Transmit Timestamp - time request departs server (should be blank here)
-
-
-    //Send NTP Request Packet
-    Rad.transmit_data(packetBuffer);
-}
-
-void broadcastNTPpacket(){
-    // set all bytes in the buffer to 0
-    memset(packetBuffer, 0, NTP_PACKET_SIZE);
-
-    packetBuffer[0] = 101;   // Mode (5 for broadcast)
-    packetBuffer[1] = 2;     // Stratum, or type of clock
-
-    //Timestamps below (x bytes)
-
-    packetBuffer[4] = ; //Reference Timestamp (last time clock was corrected)
-    packetBuffer[28] = ; //Transmit Timestamp (time at which broadcast will be sent out)
-
-    Rad.transmit_data(packetBuffer);
-    
+    }
 }
 
 

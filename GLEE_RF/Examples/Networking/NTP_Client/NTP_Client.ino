@@ -55,7 +55,7 @@ void setup(){
     Rad.initialize_radio(915.0,17,250.0,12,8);
 
     Rad.enable_recieve_interupt(recieve_callback);
-    localTime = millis();
+    uponWakeup();
 }
 
 void loop(){
@@ -74,22 +74,13 @@ void uponWakeup(void){
 }
 
 /**
- * Parameters: None
- * Returns: None
- * This function handles finding a path to the lead if unable to directly communicate.
-**/
-void findRepeater(void){
-
-}
-
-/**
- * Parameters: 
+ * Parameters: clock skew, interval between synchronizations
  * Returns: Adjustment constant
  * This function looks at clock drift and produces an constant to be added to the 
  * localTime on an interval to automatically account for clock drift.
 **/
-int autoTemperClock(){
-  return 0;
+int autoTemperClock(long clockSkew, unsigned long interval){
+  return (clockSkew / interval);
 }
 
 /**
@@ -98,8 +89,9 @@ int autoTemperClock(){
  * This function handles rebroadcasting a synchronizating broadcast if this LunaSat is a repeater for another LunaSat.
 **/
 void rebroadcast(){
-
+    
 }
+
 
 
 
@@ -107,16 +99,10 @@ void rebroadcast(){
 
 
 /*-------- NTP code ----------*/
-//Similar to https://forum.arduino.cc/t/ntp-sntp-request/355504/7
+// Similar to https://forum.arduino.cc/t/ntp-sntp-request/355504/7
 
 const int NTP_PACKET_SIZE = 36; // NTP time is in the first 48 bytes of message
-byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
-
-time_t getNtpTime()
-{
-    Serial.println("Transmit NTP Request");
-    sendNTPpacketToLander(landerID);
-}
+byte packetBuffer[NTP_PACKET_SIZE]; // buffer to hold incoming & outgoing packets
 
 void broadcastNTPpacket(){
     // set all bytes in the buffer to 0
@@ -124,17 +110,41 @@ void broadcastNTPpacket(){
 
     packetBuffer[0] = 101;   // Mode (5 for broadcast)
     packetBuffer[1] = 2;     // Stratum, or type of clock
-    pakcetBuffer[2] = lunaSatID;   //THIS LunaSat's ID
+    pakcetBuffer[2] = lunaSatID;   // THIS LunaSat's ID, not a typical NTP field
 
     //Timestamps below (x bytes)
 
-    packetBuffer[4] = ; //Reference Timestamp (last time clock was corrected)
-    packetBuffer[28] = ; //Transmit Timestamp (time at which broadcast will be sent out)
+    packetBuffer[4] = ; // Reference Timestamp (last time clock was corrected)
+    packetBuffer[28] = ; // Transmit Timestamp (time at which broadcast will be sent out)
 
     Rad.transmit_data(packetBuffer);
     
 }
 
+/**
+ * Parameters: None
+ * Returns: None
+ * This function handles sending out an occassional ping to check for other available LunaSats nearby
+**/
+void broadcastSOS(void){
+    // set all bytes in the buffer to 0
+    memset(packetBuffer, 0, NTP_PACKET_SIZE);
+
+    packetBuffer[0] = 111;   // Mode (7 for SOS)
+    packetBuffer[1] = 2;     // Stratum, or type of clock
+    pakcetBuffer[2] = lunaSatID;   // THIS LunaSat's ID, not a typical NTP field
+
+    Rad.transmit_data(packetBuffer);
+}
+
+/**
+ * Parameters: None
+ * Returns: None
+ * This function handles finding a path to the lead if unable to directly communicate.
+**/
+void findRepeater(void){
+
+}
 
 
 
