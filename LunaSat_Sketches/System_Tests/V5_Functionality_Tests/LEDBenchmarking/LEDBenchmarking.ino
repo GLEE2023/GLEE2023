@@ -15,7 +15,7 @@ void setup(){
     pinMode(LED1, OUTPUT);
     pinMode(LED2, OUTPUT);
 
-    if(singleDelay){
+    if(singleDelay){ // For a single blink
 
         Serial.println("Starting wait for single delay...");
         delay(2000);
@@ -25,7 +25,7 @@ void setup(){
         delay(1000);
         Serial.println("Starting in 1");
         delay(1000);
-        Serial.println("Starting time now.");
+        Serial.println("Starting delay now.");
 
         delay(single_delay);
 
@@ -49,7 +49,7 @@ void setup(){
 };
 
 void loop(){
-    if(!singleDelay){
+    if(!singleDelay){ // For repeated blinking
 
         digitalWrite(LED1, HIGH);
         digitalWrite(LED2, HIGH);

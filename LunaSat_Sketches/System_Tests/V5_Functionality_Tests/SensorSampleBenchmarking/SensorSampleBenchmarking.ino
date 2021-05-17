@@ -37,6 +37,7 @@ void performTest(){
 
     delay(100);
 
+    //Retrieve a single sample
     Serial.println("Getting 1 Samples...");
     delay(100);
 
@@ -46,6 +47,7 @@ void performTest(){
 
     Serial.print("Time (in microseconds) to get 1 sample: "); Serial.println(endTime-startTime);
 
+    //Retrieve 5 samples
     Serial.println("Getting 5 Samples...");
     delay(100);
 
@@ -60,6 +62,7 @@ void performTest(){
     Serial.print("Time (in microseconds) to get 5 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/5);
 
+    //Retrieve 10 samples
     Serial.println("Getting 10 Samples...");
     delay(100);
 
@@ -79,6 +82,7 @@ void performTest(){
     Serial.print("Time (in microseconds) to get 10 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/10);
 
+    //Retrieve 100 samples
     Serial.println("Getting 100 Samples...");
     delay(100);
 
