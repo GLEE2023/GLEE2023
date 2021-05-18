@@ -3,8 +3,6 @@
 //Initialize RF Object
 LunaRadio Rad;
 
-String serverID = "5";
-
 // flag to indicate that a packet was received
 volatile bool messageRecieved = false;
 
@@ -24,6 +22,10 @@ String localTime_string;
 unsigned long timeReceived;
 String timeReceived_string;
 
+//For storing output pin configuration of LEDs
+int LED1 = 4; 
+int LED2 = 5; 
+
 void recieve_callback(void) {
   // don't set flag if interrupt isn't enabled
   if(!interruptEnabled) {
@@ -36,7 +38,10 @@ void recieve_callback(void) {
 
 void setup() {
     //Set the data rate to 9600 bits pere second
-    Serial.begin(9600);
+    //Serial.begin(9600);
+
+    pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
 
     //Initialize the radio settings by using the initialize_radio function
     // Argument 1: Set frequency to 915
@@ -50,13 +55,16 @@ void setup() {
 }
 
 void loop(){
-    localTime = micros();
     if(messageRecieved){
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
-        timeReceived = micros(); //Change to seconds or microseconds for different tests
+        timeReceived = millis(); //Change to seconds or microseconds for different tests
         timeReceived_string = String(timeReceived);
+
+        digitalWrite(LED1, HIGH);
+        delay(500);
+        digitalWrite(LED1, LOW);
         
         // reset reception flag 
         messageRecieved = false;
@@ -68,10 +76,10 @@ void loop(){
         rqst = String((char*)data_buffer);
         
         //If the request matches the time request flag, send back time received and time sent
-        if(rqst==serverID){
-            Serial.println(F("Recieved request, sending response"));
+        if(rqst=="R5"){
+            //Serial.println(F("Recieved request, sending response"));
 
-            localTime = micros(); //Change to seconds or microseconds for different tests
+            localTime = millis(); //Change to seconds or microseconds for different tests
             localTime_string = String(localTime);
 
             rsp = String("R1," + timeReceived_string + "," + localTime_string);
@@ -85,4 +93,7 @@ void loop(){
         // enable interrupt service routine
         interruptEnabled = true;
     }
+    digitalWrite(LED2, HIGH);
+    delay(100);
+    digitalWrite(LED2, LOW);
 }

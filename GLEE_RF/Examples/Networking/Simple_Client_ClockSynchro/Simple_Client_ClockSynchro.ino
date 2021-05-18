@@ -19,6 +19,8 @@ String rqst;
 char RSP[16];
 String rsp;
 
+float clockSkew = 0;
+
 void recieve_callback(void) {
   // don't set flag if interrupt isn't enabled
   if(!interruptEnabled) {
@@ -34,22 +36,31 @@ unsigned long localTime;
 String localTime_string;
 
 unsigned long timeClientReceived;
-String timeClientRecieved_string;
 
 int timeServerReceived;
 String timeServerRecieved_string;
 
 unsigned long timeClientSent;
-String timeClientSent_string;
 
 int timeServerSent;
 String timeServerSent_string;
 
 String sendID;
 
+// Used to determine the time it takes to process a packet and calculate the clock skew
+unsigned long processingTimeStart;
+unsigned long processingTimeEnd;
+
+//For storing output pin configuration of LEDs
+int LED1 = 4; 
+int LED2 = 5; 
+
 void setup() {
-    //Set the data rate to 9600 bits pere second
-    Serial.begin(9600);
+    //Set the data rate to 9600 bits per second
+    //Serial.begin(9600);
+
+    pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
 
     //Initialize the radio settings by using the initialize_radio function
     // Argument 1: Set frequency to 915
@@ -60,26 +71,37 @@ void setup() {
     Rad.initialize_radio(915.0,17,250.0,12,8);
 
     Rad.enable_recieve_interupt(recieve_callback);
-    localTime = micros();
+    localTime = millis() + clockSkew;
+    timeClientSent = millis() + clockSkew;
+    rsp = String("R5");
+    rsp.toCharArray(RSP,16);
+    Rad.transmit_data(RSP); // Initial synchronization
 }
 
 void loop(){
-    localTime = micros();
-    //Request a packet from the server ever hour
-    if(micros() % 3600000000 == 0){
-        timeClientSent = micros(); //Change to seconds or milliseconds for different tests
+    localTime = millis() + clockSkew;
+    // Request a packet from the server ever hour
+    if(localTime % 120000 <= 150){
+        timeClientSent = millis() + clockSkew; // Change to seconds or milliseconds for different tests
 
         rsp = String("R5");
         rsp.toCharArray(RSP,16);
         Rad.transmit_data(RSP);
+        digitalWrite(LED1, HIGH);
+        delay(100);
+        digitalWrite(LED1, LOW);
     }
-
 
     //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
-        timeClientReceived = micros(); //Change to seconds or microseconds for different tests
+        timeClientReceived = millis() + clockSkew; // Change to seconds or microseconds for different tests
+        processingTimeStart = millis();
         interruptEnabled = false;
+
+        digitalWrite(LED1, HIGH);
+        delay(500);
+        digitalWrite(LED1, LOW);
 
         // reset reception flag 
         messageRecieved = false;
@@ -102,18 +124,16 @@ void loop(){
 
         if(sendID=="R1"){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
-            Serial.println(F("Recieved request."));
+            //Serial.println(F("Recieved request."));
 
             //Calculate clock skew
             unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
-	        float clockSkew = serverTimeWhenClientReceived - timeClientReceived;
+            processingTimeEnd = millis();
+	        clockSkew = serverTimeWhenClientReceived - timeClientReceived + (processingTimeEnd - processingTimeStart);
 
 	        // Print clock skew
-            Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" microseconds");
-
-            //Adjust clock
-            //localTime = micros() + clockSkew;
+            //Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
         }
 
         // return to listening for transmissions 
@@ -122,4 +142,7 @@ void loop(){
         // enable interrupt service routine
         interruptEnabled = true;
     }
+    digitalWrite(LED2, HIGH);
+    delay(100);
+    digitalWrite(LED2, LOW);
 }
