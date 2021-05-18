@@ -55,11 +55,18 @@ void setup() {
 }
 
 void loop(){
+    localTime = millis(); // Change to microseconds for different tests
+    if(localTime % 1000 <= 100){ // Change to microseconds for different tests
+        //Blink LED
+        digitalWrite(LED2, HIGH);
+        delay(100);
+        digitalWrite(LED2, LOW);
+    }
     if(messageRecieved){
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
-        timeReceived = millis(); //Change to seconds or microseconds for different tests
+        timeReceived = millis(); // Change to microseconds for different tests
         timeReceived_string = String(timeReceived);
 
         digitalWrite(LED1, HIGH);
@@ -93,8 +100,4 @@ void loop(){
         // enable interrupt service routine
         interruptEnabled = true;
     }
-    //Blink LED
-    digitalWrite(LED2, HIGH);
-    delay(100);
-    digitalWrite(LED2, LOW);
 }
