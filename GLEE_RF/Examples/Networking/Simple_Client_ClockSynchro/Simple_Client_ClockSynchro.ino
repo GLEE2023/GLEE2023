@@ -47,6 +47,9 @@ String timeServerSent_string;
 
 String sendID;
 
+//Interval between synchronizations, 120000ms or 2 minutes by default
+unsigned long interval = 120000;
+
 // Used to determine the time it takes to process a packet and calculate the clock skew
 unsigned long processingTimeStart;
 unsigned long processingTimeEnd;
@@ -71,8 +74,8 @@ void setup() {
     Rad.initialize_radio(915.0,17,250.0,12,8);
 
     Rad.enable_recieve_interupt(recieve_callback);
-    localTime = millis() + clockSkew;
-    timeClientSent = millis() + clockSkew;
+    localTime = millis() + clockSkew; // Change to microseconds for different tests
+    timeClientSent = millis() + clockSkew; // Change to microseconds for different tests
     rsp = String("R5");
     rsp.toCharArray(RSP,16);
     Rad.transmit_data(RSP); // Initial synchronization
@@ -81,8 +84,8 @@ void setup() {
 void loop(){
     localTime = millis() + clockSkew;
     // Request a packet from the server ever hour
-    if(localTime % 120000 <= 150){
-        timeClientSent = millis() + clockSkew; // Change to seconds or milliseconds for different tests
+    if(localTime % interval <= 150){ // Adjust these values for different tests
+        timeClientSent = millis() + clockSkew; // Change to microseconds for different tests
 
         rsp = String("R5");
         rsp.toCharArray(RSP,16);
@@ -90,13 +93,18 @@ void loop(){
         digitalWrite(LED1, HIGH);
         delay(100);
         digitalWrite(LED1, LOW);
+    } else if (localTime % 1000 <= 100){ // Change to microseconds for different tests
+        //Blink LED
+        digitalWrite(LED2, HIGH);
+        delay(100);
+        digitalWrite(LED2, LOW);
     }
 
     //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
-        timeClientReceived = millis() + clockSkew; // Change to seconds or microseconds for different tests
-        processingTimeStart = millis();
+        timeClientReceived = millis() + clockSkew; // Change to microseconds for different tests
+        processingTimeStart = millis(); // Change to microseconds for different tests
         interruptEnabled = false;
 
         digitalWrite(LED1, HIGH);
@@ -129,7 +137,7 @@ void loop(){
             //Calculate clock skew
             unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
-            processingTimeEnd = millis();
+            processingTimeEnd = millis(); // Change to microseconds for different tests
 	        clockSkew = serverTimeWhenClientReceived - timeClientReceived + (processingTimeEnd - processingTimeStart);
 
 	        // Print clock skew
@@ -142,7 +150,5 @@ void loop(){
         // enable interrupt service routine
         interruptEnabled = true;
     }
-    digitalWrite(LED2, HIGH);
-    delay(100);
-    digitalWrite(LED2, LOW);
+    
 }

@@ -79,7 +79,7 @@ void loop(){
         if(rqst=="R5"){
             //Serial.println(F("Recieved request, sending response"));
 
-            localTime = millis(); //Change to seconds or microseconds for different tests
+            localTime = millis(); // Change to microseconds for different tests
             localTime_string = String(localTime);
 
             rsp = String("R1," + timeReceived_string + "," + localTime_string);
@@ -93,6 +93,7 @@ void loop(){
         // enable interrupt service routine
         interruptEnabled = true;
     }
+    //Blink LED
     digitalWrite(LED2, HIGH);
     delay(100);
     digitalWrite(LED2, LOW);
