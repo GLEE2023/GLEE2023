@@ -26,7 +26,7 @@ String timeServerSent_string;
 
 long clockSkew = 0;
 
-// Uncomment for Benchmarking Application 4, leave commented for Benchmarking Application 3
+// Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
 //long temperingConstant = 0;
 //bool findConstant = false;
 
@@ -57,10 +57,10 @@ void loop(){
     // Get time
     timeSinceLastLocaltimeUpdate = micros() - localTime; // Change for different tests [micros(), millis(), or millis()/1000 for seconds]
 
-    // Uncomment for Benchmarking Application 4, leave commented for Benchmarking Application 3
+    // Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
     //localTime = micros() + clockSkew + (temperingConstant * timeSinceLastLocaltimeUpdate);
 
-    // Uncomment for Benchmarking Application 3, leave commented for Benchmarking Application 4
+    // Uncomment for Benchmarking Application 3, leave commented for Clock Sync Application 1
     localTime = micros() + clockSkew;
 
     // Request a packet from the server every [interval]
@@ -112,7 +112,7 @@ void loop(){
         Serial.println(clockSkew + (processingTimeEnd - processingTimeStart));
 
 
-        // Uncomment for Benchmarking Application 4, leave commented for Benchmarking Application 3
+        // Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
         /*
         if(!findConstant){
             findConstant = true;
