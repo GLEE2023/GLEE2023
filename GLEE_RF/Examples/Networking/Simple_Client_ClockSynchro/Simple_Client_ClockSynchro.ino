@@ -50,10 +50,6 @@ String sendID;
 //Interval between synchronizations, 120000ms or 2 minutes by default
 unsigned long interval = 120000;
 
-// Used to determine the time it takes to process a packet and calculate the clock skew
-unsigned long processingTimeStart;
-unsigned long processingTimeEnd;
-
 //For storing output pin configuration of LEDs
 int LED1 = 4; 
 int LED2 = 5; 
@@ -104,7 +100,6 @@ void loop(){
     if(messageRecieved){
         // Disable interrupts during reception processing
         timeClientReceived = millis() + clockSkew; // Change to microseconds for different tests
-        processingTimeStart = millis(); // Change to microseconds for different tests
         interruptEnabled = false;
 
         digitalWrite(LED1, HIGH);
@@ -137,8 +132,7 @@ void loop(){
             //Calculate clock skew
             unsigned long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	        float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
-            processingTimeEnd = millis(); // Change to microseconds for different tests
-	        clockSkew = serverTimeWhenClientReceived - timeClientReceived + (processingTimeEnd - processingTimeStart);
+	        clockSkew = serverTimeWhenClientReceived - timeClientReceived;
 
 	        // Print clock skew
             //Serial.print("Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");

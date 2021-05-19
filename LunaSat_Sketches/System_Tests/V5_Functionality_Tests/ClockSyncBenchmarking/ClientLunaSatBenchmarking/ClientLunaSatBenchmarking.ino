@@ -6,6 +6,8 @@ volatile bool interruptEnabled = true;
 char RSP[16];
 String rsp;
 
+String packet;
+
 //Clock skew and time variables
 unsigned long localTime;
 String localTime_string;
@@ -26,18 +28,12 @@ String timeServerSent_string;
 
 long clockSkew = 0;
 
-// Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
-//long temperingConstant = 0;
-//bool findConstant = false;
-
-// Used to determine the time it takes to process a packet and calculate the clock skew
-unsigned long processingTimeStart;
-unsigned long processingTimeEnd;
-
 // Use this to set the time interval at which clock synchronization will be performed in the appropriate units
 long interval = 1800000000; // Currently set to 30 minutes in microseconds
 
-String packet;
+// Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
+//long temperingConstant = 0;
+//bool findConstant = false;
 
 void setup() {
     // Set the data rate to 9600 bits per second
@@ -73,7 +69,6 @@ void loop(){
     if(Serial.available()){
         // Disable interrupts during reception processing
         timeClientReceived = micros(); // Change for different tests [micros(), millis(), or millis()/1000]
-        processingTimeStart = micros(); // Change for different tests [micros(), millis(), or millis()/1000]
         interruptEnabled = false;
 
         //Serial.print("\nServer response received");
@@ -100,17 +95,11 @@ void loop(){
         unsigned long serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
 
         clockSkew = serverTimeWhenClientReceived - timeClientReceived;
-        
-        processingTimeEnd = micros(); // Change for different tests [micros(), millis(), or millis()/1000]
 
         // Output clock skew with and without processing time
 
         Serial.print("Clock skew in microseconds: "); // Change units for different tests
         Serial.println(clockSkew);
-
-        Serial.print("Clock skew in microseconds (w/ processing time factored in): "); // Change units for different tests
-        Serial.println(clockSkew + (processingTimeEnd - processingTimeStart));
-
 
         // Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
         /*
