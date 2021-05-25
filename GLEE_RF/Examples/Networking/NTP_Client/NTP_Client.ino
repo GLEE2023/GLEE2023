@@ -70,7 +70,14 @@ void loop(){
  * This function handles synchronization upon wakeup.
 **/
 void uponWakeup(void){
-
+/**
+ * 1. Wait a short period of time before continuing. Do not perform science during this period of time.
+ * 2. Send a request packet and get an accurate time from the LoRa gateway. If there is no response from 
+ * the LoRa gateway, call the findRepeater function.
+ * 3. Resend a request packet and get an accurate time if using a repeater. If no available LunaSats, 
+ * call the broadcastSOS function.
+ * 4. Begin performing science if communication with the LoRa gateway (with or without a repeater) is established.
+**/
 }
 
 /**
@@ -79,7 +86,7 @@ void uponWakeup(void){
  * This function looks at clock drift and produces an constant to be added to the 
  * localTime on an interval to automatically account for clock drift.
 **/
-int autoTemperClock(long clockSkew, unsigned long interval){
+long autoTemperClock(long clockSkew, unsigned long interval){
   return (clockSkew / interval);
 }
 
@@ -89,7 +96,10 @@ int autoTemperClock(long clockSkew, unsigned long interval){
  * This function handles rebroadcasting a synchronizating broadcast if this LunaSat is a repeater for another LunaSat.
 **/
 void rebroadcast(){
-    
+/**
+ * 1. Check if this LunaSat is being used as a repeater after receiving a clock synchronization packet.
+ * 2. 
+**/    
 }
 
 
@@ -127,14 +137,11 @@ void broadcastNTPpacket(){
  * This function handles sending out an occassional ping to check for other available LunaSats nearby
 **/
 void broadcastSOS(void){
-    // set all bytes in the buffer to 0
-    memset(packetBuffer, 0, NTP_PACKET_SIZE);
-
-    packetBuffer[0] = 111;   // Mode (7 for SOS)
-    packetBuffer[1] = 2;     // Stratum, or type of clock
-    pakcetBuffer[2] = lunaSatID;   // THIS LunaSat's ID, not a typical NTP field
-
-    Rad.transmit_data(packetBuffer);
+/**
+ * 1. This function should only run if communication with the repeater LunaSat or the LoRa gateway cannot be established.
+ * 2. Send a sos packet out to any listening LunaSats on an short interval. Stop if a response is received.
+ * 3. If communication is restablished, call the findRepeater function to reassign a repeater.
+**/
 }
 
 /**
@@ -143,7 +150,11 @@ void broadcastSOS(void){
  * This function handles finding a path to the lead if unable to directly communicate.
 **/
 void findRepeater(void){
-
+/**
+ * 1. If repeaterID is not -1 (meaning it's currently assigned), reset it to -1.
+ * 2. Send a "find repeater" packet and wait for a response. Assign the first respondent to be a repeater.
+ * 3. Send a followup packet to the repeater LunaSat only to communicate that it was chosen to be a repeater.
+**/
 }
 
 
