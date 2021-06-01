@@ -47,6 +47,10 @@ String timeServerSent_string;
 
 String sendID;
 
+//Used to calculate the processing time for sending a packet
+//long transmitAdditionalStartTime;
+//long transmitAdditionalStopTime;
+
 //Interval between synchronizations, 120000ms or 2 minutes by default
 unsigned long interval = 120000;
 
@@ -82,10 +86,11 @@ void loop(){
     // Request a packet from the server ever hour
     if(localTime % interval <= 150){ // Adjust these values for different tests
         timeClientSent = millis() + clockSkew; // Change to microseconds for different tests
-
+        //transmitAdditionalStartTime = millis();
         rsp = String("R5");
         rsp.toCharArray(RSP,16);
         Rad.transmit_data(RSP);
+        //transmitAdditionalStopTime = millis();
         digitalWrite(LED1, HIGH);
         delay(100);
         digitalWrite(LED1, LOW);
