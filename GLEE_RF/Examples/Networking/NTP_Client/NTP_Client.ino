@@ -98,7 +98,8 @@ long autoTemperClock(long clockSkew, unsigned long interval){
 void rebroadcast(){
 /**
  * 1. Check if this LunaSat is being used as a repeater after receiving a clock synchronization packet.
- * 2. 
+ * 2. Send a request packet to each LunaSat that needs to be synchronized through this LunaSat. Those LunaSats will then respond with their own request packets.
+ * 3. Respond with a
 **/    
 }
 
@@ -160,4 +161,15 @@ void findRepeater(void){
 
 
 
+/*-------- LoRa packet format code ----------*/
+// https://lora-alliance.org/wp-content/uploads/2020/11/rp_2-1.0.1.pdf
+
+const int LORA_PACKET_SIZE = 0;
+byte loraPacketBuffer[LORA_PACKET_SIZE];
+
+// Before the payload, the radio transceiver inserts the Preamble (8 symbols), PHDR and PHDR_CRC (8 symbols). 
+// There is also the synchronization word, which is 4.25 symbols.
+
+loraPacketBuffer[] = 0; // PHYPayload (L bytes)
+loraPacketBuffer[] = 0; // CRC (uplink only, 2 bytes)
 
