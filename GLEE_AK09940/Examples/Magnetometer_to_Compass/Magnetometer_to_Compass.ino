@@ -89,10 +89,10 @@ void setup (){
     // Find the ranges of values for the headings
     for(int l = 1; l < 500; l++){
         if(calHeadings[l] <= 180){
-            if(minHeadingOne = 0){
+            if(minHeadingOne == 0){
                 minHeadingOne = calHeadings[l];
             }
-            if(maxHeadingOne = 180){
+            if(maxHeadingOne == 180){
                 maxHeadingOne = calHeadings[l];
             }
             if(minHeadingOne > calHeadings[l]){
@@ -102,10 +102,10 @@ void setup (){
                 maxHeadingOne = calHeadings[l];
             }
         } else {
-            if(minHeadingTwo = 180){
+            if(minHeadingTwo == 180){
                 minHeadingTwo = calHeadings[l];
             }
-            if(maxHeadingTwo = 360){
+            if(maxHeadingTwo == 360){
                 maxHeadingTwo = calHeadings[l];
             }
             if(minHeadingTwo > calHeadings[l]){
