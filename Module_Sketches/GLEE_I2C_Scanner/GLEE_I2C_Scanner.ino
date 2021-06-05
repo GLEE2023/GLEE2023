@@ -47,7 +47,7 @@ void setup() {
 
   Serial.println("Sensor initialization Initialization Succsessful\n");
 
-  pinMode(A3,OUTPUT);
+  pinMode(A3,OUTPUT); // TODO: Remove if depricated
   digitalWrite(A3,HIGH);
 }
 
