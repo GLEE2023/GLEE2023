@@ -77,6 +77,7 @@ void setup (){
     // Get sample readings
     for(int i = 0; i < 1000; i++){
         calMag[i] = magnetometer.getSample();
+        delay(10);
     }
 
     Serial.println(F("Done"));
@@ -256,5 +257,5 @@ void loop (){
     }
 
     delay(1000);
-  
+
 };
