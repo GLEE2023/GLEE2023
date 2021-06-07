@@ -10,14 +10,14 @@ AK09940 magnetometer = AK09940(1,true);
 
 AK_Sample_t sample;
 
-//Magnetic compass heading (calculated later)
+// Magnetic compass heading (calculated later)
 float heading;
 
-//For storing output pin configuration of LED
+// For storing output pin configuration of LED
 int LED = 4;
 
-//Direction of compass as determined by heading
-String direction;
+// Direction of compass as determined by heading
+String direction_str;
 
 float minHeadingOne = 0.0; // Minimum heading for between 0 and 180 degrees
 float maxHeadingOne = 180.0; // Maximum heading for between 0 and 180 degrees
@@ -39,7 +39,7 @@ float rawWest;*/
 **/
 float findHeading(float xMag, float yMag){
     if(yMag > 0){
-        heading = 270 - (atan(xMag/-yMag))*(180/M_PI); //M_PI = 3.141...
+        heading = 270 - (atan(xMag/-yMag))*(180/M_PI); // M_PI = 3.141...
     } else if (yMag < 0){
         heading = 90 - (atan(xMag/-yMag))*(180/M_PI);
     } else {
@@ -50,7 +50,7 @@ float findHeading(float xMag, float yMag){
         }
     }
     return heading;
-}
+};
 
 void setup (){
     // Begin Serial Communications (Lunasat baud rate set to 9600)
@@ -80,7 +80,7 @@ void setup (){
         delay(10);
     }
 
-    Serial.println(F("Done"));
+    Serial.println(F("Done."));
     delay(1000);
     Serial.println(F("Performing calibration calculations..."));
     
@@ -93,7 +93,7 @@ void setup (){
 
     // Find the ranges of values for the headings
     for(int l = 0; l < 500; l++){
-        if(calHeadings[l] <= 180){
+        if(calHeadings[l] <= 180.0){
             if((minHeadingOne == 0.0) && (calHeadings[l]>=0.0)){
                 minHeadingOne = calHeadings[l];
             }
@@ -196,51 +196,51 @@ void loop (){
         // Print message to serial if compass is pointing exactly or almost exactly in an particular direction
         if((abs(heading-0.0) < 0.5) || (abs(heading-360.0) < 0.5)){
             Serial.println("Facing due north");
-            direction = "north";
+            direction_str = "north";
         } else if (abs(heading-45.0) < 0.5){
             Serial.println("Facing due northeast");
-            direction = "northeast";
+            direction_str = "northeast";
         } else if (abs(heading-90.0) < 0.5){
             Serial.println("Facing due east");
-            direction = "east";
+            direction_str = "east";
         } else if (abs(heading-135.0) < 0.5){
             Serial.println("Facing due southeast");
-            direction = "southeast";
+            direction_str = "southeast";
         } else if (abs(heading-180.0) < 0.5){
             Serial.println("Facing due south");
-            direction = "south";
+            direction_str = "south";
         } else if (abs(heading-225.0) < 0.5){
             Serial.println("Facing due southwest");
-            direction = "southwest";
+            direction_str = "southwest";
         } else if (abs(heading-270.0) < 0.5){
             Serial.println("Facing due west");
-            direction = "west";
+            direction_str = "west";
         } else if (abs(heading-315.0) < 0.5){
             Serial.println("Facing due northwest");
-            direction = "northwest";
+            direction_str = "northwest";
         } else if (heading <= 22.5 || heading > 337.5){
-            direction = "north";
+            direction_str = "north";
         } else if (heading <= 67.5 || heading > 22.5){
-            direction = "northeast";
+            direction_str = "northeast";
         } else if (heading <= 112.5 || heading > 67.5){   
-            direction = "east";
+            direction_str = "east";
         } else if (heading <= 157.5 || heading > 112.5){  
-            direction = "southeast";
+            direction_str = "southeast";
         } else if (heading <= 202.5 || heading > 157.5){    
-            direction = "south";
+            direction_str = "south";
         } else if (heading <= 247.5 || heading > 202.5){   
-            direction = "southwest";
+            direction_str = "southwest";
         } else if (heading <= 292.5 || heading > 247.5){    
-            direction = "west";
+            direction_str = "west";
         } else if (heading <= 337.5 || heading > 292.5){   
-            direction = "northwest";
+            direction_str = "northwest";
         }
     }
 
     // Print out direction and heading of compass regardless of its heading
-    if(direction != "Error"){
+    if(direction_str != "Error"){
         Serial.print("Direction: ");
-        Serial.println(direction);
+        Serial.println(direction_str);
         Serial.print("Compass Heading: ");
         Serial.print(heading,5);
         Serial.println(" degrees");
