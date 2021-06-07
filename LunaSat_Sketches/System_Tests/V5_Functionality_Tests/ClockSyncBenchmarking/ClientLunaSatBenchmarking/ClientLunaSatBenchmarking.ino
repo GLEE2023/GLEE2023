@@ -31,6 +31,10 @@ long clockSkew = 0;
 // Use this to set the time interval at which clock synchronization will be performed in the appropriate units
 unsigned long interval = 1800000000; // Currently set to 30 minutes in microseconds
 
+//Used to calculate the processing time for sending a packet
+//long transmitAdditionalStartTime;
+//long transmitAdditionalStopTime;
+
 // Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
 //long temperingConstant = 0;
 //bool findConstant = false;
@@ -50,19 +54,21 @@ void setup() {
 }
 
 void loop(){
-    // Get time
-    timeSinceLastLocaltimeUpdate = micros() - localTime; // Change for different tests [micros(), millis(), or millis()/1000 for seconds]
 
+    localTime = micros() + clockSkew;
     // Uncomment for Clock Sync Application 1, leave commented for Benchmarking Application 3
+    //timeSinceLastLocaltimeUpdate = micros() + clockSkew - localTime; // Change for different tests [micros(), millis(), or millis()/1000 for seconds]
     //localTime = micros() + clockSkew + (temperingConstant * timeSinceLastLocaltimeUpdate);
 
     // Uncomment for Benchmarking Application 3, leave commented for Clock Sync Application 1
-    localTime = micros() + clockSkew;
+    //localTime = micros() + clockSkew;
 
     // Request a packet from the server every [interval]
     if((micros() + clockSkew) % interval <= 50){
         timeClientSent = micros(); // Change for different tests [micros(), millis(), or millis()/1000 for seconds]
+        //transmitAdditionalStartTime = millis();
         Serial.print("syncRequest");
+        //transmitAdditionalStopTime = millis();
     }
 
     // Process packet from server (Lead LunaSat)
