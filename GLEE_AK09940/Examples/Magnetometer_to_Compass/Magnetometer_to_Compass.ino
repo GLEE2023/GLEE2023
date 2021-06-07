@@ -1,4 +1,4 @@
-//Dependencies
+// Dependencies
 #include <Arduino.h>
 #include "GLEE_Sensor.h"
 #include "AK09940.h"
@@ -19,10 +19,10 @@ int LED = 4;
 //Direction of compass as determined by heading
 String direction;
 
-float minHeadingOne = 0; // Minimum heading for between 0 and 180 degrees
-float maxHeadingOne = 180; // Maximum heading for between 0 and 180 degrees
-float minHeadingTwo = 180; // Minimum heading for between 180 and 360 degrees
-float maxHeadingTwo = 360; // Maximum heading for between 180 and 360 degrees
+float minHeadingOne = 0.0; // Minimum heading for between 0 and 180 degrees
+float maxHeadingOne = 180.0; // Maximum heading for between 0 and 180 degrees
+float minHeadingTwo = 180.0; // Minimum heading for between 180 and 360 degrees
+float maxHeadingTwo = 360.0; // Maximum heading for between 180 and 360 degrees
 
 /*float rawNorth;
 float rawSouth;
@@ -70,16 +70,20 @@ void setup (){
     delay(1000);
     Serial.println(F("Go"));
 
+    // Calibration Code
+
     AK_Sample_t calMag[1000]; // Array of sample initial readings
+
     // Get sample readings
     for(int i = 0; i < 1000; i++){
         calMag[i] = magnetometer.getSample();
     }
 
-    Serial.println(F("Performing calibration calculations..."));
+    Serial.println(F("Done"));
     delay(1000);
-
-    float calHeadings[1000];
+    Serial.println(F("Performing calibration calculations..."));
+    
+    float calHeadings[1000]; // Array of headings for initial readings
 
     // Find headings for each initial reading
     for(int k = 0; k < 1000; k++){
@@ -87,31 +91,31 @@ void setup (){
     }
 
     // Find the ranges of values for the headings
-    for(int l = 1; l < 500; l++){
+    for(int l = 0; l < 500; l++){
         if(calHeadings[l] <= 180){
-            if(minHeadingOne == 0){
+            if((minHeadingOne == 0.0) && (calHeadings[l]>=0.0)){
                 minHeadingOne = calHeadings[l];
             }
-            if(maxHeadingOne == 180){
+            if(maxHeadingOne == 180.0){
                 maxHeadingOne = calHeadings[l];
             }
-            if(minHeadingOne > calHeadings[l]){
+            if((minHeadingOne > calHeadings[l]) && (calHeadings[l]>=0.0)){
                 minHeadingOne = calHeadings[l];
             }
             if(maxHeadingOne < calHeadings[l]){
                 maxHeadingOne = calHeadings[l];
             }
         } else {
-            if(minHeadingTwo == 180){
+            if(minHeadingTwo == 180.0){
                 minHeadingTwo = calHeadings[l];
             }
-            if(maxHeadingTwo == 360){
+            if((maxHeadingTwo == 360.0) && (calHeadings[l]<=360.0)){
                 maxHeadingTwo = calHeadings[l];
             }
             if(minHeadingTwo > calHeadings[l]){
                 minHeadingTwo = calHeadings[l];
             }
-            if(maxHeadingTwo < calHeadings[l]){
+            if((maxHeadingTwo < calHeadings[l]) && (calHeadings[l]<=360.0)){
                 maxHeadingTwo = calHeadings[l];
             }
         }
@@ -150,7 +154,7 @@ void setup (){
     rawEast = findHeading(maxYMag,associatedMaxY);
     rawWest = findHeading(minYMag,associatedMinY);*/
 
-    Serial.println(F("Ready to use."));
+    Serial.println(F("Ready to use.")); // Print that magnetometer has been calibrated
     delay(100);
     Serial.println();
     Serial.println();
@@ -158,7 +162,7 @@ void setup (){
 
 void loop (){
     Serial.print(F("Data Ready: ")); Serial.println(magnetometer.dataReady());
-    sample = magnetometer.getSample();
+    sample = magnetometer.getSample(); // Get sample
 
     // Set aside magnitude of magnetic field in x and y directions for calculations
     float xMag = sample.magnetic.x;
@@ -179,7 +183,7 @@ void loop (){
         }
     }
 
-    // Set to Error in order to determine what information should be printed
+    // Set to Error by default in order to determine what information should be printed
     direction = "Error";
 
     // Determine if heading is valid and print general direction of compass
@@ -190,28 +194,28 @@ void loop (){
     } else {
         // Print message to serial if compass is pointing exactly or almost exactly in an particular direction
         if((abs(heading-0.0) < 0.5) || (abs(heading-360.0) < 0.5)){
-            Serial.println("Facing due north (Heading of approx. 0 degrees)");
+            Serial.println("Facing due north");
             direction = "north";
         } else if (abs(heading-45.0) < 0.5){
-            Serial.println("Facing due northeast (Heading of approx. 45 degrees)");
+            Serial.println("Facing due northeast");
             direction = "northeast";
         } else if (abs(heading-90.0) < 0.5){
-            Serial.println("Facing due east (Heading of approx. 90 degrees)");
+            Serial.println("Facing due east");
             direction = "east";
         } else if (abs(heading-135.0) < 0.5){
-            Serial.println("Facing due southeast (Heading of approx. 135 degrees)");
+            Serial.println("Facing due southeast");
             direction = "southeast";
         } else if (abs(heading-180.0) < 0.5){
-            Serial.println("Facing due south (Heading of approx. 180 degrees)");
+            Serial.println("Facing due south");
             direction = "south";
         } else if (abs(heading-225.0) < 0.5){
-            Serial.println("Facing due southwest (Heading of approx. 225 degrees)");
+            Serial.println("Facing due southwest");
             direction = "southwest";
         } else if (abs(heading-270.0) < 0.5){
-            Serial.println("Facing due west (Heading of approx. 270 degrees)");
+            Serial.println("Facing due west");
             direction = "west";
         } else if (abs(heading-315.0) < 0.5){
-            Serial.println("Facing due northwest (Heading of approx. 315 degrees)");
+            Serial.println("Facing due northwest");
             direction = "northwest";
         } else if (heading <= 22.5 || heading > 337.5){
             direction = "north";
@@ -237,7 +241,7 @@ void loop (){
         Serial.print("Direction: ");
         Serial.println(direction);
         Serial.print("Compass Heading: ");
-        Serial.print(heading);
+        Serial.print(heading,5);
         Serial.println(" degrees");
     }
     
@@ -251,6 +255,6 @@ void loop (){
         digitalWrite(LED, LOW);
     }
 
-    delay(100);
+    delay(1000);
   
 };
