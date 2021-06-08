@@ -1,7 +1,7 @@
 // Include dependencies (libraries)
 #include "CAP.h"
 
-Capacitive cap(1);
+CAP cap(2,1);
 
 void setup() {
 	Serial.begin(9600); // open serial port, set the baud rate to 9600 bps
