@@ -24,11 +24,6 @@ float maxHeadingOne = 180.0; // Maximum heading for between 0 and 180 degrees
 float minHeadingTwo = 180.0; // Minimum heading for between 180 and 360 degrees
 float maxHeadingTwo = 360.0; // Maximum heading for between 180 and 360 degrees
 
-/*float rawNorth;
-float rawSouth;
-float rawEast;
-float rawWest;*/
-
 /**
  * Parameters: float xMag (magnitude of magnetic field in x direction), 
  * float yMag (magnitude of magnetic field in y direction)
@@ -57,32 +52,36 @@ void setup (){
     Serial.begin(9600);
     delay(3000);
     magnetometer.begin();
+    magnetometer.readWAI(); // For debugging
     magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
 
     // Set pin LED as output
     pinMode(LED, OUTPUT);
 
-    Serial.println(F("Spin the magnetometer in all directions for calibration in 3"));
+    Serial.println("Spin the magnetometer in all directions for calibration in 3");
     delay(1000);
-    Serial.println(F("2"));
+    Serial.println("2");
     delay(1000);
-    Serial.println(F("1"));
+    Serial.println("1");
     delay(1000);
-    Serial.println(F("Go"));
-
+    Serial.println("Go");
+    delay(1000);
+    
     // Calibration Code
 
     AK_Sample_t calMag[1000]; // Array of sample initial readings
 
     // Get sample readings
     for(int i = 0; i < 1000; i++){
+        delay(10);
+        Serial.print("Data Ready: "); Serial.println(magnetometer.dataReady()); // For debugging
         calMag[i] = magnetometer.getSample();
         delay(10);
     }
 
-    Serial.println(F("Done."));
+    Serial.println("Done.");
     delay(1000);
-    Serial.println(F("Performing calibration calculations..."));
+    Serial.println("Performing calibration calculations...");
     
     float calHeadings[1000]; // Array of headings for initial readings
 
@@ -122,47 +121,14 @@ void setup (){
         }
     }
 
-    /*float maxXMag = calMag[0].magnetic.x;
-    float associatedMaxX = calMag[0].magnetic.y;
-    float maxYMag = calMag[0].magnetic.y;
-    float associatedMaxY = calMag[0].magnetic.x;
-    float minXMag = calMag[0].magnetic.x;
-    float associatedMinX = calMag[0].magnetic.y;
-    float minYMag = calMag[0].magnetic.y;
-    float associatedMinY = calMag[0].magnetic.x;*/
-
-    /*for(int j = 1; j < 500; j++){
-        if(calMag[j].magnetic.x > maxXMag){
-            maxXMag = calMag[j].magnetic.x;
-            associatedMaxX = calMag[j].magnetic.y;
-        }
-        if(calMag[j].magnetic.x < minXMag){
-            minXMag = calMag[j].magnetic.x;
-            associatedMinX = calMag[j].magnetic.y;
-        }
-        if(calMag[j].magnetic.x > maxYMag){
-            maxYMag = calMag[j].magnetic.y;
-            associatedMaxY = calMag[j].magnetic.x;
-        }
-        if(calMag[j].magnetic.x < minXMag){
-            minYMag = calMag[j].magnetic.y;
-            associatedMinY = calMag[j].magnetic.x;
-        }
-    }
-
-    rawNorth = findHeading(maxXMag,associatedMaxX);
-    rawSouth = findHeading(minXMag,associatedMinX);
-    rawEast = findHeading(maxYMag,associatedMaxY);
-    rawWest = findHeading(minYMag,associatedMinY);*/
-
-    Serial.println(F("Ready to use.")); // Print that magnetometer has been calibrated
-    delay(100);
+    Serial.println("Ready to use."); // Print that magnetometer has been calibrated
+    delay(1000);
     Serial.println();
     Serial.println();
 };
 
 void loop (){
-    Serial.print(F("Data Ready: ")); Serial.println(magnetometer.dataReady());
+    Serial.print("Data Ready: "); Serial.println(magnetometer.dataReady());
     sample = magnetometer.getSample(); // Get sample
 
     // Set aside magnitude of magnetic field in x and y directions for calculations
@@ -185,7 +151,7 @@ void loop (){
     }
 
     // Set to Error by default in order to determine what information should be printed
-    direction = "Error";
+    direction_str = "Error";
 
     // Determine if heading is valid and print general direction of compass
     if(heading < 0.0 || heading > 360.0){
