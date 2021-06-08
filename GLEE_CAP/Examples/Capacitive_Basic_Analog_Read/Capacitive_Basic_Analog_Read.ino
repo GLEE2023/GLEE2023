@@ -9,6 +9,6 @@ void setup() {
 }
 
 void loop(){
-	int rawData = cap.getRawData(); //Pin is Argument
+	int rawData = cap.getRawData(); 
 	Serial.println(rawData); //Print raw data
 };
