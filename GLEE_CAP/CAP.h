@@ -20,7 +20,7 @@ class CAP:public Sensor{
 		double getDieletricConstant(double analogReadIn);
 		void addCalibrationPoint(double x, double y);
 		void getLinearRegression();
-
+		void materialIdent(double DielectricConst);
 	private:
 		int pin;
 		int index=0;
