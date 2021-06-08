@@ -58,6 +58,8 @@ void setup (){
     // Set pin LED as output
     pinMode(LED, OUTPUT);
 
+    Serial.println("Before using the magnetometer, it will be need to be calibrated by spinning it in all possible directions.");
+    delay(3000);
     Serial.println("Spin the magnetometer in all directions for calibration in 3");
     delay(1000);
     Serial.println("2");
@@ -66,13 +68,15 @@ void setup (){
     delay(1000);
     Serial.println("Go");
     delay(1000);
-    
+
     // Calibration Code
 
-    AK_Sample_t calMag[1000]; // Array of sample initial readings
+    int calibrationSize = 1000; // Number of data points to be used for calibration
+
+    AK_Sample_t calMag[calibrationSize]; // Array of sample initial readings
 
     // Get sample readings
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < calibrationSize; i++){
         delay(10);
         Serial.print("Data Ready: "); Serial.println(magnetometer.dataReady()); // For debugging
         calMag[i] = magnetometer.getSample();
@@ -83,10 +87,10 @@ void setup (){
     delay(1000);
     Serial.println("Performing calibration calculations...");
     
-    float calHeadings[1000]; // Array of headings for initial readings
+    float calHeadings[calibrationSize]; // Array of headings for initial readings
 
     // Find headings for each initial reading
-    for(int k = 0; k < 1000; k++){
+    for(int k = 0; k < calibrationSize; k++){
         calHeadings[k] = findHeading(calMag[k].magnetic.x,calMag[k].magnetic.y);
     }
 
@@ -203,7 +207,7 @@ void loop (){
         }
     }
 
-    // Print out direction and heading of compass regardless of its heading
+    // Print out direction and heading of compass if the heading value is valid
     if(direction_str != "Error"){
         Serial.print("Direction: ");
         Serial.println(direction_str);
