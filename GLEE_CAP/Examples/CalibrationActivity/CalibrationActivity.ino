@@ -8,6 +8,7 @@ void setup() {
   Serial.begin(9600); //Set BPM
   cap.begin(); //Begin Capacitive Sensor
   
+  //CHANGE THESE POINTS TO YOUR CALIBRATION POINTS (ADC, DIELECTRIC CONST)
   cap.addCalibrationPoint(17,94); //Add Calibration Point 1
   cap.addCalibrationPoint(13,73); //Add Calibration Point 2
   cap.addCalibrationPoint(12,59); //Add Calibration Point 3
