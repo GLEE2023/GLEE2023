@@ -71,7 +71,7 @@ void setup (){
 
     // Calibration Code
 
-    int calibrationSize = 1000; // Number of data points to be used for calibration
+    int calibrationSize = 500; // Number of data points to be used for calibration
 
     AK_Sample_t calMag[calibrationSize]; // Array of sample initial readings
 
@@ -95,7 +95,7 @@ void setup (){
     }
 
     // Find the ranges of values for the headings
-    for(int l = 0; l < 500; l++){
+    for(int l = 0; l < calibrationSize; l++){
         if(calHeadings[l] <= 180.0){
             if((minHeadingOne == 0.0) && (calHeadings[l]>=0.0)){
                 minHeadingOne = calHeadings[l];
