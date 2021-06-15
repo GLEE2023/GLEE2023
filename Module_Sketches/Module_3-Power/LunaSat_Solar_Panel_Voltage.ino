@@ -11,7 +11,7 @@ void loop() {
   // read the input on analog pin 0:
   int solarCellReading = analogRead(A1);
   
-  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
+  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 3.3V):
   float voltage = solarCellReading * (3.3 / 1023.0);
   
   // print out the value you read:
