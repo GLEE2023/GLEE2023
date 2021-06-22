@@ -29,7 +29,7 @@ String timeServerSent_string;
 long clockSkew = 0;
 
 // Use this to set the time interval at which clock synchronization will be performed in the appropriate units
-unsigned long interval = 1800000000; // Currently set to 30 minutes in microseconds
+unsigned long interval = 10000000; // Currently set to 30 minutes in microseconds
 
 //Used to calculate the processing time for sending a packet
 //long transmitAdditionalStartTime;
