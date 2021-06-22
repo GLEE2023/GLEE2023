@@ -7,25 +7,26 @@ int LED2 = 5;
 
 // Delay variables in milliseconds
 int on_time = 1000; // For repeated blinking
-int single_delay = 10000; // For a single blink
+unsigned long single_delay = 3600000; // For a single blink
 
 bool singleDelay = true; // True when testing with a single blink and false when testing with repeated blinking
 
 void setup(){
+    Serial.begin(9600);
     pinMode(LED1, OUTPUT);
     pinMode(LED2, OUTPUT);
-
+    delay(5000);
     if(singleDelay){ // For a single blink
 
-        Serial.println("Starting wait for single delay...");
+        Serial.println(F("Starting wait for single delay..."));
         delay(2000);
-        Serial.println("Starting in 3");
+        Serial.println(F("Starting in 3"));
         delay(1000);
-        Serial.println("Starting in 2");
+        Serial.println(F("Starting in 2"));
         delay(1000);
-        Serial.println("Starting in 1");
+        Serial.println(F("Starting in 1"));
         delay(1000);
-        Serial.println("Starting delay now.");
+        Serial.println(F("Starting delay now."));
 
         delay(single_delay);
 
