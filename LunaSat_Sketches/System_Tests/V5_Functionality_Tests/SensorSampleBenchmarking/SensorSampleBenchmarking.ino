@@ -23,6 +23,7 @@ bool performAllTests = false;
  * This function handles calculating the average time to retrieve a sample for a given LunaSat configuration.
 **/
 void performTest(){
+    Serial.println();
     Serial.print("LunaSat Configuration: ");    // Print current LunaSat Configuration
     Serial.print("{");
     Serial.print(lunaSatConfig[0]); Serial.print(",");
@@ -92,7 +93,7 @@ void performTest(){
     }
     endTime = micros();
 
-    Serial.print("Time (in microseconds) to get 100 samples: "); Serial.println(endTime-startTime);
+    //Serial.print("Time (in microseconds) to get 100 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/100);
 }
 
@@ -103,8 +104,8 @@ void setup() {
     if(!performAllTests){   // For a single configuration
         performTest();
     } else {                // For all configurations
-        Serial.println("Performing all possible tests.");
-        Serial.println();
+        //Serial.println("Performing all possible tests.");
+        //Serial.println();
 
         for(int i = 0; i<6; i++){   // Set LunaSat configuration to all sensors disabled
             lunaSatConfig[i] = 0;
@@ -119,21 +120,27 @@ void setup() {
                             for(int five = 0; five < 2; five++){
                                 lunaSatConfig[5] = five;
                                 performTest();
+                                delay(1000);
                             }
                             lunaSatConfig[4] = four;
                             performTest();
+                            delay(1000);
                         }
                         lunaSatConfig[3] = three;
                         performTest();
+                        delay(1000);
                     }
-                    lunaSatConfig[2] = two;
+                    /*lunaSatConfig[2] = 0;
                     performTest();
+                    delay(1000);*/
                 }
                 lunaSatConfig[1] = one;
                 performTest();
+                delay(1000);
             }
             lunaSatConfig[0] = zero;
             performTest();
+            delay(1000);
         }
     }
 }
