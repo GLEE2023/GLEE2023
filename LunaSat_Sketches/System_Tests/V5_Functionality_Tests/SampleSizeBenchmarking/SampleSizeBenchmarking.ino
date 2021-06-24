@@ -1,7 +1,15 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[6] = {0,0,0,0,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+int lunaSatConfig[6] = {1,0,0,1,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+
+/*int allConfigs[64][6] = {{0,0,0,0,0,0},{1,0,0,0,0,0},{0,1,0,0,0,0},
+{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1},{1,1,0,0,0,0},{1,0,0,1,0,0},
+{1,0,0,0,1,0}, {1,0,0,0,0,1}, {0,1,0,1,0,0}, {0,1,0,0,1,0}, {0,1,0,0,0,1},
+{0,0,0,1,1,0}, {0,0,0,1,0,1}, {0,0,0,0,1,1}, {1,1,0,1,0,0}, {1,1,0,0,1,0},
+{1,1,0,0,0,1}, {1,0,0,1,1,0}, {1,0,0,1,0,1}, {1,0,0,0,1,1}, {0,1,0,1,1,0}, 
+{0,1,0,1,0,1}, {0,1,0,0,1,1}, {0,0,0,1,1,1}, {1,1,0,1,0,1}, {1,1,0,0,1,1}, 
+{1,0,0,1,1,1}, {0,1,0,1,1,1}, {1,1,0,1,1,0}, {1,1,0,1,1,1}};*/
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 LunaSat lunaSat(0, lunaSatConfig, false);
@@ -36,15 +44,41 @@ void performTest(){
     delay(100);
 
     sample = lunaSat.getSample(); 
-    size = sizof(sample);
 
-    Serial.print("Size of sample: "); Serial.print(size); Serial.println(" bytes")
+    if(lunaSatConfig[0]==1){
+      size = size + sizeof(sample.TMPtemperature);
+    }
+    if(lunaSatConfig[1]==1){
+      size = size + sizeof(sample.acceleration);
+    }
+    if(lunaSatConfig[3]==1){
+      size = size + sizeof(sample.TPTemperature);
+    }
+    if(lunaSatConfig[4]==1){
+      size = size + sizeof(sample.cap);
+    }
+    
+    Serial.print("Size of sample: "); Serial.print(size); Serial.println(" bytes");
+    Serial.print("Timestamp size: "); Serial.print(sizeof(sample.timeStamp)); Serial.println(" bytes");
+    Serial.print("Maximum size of sample: "); Serial.print(sizeof(sample)); Serial.println(" bytes");
 }
 
 void setup() {
-    lunaSat.begin(9600);    // Direct serial communications with computer
+  
+    Serial.begin(9600);    // Direct serial communications with computer
     delay(5000);
+    /*for(int i = 0; i < 32; i++) {
+      lunaSatConfig[0] = allConfigs[i][0];
+      lunaSatConfig[1] = allConfigs[i][1];
+      lunaSatConfig[2] = allConfigs[i][2];
+      lunaSatConfig[3] = allConfigs[i][3];
+      lunaSatConfig[4] = allConfigs[i][4];
+      lunaSatConfig[5] = allConfigs[i][5];
+      performTest();
+      delay(1000);
+    }*/
     performTest();
+    
 }
 
 void loop() {
