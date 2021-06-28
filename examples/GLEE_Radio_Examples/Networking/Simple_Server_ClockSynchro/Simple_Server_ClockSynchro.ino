@@ -13,7 +13,7 @@ String rqst;
 
 // Assemble LunaSat Packet
 // Response char array and string variables
-char RSP[80];
+char RSP[32];
 String rsp;
 
 unsigned long localTime;
@@ -38,7 +38,7 @@ void recieve_callback(void) {
 
 void setup() {
     //Set the data rate to 9600 bits pere second
-    //Serial.begin(9600);
+    Serial.begin(9600);
 
     pinMode(LED1, OUTPUT);
     pinMode(LED2, OUTPUT);
@@ -52,9 +52,11 @@ void setup() {
     Rad.initialize_radio(915.0,17,250.0,12,8);
 
     Rad.enable_recieve_interupt(recieve_callback);
+    Serial.println(interruptEnabled);
 }
 
 void loop(){
+    
     localTime = millis(); // Change to microseconds for different tests
     if(localTime % 1000 <= 100){ // Change to microseconds for different tests
         //Blink LED
@@ -66,6 +68,9 @@ void loop(){
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
+        // reset reception flag 
+        messageRecieved = false;
+
         timeReceived = millis(); // Change to microseconds for different tests
         timeReceived_string = String(timeReceived);
 
@@ -73,24 +78,25 @@ void loop(){
         delay(500);
         digitalWrite(LED1, LOW);
         
-        // reset reception flag 
-        messageRecieved = false;
+        
 
         //Read data from request
-        byte data_buffer[16];
+        char data_buffer[32];
 
-        Rad.readData(data_buffer, 16);
-        rqst = String((char*)data_buffer);
-        
+        Rad.readData(data_buffer, 32);
+        //String rqst((const __FlashStringHelper*) data_buffer);
+        Serial.println(data_buffer);
+        String head = String(data_buffer[0])+String(data_buffer[1]);
+        //Serial.println(head);
         //If the request matches the time request flag, send back time received and time sent
-        if(rqst=="R5"){
-            //Serial.println(F("Recieved request, sending response"));
+        if(head=="R5"){
+            Serial.println(F("Recieved request, sending response"));
 
             localTime = millis(); // Change to microseconds for different tests
             localTime_string = String(localTime);
-
-            rsp = String("R1," + timeReceived_string + "," + localTime_string);
-            rsp.toCharArray(RSP,80);
+            rsp = "";
+            rsp = String("R1," + timeReceived_string + "," + localTime_string + ",");
+            rsp.toCharArray(RSP,32);
             Rad.transmit_data(RSP);
         }
 
