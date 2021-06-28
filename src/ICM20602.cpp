@@ -36,7 +36,9 @@ that communication with the sensor has begun.
 */
 bool ICM20602::begin(void){
     Wire.begin();
-    Serial.println("Beginning Communication With ICM20602");
+    if(ICM20602::sensorDebug){
+		Serial.println("Beginning Communication With ICM20602");
+	}
     return true;
 }
 
@@ -193,6 +195,16 @@ sensor_int16_vec_t ICM20602::getRawAngVel(){
 	RawAngVel.y = read2Byte(ICM20602_GYRO_YOUT_H);
 	RawAngVel.z = read2Byte(ICM20602_GYRO_ZOUT_H);
 	return RawAngVel;
+}
+
+/*
+Parameters: none
+Returns: 3 axis acceleration in G's
+*/
+sensor_float_vec_t ICM20602::getSample(){
+	sensor_int16_vec_t rawAccel = getRawAccel();
+	sensor_float_vec_t GAccel = getGAccel(rawAccel); 
+	return(GAccel);
 }
 
 /*

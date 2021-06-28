@@ -96,6 +96,8 @@ class ICM20602:public Sensor{
         float getAccelSensitivity();
         float getGyroSensitivity();
 
+        sensor_float_vec_t getSample();
+
     private:
         sensor_int16_vec_t accelRaw;
         sensor_float_vec_t accelMPS;
