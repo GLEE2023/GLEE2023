@@ -1,5 +1,5 @@
 # Great Lunar Expedition For Everyone
-![Project Image](./Docs/Images/GLEE_banner.png)
+![Project Image](./extras/Docs/Images/GLEE_banner.png)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 > "We are going to the moon and we'd like to take you along for the ride."
 
@@ -24,7 +24,7 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
 ## Mission Concept
  
 <center>
-<img height=300 src="./Docs/Images/GLEE_concept_art_small.png">
+<img height=300 src="./extras/Docs/Images/GLEE_concept_art_small.png">
 </center>
 
 ## LunaSat - LUNAr Sensing ArchiTecture
@@ -32,7 +32,7 @@ GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of abou
 
 This repo contains the Arduino libraries and sketches wich are used to control the LunaSats. 
 ### This is a v4 LunaSat
-![LunaSat Front](./Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./Docs/Images/LunaSat_back.jpg)
+![LunaSat Front](./extras/Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./extras/Docs/Images/LunaSat_back.jpg)
 
 ### LunaSat Tech (Data Sheets Linked)
 * Microprocessor
