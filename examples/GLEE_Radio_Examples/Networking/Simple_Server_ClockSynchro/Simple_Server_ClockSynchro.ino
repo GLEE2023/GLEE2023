@@ -73,6 +73,8 @@ void loop(){
 
         timeReceived = millis(); // Change to microseconds for different tests
         timeReceived_string = String(timeReceived);
+        //Serial.print("Time Received: ");
+        //Serial.println(timeReceived_string);
 
         digitalWrite(LED1, HIGH);
         delay(500);
@@ -94,6 +96,7 @@ void loop(){
 
             localTime = millis(); // Change to microseconds for different tests
             localTime_string = String(localTime);
+            //Serial.println(localTime_string);
             rsp = "";
             rsp = String("R1," + timeReceived_string + "," + localTime_string + ",");
             rsp.toCharArray(RSP,32);
