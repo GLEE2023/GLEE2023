@@ -9,8 +9,6 @@ volatile bool messageRecieved = false;
 // disable interrupt when it's not needed
 volatile bool interruptEnabled = true;
 
-String rqst;
-
 // Assemble LunaSat Packet
 // Response char array and string variables
 char RSP[32];
@@ -21,6 +19,8 @@ String localTime_string;
 
 unsigned long timeReceived;
 String timeReceived_string;
+
+long timeSinceLastUpdate;
 
 //For storing output pin configuration of LEDs
 int LED1 = 4; 
@@ -53,15 +53,16 @@ void setup() {
 
     Rad.enable_recieve_interupt(recieve_callback);
     Serial.println(interruptEnabled);
+    localTime = millis();
 }
 
 void loop(){
-    
-    localTime = millis(); // Change to microseconds for different tests
-    if(localTime % 1000 <= 100){ // Change to microseconds for different tests
+    timeSinceLastUpdate = millis() - localTime;
+    localTime += (millis()-localTime); // Change to microseconds for different tests
+    if(localTime % 1000 <= 10){ // Change to microseconds for different tests
         //Blink LED
         digitalWrite(LED2, HIGH);
-        delay(100);
+    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 120)){
         digitalWrite(LED2, LOW);
     }
     if(messageRecieved){
@@ -70,33 +71,22 @@ void loop(){
 
         // reset reception flag 
         messageRecieved = false;
-
-        timeReceived = millis(); // Change to microseconds for different tests
+        timeSinceLastUpdate = millis() - localTime;
+        localTime += (millis()-localTime);
+        timeReceived = localTime; // Change to microseconds for different tests
         timeReceived_string = String(timeReceived);
-        //Serial.print("Time Received: ");
-        //Serial.println(timeReceived_string);
-
-        digitalWrite(LED1, HIGH);
-        delay(500);
-        digitalWrite(LED1, LOW);
-        
-        
 
         //Read data from request
         char data_buffer[32];
 
         Rad.readData(data_buffer, 32);
-        //String rqst((const __FlashStringHelper*) data_buffer);
-        Serial.println(data_buffer);
         String head = String(data_buffer[0])+String(data_buffer[1]);
-        //Serial.println(head);
         //If the request matches the time request flag, send back time received and time sent
         if(head=="R5"){
             Serial.println(F("Recieved request, sending response"));
-
-            localTime = millis(); // Change to microseconds for different tests
+            timeSinceLastUpdate = millis() - localTime;
+            localTime += (millis()-localTime); // Change to microseconds for different tests
             localTime_string = String(localTime);
-            //Serial.println(localTime_string);
             rsp = "";
             rsp = String("R1," + timeReceived_string + "," + localTime_string + ",");
             rsp.toCharArray(RSP,32);
