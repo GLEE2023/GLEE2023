@@ -88,10 +88,11 @@ void loop(){
         rsp.toCharArray(RSP,32);
         Rad.transmit_data(RSP);
         Serial.println(F("Sent message"));
-    } else if ((localTime % 1000 <= 10)){ // Change to microseconds for different tests
+        interval = 120000;
+    } else if ((localTime % 1000 <= 5)){ // Change to microseconds for different tests
         //Blink LED
         digitalWrite(LED2, HIGH);
-    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 120)){
+    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 115)){
         digitalWrite(LED2, LOW);
     }
 
@@ -127,11 +128,15 @@ void loop(){
 
         if(head=="R1"){
             // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
+            Serial.println(timeClientSent);
+            Serial.println(timeServerReceived);
+            Serial.println(timeServerSent);
+            Serial.println(timeClientReceived);
             //Calculate clock skew
             long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
 	          float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
-            clockSkew += (serverTimeWhenClientReceived - timeClientReceived + 228);
-            float change = (serverTimeWhenClientReceived - timeClientReceived + 228);
+            clockSkew += (serverTimeWhenClientReceived - timeClientReceived + 200);
+            float change = (serverTimeWhenClientReceived - timeClientReceived + 200);
             Serial.print("Cumulative Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
             Serial.print("Change in Clock Skew: "); Serial.print(change); Serial.println(" milliseconds");
         }

@@ -59,10 +59,10 @@ void setup() {
 void loop(){
     timeSinceLastUpdate = millis() - localTime;
     localTime += (millis()-localTime); // Change to microseconds for different tests
-    if(localTime % 1000 <= 10){ // Change to microseconds for different tests
+    if(localTime % 1000 <= 5){ // Change to microseconds for different tests
         //Blink LED
         digitalWrite(LED2, HIGH);
-    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 120)){
+    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 115)){
         digitalWrite(LED2, LOW);
     }
     if(messageRecieved){
