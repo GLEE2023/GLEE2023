@@ -30,7 +30,7 @@ void setup (){
 
     // Set digital filtering
     magnetometer.setFilter(MLX90393_FILTER_6);
-    magnetometer.getSensor(magnetometer);
+    //magnetometer.getSensor(magnetometer);
     //magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
     //Equivalent line:
 };
@@ -42,7 +42,7 @@ void loop (){
 
     sample = magnetometer.getSample();
 
-    if (sensor.readData(&x, &y, &z)) {
+    if (magnetometer.readData(&x, &y, &z)) {
         Serial.print("X: "); Serial.print(sample.magnetic.x, 4); Serial.println(" uT");
         Serial.print("Y: "); Serial.print(sample.magnetic.y, 4); Serial.println(" uT");
         Serial.print("Z: "); Serial.print(sample.magnetic.z, 4); Serial.println(" uT");
