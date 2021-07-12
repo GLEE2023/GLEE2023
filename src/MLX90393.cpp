@@ -407,11 +407,20 @@ bool MLX90393::readRegister(uint8_t reg, uint16_t *data) {
 
     return true;
 }
-
+/*
+Parameters: magnetic axes readings as a sensor_float_vec_t
+Returns: magnetic field strength as a float
+This function calculates the magnetic field strength based on the individual magnetic readings of all 3 axes.
+*/
 float MLX90393::getMagFieldStrength(sensor_float_vec_t magnetic){
     return sqrt(pow(magnetic.x,2) + pow(magnetic.y,2) + pow(magnetic.z,2)); // L2 norm
 }
 
+/*
+Parameters: None
+Returns: Sample as a AK_Sample_t
+This function gets the magnetic readings and magnetic field strength and returns them as a part of the AK_Sample_t data type.
+*/
 AK_Sample_t MLX90393::getSample(void){
     float x,y,z;
     AK_Sample_t sample;
