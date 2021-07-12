@@ -261,6 +261,9 @@ enum mlx90393_oversampling MLX90393::getOversampling(void) {
   return _osr;
 }
 
+// To-do
+//bool MLX90393::getTemp(void){};
+
 /**
  * Sets the TRIG_INT pin to the specified function.
  *
