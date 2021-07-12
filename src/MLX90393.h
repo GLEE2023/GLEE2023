@@ -11,11 +11,18 @@
 #ifndef MLX90393_H
 #define MLX90393_H
 
+#include <Arduino.h>
 #include "GLEE_Sensor.h"
+#include <Adafruit_I2CDevice.h>
+#include <Adafruit_SPIDevice.h>
+#include <Adafruit_Sensor.h>
 
 //Registers
 
 //#define MLX90393_DEFAULT_ADDR (0x0C) /* Can also be 0x18, depending on IC */
+
+// MLX90393 Sensor ADDRESS as given by data sheet: 0x0C
+#define MLX90393_DEFAULT_ADDR 0x0C		
 
 #define MLX90393_AXIS_ALL (0x0E)      /**< X+Y+Z axis bits for commands. */
 #define MLX90393_CONF1 (0x00)         /**< Gain */
@@ -44,29 +51,6 @@ enum {
   MLX90393_REG_RT = (0xF0),  /**< Reset. */
   MLX90393_REG_NOP = (0x00), /**< NOP. */
 };
-
-//#define MLX90393_WAI_1 0x00		    // WAI Company ID (Typically 0x48)
-//#define MLX90393_WAI_2 0x01		    // WAI Device ID (Typically)
-
-//#define MLX90393_ST_1 0x10			// Status Register - Data Status 1
-//#define MLX90393_HX 0x11				// Magnetic Field Measurement Data - X-Axis Low Byte
-//#define MLX90393_HY 0x14				// Magnetic Field Measurement Data - Y-Axis Low Byte
-//#define MLX90393_HZ 0x17				// Magnetic Field Measurement Data - Z-Axis Low Byte
-//#define MLX90393_TMPS 0x1A			// Temperature Measurement Data
-
-//#define MLX90393_ST_2 0x1B		    // Status Register 2
-
-// Control settings registers (all 1xByte)
-//#define MLX90393_CNTL_1 0x30				// Watermark settings 		3 bit value D[0:2] = [WM[2],WM[1],WM[0]] (page 34 datasheet)
-//#define MLX90393_CNTL_2 0x31				// Temperature settings 	1 bit value D[6] = TEM[0] (temperature enable)
-//#define MLX90393_CNTL_3 0x32				// Operational settings 	8 bit value D[0:7] = [FIFO, MT[1], MT[0], MODE[4], MODE[3], MODE[2], MODE[1], MODE[0]]
-//#define MLX90393_CNTL_4 0x33				// Reset control			1 bit value D[0] = SRST (soft reset)
-
-// MLX90393 Sensor ADDRESS as given by data sheet: 0x0C
-#define MLX90393_DEFAULT_ADDR 0x0C				
-
-// The sensor Class defines the following data types
-// This structure represents raw sensor readings: temp, and magnetic x,y,z output 
 
 /** Gain settings for CONF1 register. */
 typedef enum mlx90393_gain {
@@ -185,58 +169,16 @@ typedef struct{
     float strength;
 }AK_Sample_t;
 
-/*
-typedef struct{
-    uint32_t x;	
-    uint32_t y;
-    uint32_t z;
-    uint8_t temp;	//Temperature output - Temperature byte
-}AK_RawData_t;
-
-// Sensor Modes From DataSheet
-enum MLX90393_Measurement_Mode_t{
-    POWER_DOWN = 0b00000,						// These sensor modes and values
-    SINGLE_MEASURE = 0b00001,					// represent bits [4:0] of the CNTL3 Byte
-    CONT_MEASURE_1 = 0b00010,
-    CONT_MEASURE_2 = 0b00100,
-    CONT_MEASURE_3 = 0b00110,
-    CONT_MEASURE_4 = 0b01000,
-    CONT_MEASURE_5 = 0b01010,
-    CONT_MEASURE_6 = 0b01100,
-    SELF_TEST = 0b10000,
-};
-
-// Drive mode options from data sheet
-// TODO: Write readme documentation for drive mode (what each bit represents)
-enum MLX90393_Drive_Mode_t{
-	LOW_POWER_1 = 0b00,
-	LOW_POWER_2 = 0b01,
-	LOW_NOISE_1 = 0b10,
-	LOW_NOISE_2 = 0b11,
-};*/
-
 // Primary Magnetometor class inharents parent sensor class variables and methods
-class MLX90393: public Sensor{
+class MLX90393: public Adafruit_Sensor{
 	// Initialization for Sensor Data, Sensor Info and Data Structures 
 	public:
 		MLX90393(int _id, bool _debug = false);
-
-        /*void begin(void);
-        void readWAI(void);
-        void setOpMode(bool fifo, MLX90393_Drive_Mode_t driveMode, MLX90393_Measurement_Mode_t measureMode);
-        bool dataReady(void);
-
-        // Getters
-        AK_RawData_t getRawData(void);
-        
-        float getTemperature(uint8_t rawTemp);
-        sensor_float_vec_t getMagnetic(AK_RawData_t rawData);
         float getMagFieldStrength(sensor_float_vec_t magnetic);
-        */
         AK_Sample_t getSample(void);
 
         bool begin_I2C(uint8_t i2c_addr = MLX90393_DEFAULT_ADDR, TwoWire *wire = &Wire);
-        bool begin_SPI(uint8_t cs_pin, SPIClass *theSPI = &SPI);
+        //bool begin_SPI(uint8_t cs_pin, SPIClass *theSPI = &SPI);
 
         bool reset(void);
         bool exitMode(void);
@@ -259,23 +201,17 @@ class MLX90393: public Sensor{
         bool setTrigInt(bool state);
         bool readData(float *x, float *y, float *z);
 
-        bool getEvent(sensors_event_t *event);
-        void getSensor(sensor_t *sensor);
+        //bool getEvent(sensors_event_t *event);
+        //void getSensor(sensor_t *sensor);
 
     private:
-        /*bool FIFO;
-        uint8_t watermarkLevel;  
-        MLX90393_Measurement_Mode_t measurementMode;
-        MLX90393_Drive_Mode_t driveMode;*/
-
         Adafruit_I2CDevice *i2c_dev = NULL;
         Adafruit_SPIDevice *spi_dev = NULL;
 
         bool readRegister(uint8_t reg, uint16_t *data);
         bool writeRegister(uint8_t reg, uint16_t data);
         bool _init(void);
-        uint8_t transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf = NULL,
-                            uint8_t rxlen = 0, uint8_t interdelay = 10);
+        uint8_t transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf = NULL, uint8_t rxlen = 0, uint8_t interdelay = 10);
 
         enum mlx90393_gain _gain;
         enum mlx90393_resolution _res_x, _res_y, _res_z;

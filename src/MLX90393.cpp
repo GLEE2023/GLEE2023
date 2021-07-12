@@ -21,7 +21,6 @@ MLX90393::MLX90393(int _id, bool _debug){
     MLX90393::info.name = "MLX90393 Magnetometer";		// assign sensor name
     MLX90393::info.address = MLX90393_DEFAULT_ADDR;		// assign sensor i2c address
     MLX90393::sensorDebug= _debug;						// debug flag status
-	//MLX90393::FIFO = true;                               // FIFO true by default (enables dataready pin on sensor)
 }
 
 /*!
@@ -46,28 +45,6 @@ bool Adafruit_MLX90393::begin_I2C(uint8_t i2c_addr, TwoWire *wire) {
     return false;
   }
 
-  return _init();
-}
-
-/*!
- *    @brief  Sets up the hardware and initializes hardware SPI
- *    @param  cs_pin The arduino pin # connected to chip select
- *    @param  theSPI The SPI object to be used for SPI connections.
- *    @return True if initialization was successful, otherwise false.
- */
-boolean Adafruit_MLX90393::begin_SPI(uint8_t cs_pin, SPIClass *theSPI) {
-  i2c_dev = NULL;
-  if (!spi_dev) {
-    _cspin = cs_pin;
-    spi_dev = new Adafruit_SPIDevice(cs_pin,
-                                     1000000,               // frequency
-                                     SPI_BITORDER_MSBFIRST, // bit order
-                                     SPI_MODE3,             // data mode
-                                     theSPI);
-  }
-  if (!spi_dev->begin()) {
-    return false;
-  }
   return _init();
 }
 
@@ -108,17 +85,6 @@ bool Adafruit_MLX90393::_init(void) {
   return true;
 }
 
-/**
- * Initialization method
- * Contians initial configuration setup
-**/
-// void MLX90393::init(){
-//     // Standard configuration
-//         // Drive Mode: Low Noise 1
-//         // Measurement mode: Power down 
-//         // Watermark Level: 1
-// }
-
 /**************************************************************************/
 /*!
     @brief  Gets the sensor_t device data, Adafruit Unified Sensor format
@@ -141,14 +107,6 @@ void Adafruit_MLX90393::getSensor(sensor_t *sensor) {
   sensor->max_value = 50000;  // +50 gauss in uTesla
   sensor->resolution = 0.15;  // 100/16-bit uTesla per LSB
 }
-
-/*void MLX90393::setOpMode(bool fifo, MLX90393_Drive_Mode_t driveMode, MLX90393_Measurement_Mode_t measureMode){
-	MLX90393::FIFO = fifo;
-	MLX90393::driveMode = driveMode;
-	MLX90393::measurementMode = measureMode;
-	uint8_t writeData = ((uint8_t) fifo << 7 |  driveMode << 5 | measureMode);
-	MLX90393::writeByte(MLX90393_CNTL_3, writeData);
-}*/
 
 /**
  * Perform a mode exit
@@ -347,32 +305,6 @@ bool Adafruit_MLX90393::startSingleMeasurement(void) {
   return false;
 }
 
-/*AK_RawData_t MLX90393::getRawData(void){
-	AK_RawData_t rawData;
-	uint8_t dataBuf[3] = {0,0,0};
-
-	MLX90393::readBytes(MLX90393_HX, 3, &dataBuf[0]);
-	dataBuf[2] = dataBuf[2] && 0b00000011; // Remove higher 6 bits
-	rawData.x = (uint32_t) ( dataBuf[2] << 16 | dataBuf[1] << 8 | dataBuf[0]);
-
-	MLX90393::readBytes(MLX90393_HY, 3, &dataBuf[0]);
-	dataBuf[2] = dataBuf[2] && 0b00000011; // Remove higher 6 bits
-	rawData.y = (uint32_t) ( dataBuf[2] << 16 | dataBuf[1] << 8 | dataBuf[0]);
-
-	MLX90393::readBytes(MLX90393_HZ, 3, &dataBuf[0]);
-	dataBuf[2] = dataBuf[2] && 0b00000011; // Remove higher 6 bits
-	rawData.z = (uint32_t) ( dataBuf[2] << 16 | dataBuf[1] << 8 | dataBuf[0]);
-
-	rawData.temp = readByte(MLX90393_TMPS);
-
-	return rawData;
-}*/
-
-/*float MLX90393::getTemperature(uint8_t rawTemp){
-	float temp = 30.0f - ((float) rawTemp)/1.72f; // Conversion in datasheet
-	return temp;
-}*/
-
 sensor_float_vec_t MLX90393::getMagnetic(float *x, float *y, float *z){
     sensor_float_vec_t magnetic;
     
@@ -483,11 +415,6 @@ float MLX90393::getMagFieldStrength(sensor_float_vec_t magnetic){
     return sqrt(pow(magnetic.x,2) + pow(magnetic.y,2) + pow(magnetic.z,2)); // L2 norm
 }
 
-/*bool MLX90393::dataReady(){
-    if (digitalRead(7)) return true; // TODO: Change for const pin declaration
-    else return false;
-}*/
-
 AK_Sample_t MLX90393::getSample(void){
     AK_Sample_t sample;
     
@@ -507,4 +434,3 @@ AK_Sample_t MLX90393::getSample(void){
 
     return sample;
 }   
-
