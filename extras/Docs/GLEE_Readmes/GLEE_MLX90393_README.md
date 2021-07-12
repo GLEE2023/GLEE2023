@@ -13,7 +13,7 @@ This example is for making basic magnetic field observations.
 ```c++
 #include "MLX90393.h"
 
-MLX90393 magnetometer = MLX90393();
+MLX90393 magnetometer = MLX90393(1,false);
 
 AK_Sample_t sample;
 
@@ -30,24 +30,26 @@ void setup (){
 
     // Set digital filtering
     magnetometer.setFilter(MLX90393_FILTER_6);
-    //magnetometer.getSensor(magnetometer);
-    //magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
-    //Equivalent line:
+
+    //No apparent equivalency for setOpMode()
 };
 
 void loop (){   
     float x, y, z;
-    //Serial.print(F("Data Ready Pin Showing: ")); 
-    //Serial.println(magnetometer.dataReady());
 
     sample = magnetometer.getSample();
 
     if (magnetometer.readData(&x, &y, &z)) {
+        Serial.println("Direct Measurements");
+        Serial.print("X: "); Serial.print(x, 4); Serial.println(" uT");
+        Serial.print("Y: "); Serial.print(y, 4); Serial.println(" uT");
+        Serial.print("Z: "); Serial.print(z, 4); Serial.println(" uT");
+        Serial.print(F("Magnetic Field Magnitude: ")); 
+        Serial.println(sample.strength);
+        Serial.println("Sample Measurements");
         Serial.print("X: "); Serial.print(sample.magnetic.x, 4); Serial.println(" uT");
         Serial.print("Y: "); Serial.print(sample.magnetic.y, 4); Serial.println(" uT");
         Serial.print("Z: "); Serial.print(sample.magnetic.z, 4); Serial.println(" uT");
-        Serial.print(F("Magnetic Field Magnitude: ")); 
-        Serial.println(sample.strength);
     } else {
         Serial.println("Unable to read XYZ data from the sensor.");
     }
@@ -87,7 +89,6 @@ void loop (){
 | 0x0Ah...0x1Fh | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE | FREE |
 
 
-
 # Commands
 | Command Name | Symbol | CMD1 byte | CMD2 byte | CMD3 byte | CMD4 byte |
 |---|---|---|---|---|---|
@@ -119,6 +120,7 @@ The first byte transmitted by the MLX90393 as a response to a command.
 | 0x10 | SPI mode only |
 | 0x11 | I2C mode only |
 
+
 # Customized Data Types
 | Data Type Name | Data Structure | Usage |
 |---|---|---|
@@ -129,7 +131,6 @@ The first byte transmitted by the MLX90393 as a response to a command.
 | mlx90393_oversampling | enum | Oversampling settings for CONF3 register |
 | sensors_event_t | 
 | sensor_t | 
-
 
 
 # Methods 
@@ -157,6 +158,3 @@ The first byte transmitted by the MLX90393 as a response to a command.
 | writeRegister | bool | uint8_t, uint16_t |
 | _init | bool | void |
 | transceive | uint8_t | uint8_t, uint8_t, uint8_t, uint8_t, uint8_t | Peforms a full read/write transcation with the sensor |
-
-
-
