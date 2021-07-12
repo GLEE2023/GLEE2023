@@ -7,6 +7,7 @@ AK_Sample_t sample;
 void setup (){
     Serial.begin(9600);
     magnetometer.begin_I2C();
+    //magnetometer.getSensor(/*Parameter*/);
     magnetometer.setGain(MLX90393_GAIN_2_5X);
     magnetometer.setResolution(MLX90393_X, MLX90393_RES_19);
     magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19);

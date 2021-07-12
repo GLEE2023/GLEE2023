@@ -37,70 +37,69 @@
 
 /** Register map. */
 enum {
-  MLX90393_REG_SB = (0x10),  /**< Start burst mode. */
-  MLX90393_REG_SW = (0x20),  /**< Start wakeup on change mode. */
-  MLX90393_REG_SM = (0x30),  /**> Start single-meas mode. */
-  MLX90393_REG_RM = (0x40),  /**> Read measurement. */
-  MLX90393_REG_RR = (0x50),  /**< Read register. */
-  MLX90393_REG_WR = (0x60),  /**< Write register. */
-  MLX90393_REG_EX = (0x80),  /**> Exit moode. */
-  MLX90393_REG_HR = (0xD0),  /**< Memory recall. */
-  MLX90393_REG_HS = (0x70),  /**< Memory store. */
-  MLX90393_REG_RT = (0xF0),  /**< Reset. */
-  MLX90393_REG_NOP = (0x00), /**< NOP. */
+    MLX90393_REG_SB = (0x10),  /**< Start burst mode. */
+    MLX90393_REG_SW = (0x20),  /**< Start wakeup on change mode. */
+    MLX90393_REG_SM = (0x30),  /**> Start single-meas mode. */
+    MLX90393_REG_RM = (0x40),  /**> Read measurement. */
+    MLX90393_REG_RR = (0x50),  /**< Read register. */
+    MLX90393_REG_WR = (0x60),  /**< Write register. */
+    MLX90393_REG_EX = (0x80),  /**> Exit moode. */
+    MLX90393_REG_HR = (0xD0),  /**< Memory recall. */
+    MLX90393_REG_HS = (0x70),  /**< Memory store. */
+    MLX90393_REG_RT = (0xF0),  /**< Reset. */
+    MLX90393_REG_NOP = (0x00), /**< NOP. */
 };
 
 /** Gain settings for CONF1 register. */
 typedef enum mlx90393_gain {
-  MLX90393_GAIN_5X = (0x00),
-  MLX90393_GAIN_4X,
-  MLX90393_GAIN_3X,
-  MLX90393_GAIN_2_5X,
-  MLX90393_GAIN_2X,
-  MLX90393_GAIN_1_67X,
-  MLX90393_GAIN_1_33X,
-  MLX90393_GAIN_1X
+    MLX90393_GAIN_5X = (0x00),
+    MLX90393_GAIN_4X,
+    MLX90393_GAIN_3X,
+    MLX90393_GAIN_2_5X,
+    MLX90393_GAIN_2X,
+    MLX90393_GAIN_1_67X,
+    MLX90393_GAIN_1_33X,
+    MLX90393_GAIN_1X
 } mlx90393_gain_t;
 
 /** Resolution settings for CONF3 register. */
 typedef enum mlx90393_resolution {
-  MLX90393_RES_16,
-  MLX90393_RES_17,
-  MLX90393_RES_18,
-  MLX90393_RES_19,
+    MLX90393_RES_16,
+    MLX90393_RES_17,
+    MLX90393_RES_18,
+    MLX90393_RES_19,
 } mlx90393_resolution_t;
 
 /** Axis designator. */
 typedef enum mlx90393_axis {
-  MLX90393_X,
-  MLX90393_Y,
-  MLX90393_Z
+    MLX90393_X,
+    MLX90393_Y,
+    MLX90393_Z
 } mlx90393_axis_t;
 
 /** Digital filter settings for CONF3 register. */
 typedef enum mlx90393_filter {
-  MLX90393_FILTER_0,
-  MLX90393_FILTER_1,
-  MLX90393_FILTER_2,
-  MLX90393_FILTER_3,
-  MLX90393_FILTER_4,
-  MLX90393_FILTER_5,
-  MLX90393_FILTER_6,
-  MLX90393_FILTER_7,
+    MLX90393_FILTER_0,
+    MLX90393_FILTER_1,
+    MLX90393_FILTER_2,
+    MLX90393_FILTER_3,
+    MLX90393_FILTER_4,
+    MLX90393_FILTER_5,
+    MLX90393_FILTER_6,
+    MLX90393_FILTER_7,
 } mlx90393_filter_t;
 
 /** Oversampling settings for CONF3 register. */
 typedef enum mlx90393_oversampling {
-  MLX90393_OSR_0,
-  MLX90393_OSR_1,
-  MLX90393_OSR_2,
-  MLX90393_OSR_3,
+    MLX90393_OSR_0,
+    MLX90393_OSR_1,
+    MLX90393_OSR_2,
+    MLX90393_OSR_3,
 } mlx90393_oversampling_t;
 
 /** Lookup table to convert raw values to uT based on [HALLCONF][GAIN_SEL][RES].
  */
 const float mlx90393_lsb_lookup[2][8][4][2] = {
-
     /* HALLCONF = 0xC (default) */
     {
         /* GAIN_SEL = 0, 5x gain */
@@ -170,57 +169,57 @@ typedef struct{
 
 // Primary Magnetometor class inharents parent sensor class variables and methods
 class MLX90393: public Sensor{
-	// Initialization for Sensor Data, Sensor Info and Data Structures 
-	public:
-		MLX90393(int _id, bool _debug = false);
-        float getMagFieldStrength(sensor_float_vec_t magnetic);
-        AK_Sample_t getSample(void);
+    // Initialization for Sensor Data, Sensor Info and Data Structures 
+    public:
+        MLX90393(int _id, bool _debug = false);
+            float getMagFieldStrength(sensor_float_vec_t magnetic);
+            AK_Sample_t getSample(void);
 
-        bool begin_I2C(uint8_t i2c_addr = MLX90393_DEFAULT_ADDR, TwoWire *wire = &Wire);
-        //bool begin_SPI(uint8_t cs_pin, SPIClass *theSPI = &SPI);
+            bool begin_I2C(uint8_t i2c_addr = MLX90393_DEFAULT_ADDR, TwoWire *wire = &Wire);
+            //bool begin_SPI(uint8_t cs_pin, SPIClass *theSPI = &SPI);
 
-        bool reset(void);
-        bool exitMode(void);
+            bool reset(void);
+            bool exitMode(void);
 
-        bool readMeasurement(float *x, float *y, float *z);
-        bool startSingleMeasurement(void);
+            bool readMeasurement(float *x, float *y, float *z);
+            bool startSingleMeasurement(void);
 
-        bool setGain(enum mlx90393_gain gain);
-        enum mlx90393_gain getGain(void);
+            bool setGain(enum mlx90393_gain gain);
+            enum mlx90393_gain getGain(void);
 
-        bool setResolution(enum mlx90393_axis, enum mlx90393_resolution resolution);
-        enum mlx90393_resolution getResolution(enum mlx90393_axis);
+            bool setResolution(enum mlx90393_axis, enum mlx90393_resolution resolution);
+            enum mlx90393_resolution getResolution(enum mlx90393_axis);
 
-        bool setFilter(enum mlx90393_filter filter);
-        enum mlx90393_filter getFilter(void);
+            bool setFilter(enum mlx90393_filter filter);
+            enum mlx90393_filter getFilter(void);
 
-        bool setOversampling(enum mlx90393_oversampling oversampling);
-        enum mlx90393_oversampling getOversampling(void);
+            bool setOversampling(enum mlx90393_oversampling oversampling);
+            enum mlx90393_oversampling getOversampling(void);
 
-        bool setTrigInt(bool state);
-        bool readData(float *x, float *y, float *z);
+            bool setTrigInt(bool state);
+            bool readData(float *x, float *y, float *z);
 
-        sensor_float_vec_t getMagnetic(float *x, float *y, float *z);
+            sensor_float_vec_t getMagnetic(float *x, float *y, float *z);
 
-        //bool getEvent(sensors_event_t *event);
-        //void getSensor(sensor_t *sensor);
+            //bool getEvent(sensors_event_t *event);
+            void getSensor(sensor_t *sensor);
 
-    private:
-        Adafruit_I2CDevice *i2c_dev = NULL;
-        Adafruit_SPIDevice *spi_dev = NULL;
+      private:
+          Adafruit_I2CDevice *i2c_dev = NULL;
+          Adafruit_SPIDevice *spi_dev = NULL;
 
-        bool readRegister(uint8_t reg, uint16_t *data);
-        bool writeRegister(uint8_t reg, uint16_t data);
-        bool _init(void);
-        uint8_t transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf = NULL, uint8_t rxlen = 0, uint8_t interdelay = 10);
+          bool readRegister(uint8_t reg, uint16_t *data);
+          bool writeRegister(uint8_t reg, uint16_t data);
+          bool _init(void);
+          uint8_t transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf = NULL, uint8_t rxlen = 0, uint8_t interdelay = 10);
 
-        enum mlx90393_gain _gain;
-        enum mlx90393_resolution _res_x, _res_y, _res_z;
-        enum mlx90393_filter _dig_filt;
-        enum mlx90393_oversampling _osr;
+          enum mlx90393_gain _gain;
+          enum mlx90393_resolution _res_x, _res_y, _res_z;
+          enum mlx90393_filter _dig_filt;
+          enum mlx90393_oversampling _osr;
 
-        int32_t _sensorID = 90393;
-        int _cspin;
+          int32_t _sensorID = 90393;
+          int _cspin;
 };
 
 #endif

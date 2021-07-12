@@ -3,7 +3,7 @@ This library is intended for GLEE's Magnetometer Sensor, the
 MLX90393.
 Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control 
 the MLX90393. GLEE_MLX90393 supports the basic functionality of the magnetometer with reading 
-and saving the three-axis magnetic field. [[[It has nine operation modes, including: power-down mode, single measurement mode, continuous measurement modes 1 through 6, and self-test mode and four drive modes with to of each of low noise mode and low power mode. More details about these sensor modes can be found below.]]]
+and saving the three-axis magnetic field. It has 3 modes, including: burst mode, wake-up on change, and single measurement. See more details below.
 
 ## Magnetometer Data Sheet
 [Melexis MLX90393](https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90393)
@@ -20,6 +20,7 @@ AK_Sample_t sample;
 void setup (){
     Serial.begin(9600);
     magnetometer.begin_I2C();
+    //magnetometer.getSensor(/*Parameter*/);
     magnetometer.setGain(MLX90393_GAIN_2_5X);
     magnetometer.setResolution(MLX90393_X, MLX90393_RES_19);
     magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19);
