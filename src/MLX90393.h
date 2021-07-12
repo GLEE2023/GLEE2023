@@ -1,7 +1,7 @@
 /**
  * Description: This is an Arduino (C++) Header file required for the MLX90393 Magnetometer
  * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
- * Library Contributors: John Walker Johnson, Lawson Nerenberg
+ * Library Contributors: Matt Moran, Lawson Nerenberg
  * Primary Resources Used in Creation:
  * MLX90393 Datasheet (https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/MLX90393_Prelim_DS_11-2-18.pdf)
  * Arduino Wire Library Reference Guide
@@ -18,8 +18,6 @@
 #include <Adafruit_Sensor.h>
 
 //Registers
-
-//#define MLX90393_DEFAULT_ADDR (0x0C) /* Can also be 0x18, depending on IC */
 
 // MLX90393 Sensor ADDRESS as given by data sheet: 0x0C
 #define MLX90393_DEFAULT_ADDR 0x0C		
@@ -170,7 +168,7 @@ typedef struct{
 }AK_Sample_t;
 
 // Primary Magnetometor class inharents parent sensor class variables and methods
-class MLX90393: public Adafruit_Sensor{
+class MLX90393: public Sensor{
 	// Initialization for Sensor Data, Sensor Info and Data Structures 
 	public:
 		MLX90393(int _id, bool _debug = false);
@@ -200,6 +198,8 @@ class MLX90393: public Adafruit_Sensor{
 
         bool setTrigInt(bool state);
         bool readData(float *x, float *y, float *z);
+
+        sensor_float_vec_t getMagnetic(float *x, float *y, float *z);
 
         //bool getEvent(sensors_event_t *event);
         //void getSensor(sensor_t *sensor);
