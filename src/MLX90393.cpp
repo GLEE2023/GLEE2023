@@ -46,6 +46,28 @@ bool MLX90393::begin_I2C(uint8_t i2c_addr, TwoWire *wire) {
     return _init();
 }
 
+/*!
+ *    @brief  Sets up the hardware and initializes hardware SPI
+ *    @param  cs_pin The arduino pin # connected to chip select
+ *    @param  theSPI The SPI object to be used for SPI connections.
+ *    @return True if initialization was successful, otherwise false.
+ */
+/*boolean Adafruit_MLX90393::begin_SPI(uint8_t cs_pin, SPIClass *theSPI) {
+  i2c_dev = NULL;
+  if (!spi_dev) {
+    _cspin = cs_pin;
+    spi_dev = new Adafruit_SPIDevice(cs_pin,
+                                     1000000,               // frequency
+                                     SPI_BITORDER_MSBFIRST, // bit order
+                                     SPI_MODE3,             // data mode
+                                     theSPI);
+  }
+  if (!spi_dev->begin()) {
+    return false;
+  }
+  return _init();
+}*/
+
 /**
  * Parameters: None
  * Returns: True if initialization was successful, false if not
