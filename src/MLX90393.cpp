@@ -336,9 +336,9 @@ sensor_float_vec_t MLX90393::getMagnetic(float *x, float *y, float *z){
     int32_t magY = *y;
     int32_t magZ = *z;
 
-    magnetic.x = magX * 10;
-    magnetic.y = magY * 10;
-    magnetic.z = magZ * 10;
+    magnetic.x = magX;
+    magnetic.y = magY;
+    magnetic.z = magZ;
 
     return magnetic;
 }
@@ -454,8 +454,8 @@ AK_Sample_t MLX90393::getSample(void){
     AK_Sample_t sample;
     
     //MLX90393::setOpMode(true, LOW_POWER_1, SINGLE_MEASURE); // Only single measurement mode is currently supported
-    MLX90393::startSingleMeasurement();
-    delay(5); // Wait for single measurement to be taken
+    //MLX90393::startSingleMeasurement();
+    //delay(5); // Wait for single measurement to be taken
 
     if(MLX90393::readData(&x,&y,&z)){
         //MLX90393::setOpMode(true, LOW_POWER_1, POWER_DOWN); // No true equivalent function

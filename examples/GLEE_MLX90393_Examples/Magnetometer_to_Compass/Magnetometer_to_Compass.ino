@@ -85,9 +85,9 @@ void setup (){
 
     // Get sample readings
     for(int i = 0; i < calibrationSize; i++){
-        delay(10);
+        delay(100);
         calMag[i] = magnetometer.getSample();
-        delay(10);
+        delay(100);
     }
 
     Serial.println("Done.");
