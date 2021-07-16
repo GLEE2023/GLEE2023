@@ -79,7 +79,7 @@ void setup (){
 
     // Calibration Code
 
-    int calibrationSize = 500; // Number of data points to be used for calibration
+    int calibrationSize = 200; // Number of data points to be used for calibration
 
     AK_Sample_t calMag[calibrationSize]; // Array of sample initial readings
 
@@ -91,14 +91,16 @@ void setup (){
     }
 
     Serial.println("Done.");
-    delay(1000);
+    delay(3000);
     Serial.println("Performing calibration calculations...");
     
     float calHeadings[calibrationSize]; // Array of headings for initial readings
 
     // Find headings for each initial reading
     for(int k = 0; k < calibrationSize; k++){
+        delay(100);
         calHeadings[k] = findHeading(calMag[k].magnetic.x,calMag[k].magnetic.y);
+        delay(100);
     }
 
     // Find the ranges of values for the headings
