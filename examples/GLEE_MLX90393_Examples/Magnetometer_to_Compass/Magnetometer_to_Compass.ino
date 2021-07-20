@@ -86,8 +86,8 @@ void setup (){
 
     for(int i = 0; i < calibrationSize; i++){
         delay(100);
-        AK_Sample_t calMag = mangetometer.getSample();
-        calHeadings[i] = findHeading(calMag.magnetic.x,calMag.mangetic.y);
+        AK_Sample_t calMag = magnetometer.getSample();
+        calHeadings[i] = findHeading(calMag.magnetic.x,calMag.magnetic.y);
         delay(100);
     }
 
