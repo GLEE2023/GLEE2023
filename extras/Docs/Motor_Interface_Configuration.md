@@ -41,6 +41,6 @@ Motor Controller Interface:
 | - | GND | GND | Ground|
 
 
-![Motor Controller Pinouts](./extras/docs/Images/Motor_refrence.jpg)
-![Arduino Pinout](./extras/docs/Images/Arduino_due_refrence.jpg)
+![Motor Controller Pinouts](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Arduino_Due_Refrence.JPG)
+![Arduino Pinout](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Motor_Refrence.JPG)
 
