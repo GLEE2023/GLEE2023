@@ -14,7 +14,7 @@ AK_Sample_t sample;
 float heading;
 
 // For storing output pin configuration of LED
-int LED = 4;
+int LED = 4; // May need to be changed
 
 // Direction of compass as determined by heading
 String direction_str;
@@ -28,15 +28,15 @@ float maxHeadingTwo = 360.0; // Maximum heading for between 180 and 360 degrees
  * Parameters: float xMag (magnitude of magnetic field in x direction), 
  * float yMag (magnitude of magnetic field in y direction)
  * Returns: compass heading 
- * This function uses the raw magnetomtete readings to output
+ * This function uses the raw magnetometer readings to output
  * a heading. It does not take into account calibrated ranges so it is
  * only used in setup.
 **/
 float findHeading(float xMag, float yMag){
     if(yMag > 0){
-        heading = 270 - (atan(xMag/-yMag))*(180/M_PI); // M_PI = 3.141...
+        heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
     } else if (yMag < 0){
-        heading = 90 - (atan(xMag/-yMag))*(180/M_PI);
+        heading = 270 - (atan(xMag/yMag))*(180/M_PI);
     } else {
         if(xMag < 0){
             heading = 180;
@@ -53,15 +53,15 @@ void setup (){
     delay(3000);
     magnetometer.begin_I2C();
     // Set resolution
-    magnetometer.setResolution(MLX90393_X, MLX90393_RES_19);
-    magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19);
-    magnetometer.setResolution(MLX90393_Z, MLX90393_RES_16);
+    magnetometer.setResolution(MLX90393_X, MLX90393_RES_19); // May need to be changed
+    magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19); // May need to be changed
+    magnetometer.setResolution(MLX90393_Z, MLX90393_RES_16); // May need to be changed
 
     // Set oversampling
-    magnetometer.setOversampling(MLX90393_OSR_2);
+    magnetometer.setOversampling(MLX90393_OSR_2); // May need to be changed
 
     // Set digital filtering
-    magnetometer.setFilter(MLX90393_FILTER_6);
+    magnetometer.setFilter(MLX90393_FILTER_6); // May need to be changed
 
     // Set pin LED as output
     pinMode(LED, OUTPUT);
@@ -79,32 +79,24 @@ void setup (){
 
     // Calibration Code
 
-    int calibrationSize = 200; // Number of data points to be used for calibration
-
-    AK_Sample_t calMag[calibrationSize]; // Array of sample initial readings
+    int calibrationSize = 10; // Number of data points to be used for calibration
 
     // Get sample readings
+    float calHeadings[calibrationSize];
+
     for(int i = 0; i < calibrationSize; i++){
         delay(100);
-        calMag[i] = magnetometer.getSample();
+        AK_Sample_t calMag = mangetometer.getSample();
+        calHeadings[i] = findHeading(calMag.magnetic.x,calMag.mangetic.y);
         delay(100);
     }
 
     Serial.println("Done.");
     delay(3000);
-    Serial.println("Performing calibration calculations...");
-    
-    float calHeadings[calibrationSize]; // Array of headings for initial readings
-
-    // Find headings for each initial reading
-    for(int k = 0; k < calibrationSize; k++){
-        delay(100);
-        calHeadings[k] = findHeading(calMag[k].magnetic.x,calMag[k].magnetic.y);
-        delay(100);
-    }
 
     // Find the ranges of values for the headings
     for(int l = 0; l < calibrationSize; l++){
+        delay(100);
         if(calHeadings[l] <= 180.0){
             if((minHeadingOne == 0.0) && (calHeadings[l]>=0.0)){
                 minHeadingOne = calHeadings[l];
@@ -146,13 +138,15 @@ void loop (){
     // Set aside magnitude of magnetic field in x and y directions for calculations
     float xMag = sample.magnetic.x;
     float yMag = sample.magnetic.y;
+    Serial.println("X magnitude: " + (String)xMag);
+    Serial.println("Y magnitude: " + (String)yMag);
 
     // Determine compass heading (relative to magnetic north)
     if(yMag > 0){
-        heading = 270 - (atan(xMag/-yMag))*(180/M_PI); // M_PI = 3.141...
+        heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
         heading = 180 + ((360 - 180) / (maxHeadingTwo - minHeadingTwo)) * (heading - minHeadingTwo); // Use calibration values   
     } else if (yMag < 0){
-        heading = 90 - (atan(xMag/-yMag))*(180/M_PI);
+        heading = 270 - (atan(xMag/yMag))*(180/M_PI);
         heading = 0 + ((180 - 0) / (maxHeadingOne - minHeadingOne)) * (heading - minHeadingOne); // Use calibration values  
     } else {
         if(xMag < 0){
