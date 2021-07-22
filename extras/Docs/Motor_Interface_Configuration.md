@@ -39,6 +39,8 @@ Motor Controller Interface:
 | - | 4 | - | Supply V_cc |
 | - | 17 | PB 15 | Speed Control |
 | - | GND | GND | Ground|
+| - | DigIN1 | HIGH |
+| - | DigIN2 | LOW |
 
 
 ![Motor Controller Pinouts](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Arduino_Due_Refrence.JPG)
