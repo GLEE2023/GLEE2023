@@ -25,7 +25,7 @@ Controller Input/Output:
 | Motor | Winding 1, 2, 3 |
 
 Motor Controller Interface:
-
+TODO: Add Arduino connections for enable, direction and ready 
 | Motor Pin  | Controller Pin | Arduino (Due) | Description |
 |:----------:|:-------------:|:----------:|:--------:|
 | 1 | 6 | - | V_hall (5V) |
