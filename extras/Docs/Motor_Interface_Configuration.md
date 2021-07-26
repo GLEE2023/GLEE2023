@@ -30,8 +30,8 @@ Motor Controller Interface:
 |:----------:|:-------------:|:----------:|:--------:|
 | 1 | 6 | - | V_hall (5V) |
 | 2 | 9 | - | Hall 3 |
-| 3 | 8 | - | Hall 2 |
-| 4 | 7 | - | Hall 1 |
+| 3 | 7 | - | Hall 1 |
+| 4 | 6 | - | Hall 2 |
 | 5 | 5 | - | GND |
 | 6 | 3 | - | Winding 3 |
 | 7 | 2 | - | Winding 2 |
@@ -44,5 +44,5 @@ Motor Controller Interface:
 
 
 ![Motor Controller Pinouts](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Arduino_Due_Refrence.JPG)
+![Motor Controller Pinouts](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/motor-pin-refrence.JPG)
 ![Arduino Pinout](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Motor_Refrence.JPG)
-
