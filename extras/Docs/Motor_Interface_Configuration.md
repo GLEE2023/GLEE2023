@@ -42,9 +42,14 @@ TODO: Add Arduino connections for enable, direction and ready
 | - | 11 | HIGH | DigIN1| 
 | - | 12 | LOW |DigIN2 |
 
-Controller Pin Refrence
+## Controller Pin Refrence
+
 ![Motor Controller Pinouts](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Arduino_Due_Refrence.JPG)
-Motor Pin Refrence
+
+## Motor Pin Refrence
+
 ![Motor Controller Pinouts](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Motor-Pin-Refrence.JPG)
-Arduino Pin Refrence
+
+## Arduino Pin Refrence
+
 ![Arduino Pinout](https://github.com/GLEE2023/GLEE2023/blob/dev/extras/Docs/Images/Motor_Refrence.JPG)
