@@ -49,8 +49,8 @@ void LunaSat::begin(int baudRate){
 
     // Sensor specific begins and initializations
     if (info.conf[1]){
-        LunaSat::icm20602->begin();
-        LunaSat::icm20602->initialize();
+        // LunaSat::icm20602->begin();
+        // LunaSat::icm20602->initialize();
         Serial.println(F("Accel Initialized"));
     }
 
@@ -83,8 +83,8 @@ lunaSat_sample_t LunaSat::getSample(void){
 
         // Handle acceleration sample based on configuration
         if (info.conf[1] == 1){
-            sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
-            sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
+            // sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
+            // sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
         }
 
         // Handle Thermopile Sample based on configuration
