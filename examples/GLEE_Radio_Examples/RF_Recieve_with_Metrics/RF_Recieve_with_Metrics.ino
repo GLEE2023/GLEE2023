@@ -20,10 +20,10 @@ void loop() {
   //Check if RF successfully recieved tranmsission using the recieve_data_string() function
   //Store Results in a string variable
   String output = Rad.receive_data_string();
-  int rssi = Rad.getRSSI();
-  int snr = Rad.getSNR();
+  float rssi = Rad.getRSSI();
+  float snr = Rad.getSNR();
   //Output the results 
   Serial.println(output);
-  Serial.println(rssi);
-  Serial.println(snr);
+  Serial.println(rssi,5);
+  Serial.println(snr,5);
 }
