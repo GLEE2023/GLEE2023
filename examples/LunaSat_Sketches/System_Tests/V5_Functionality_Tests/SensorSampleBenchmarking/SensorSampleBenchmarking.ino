@@ -16,7 +16,6 @@ float endTime;
 // False for performing tests using a single configuration, true for performing tests using all possible configurations
 bool performAllTests = false;
 
-
 /**
  * Parameters: None
  * Returns: None
@@ -106,42 +105,22 @@ void setup() {
     } else {                // For all configurations
         //Serial.println("Performing all possible tests.");
         //Serial.println();
-
+        //https://www.geeksforgeeks.org/program-decimal-binary-conversion/
         for(int i = 0; i<6; i++){   // Set LunaSat configuration to all sensors disabled
             lunaSatConfig[i] = 0;
         }
 
-        //Perform benchmarking tests on all 64 combinations of sensors
-        for(int zero = 0; zero < 2; zero++){
-            for(int one = 0; one < 2; one++){
-                for(int two = 0; two < 2; two++){
-                    for(int three = 0; three < 2; three++){
-                        for(int four = 0; four < 2; four++){
-                            for(int five = 0; five < 2; five++){
-                                lunaSatConfig[5] = five;
-                                performTest();
-                                delay(1000);
-                            }
-                            lunaSatConfig[4] = four;
-                            performTest();
-                            delay(1000);
-                        }
-                        lunaSatConfig[3] = three;
-                        performTest();
-                        delay(1000);
-                    }
-                    /*lunaSatConfig[2] = 0;
-                    performTest();
-                    delay(1000);*/
-                }
-                lunaSatConfig[1] = one;
-                performTest();
-                delay(1000);
+        for(int n = 0; n < 64; n++){
+            int j = 0;
+            while (n > 0) {
+                lunaSatConfig[j] = n % 2;
+                n = n / 2;
+                j++;
             }
-            lunaSatConfig[0] = zero;
             performTest();
-            delay(1000);
+
         }
+        
     }
 }
 
