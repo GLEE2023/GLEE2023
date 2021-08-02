@@ -55,6 +55,8 @@ void Sensor::setDebugMode(bool _debug){
     Sensor::sensorDebug = _debug;
 }
 
+// I2C Helper Functions 
+
 uint8_t Sensor::readByte(uint8_t registerAddress){
     uint8_t readByte;                                       // byte to store data that is read
     Wire.beginTransmission(Sensor::info.address);           // begins comms with sensor specified
@@ -63,13 +65,6 @@ uint8_t Sensor::readByte(uint8_t registerAddress){
     Wire.requestFrom(Sensor::info.address, uint8_t (1) );   // request 1 byte from the sensor address
     readByte = Wire.read();                                 // read data and store in the readByte variable
     return readByte;                                        // return the read data byte
-}
-
-void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
-    Wire.beginTransmission(Sensor::info.address);               // begin communication with the sensor 
-    Wire.write(registerAddress);                                // point to address to be written to
-    Wire.write(writeData);                                      // write data to adress specificed above
-    Wire.endTransmission();                                     // end communication
 }
 
 void Sensor::readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
@@ -82,5 +77,30 @@ void Sensor::readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
     while(Wire.available()){
         data[i] = Wire.read();
         i++;
+    }
+}
+
+void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
+    Wire.beginTransmission(Sensor::info.address);               // begin communication with the sensor 
+    Wire.write(registerAddress);                                // point to address to be written to
+    Wire.write(writeData);                                      // write data to adress specificed above
+    Wire.endTransmission();                                     // end communication
+}
+
+void Sensor::writeBits(uint8_t registerAddress, uint8_t startBit, uint8_t length, uint8_t data){
+
+
+    uint8_t buff; 
+    if (readByte(registerAddress) != 0){
+        uint8_t mask = ((1 << length) - 1) << (startBit - length + 1);
+        data <<= (startBit - length + 1); 
+        data &= mask;
+        buff &= ~(mask);
+        buff |= data;
+        writeByte(registerAddress, buff);
+        //return;
+    } else {
+        // ERROR
+        //return;
     }
 }
