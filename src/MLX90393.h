@@ -165,7 +165,7 @@ typedef struct{
     sensor_float_vec_t magnetic;
     float strength;
     float temp;
-}AK_Sample_t;
+} mlx_sample_t;
 
 // Primary Magnetometor class inharents parent sensor class variables and methods
 class MLX90393: public Sensor{
@@ -173,7 +173,7 @@ class MLX90393: public Sensor{
     public:
         MLX90393(int _id, bool _debug = false);
             float getMagFieldStrength(sensor_float_vec_t magnetic);
-            AK_Sample_t getSample(void);
+            mlx_sample_t getSample(void);
 
             bool begin_I2C(uint8_t i2c_addr = MLX90393_DEFAULT_ADDR, TwoWire *wire = &Wire);
             //bool begin_SPI(uint8_t cs_pin, SPIClass *theSPI = &SPI);

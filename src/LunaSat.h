@@ -9,11 +9,15 @@
 #include <GLEE_Radio.h> // Library containing pertiant radio functionality
 
 // Include Sensor Libraries
-#include "AK09940.h"                // Magnetometer Library
-// #include "ICM20602.h"               // IMU Library
-#include "TMP117.h"                 // Temperature Sensor Library
-#include "TPIS1385.h"               // Thermopile Library
-#include "CAP.h"             // Capacitive Sesnor Library
+
+#include "TMP117.h"     // Temperature Sensor Library
+#include "TPIS1385.h"   // Thermopile Library
+#include "CAP.h"        // Capacitive Sesnor Library
+#include "MLX90393.h"   // Magnetometer Library
+#include "MPU6000.h"    // Accelerometer Library
+
+// #include "AK09940.h"   // 5.0 Magnetometer Library
+// #include "ICM20602.h"  // 5.0 IMU Library
 
 #define LED1 4 // Indicator LED Pin Constants defined here
 #define LED2 5 
@@ -90,10 +94,14 @@ class LunaSat{
     
         // Sensor class instances
         TMP117 *tmp117 = new TMP117(0);
-        // ICM20602 *icm20602 = new ICM20602(1,true,false);
-        AK09940 *ak09940 = new AK09940(2);
+        MPU6000 *mpu6000 = new MPU6000(1);
+        MLX90393 *mlx90393 = new MLX90393(2);
         TPIS1385 *tpis1385 = new TPIS1385(3);
         CAP *cap = new CAP(4);
+
+        // 5.0 Sensors
+        // ICM20602 *icm20602 = new ICM20602(1,true,false);
+        // AK09940 *ak09940 = new AK09940(2);
 
         bool debug;
 };

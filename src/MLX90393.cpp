@@ -446,12 +446,12 @@ float MLX90393::getMagFieldStrength(sensor_float_vec_t magnetic){
 
 /**
  * Parameters: None
- * Returns: Sample as the custom type AK_Sample_t
- * This function gets the magnetic readings and magnetic field strength and returns them as a part of the AK_Sample_t data type.
+ * Returns: Sample as the custom type mlx_sample_t
+ * This function gets the magnetic readings and magnetic field strength and returns them as a part of the mlx_sample_t data type.
 **/
-AK_Sample_t MLX90393::getSample(void){
+mlx_sample_t MLX90393::getSample(void){
     float x,y,z;
-    AK_Sample_t sample;
+    mlx_sample_t sample;
     
     //MLX90393::setOpMode(true, LOW_POWER_1, SINGLE_MEASURE); // Only single measurement mode is currently supported
     //MLX90393::startSingleMeasurement();

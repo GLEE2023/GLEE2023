@@ -44,28 +44,50 @@ void LunaSat::begin(int baudRate){
     Serial.begin(baudRate);
     delay(5);
     if (debug){
-        Serial.println("LunaSat has begun serial communications");
+        Serial.println(F("Serial Coms Active"));
     }
 
     // Sensor specific begins and initializations
     if (info.conf[1]){
+        LunaSat::mpu6000->begin();
+        LunaSat::mpu6000->initialize();
+        LunaSat::mpu6000->setAccelRange(MPU6000_RANGE_2_G);
+
+        // Depricated 5.0 Accel Init
         // LunaSat::icm20602->begin();
         // LunaSat::icm20602->initialize();
-        Serial.println(F("Accel Initialized"));
+
+        if (debug) Serial.println(F("Accel Initialized"));
+    }
+
+    if (info.conf[2]==1) {
+        LunaSat::mlx90393->begin_I2C();
+        LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
+        LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
+        LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
+        LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
+        LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
+        LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+
+       if (debug) Serial.println(F("Mag Initialized"));
     }
 
     if (info.conf[3]==1){
         LunaSat::tpis1385->begin();
         LunaSat::tpis1385->readEEprom();
+
+        if (debug) Serial.println(F("T-Pile Initialized"));
     }
 
     if (info.conf[4]==1){
         LunaSat::cap->begin();
+        if (debug) Serial.println(F("Cap Initialized"));
     }
     if(info.conf[5]==1){
         // Default radio initialization
         LunaSat::rad.initialize_radio();
         delay(50);
+        if (debug) Serial.println(F("Radio Initialized"));
     }
 }
 
@@ -83,8 +105,18 @@ lunaSat_sample_t LunaSat::getSample(void){
 
         // Handle acceleration sample based on configuration
         if (info.conf[1] == 1){
+            
+            sample.acceleration = LunaSat::mpu6000->getSample();
+            
+            // 5.0 ICM [deprecated]
             // sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
             // sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
+        }
+
+        // Handle Magnetometer
+        if (info.conf[2] == 1){
+            mlx_sample_t magSample = LunaSat::mlx90393->getSample();
+            sample.magnetic = magSample.magnetic;
         }
 
         // Handle Thermopile Sample based on configuration
