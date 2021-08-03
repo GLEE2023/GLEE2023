@@ -142,11 +142,14 @@ void loop (){
     Serial.println("Y magnitude: " + (String)yMag);
 
     // Determine compass heading (relative to magnetic north)
+    Serial.print("atan2: "); Serial.println(atan2(xMag,yMag);
+    Serial.print("atan: "); Serial.println(atan(xMag/yMag);
+                                           
     if(yMag > 0){
         heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
         heading = 180 + ((360 - 180) / (maxHeadingTwo - minHeadingTwo)) * (heading - minHeadingTwo); // Use calibration values   
     } else if (yMag < 0){
-        heading = 270 - (atan(xMag/yMag))*(180/M_PI);
+        heading = 270 - (atan2(xMag/yMag))*(180/M_PI);
         heading = 0 + ((180 - 0) / (maxHeadingOne - minHeadingOne)) * (heading - minHeadingOne); // Use calibration values  
     } else {
         if(xMag < 0){
