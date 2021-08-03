@@ -24,9 +24,6 @@ float maxHeadingOne = 180.0; // Maximum heading for between 0 and 180 degrees
 float minHeadingTwo = 180.0; // Minimum heading for between 180 and 360 degrees
 float maxHeadingTwo = 360.0; // Maximum heading for between 180 and 360 degrees
 
-float xMag = 0;
-float yMag = 0;
-
 /**
  * Parameters: float xMag (magnitude of magnetic field in x direction), 
  * float yMag (magnitude of magnetic field in y direction)
@@ -135,110 +132,107 @@ void setup (){
     Serial.println();
 };
 
-
-
 void loop (){
     sample = magnetometer.getSample(); // Get sample
 
     // Set aside magnitude of magnetic field in x and y directions for calculations
-    xMag = sample.magnetic.x;
-    yMag = sample.magnetic.y;
+    float xMag = sample.magnetic.x;
+    float yMag = sample.magnetic.y;
     Serial.println("X magnitude: " + (String)xMag);
     Serial.println("Y magnitude: " + (String)yMag);
 
-    // Determine compass heading
-    heading = atan2(xMag,yMag) * (180/M_PI);
+    // Determine compass heading (relative to magnetic north)
+    Serial.print("atan2: "); Serial.println(atan2(xMag,yMag);
+    Serial.print("atan: "); Serial.println(atan(xMag/yMag);
+                                           
+    if(yMag > 0){
+        heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
+        heading = 180 + ((360 - 180) / (maxHeadingTwo - minHeadingTwo)) * (heading - minHeadingTwo); // Use calibration values   
+    } else if (yMag < 0){
+        heading = 270 - (atan2(xMag/yMag))*(180/M_PI);
+        heading = 0 + ((180 - 0) / (maxHeadingOne - minHeadingOne)) * (heading - minHeadingOne); // Use calibration values  
+    } else {
+        if(xMag < 0){
+            heading = 180;
+        } else {
+            heading = 0.0;
+        }
+    }
+
+    // Set to Error by default in order to determine what information should be printed
+    direction_str = "Error";
+
+    // Determine if heading is valid and print general direction of compass
+    if(heading < 0.0 || heading > 360.0){
+        Serial.print("Error. Heading should be between 0 and 360 degrees. Your heading is: ");
+        Serial.print(heading);
+        Serial.println(" degrees");
+        /*
+         * heading = abs(heading % 360)
+         */
+    } else {
+        // Print message to serial if compass is pointing exactly or almost exactly in an particular direction
+        if((abs(heading-0.0) < 0.5) || (abs(heading-360.0) < 0.5)){
+            Serial.println("Facing due north");
+            direction_str = "north";
+        } else if (abs(heading-45.0) < 0.5){
+            Serial.println("Facing due northeast");
+            direction_str = "northeast";
+        } else if (abs(heading-90.0) < 0.5){
+            Serial.println("Facing due east");
+            direction_str = "east";
+        } else if (abs(heading-135.0) < 0.5){
+            Serial.println("Facing due southeast");
+            direction_str = "southeast";
+        } else if (abs(heading-180.0) < 0.5){
+            Serial.println("Facing due south");
+            direction_str = "south";
+        } else if (abs(heading-225.0) < 0.5){
+            Serial.println("Facing due southwest");
+            direction_str = "southwest";
+        } else if (abs(heading-270.0) < 0.5){
+            Serial.println("Facing due west");
+            direction_str = "west";
+        } else if (abs(heading-315.0) < 0.5){
+            Serial.println("Facing due northwest");
+            direction_str = "northwest";
+        } else if (heading <= 22.5 || heading > 337.5){
+            direction_str = "north";
+        } else if (heading <= 67.5 && heading > 22.5){
+            direction_str = "northeast";
+        } else if (heading <= 112.5 && heading > 67.5){   
+            direction_str = "east";
+        } else if (heading <= 157.5 && heading > 112.5){  
+            direction_str = "southeast";
+        } else if (heading <= 202.5 && heading > 157.5){    
+            direction_str = "south";
+        } else if (heading <= 247.5 && heading > 202.5){   
+            direction_str = "southwest";
+        } else if (heading <= 292.5 && heading > 247.5){    
+            direction_str = "west";
+        } else if (heading <= 337.5 && heading > 292.5){   
+            direction_str = "northwest";
+        }
+    }
+
+    // Print out direction and heading of compass if the heading value is valid
+    if(direction_str != "Error"){
+        Serial.print("Direction: ");
+        Serial.println(direction_str);
+        Serial.print("Compass Heading: ");
+        Serial.print(heading,5);
+        Serial.println(" degrees");
+    }
     
-    Serial.print("Heading: "); Serial.println(heading,2);
-           
-    // if(yMag > 0){
-    //     heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
-    //     heading = 180 + ((360 - 180) / (maxHeadingTwo - minHeadingTwo)) * (heading - minHeadingTwo); // Use calibration values   
-    // } else if (yMag < 0){
-    //     heading = 270 - (atan(xMag/yMag))*(180/M_PI);
-    //     heading = 0 + ((180 - 0) / (maxHeadingOne - minHeadingOne)) * (heading - minHeadingOne); // Use calibration values  
-    // } else {
-    //     if(xMag < 0){
-    //         heading = 180;
-    //     } else {
-    //         heading = 0.0;
-    //     }
-    // }
-
-    // // Set to Error by default in order to determine what information should be printed
-    // direction_str = "Error";
-
-    // // Determine if heading is valid and print general direction of compass
-    // if(heading < 0.0 || heading > 360.0){
-    //     Serial.print("Error. Heading should be between 0 and 360 degrees. Your heading is: ");
-    //     Serial.print(heading);
-    //     Serial.println(" degrees");
-    //     /*
-    //      * heading = abs(heading % 360)
-    //      */
-    // } else {
-    //     // Print message to serial if compass is pointing exactly or almost exactly in an particular direction
-    //     if((abs(heading-0.0) < 0.5) || (abs(heading-360.0) < 0.5)){
-    //         Serial.println("Facing due north");
-    //         direction_str = "north";
-    //     } else if (abs(heading-45.0) < 0.5){
-    //         Serial.println("Facing due northeast");
-    //         direction_str = "northeast";
-    //     } else if (abs(heading-90.0) < 0.5){
-    //         Serial.println("Facing due east");
-    //         direction_str = "east";
-    //     } else if (abs(heading-135.0) < 0.5){
-    //         Serial.println("Facing due southeast");
-    //         direction_str = "southeast";
-    //     } else if (abs(heading-180.0) < 0.5){
-    //         Serial.println("Facing due south");
-    //         direction_str = "south";
-    //     } else if (abs(heading-225.0) < 0.5){
-    //         Serial.println("Facing due southwest");
-    //         direction_str = "southwest";
-    //     } else if (abs(heading-270.0) < 0.5){
-    //         Serial.println("Facing due west");
-    //         direction_str = "west";
-    //     } else if (abs(heading-315.0) < 0.5){
-    //         Serial.println("Facing due northwest");
-    //         direction_str = "northwest";
-    //     } else if (heading <= 22.5 || heading > 337.5){
-    //         direction_str = "north";
-    //     } else if (heading <= 67.5 && heading > 22.5){
-    //         direction_str = "northeast";
-    //     } else if (heading <= 112.5 && heading > 67.5){   
-    //         direction_str = "east";
-    //     } else if (heading <= 157.5 && heading > 112.5){  
-    //         direction_str = "southeast";
-    //     } else if (heading <= 202.5 && heading > 157.5){    
-    //         direction_str = "south";
-    //     } else if (heading <= 247.5 && heading > 202.5){   
-    //         direction_str = "southwest";
-    //     } else if (heading <= 292.5 && heading > 247.5){    
-    //         direction_str = "west";
-    //     } else if (heading <= 337.5 && heading > 292.5){   
-    //         direction_str = "northwest";
-    //     }
-    // }
-
-    // // Print out direction and heading of compass if the heading value is valid
-    // if(direction_str != "Error"){
-    //     Serial.print("Direction: ");
-    //     Serial.println(direction_str);
-    //     Serial.print("Compass Heading: ");
-    //     Serial.print(heading,5);
-    //     Serial.println(" degrees");
-    // }
-    
-    // if(heading<=180.0){
-    //     digitalWrite(LED, HIGH);
-    //     delay(50 + (heading*4)); // Delay blink of LED based on value of heading
-    //     digitalWrite(LED, LOW);
-    // } else {
-    //     digitalWrite(LED, HIGH);
-    //     delay(50 + ((360-heading)*4)); // Delay blink of LED based on value of heading
-    //     digitalWrite(LED, LOW);
-    // }
+    if(heading<=180.0){
+        digitalWrite(LED, HIGH);
+        delay(50 + (heading*4)); // Delay blink of LED based on value of heading
+        digitalWrite(LED, LOW);
+    } else {
+        digitalWrite(LED, HIGH);
+        delay(50 + ((360-heading)*4)); // Delay blink of LED based on value of heading
+        digitalWrite(LED, LOW);
+    }
 
     delay(1000);
 
