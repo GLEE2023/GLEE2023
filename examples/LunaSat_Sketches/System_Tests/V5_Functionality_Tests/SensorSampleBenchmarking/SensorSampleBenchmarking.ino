@@ -14,7 +14,7 @@ float startTime;
 float endTime;
 
 // False for performing tests using a single configuration, true for performing tests using all possible configurations
-bool performAllTests = false;
+bool performAllTests = true;
 
 /**
  * Parameters: None
@@ -36,7 +36,7 @@ void performTest(){
     //Serial.println("LunaSat Configuration: {" + to_string(lunaSatConfig[0]) + "," + to_string(lunaSatConfig[1]) + "," + to_string(lunaSatConfig[2]) + "," + to_string(lunaSatConfig[3]) + "," + to_string(lunaSatConfig[4]) + "," + to_string(lunaSatConfig[5]) + "}");
 
     delay(100);
-
+    /*
     //Retrieve a single sample
     Serial.println("Getting 1 Samples...");
     delay(100);
@@ -46,41 +46,35 @@ void performTest(){
     endTime = micros();
 
     Serial.print("Time (in microseconds) to get 1 sample: "); Serial.println(endTime-startTime);
-
+    
+    
     //Retrieve 5 samples
     Serial.println("Getting 5 Samples...");
     delay(100);
 
     startTime = micros();
-    sample = lunaSat.getSample(); 
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
+    for(int i = 0; i < 5; i++){
+      sample = lunaSat.getSample();
+    }
     endTime = micros();
 
     Serial.print("Time (in microseconds) to get 5 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/5);
-
+    
+    
     //Retrieve 10 samples
     Serial.println("Getting 10 Samples...");
     delay(100);
 
     startTime = micros();
-    sample = lunaSat.getSample(); 
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample(); 
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
-    sample = lunaSat.getSample();
+    for(int i = 0; i < 10; i++){
+      sample = lunaSat.getSample();
+    }
     endTime = micros();
 
     Serial.print("Time (in microseconds) to get 10 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/10);
+    */
 
     //Retrieve 100 samples
     Serial.println("Getting 100 Samples...");
@@ -94,6 +88,7 @@ void performTest(){
 
     //Serial.print("Time (in microseconds) to get 100 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/100);
+    delay(1000);
 }
 
 void setup() {
@@ -106,15 +101,13 @@ void setup() {
         //Serial.println("Performing all possible tests.");
         //Serial.println();
         //https://www.geeksforgeeks.org/program-decimal-binary-conversion/
-        for(int i = 0; i<6; i++){   // Set LunaSat configuration to all sensors disabled
-            lunaSatConfig[i] = 0;
-        }
 
         for(int n = 0; n < 64; n++){
             int j = 0;
-            while (n > 0) {
-                lunaSatConfig[j] = n % 2;
-                n = n / 2;
+            int k = n;
+            while (k > 0) {
+                lunaSatConfig[j] = k % 2;
+                k = k / 2;
                 j++;
             }
             performTest();
