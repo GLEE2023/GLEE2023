@@ -93,42 +93,54 @@ void LunaSat::begin(int baudRate){
 
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
-    if (!debug){
-        sample.timeStamp = millis();
 
-        // Handle Temperature Sensor Sample base on configuration
-        if (info.conf[0] == 1){
-            sample.TMPtemperature = LunaSat::tmp117->getTemperatureC();
-        }else{
-            sample.TMPtemperature = 0;
-        }
+    sample.timeStamp = millis();
 
-        // Handle acceleration sample based on configuration
-        if (info.conf[1] == 1){
-            
-            //sample.acceleration = LunaSat::mpu6000->getSample();
-            
-            // 5.0 ICM [deprecated]
-            // sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
-            // sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
-        }
-
-        // Handle Magnetometer
-        if (info.conf[2] == 1){
-            mlx_sample_t magSample = LunaSat::mlx90393->getSample();
-            sample.magnetic = magSample.magnetic;
-        }
-
-        // Handle Thermopile Sample based on configuration
-        if (info.conf[3] == 1){
-            sample.TPTemperature = LunaSat::tpis1385->getSample();
-        }
-
-        if (info.conf[4] == 1){
-            sample.cap = LunaSat::cap->getRawData();
-        }
-        
+    // Handle Temperature Sensor Sample base on configuration
+    if (info.conf[0] == 1){
+        sample.TMPtemperature = LunaSat::tmp117->getTemperatureC();
+    }else{
+        sample.TMPtemperature = 0;
     }
+
+    // Handle acceleration sample based on configuration
+    if (info.conf[1] == 1){
+        
+        //sample.acceleration = LunaSat::mpu6000->getSample();
+        
+        // 5.0 ICM [deprecated]
+        // sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
+        // sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
+    } else {
+        sample.acceleration.x = 0;
+        sample.acceleration.y = 0;
+        sample.acceleration.z = 0;
+    }
+
+    // Handle Magnetometer
+    if (info.conf[2] == 1){
+        mlx_sample_t magSample = LunaSat::mlx90393->getSample();
+        sample.magnetic = magSample.magnetic;
+    } else {
+        sample.magnetic.x = 0;
+        sample.magnetic.y = 0;
+        sample.magnetic.z = 0;
+    }
+
+    // Handle Thermopile Sample based on configuration
+    if (info.conf[3] == 1){
+        sample.TPTemperature = LunaSat::tpis1385->getSample();
+    } else {
+        sample.TPTemperature = 0;
+    }
+
+    if (info.conf[4] == 1){
+        sample.cap = LunaSat::cap->getRawData();
+    } else {
+        sample.cap = 0;
+    }
+        
+    
 
     return sample;
 }
