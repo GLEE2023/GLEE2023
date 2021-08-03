@@ -148,7 +148,11 @@ void loop (){
 
     // Determine compass heading
     heading = atan2(xMag,yMag) * (180/M_PI);
-    
+
+    if (heading < 0) {
+        heading = 360 + heading;
+    }
+
     Serial.print("Heading: "); Serial.println(heading,2);
            
     // if(yMag > 0){
