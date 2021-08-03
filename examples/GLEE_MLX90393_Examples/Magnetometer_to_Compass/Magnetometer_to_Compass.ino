@@ -5,10 +5,10 @@
 #include <math.h>
 #include <String.h>
 
-// Instantiate AKO9940 class with id of one and debugging set to true
+// Instantiate MLX90393 class with id of one and debugging set to true
 MLX90393 magnetometer = MLX90393(1,true);
 
-AK_Sample_t sample;
+mlx_sample_t sample;
 
 // Magnetic compass heading (calculated later)
 float heading;
@@ -86,7 +86,7 @@ void setup (){
 
     for(int i = 0; i < calibrationSize; i++){
         delay(100);
-        AK_Sample_t calMag = magnetometer.getSample();
+        mlx_sample_t calMag = magnetometer.getSample();
         calHeadings[i] = findHeading(calMag.magnetic.x,calMag.magnetic.y);
         delay(100);
     }
