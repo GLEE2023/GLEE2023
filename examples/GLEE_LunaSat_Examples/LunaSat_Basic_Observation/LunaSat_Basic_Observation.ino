@@ -4,7 +4,7 @@
 int lunaSatConfig[6] = {1,1,1,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
-LunaSat lunaSat(0, lunaSatConfig, false);
+LunaSat lunaSat(0, lunaSatConfig, true);
 
 // Custom datatypes allow for sample specialization, user can craft their own ideal sample
 lunaSat_sample_t sample;  
