@@ -1,7 +1,7 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[6] = {1,0,0,1,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+int lunaSatConfig[6] = {0,0,0,0,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 /*int allConfigs[64][6] = {{0,0,0,0,0,0},{1,0,0,0,0,0},{0,1,0,0,0,0},
 {0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1},{1,1,0,0,0,0},{1,0,0,1,0,0},
@@ -26,6 +26,7 @@ int size;
  * This function handles calculating the average time to retrieve a sample for a given LunaSat configuration.
 **/
 void performTest(){
+    size = 0;
     Serial.println();
     Serial.print("LunaSat Configuration: ");    // Print current LunaSat Configuration
     Serial.print("{");
@@ -51,6 +52,9 @@ void performTest(){
     if(lunaSatConfig[1]==1){
       size = size + sizeof(sample.acceleration);
     }
+    if(lunaSatConfig[2]==1){
+      size = size + sizeof(sample.magnetic);
+    }
     if(lunaSatConfig[3]==1){
       size = size + sizeof(sample.TPTemperature);
     }
@@ -61,23 +65,26 @@ void performTest(){
     Serial.print("Size of sample: "); Serial.print(size); Serial.println(" bytes");
     Serial.print("Timestamp size: "); Serial.print(sizeof(sample.timeStamp)); Serial.println(" bytes");
     Serial.print("Maximum size of sample: "); Serial.print(sizeof(sample)); Serial.println(" bytes");
+    delay(1000);
 }
 
 void setup() {
   
     Serial.begin(9600);    // Direct serial communications with computer
     delay(5000);
-    /*for(int i = 0; i < 32; i++) {
-      lunaSatConfig[0] = allConfigs[i][0];
-      lunaSatConfig[1] = allConfigs[i][1];
-      lunaSatConfig[2] = allConfigs[i][2];
-      lunaSatConfig[3] = allConfigs[i][3];
-      lunaSatConfig[4] = allConfigs[i][4];
-      lunaSatConfig[5] = allConfigs[i][5];
+
+    for(int n = 0; n < 64; n++){
+      int j = 0;
+      int k = n;
+      while (k > 0) {
+          lunaSatConfig[j] = k % 2;
+          k = k / 2;
+          j++;
+      }
       performTest();
-      delay(1000);
-    }*/
-    performTest();
+
+    }
+    //performTest();
     
 }
 
