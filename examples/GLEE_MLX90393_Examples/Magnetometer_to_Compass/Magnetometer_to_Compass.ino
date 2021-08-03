@@ -164,6 +164,9 @@ void loop (){
         Serial.print("Error. Heading should be between 0 and 360 degrees. Your heading is: ");
         Serial.print(heading);
         Serial.println(" degrees");
+        /*
+         * heading = abs(heading % 360)
+         */
     } else {
         // Print message to serial if compass is pointing exactly or almost exactly in an particular direction
         if((abs(heading-0.0) < 0.5) || (abs(heading-360.0) < 0.5)){
@@ -192,19 +195,19 @@ void loop (){
             direction_str = "northwest";
         } else if (heading <= 22.5 || heading > 337.5){
             direction_str = "north";
-        } else if (heading <= 67.5 || heading > 22.5){
+        } else if (heading <= 67.5 && heading > 22.5){
             direction_str = "northeast";
-        } else if (heading <= 112.5 || heading > 67.5){   
+        } else if (heading <= 112.5 && heading > 67.5){   
             direction_str = "east";
-        } else if (heading <= 157.5 || heading > 112.5){  
+        } else if (heading <= 157.5 && heading > 112.5){  
             direction_str = "southeast";
-        } else if (heading <= 202.5 || heading > 157.5){    
+        } else if (heading <= 202.5 && heading > 157.5){    
             direction_str = "south";
-        } else if (heading <= 247.5 || heading > 202.5){   
+        } else if (heading <= 247.5 && heading > 202.5){   
             direction_str = "southwest";
-        } else if (heading <= 292.5 || heading > 247.5){    
+        } else if (heading <= 292.5 && heading > 247.5){    
             direction_str = "west";
-        } else if (heading <= 337.5 || heading > 292.5){   
+        } else if (heading <= 337.5 && heading > 292.5){   
             direction_str = "northwest";
         }
     }
