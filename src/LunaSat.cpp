@@ -49,8 +49,8 @@ void LunaSat::begin(int baudRate){
 
     // Sensor specific begins and initializations
     if (info.conf[1]){
-        // LunaSat::mpu6000->begin();
-        // LunaSat::mpu6000->initialize();
+        LunaSat::mpu6000->begin();
+        LunaSat::mpu6000->initialize();
         // LunaSat::mpu6000->setAccelRange(MPU6000_RANGE_2_G);
 
         // Depricated 5.0 Accel Init
@@ -106,7 +106,7 @@ lunaSat_sample_t LunaSat::getSample(void){
     // Handle acceleration sample based on configuration
     if (info.conf[1] == 1){
         
-        //sample.acceleration = LunaSat::mpu6000->getSample();
+        sample.acceleration = LunaSat::mpu6000->getSample();
         
         // 5.0 ICM [deprecated]
         // sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
