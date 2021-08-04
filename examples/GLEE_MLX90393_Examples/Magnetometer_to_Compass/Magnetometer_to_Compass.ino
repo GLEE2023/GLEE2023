@@ -92,7 +92,8 @@ void setup (){
         mlx_sample_t calMag = magnetometer.getSample();
         //calHeadings[i] = findHeading(calMag.magnetic.x,calMag.magnetic.y);
         calHeadings[i] = calMag;
-        delay(100);
+        print(calHeadings[i]);
+        //delay(100);
     }
 
     Serial.println("Done.");
@@ -183,6 +184,8 @@ void loop (){
 
     if (heading < 0) {
         heading = 360 + heading;
+    } else if (heading > 360) {
+        heading = heading % 360;
     }
 
     // // Set to Error by default in order to determine what information should be printed
@@ -193,9 +196,6 @@ void loop (){
          Serial.print("Error. Heading should be between 0 and 360 degrees. Your heading is: ");
          Serial.print(heading);
          Serial.println(" degrees");
-         /*
-          * heading = abs(heading % 360)
-          */
      } else {
          // Print message to serial if compass is pointing exactly or almost exactly in an particular direction
          if((abs(heading-0.0) < 0.5) || (abs(heading-360.0) < 0.5)){
