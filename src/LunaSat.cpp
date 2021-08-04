@@ -61,13 +61,13 @@ void LunaSat::begin(int baudRate){
     }
 
     if (info.conf[2]==1) {
-        LunaSat::mlx90393->begin_I2C();
-        LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
-        LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
-        LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
-        LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
-        LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
-        LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+        // LunaSat::mlx90393->begin_I2C();
+        // LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
+        // LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
+        // LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
+        // LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
+        // LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
+        // LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
 
        if (debug) Serial.println(F("Mag Initialized"));
     } 
@@ -119,7 +119,7 @@ lunaSat_sample_t LunaSat::getSample(void){
 
     // Handle Magnetometer
     if (info.conf[2] == 1){
-        sample.mag = LunaSat::mlx90393->getSample();
+        // sample.mag = LunaSat::mlx90393->getSample();
     } else {
         sample.mag.magnetic.x = 0;
         sample.mag.magnetic.y = 0;
