@@ -51,26 +51,16 @@ void MPU6000::initialize(void){
     Wire.setClock(100000);
 
 
-
-    // writeByte(MPU6000_PWR_MGMT_1, 0x01);   // Set clock set to auto
-    // writeByte(MPU6000_CONFIG, 0x01); 
-    // writeByte(MPU6000_GYRO_CONFIG, 0x10);    
-    // writeByte(MPU6000_ACCEL_CONFIG, 0x00);   
-	// if(gyroOn){
-	// 	disableGyro(false);    // Configuration with Gyro enabled 
-	// }else{
-	// 	disableGyro(true);  // Configuration with Gyro disabled 
-	// }
-  // TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
+  	// TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
 
 /*
-Parameters: none
-Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
-This function reads in the high bytes of the accel for each of the three 
-axis, performs a bitwise operation, then saves and returns the raw acceleration
-struct.
+	Parameters: none
+	Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
+	This function reads in the high bytes of the accel for each of the three 
+	axis, performs a bitwise operation, then saves and returns the raw acceleration
+	struct.
 */
 sensor_int16_vec_t MPU6000::getRawAcc(){
 	sensor_int16_vec_t rawAcc;
@@ -81,8 +71,8 @@ sensor_int16_vec_t MPU6000::getRawAcc(){
 	
 	// 2xBytes per raw axis reading
 	rawAcc.x = buffer[0] << 8 | buffer[1];
-	rawAcc.x = buffer[2] << 8 | buffer[3];
-	rawAcc.x = buffer[4] << 8 | buffer[5];
+	rawAcc.y = buffer[2] << 8 | buffer[3];
+	rawAcc.z = buffer[4] << 8 | buffer[5];
 
     return rawAcc;
 }
@@ -96,8 +86,8 @@ sensor_int16_vec_t MPU6000::getRawGyro(){
 	
 	// 2xBytes per raw axis reading
 	rawGyro.x = buffer[0] << 8 | buffer[1];
-	rawGyro.x = buffer[2] << 8 | buffer[3];
-	rawGyro.x = buffer[4] << 8 | buffer[5];
+	rawGyro.y = buffer[2] << 8 | buffer[3];
+	rawGyro.z = buffer[4] << 8 | buffer[5];
 
     return rawGyro;
 }
