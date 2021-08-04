@@ -61,13 +61,13 @@ void LunaSat::begin(int baudRate){
     }
 
     if (info.conf[2]==1) {
-        // LunaSat::mlx90393->begin_I2C();
-        // LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
-        // LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
-        // LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
-        // LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
-        // LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
-        // LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+        LunaSat::mlx90393->begin_I2C();
+        LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
+        LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
+        LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
+        LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
+        LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
+        LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
 
        if (debug) Serial.println(F("Mag Initialized"));
     } 
@@ -119,11 +119,11 @@ lunaSat_sample_t LunaSat::getSample(void){
 
     // Handle Magnetometer
     if (info.conf[2] == 1){
-        // sample.magnetic = LunaSat::mlx90393->getSample();
+        sample.mag = LunaSat::mlx90393->getSample();
     } else {
-        sample.magnetic.x = 0;
-        sample.magnetic.y = 0;
-        sample.magnetic.z = 0;
+        sample.mag.magnetic.x = 0;
+        sample.mag.magnetic.y = 0;
+        sample.mag.magnetic.z = 0;
     }
 
     // Handle Thermopile Sample based on configuration
@@ -166,11 +166,11 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
         Serial.print(sample.acceleration.z,5);
     }
     if (info.conf[2]==1){
-        Serial.print(sample.magnetic.x);
+        Serial.print(sample.mag.magnetic.x);
         Serial.print(',');
-        Serial.print(sample.magnetic.y);
+        Serial.print(sample.mag.magnetic.y);
         Serial.print(',');
-        Serial.print(sample.magnetic.z);
+        Serial.print(sample.mag.magnetic.z);
     }
     if (info.conf[3]==1){
         Serial.print(',');
@@ -212,11 +212,11 @@ void LunaSat::transmitSample(lunaSat_sample_t sample){
     }
     if (info.conf[2]==1){
         sampleString = sampleString + sep;
-        sampleString = sampleString + String(sample.magnetic.x);
+        sampleString = sampleString + String(sample.mag.magnetic.x);
         sampleString = sampleString + sep;
-        sampleString = sampleString + String(sample.magnetic.y);
+        sampleString = sampleString + String(sample.mag.magnetic.y);
         sampleString = sampleString + sep;
-        sampleString = sampleString + String(sample.magnetic.z);
+        sampleString = sampleString + String(sample.mag.magnetic.z);
 
     }
     if (info.conf[3]==1){
