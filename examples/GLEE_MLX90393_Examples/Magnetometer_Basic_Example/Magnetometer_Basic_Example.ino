@@ -2,7 +2,7 @@
 
 MLX90393 magnetometer = MLX90393(1,false);
 
-AK_Sample_t sample;
+mlx_sample_t sample;
 
 void setup (){
     Serial.begin(9600);
