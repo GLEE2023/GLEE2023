@@ -58,6 +58,7 @@ typedef struct{
     unsigned long timeStamp;
     double TMPtemperature;
     sensor_float_vec_t acceleration;
+    // mlx_sample_t magnetic;
     sensor_float_vec_t magnetic;
     TPsample_t TPTemperature;
     int cap;
@@ -72,7 +73,7 @@ class LunaSat{
         // This controlls whether debug messages are 
         // printed to serial
 
-        LunaSat(int _id, int _conf[6], bool _debug = false);
+        LunaSat(int _id, int _conf[6], bool _debug = true);
 
         
 
@@ -94,8 +95,8 @@ class LunaSat{
     
         // Sensor class instances
         TMP117 *tmp117 = new TMP117(0);
-        MPU6000 *mpu6000 = new MPU6000(1);
-        MLX90393 *mlx90393 = new MLX90393(2);
+        // MPU6000 *mpu6000 = new MPU6000(1);
+        // MLX90393 *mlx90393 = new MLX90393(2);
         TPIS1385 *tpis1385 = new TPIS1385(3);
         CAP *cap = new CAP(4);
 

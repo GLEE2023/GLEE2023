@@ -25,8 +25,8 @@ LunaSat::LunaSat(int _id, int _conf[6], bool _debug){
     Serial.println(F("Done initalization"));
 
     // Set indicator LED pin modes
-    pinMode(LED1, OUTPUT);
-    pinMode(LED2, OUTPUT);
+    // pinMode(LED1, OUTPUT);
+    // pinMode(LED2, OUTPUT);
 
     //TODO: Handle passing modes/configurations as arguments into sensor constructors
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
@@ -61,16 +61,16 @@ void LunaSat::begin(int baudRate){
     }
 
     if (info.conf[2]==1) {
-        LunaSat::mlx90393->begin_I2C();
-        LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
-        LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
-        LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
-        LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
-        LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
-        LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+        // LunaSat::mlx90393->begin_I2C();
+        // LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
+        // LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
+        // LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
+        // LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
+        // LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
+        // LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
 
        if (debug) Serial.println(F("Mag Initialized"));
-    }
+    } 
 
     if (info.conf[3]==1){
         LunaSat::tpis1385->begin();
@@ -119,8 +119,7 @@ lunaSat_sample_t LunaSat::getSample(void){
 
     // Handle Magnetometer
     if (info.conf[2] == 1){
-        mlx_sample_t magSample = LunaSat::mlx90393->getSample();
-        sample.magnetic = magSample.magnetic;
+        // sample.magnetic = LunaSat::mlx90393->getSample();
     } else {
         sample.magnetic.x = 0;
         sample.magnetic.y = 0;
@@ -131,7 +130,8 @@ lunaSat_sample_t LunaSat::getSample(void){
     if (info.conf[3] == 1){
         sample.TPTemperature = LunaSat::tpis1385->getSample();
     } else {
-        sample.TPTemperature = 0;
+        sample.TPTemperature.ambient = 0;
+        sample.TPTemperature.object = 0;
     }
 
     if (info.conf[4] == 1){
@@ -140,8 +140,6 @@ lunaSat_sample_t LunaSat::getSample(void){
         sample.cap = 0;
     }
         
-    
-
     return sample;
 }
 

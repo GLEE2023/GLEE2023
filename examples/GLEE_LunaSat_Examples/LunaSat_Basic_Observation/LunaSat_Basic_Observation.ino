@@ -1,7 +1,10 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[6] = {1,1,1,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
+// Configuration format: 
+// {TMP117, MPU6000, MLX90393, TIPS1385, CAP, SX1272}
+// {Temperature, Accelerometer, Magnetometer, T-pile, Capacitive, Transciever}
+int lunaSatConfig[6] = {1,0,0,0,0,0}; 
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 LunaSat lunaSat(0, lunaSatConfig, true);
