@@ -43,7 +43,7 @@
 #define MPU6000_CONFIG_FS_SEL_LEN 2
 
 // Constants 
-#define IMU_ONE_G 9.80665
+#define MPU_ONE_G 9.80665
 
 extern float aRes, gRes; 
 
@@ -85,8 +85,8 @@ class MPU6000:public Sensor{
         sensor_float_vec_t getAcc(sensor_int16_vec_t rawAcc);
         sensor_float_vec_t getGyro(sensor_int16_vec_t rawGyro);
         
-        // sensor_float_vec_t getMPSAccel(sensor_float_vec_t GAccel);
-        // sensor_float_vec_t getGAccel(sensor_int16_vec_t rawAccel);
+        sensor_float_vec_t getMPSAccel(sensor_float_vec_t GAccel);
+        sensor_float_vec_t getGAccel(sensor_int16_vec_t rawAccel);
         
         // sensor_float_vec_t getDPSAngVel(sensor_int16_vec_t rawAngVel);
         // sensor_float_vec_t getGAccel_fuzzed();
@@ -101,7 +101,7 @@ class MPU6000:public Sensor{
         void setAccelRange(mpu6000_accel_range_t new_range);
         void setGyroRange(mpu6000_gyro_range_t new_range);
 
-        // float getAccelSensitivity();
+        float getAccelSensitivity();
         // float getGyroSensitivity();
 
         sensor_float_vec_t getSample();

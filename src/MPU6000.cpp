@@ -204,6 +204,36 @@ gyroscope is to be enabled or disabled.
 // }
 
 
+/*
+Parameters: the raw acceleration as a struct of sensor_int16_vec_t type
+Returns: the accelerations in G's as a sensor_float_vec_t type
+This function converts the raw acceleration in LSB/G to the acceleration in 
+G's by dividing the sensitivity factor based on the current sensitivity scale.
+*/
+sensor_float_vec_t MPU6000::getGAccel(sensor_int16_vec_t rawAccel){
+	sensor_float_vec_t accelG;
+	//accelG.x = (float) rawAccel.x / ICM20602::currentAccelFactor;
+    //accelG.y = (float) rawAccel.y / ICM20602::currentAccelFactor;
+    //accelG.z = (float) rawAccel.z / ICM20602::currentAccelFactor;
+	accelG.x = (float) rawAccel.x / MPU6000::accel_scale;
+    accelG.y = (float) rawAccel.y / MPU6000::accel_scale;
+    accelG.z = (float) rawAccel.z / MPU6000::accel_scale;
+	return accelG;
+}
+
+/*
+Parameters: the accleration in G's as a struct of sensor_float_vec_t type
+Returns: The acceleration in m/s^2 as a struct of sensor_float_vec_t type
+This function converts the raw accelerations in LSB/G to 
+meters per second squared.
+*/
+sensor_float_vec_t MPU6000::getMPSAccel(sensor_float_vec_t GAccel){
+	sensor_float_vec_t accelMPS;
+	accelMPS.x = GAccel.x * MPU_ONE_G;
+	accelMPS.y = GAccel.y * MPU_ONE_G;
+	accelMPS.z = GAccel.z * MPU_ONE_G;
+	return accelMPS;    
+}
 
 
 /*
@@ -310,26 +340,26 @@ Returns: the accelerometer sensitivity scale factor as a FLOAT
 This function uses a switch statement to return the sensitivity scale factor
 for the acceleration depending on the current sensing accuracy scale.
 */
-// float MPU6000::getAccelSensitivity(){
-//   // TODO: Write setter for sensity a variable, possibly private
-//   	float factor;
-// 	switch (currentAccelScale) {
-// 		case (AFS_2G):
-//       		factor = 16384.0;
-//       		break;
-//     	case (AFS_4G):
-//       		factor = 8192.0;
-//       		break;
-//     	case (AFS_8G):
-//      		factor = 4096.0;
-//       		break;
-//     	case (AFS_16G):
-//       		factor = 2048.0;
-//       		break;
-// 	}
-// 	currentAccelFactor = factor;
-// 	return factor;  
-// }
+float MPU6000::getAccelSensitivity(){
+  // TODO: Write setter for sensity a variable, possibly private
+  	float factor;
+	switch (accel_range) {
+		case (MPU6000_RANGE_2_G):
+      		factor = 16384.0;
+      		break;
+    	case (MPU6000_RANGE_4_G):
+      		factor = 8192.0;
+      		break;
+    	case (MPU6000_RANGE_8_G):
+     		factor = 4096.0;
+      		break;
+    	case (MPU6000_RANGE_16_G):
+      		factor = 2048.0;
+      		break;
+	}
+	accel_scale = factor;
+	return factor;  
+}
 
 
 
