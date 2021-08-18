@@ -47,6 +47,9 @@ void LunaSat::begin(int baudRate){
         Serial.println(F("Serial Coms Active"));
     }
 
+    // DEBUG PRINT
+    Serial.println(F("Serial Coms Active"));
+
     // Sensor specific begins and initializations
     if (info.conf[1]){
         LunaSat::mpu6000->begin();
@@ -58,16 +61,26 @@ void LunaSat::begin(int baudRate){
         // LunaSat::icm20602->initialize();
 
         if (debug) Serial.println(F("Accel Initialized"));
+
+        // DEBUG PRINT
+        Serial.println(F("Accel Initialized"));
     }
 
     if (info.conf[2]==1) {
-        // LunaSat::mlx90393->begin_I2C();
-        // LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
-        // LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
-        // LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
-        // LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
-        // LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
-        // LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+        LunaSat::mlx90393->begin_I2C();
+        Serial.println(F("MAG I2C Began")); // DEBUG PRINT
+        LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
+        Serial.println(F("Gain Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
+        Serial.println(F("X Resolution Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
+        Serial.println(F("Y Resolution Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
+        Serial.println(F("Z Resolution Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
+        Serial.println(F("Over Sampling Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+        Serial.println(F("Filter Set")); // DEBUG PRINT
 
        if (debug) Serial.println(F("Mag Initialized"));
     } 
@@ -119,7 +132,7 @@ lunaSat_sample_t LunaSat::getSample(void){
 
     // Handle Magnetometer
     if (info.conf[2] == 1){
-        // sample.mag = LunaSat::mlx90393->getSample();
+        sample.mag = LunaSat::mlx90393->getSample();
     } else {
         sample.mag.magnetic.x = 0;
         sample.mag.magnetic.y = 0;
