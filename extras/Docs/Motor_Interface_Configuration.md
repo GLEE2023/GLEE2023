@@ -11,18 +11,6 @@ Motor Input/Outputs:
 | Pin 7 | Motor Winding 2 |
 | Pin 8 | Motor Winding 1 |
 
-Controller Input/Output:
-
-| Connection  |      Purpose|
-|----------|-------------:|
-| Set Speed | Analogue Input 0-5V |
-| Enable | Hall Sensor 3 | 
-| Direction | Hall Sensor 2 |
-| Speed Range DigIn1 | Hall Sensor 1 |
-| Speed Range DigIn2 | GND | 
-| Set Current Limit | External Resistor |
-| Hall Sensor | Hall 1, 2, 3 |
-| Motor | Winding 1, 2, 3 |
 
 Motor Controller Interface:
 TODO: Add Arduino connections for enable, direction and ready 
@@ -37,10 +25,13 @@ TODO: Add Arduino connections for enable, direction and ready
 | 7 | 2 | - | Winding 2 |
 | 8 | 1 | - | Winding 1 |
 | - | 4 | - | Supply V_cc |
-| - | 17 | PB 15 | Speed Control |
+| - | 10 | Pin 8 | Ready Status |
+| - | 11 | Pin 2 [HIGH] | DigIN1| 
+| - | 12 | GND |DigIN2 |
+| - | 13 | Pin 4 | Enable [active high] |
+| - | 17 | Pin 6 [PB 15] | Speed Control |
 | - | GND | GND | Ground|
-| - | 11 | HIGH | DigIN1| 
-| - | 12 | LOW |DigIN2 |
+
 
 ## Controller Pin Refrence
 
