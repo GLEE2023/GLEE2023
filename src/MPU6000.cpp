@@ -21,7 +21,7 @@ MPU6000::MPU6000(int _id, bool _debug){
   	MPU6000::sensorDebug = _debug;
     MPU6000::accel_range = MPU6000_RANGE_2_G;
     MPU6000::gyro_range = MPU6000_RANGE_250_DEG;
-    MPU6000::accel_scale = 16384.0; 
+    MPU6000::accel_scale = 16384.0; // Defaults to 4gs for some reason
     MPU6000::gyro_scale = 131.0;
 	//MPU6000::gyroOn = _gyroOn;
 }
@@ -38,6 +38,10 @@ bool MPU6000::begin(void){
     if(MPU6000::sensorDebug){
 		Serial.println("Beginning Communication With MPU6000");
 	}
+
+	setAccelRange(accel_range);
+	setGyroRange(gyro_range);
+	
     return true;
 }
 
@@ -100,9 +104,9 @@ sensor_int16_vec_t MPU6000::getRawGyro(){
 */
 sensor_float_vec_t MPU6000::getAcc(sensor_int16_vec_t rawAcc){
 	sensor_float_vec_t acc;
-	acc.x = (float) rawAcc.x / accel_scale;
-    acc.y = (float) rawAcc.y / accel_scale;
-    acc.z = (float) rawAcc.z / accel_scale;
+	acc.x = (float) rawAcc.x / MPU6000::accel_scale;
+    acc.y = (float) rawAcc.y / MPU6000::accel_scale;
+    acc.z = (float) rawAcc.z / MPU6000::accel_scale;
 	return acc;
 }
 
@@ -152,12 +156,24 @@ based on the new scale.
 void MPU6000::setAccelRange(mpu6000_accel_range_t new_range){
     accel_range = new_range;
 
-	writeBits(MPU6000_ACCEL_CONFIG, MPU6000_CONFIG_FS_SEL_BIT, MPU6000_CONFIG_FS_SEL_LEN, new_range);
-
-	if (accel_range == MPU6000_RANGE_2_G) accel_scale = 16384;
-	if (accel_range == MPU6000_RANGE_4_G) accel_scale = 8192;
-	if (accel_range == MPU6000_RANGE_8_G) accel_scale = 4096;
-	if (accel_range == MPU6000_RANGE_16_G) accel_scale = 2048;
+	switch(accel_range){
+		case(MPU6000_RANGE_2_G):
+			writeByte(MPU6000_ACCEL_CONFIG, 0b00000000);
+			accel_scale = 16384.0;
+			break; 
+		case(MPU6000_RANGE_4_G):
+			writeByte(MPU6000_ACCEL_CONFIG, 0b00001000);
+			accel_scale = 8192.0;
+			break; 
+		case(MPU6000_RANGE_8_G):
+			writeByte(MPU6000_ACCEL_CONFIG, 0b00010000);
+			accel_scale = 4096.0;
+			break; 
+		case(MPU6000_RANGE_16_G):
+			writeByte(MPU6000_ACCEL_CONFIG, 0b00011000);
+			accel_scale = 2048.0;
+			break; 
+	}
 }
 
 /*
@@ -170,12 +186,25 @@ based on the new scale.
 void MPU6000::setGyroRange(mpu6000_gyro_range_t new_range){
     gyro_range = new_range;
 
-	writeBits(MPU6000_GYRO_CONFIG, MPU6000_CONFIG_FS_SEL_BIT, MPU6000_CONFIG_FS_SEL_LEN, new_range);
+	switch(accel_range){
+		case(MPU6000_RANGE_250_DEG):
+			writeByte(MPU6000_GYRO_CONFIG, 0b00000000);
+			gyro_scale = 131.0;
+			break;
+		case(MPU6000_RANGE_500_DEG):
+			writeByte(MPU6000_GYRO_CONFIG, 0b00001000);
+			gyro_scale = 65.5;
+			break;
+		case(MPU6000_RANGE_1000_DEG):
+			writeByte(MPU6000_GYRO_CONFIG, 0b00001000);
+			gyro_scale = 32.8;
+			break;
+		case(MPU6000_RANGE_2000_DEG):
+			writeByte(MPU6000_GYRO_CONFIG, 0b00001000);
+			gyro_scale = 16.4;
+			break;
 
-	if (gyro_range == MPU6000_RANGE_250_DEG) gyro_scale = 131;
-	if (gyro_range == MPU6000_RANGE_500_DEG) gyro_scale = 65.5;
-	if (gyro_range == MPU6000_RANGE_1000_DEG) gyro_scale = 32.8;
-	if (gyro_range == MPU6000_RANGE_2000_DEG) gyro_scale = 16.4;
+	}
 }
 
 /*
