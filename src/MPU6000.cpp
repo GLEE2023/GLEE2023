@@ -40,7 +40,7 @@ bool MPU6000::begin(void){
 	}
 
 	setAccelRange(accel_range);
-	setGyroRange(gyro_range);
+	//setGyroRange(gyro_range);
 	
     return true;
 }
@@ -156,24 +156,42 @@ based on the new scale.
 void MPU6000::setAccelRange(mpu6000_accel_range_t new_range){
     accel_range = new_range;
 
-	switch(accel_range){
-		case(MPU6000_RANGE_2_G):
-			writeByte(MPU6000_ACCEL_CONFIG, 0b00000000);
-			accel_scale = 16384.0;
-			break; 
-		case(MPU6000_RANGE_4_G):
-			writeByte(MPU6000_ACCEL_CONFIG, 0b00001000);
-			accel_scale = 8192.0;
-			break; 
-		case(MPU6000_RANGE_8_G):
-			writeByte(MPU6000_ACCEL_CONFIG, 0b00010000);
-			accel_scale = 4096.0;
-			break; 
-		case(MPU6000_RANGE_16_G):
-			writeByte(MPU6000_ACCEL_CONFIG, 0b00011000);
-			accel_scale = 2048.0;
-			break; 
+	if(accel_range == MPU6000_RANGE_2_G){
+		writeByte(MPU6000_ACCEL_CONFIG, 0b00000000);
+		accel_scale = 16384.0;
 	}
+
+	if(accel_range == MPU6000_RANGE_4_G){
+		writeByte(MPU6000_ACCEL_CONFIG, 0b00001000);
+		accel_scale = 8192.0;
+	}
+	if(accel_range == MPU6000_RANGE_8_G){
+		writeByte(MPU6000_ACCEL_CONFIG, 0b00010000);
+		accel_scale = 4096.0;
+	}
+	if(accel_range == MPU6000_RANGE_16_G){
+		writeByte(MPU6000_ACCEL_CONFIG, 0b00011000);
+		accel_scale = 2048.0;
+	}
+
+	// switch(accel_range){
+	// 	case(MPU6000_RANGE_2_G):
+	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00000000);
+	// 		accel_scale = 16384.0;
+	// 		break; 
+	// 	case(MPU6000_RANGE_4_G):
+	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00001000);
+	// 		accel_scale = 8192.0;
+	// 		break; 
+	// 	case(MPU6000_RANGE_8_G):
+	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00010000);
+	// 		accel_scale = 4096.0;
+	// 		break; 
+	// 	case(MPU6000_RANGE_16_G):
+	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00011000);
+	// 		accel_scale = 2048.0;
+	// 		break; 
+	// }
 }
 
 /*

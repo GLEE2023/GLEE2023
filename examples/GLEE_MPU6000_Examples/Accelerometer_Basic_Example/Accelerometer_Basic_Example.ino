@@ -8,7 +8,7 @@ void setup(){
 
     accelerometer.begin();
     accelerometer.initialize();
-    accelerometer.setAccelScale(MPU6000_RANGE_2_G); // Range options 2_G, 4_G, 8_G, 16_G
+    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Range options 2_G, 4_G, 8_G, 16_G
 };
 
 void loop(){
