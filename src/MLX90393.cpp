@@ -37,43 +37,14 @@ bool MLX90393::begin_I2C(uint8_t i2c_addr, TwoWire *wire) {
     if (!i2c_dev) {
         i2c_dev = new Adafruit_I2CDevice(i2c_addr, wire);
     }
-    spi_dev = NULL;
+    //spi_dev = NULL;
 
     if (!i2c_dev->begin()) {
         return false;
     }
 
-    return _init();
-}
+    //return _init();
 
-/*!
- *    @brief  Sets up the hardware and initializes hardware SPI
- *    @param  cs_pin The arduino pin # connected to chip select
- *    @param  theSPI The SPI object to be used for SPI connections.
- *    @return True if initialization was successful, otherwise false.
- */
-/*boolean Adafruit_MLX90393::begin_SPI(uint8_t cs_pin, SPIClass *theSPI) {
-  i2c_dev = NULL;
-  if (!spi_dev) {
-    _cspin = cs_pin;
-    spi_dev = new Adafruit_SPIDevice(cs_pin,
-                                     1000000,               // frequency
-                                     SPI_BITORDER_MSBFIRST, // bit order
-                                     SPI_MODE3,             // data mode
-                                     theSPI);
-  }
-  if (!spi_dev->begin()) {
-    return false;
-  }
-  return _init();
-}*/
-
-/**
- * Parameters: None
- * Returns: True if initialization was successful, false if not
- * This function...
-**/
-bool MLX90393::_init(void) {
     if (!exitMode())
         return false;
 
@@ -109,6 +80,72 @@ bool MLX90393::_init(void) {
     return true;
 }
 
+/*!
+ *    @brief  Sets up the hardware and initializes hardware SPI
+ *    @param  cs_pin The arduino pin # connected to chip select
+ *    @param  theSPI The SPI object to be used for SPI connections.
+ *    @return True if initialization was successful, otherwise false.
+ */
+/*boolean Adafruit_MLX90393::begin_SPI(uint8_t cs_pin, SPIClass *theSPI) {
+  i2c_dev = NULL;
+  if (!spi_dev) {
+    _cspin = cs_pin;
+    spi_dev = new Adafruit_SPIDevice(cs_pin,
+                                     1000000,               // frequency
+                                     SPI_BITORDER_MSBFIRST, // bit order
+                                     SPI_MODE3,             // data mode
+                                     theSPI);
+  }
+  if (!spi_dev->begin()) {
+    return false;
+  }
+  return _init();
+}*/
+
+/**
+ * Parameters: None
+ * Returns: True if initialization was successful, false if not
+ * This function...
+**/
+
+// bool MLX90393::_init(void) {
+    
+//     if (!exitMode())
+//         return false;
+
+//     if (!reset())
+//         return false;
+
+//     /* Set gain and sensor config. */
+//     if (!setGain(MLX90393_GAIN_1X)) {
+//         return false;
+//     }
+
+//     /* Set resolution. */
+//     if (!setResolution(MLX90393_X, MLX90393_RES_16))
+//         return false;
+//     if (!setResolution(MLX90393_Y, MLX90393_RES_16))
+//         return false;
+//     if (!setResolution(MLX90393_Z, MLX90393_RES_16))
+//         return false;
+
+//     /* Set oversampling. */
+//     if (!setOversampling(MLX90393_OSR_3))
+//         return false;
+
+//     /* Set digital filtering. */
+//     if (!setFilter(MLX90393_FILTER_7))
+//         return false;
+
+//     /* set INT pin to output interrupt */
+//     if (!setTrigInt(false)) {
+//         return false;
+//     }
+
+//     return true;
+// }
+
+
 /**
  * Parameters: sensor - pointer to an Adafruit Unified sensor_t object
  * Returns: None
@@ -122,7 +159,7 @@ void MLX90393::getSensor(sensor_t *sensor) {
     strncpy(sensor->name, "MLX90393", sizeof(sensor->name) - 1);
     sensor->name[sizeof(sensor->name) - 1] = 0;
     sensor->version = 1;
-    sensor->sensor_id = _sensorID;
+    sensor->sensor_id = 90393;
     sensor->type = SENSOR_TYPE_MAGNETIC_FIELD;
     sensor->min_delay = 0;
     sensor->min_value = -50000; // -50 gauss in uTesla
@@ -258,6 +295,7 @@ bool MLX90393::setFilter(enum mlx90393_filter filter) {
  * Returns: An enum of the custom type mlx90393_filter containing the current digital filter setting.
  * This function gets the current digital filter setting.
 **/
+
 enum mlx90393_filter MLX90393::getFilter(void) { return _dig_filt; }
 
 /**
@@ -329,9 +367,11 @@ bool MLX90393::startSingleMeasurement(void) {
  * Returns: The custom type sensor_float_vec_t containing the magnetic measurmeents
  * This function combines the 3 magnetic axes readings into one data type.
 **/
+
+/*
 sensor_float_vec_t MLX90393::getMagnetic(float *x, float *y, float *z){
     sensor_float_vec_t magnetic;
-    
+    /*
     int32_t magX = *x;
     int32_t magY = *y;
     int32_t magZ = *z;
@@ -339,9 +379,18 @@ sensor_float_vec_t MLX90393::getMagnetic(float *x, float *y, float *z){
     magnetic.x = magX;
     magnetic.y = magY;
     magnetic.z = magZ;
+    */
+    /*
+    magnetic.x = (int32_t) *x;
+    magnetic.y = (int32_t) *y;
+    magnetic.z = (int32_t) *z;
 
     return magnetic;
+    
 }
+*/
+
+
 
 /**
  * Parameters: Pointers to the floats x,y,z, which are readings of the 3 axes
@@ -376,6 +425,13 @@ bool MLX90393::readMeasurement(float *x, float *y, float *z) {
         zi -= 0x8000;
     if (_res_z == MLX90393_RES_19)
         zi -= 0x4000;
+
+
+    /*
+    *x = (float)xi * mlx90393_lsb_lookup[0][_gain][_res_x][0];
+    *y = (float)yi * mlx90393_lsb_lookup[0][_gain][_res_y][0];
+    *z = (float)zi * mlx90393_lsb_lookup[0][_gain][_res_z][1];
+    */
 
     *x = (float)xi * mlx90393_lsb_lookup[0][_gain][_res_x][0];
     *y = (float)yi * mlx90393_lsb_lookup[0][_gain][_res_y][0];
@@ -440,9 +496,11 @@ bool MLX90393::readRegister(uint8_t reg, uint16_t *data) {
  * Returns: magnetic field strength as a float
  * This function calculates the magnetic field strength based on the individual magnetic readings of all 3 axes.
 **/
+/*
 float MLX90393::getMagFieldStrength(sensor_float_vec_t magnetic){
     return sqrt(pow(magnetic.x,2) + pow(magnetic.y,2) + pow(magnetic.z,2)); // L2 norm
 }
+*/
 
 /**
  * Parameters: None
@@ -460,8 +518,16 @@ mlx_sample_t MLX90393::getSample(void){
     if(MLX90393::readData(&x,&y,&z)){
         //MLX90393::setOpMode(true, LOW_POWER_1, POWER_DOWN); // No true equivalent function
         MLX90393::exitMode();
+
+        /*
         sample.magnetic = MLX90393::getMagnetic(&x,&y,&z);
         sample.strength = MLX90393::getMagFieldStrength(sample.magnetic);
+        */
+
+        sample.magnetic.x = (int32_t) x;
+        sample.magnetic.y = (int32_t) y;
+        sample.magnetic.z = (int32_t) z;
+        sample.strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
     }else{
         Serial.println(F("Waiting for data to get ready"));
     }
@@ -497,7 +563,7 @@ uint8_t MLX90393::transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf, uint
             rxbuf[i] = rxbuf2[i + 1];
         }
     }
-
+    /*
     if (spi_dev) {
         spi_dev->write_then_read(txbuf, txlen, rxbuf2, rxlen + 1, 0x00);
         status = rxbuf2[0];
@@ -506,6 +572,7 @@ uint8_t MLX90393::transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf, uint
         }
         delay(interdelay);
     }
+    */
 
     /* Mask out bytes available in the status response. */
     return (status >> 2);
