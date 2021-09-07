@@ -36,7 +36,7 @@ void performTest(){
     //Serial.println("LunaSat Configuration: {" + to_string(lunaSatConfig[0]) + "," + to_string(lunaSatConfig[1]) + "," + to_string(lunaSatConfig[2]) + "," + to_string(lunaSatConfig[3]) + "," + to_string(lunaSatConfig[4]) + "," + to_string(lunaSatConfig[5]) + "}");
 
     delay(100);
-    /*
+    
     //Retrieve a single sample
     Serial.println("Getting 1 Samples...");
     delay(100);
@@ -74,7 +74,6 @@ void performTest(){
 
     Serial.print("Time (in microseconds) to get 10 samples: "); Serial.println(endTime-startTime);
     Serial.print("Average time (in microseconds) to get 1 sample: "); Serial.println((endTime-startTime)/10);
-    */
 
     //Retrieve 100 samples
     Serial.println("Getting 100 Samples...");
