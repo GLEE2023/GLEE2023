@@ -19,10 +19,10 @@ int LED = 4; // May need to be changed
 // Direction of compass as determined by heading
 String direction_str;
 
-float minX = 0.0; // Minimum heading for between 0 and 180 degrees
-float maxX = 180.0; // Maximum heading for between 0 and 180 degrees
-float minY = 180.0; // Minimum heading for between 180 and 360 degrees
-float maxY = 360.0; // Maximum heading for between 180 and 360 degrees
+float minX = 180.0; // Minimum heading for between 0 and 180 degrees
+float maxX = 0.0; // Maximum heading for between 0 and 180 degrees
+float minY = 360.0; // Minimum heading for between 180 and 360 degrees
+float maxY = 180.0; // Maximum heading for between 180 and 360 degrees
 
 float xMag = 0;
 float yMag = 0;
@@ -86,30 +86,54 @@ void setup (){
 
     // Calibration Code
 
-    int calibrationSize = 10; // Number of data points to be used for calibration
+    int calibrationSize = 100; // Number of data points to be used for calibration
 
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < calibrationSize; i++){
         delay(100);
-        while(!(Serial.available() > 0)){}
-        tmp = Serial.read();
+        //while(!(Serial.available() > 0)){}
+        //tmp = Serial.read();
         mlx_sample_t calMag = magnetometer.getSample();
 
-        Serial.println(calMag.magnetic.x);
-        Serial.println(calMag.magnetic.y);
+        //Serial.println(calMag.magnetic.x);
+        //Serial.println(calMag.magnetic.y);
 
-        if(calMag.magnetic.x < minX){
-            minX = calMag.magnetic.x;
+        //float heading = findHeading(calMag.magnetic.x,calMag.magnetic.y);
+
+        heading = atan2(calMag.magnetic.y,calMag.magnetic.x) - 0.119206;
+
+        heading = heading * (180/M_PI);
+
+        while(heading < 0) {
+            heading = 360.0 + heading;
         }
-        if(calMag.magnetic.x > maxX){
-            maxX = calMag.magnetic.x;
+        
+        while(heading > 360) {
+            heading = heading - 360.0;
         }
-        if(calMag.magnetic.y < minY){
-            minY = calMag.magnetic.y;
+
+        Serial.println(heading,5);
+
+        if(heading < minX && heading >= 0.0){
+            minX = heading;
         }
-        if(calMag.magnetic.y > maxY){
-            maxY = calMag.magnetic.y;
+        if(heading < minY && heading >= 180.0){
+            minY = heading;
         }
+        
+        if(heading > maxY && heading <= 360.0){
+            maxY = heading;
+        }
+        if(heading > maxX && heading <= 180.0){
+            maxX = heading;
+        }
+        
+        //delay(100);
     }
+
+    Serial.println(minX);
+    Serial.println(maxX);
+    Serial.println(minY);
+    Serial.println(maxY);
 
     Serial.println("Done.");
     delay(1000);
@@ -134,10 +158,34 @@ void loop (){
     //Serial.println("Y magnitude: " + (String)yMag);
 
     // Determine compass heading
-    //heading = atan2(yMag,xMag) * (180/M_PI);
+    
 
-    //Serial.print("Heading: "); Serial.println(heading,2);
-           
+    if (yMag > 0){
+        heading = atan2(yMag,xMag) - 0.119206;
+        heading = heading * (180/M_PI);
+        heading = 90 - heading;
+        heading = 180 + ((360 - 180) / (maxY - minY)) * (heading - minY); // Use calibration values
+    }
+
+    if (yMag < 0){
+        heading = atan2(yMag,xMag) - 0.119206;
+        heading = heading * (180/M_PI);
+        heading = 270 - heading;
+        heading = 0 + ((180 - 0) / (maxX - minX)) * (heading - minX); // Use calibration values
+    }
+
+    while(heading < 0) {
+        heading = 360.0 + heading;
+    }
+    
+    while(heading > 360) {
+        heading = heading - 360.0;
+    }
+
+    Serial.print("Heading: "); Serial.println(heading,2);
+
+
+    /*       
     if(yMag > 0){
         heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
         heading = 180 + ((360 - 180) / (maxY - minY)) * (heading - minY); // Use calibration values   
@@ -151,14 +199,7 @@ void loop (){
             heading = 0.0;
         }
     }
-
-    while(heading < 0) {
-        heading = 360.0 + heading;
-    }
-    
-    while(heading > 360) {
-        heading = heading - 360.0;
-    }
+    */
 
     // // Set to Error by default in order to determine what information should be printed
     direction_str = "Error";
