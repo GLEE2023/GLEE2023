@@ -26,28 +26,19 @@ void setup (){
 };
 
 void loop (){   
-    //float x, y, z;
 
-    if (magnetometer.readData(&x, &y, &z)) {
-        sample = magnetometer.getSample();
-        /*
-        Serial.println("|Magnetic Field Axes Measurements|");
-        Serial.print("X: "); Serial.print(x, 4); Serial.println(" uT");
-        Serial.print("Y: "); Serial.print(y, 4); Serial.println(" uT");
-        Serial.print("Z: "); Serial.print(z, 4); Serial.println(" uT");
-        */
+    sample = magnetometer.getSample();
 
-        // Print out magnetic field measurements for each axis 
-        Serial.println("|Magnetic Field Axes Measurements|");
-        Serial.print("X: "); Serial.print(sample.magnetic.x, 4); Serial.println(" uT");
-        Serial.print("Y: "); Serial.print(sample.magnetic.y, 4); Serial.println(" uT");
-        Serial.print("Z: "); Serial.print(sample.magnetic.z, 4); Serial.println(" uT");
-
-        // Print out strength of magnetic field
-        Serial.print(F("|Magnetic Field Strength (Magnitude)|")); 
-        Serial.println(sample.strength);
-    } else {
-        Serial.println("Unable to read XYZ data from the sensor.");
-    }
+    // Print out magnetic field measurements for each axis 
+    Serial.println("Magnetic Field Axes Measurements");
+    Serial.print("X: "); Serial.print(sample.magnetic.x,4); Serial.println(" uT");
+    Serial.print("Y: "); Serial.print(sample.magnetic.y,4); Serial.println(" uT");
+    Serial.print("Z: "); Serial.print(sample.magnetic.z,4); Serial.println(" uT");
+    Serial.println();
+    // Print out strength of magnetic field
+    Serial.println("Magnetic Field Strength (Magnitude)"); 
+    Serial.print(sample.strength,4); Serial.println(" uT");
+    Serial.println();
+   
     delay(1000); // Take samples every one second
 };
