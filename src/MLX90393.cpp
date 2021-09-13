@@ -524,9 +524,9 @@ mlx_sample_t MLX90393::getSample(void){
         sample.strength = MLX90393::getMagFieldStrength(sample.magnetic);
         */
 
-        sample.magnetic.x = (int32_t) x;
-        sample.magnetic.y = (int32_t) y;
-        sample.magnetic.z = (int32_t) z;
+        sample.magnetic.x = x;
+        sample.magnetic.y = y;
+        sample.magnetic.z = z;
         sample.strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
     }else{
         Serial.println(F("Waiting for data to get ready"));
