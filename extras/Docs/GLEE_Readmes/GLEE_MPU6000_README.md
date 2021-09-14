@@ -1,19 +1,19 @@
-# GLEE - LunaSat Inertial Measurement Unit Library (Accelerometer and Gyroscope) - GLEE_ICM20602
-This library is intended for GLEE's Accelerometer Sensor, the ICM20602. 
+# GLEE - LunaSat Inertial Measurement Unit Library (Accelerometer and Gyroscope) - GLEE_MPU6000
+This library is intended for GLEE's Accelerometer Sensor, the MPU6000. 
 Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control 
-the ICM20602. GLEE_ICM20602 supports the basic functionality of the accelerometer and the gyroscope with reading 
+the MPU6000. GLEE_MPU6000 supports the basic functionality of the accelerometer and the gyroscope with reading 
 and saving the three-axis acceleration and angular velocity in different units depending on one of four sensing 
 accuracies. 
 
 ![ICM20602](/Docs/Images/ICM20602_close_up.jpg)
 
 ## Accelerometer Datasheet
-[InvenSense ICM20602](https://invensense.tdk.com/wp-content/uploads/2016/10/DS-000176-ICM-20602-v1.0.pdf)
+[InvenSense MPU6000](https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/mpu-6000-datasheet1.pdf)
 
 ## Examples
 # Accelerometer- outputting the acceleration in G's for the x, y, and z axes
 ```C++
-#include "ICM20602.h"
+#include "MPU6000.h"
 
 ICM20602 accelerometer(1);
 sensor_int16_vec_t accelRaw;
