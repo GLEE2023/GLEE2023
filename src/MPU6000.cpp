@@ -27,11 +27,11 @@ MPU6000::MPU6000(int _id, bool _debug){
 }
 
 /*
-Parameters: none
-Returns: whether communication with sensor was successful as a BOOL
-This function begins a transmission to the I2C slave 
-device with the given address and notifies the user
-that communication with the sensor has begun.
+	Parameters: none
+	Returns: whether communication with sensor was successful as a BOOL
+	This function begins a transmission to the I2C slave 
+	device with the given address and notifies the user
+	that communication with the sensor has begun.
 */
 bool MPU6000::begin(void){
     Wire.begin();
@@ -46,18 +46,50 @@ bool MPU6000::begin(void){
 }
 
 /*
-Parameters: none
-Returns: none
-This function sets the clock to auto, disables or enables the gyroscope, and sets a
-couple of the other registers.
+	Parameters: none
+	Returns: none
+	This function sets the clock to auto, disables or enables the gyroscope, and sets a
+	couple of the other registers.
 */
 void MPU6000::initialize(void){
-    Wire.setClock(100000);
+    // Wire.setClock(100000);
+	reset();
 
+
+	
+	setSampleRateDivisor(0);
+
+	setFilterBandwidth(MPU6050_BAND_260_HZ);
+
+	setAccelerometerRange(MPU6050_RANGE_2_G);
+
+	writeByte(MPU6000_PWR_MGMT_1, 0x01);
+	delay(100);
+	// setGyroRange(MPU6050_RANGE_500_DEG);
+
+	// setAccelerometerRange(MPU6050_RANGE_2_G); // already the default
 
   	// TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
+void MPU6000::reset(void){
+
+	writeByte(MPU6000_PWR_MGMT_1, 0b10000000);
+	while(readByte(MPU6000_PWR_MGMT_1) == 0b10000000){
+		delay(1);
+	}
+	delay(100);
+	writeByte(MPU6000_SIGNAL_PATH_RESET, 0b00000111);
+	delay(100);
+}
+
+void MPU6000::setSampleRateDivisor(uint8_t divisor){
+	writeByte(MPU6000_SMPLRT_DIV, divisor);
+}
+
+void MPU6000::setFilterBandwidth(npu6000_bandwidth_t bandwidth){
+	writeByte(MPU6000_CONFIG, bandwidth);
+}
 
 /*
 	Parameters: none
@@ -174,24 +206,6 @@ void MPU6000::setAccelRange(mpu6000_accel_range_t new_range){
 		accel_scale = 2048.0;
 	}
 
-	// switch(accel_range){
-	// 	case(MPU6000_RANGE_2_G):
-	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00000000);
-	// 		accel_scale = 16384.0;
-	// 		break; 
-	// 	case(MPU6000_RANGE_4_G):
-	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00001000);
-	// 		accel_scale = 8192.0;
-	// 		break; 
-	// 	case(MPU6000_RANGE_8_G):
-	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00010000);
-	// 		accel_scale = 4096.0;
-	// 		break; 
-	// 	case(MPU6000_RANGE_16_G):
-	// 		writeByte(MPU6000_ACCEL_CONFIG, 0b00011000);
-	// 		accel_scale = 2048.0;
-	// 		break; 
-	// }
 }
 
 /*
@@ -225,31 +239,6 @@ void MPU6000::setGyroRange(mpu6000_gyro_range_t new_range){
 	}
 }
 
-/*
-Parameters: to disable or enable the gyroscope as a boolean
-Returns: none
-This function writes the configuration of the sensor depending on whether the 
-gyroscope is to be enabled or disabled.
-*/
-
-
-// int16_t MPU6000::read2Byte(uint8_t registerAddress){
-//     uint8_t data[2] = {0};			// Declares an array of length 2 to be empty
-//   	int16_t datac = 0;				// Declares the return variable to be 0
-    
-//     Wire.beginTransmission(MPU6000::info.address);          //begins comms with sensor specified
-//     Wire.write(registerAddress);                            //identifies register for data to be read from
-//     Wire.endTransmission();                                 //end transmission
-//     Wire.requestFrom(MPU6000::info.address, uint8_t(2) );   //request 2 bytes from the sensor address
-  	
-//     if (Wire.available() <= 2){             // Don't read more than 2 bits
-//   		data[0] = Wire.read();			    // Reads the first set of bits (D15-D8)
-//   		data[1] = Wire.read();			    // Reads the second set of bits (D7-D0)
-//   		datac = ((data[0] << 8) | data[1]); // Swap the LSB and the MSB
-//   	}
-//   	return datac;   //return the read data byte
-// }
-
 
 /*
 Parameters: the raw acceleration as a struct of sensor_int16_vec_t type
@@ -282,6 +271,40 @@ sensor_float_vec_t MPU6000::getMPSAccel(sensor_float_vec_t GAccel){
 	return accelMPS;    
 }
 
+
+
+
+
+
+/*
+Parameters: none
+Returns: the accelerometer sensitivity scale factor as a FLOAT 
+This function uses a switch statement to return the sensitivity scale factor
+for the acceleration depending on the current sensing accuracy scale.
+*/
+float MPU6000::getAccelSensitivity(){
+  // TODO: Write setter for sensity a variable, possibly private
+  	float factor;
+	switch (accel_range) {
+		case (MPU6000_RANGE_2_G):
+      		factor = 16384.0;
+      		break;
+    	case (MPU6000_RANGE_4_G):
+      		factor = 8192.0;
+      		break;
+    	case (MPU6000_RANGE_8_G):
+     		factor = 4096.0;
+      		break;
+    	case (MPU6000_RANGE_16_G):
+      		factor = 2048.0;
+      		break;
+	}
+	accel_scale = factor;
+	return factor;  
+}
+
+
+/* Begin Funtion update TODO */
 
 /*
 Parameters: the current raw acceleration to be saved as a struct of sensor_int16_vec_t type
@@ -378,61 +401,3 @@ the private type sensor_float_vec_t angVelDPS struct.
 // void MPU6000::updateDPSAngVel(sensor_float_vec_t DPSAngVel){
 // 	MPU6000::angVelDPS = DPSAngVel;
 // }
-
-
-
-/*
-Parameters: none
-Returns: the accelerometer sensitivity scale factor as a FLOAT 
-This function uses a switch statement to return the sensitivity scale factor
-for the acceleration depending on the current sensing accuracy scale.
-*/
-float MPU6000::getAccelSensitivity(){
-  // TODO: Write setter for sensity a variable, possibly private
-  	float factor;
-	switch (accel_range) {
-		case (MPU6000_RANGE_2_G):
-      		factor = 16384.0;
-      		break;
-    	case (MPU6000_RANGE_4_G):
-      		factor = 8192.0;
-      		break;
-    	case (MPU6000_RANGE_8_G):
-     		factor = 4096.0;
-      		break;
-    	case (MPU6000_RANGE_16_G):
-      		factor = 2048.0;
-      		break;
-	}
-	accel_scale = factor;
-	return factor;  
-}
-
-
-
-/*
-Parameters: none
-Returns: the gyroscope sensitivity scale factor as a FLOAT 
-This function uses a switch statement to return the sensitivity scale factor
-for the gyroscope depending on the current sensing accuracy scale.
-*/
-// float MPU6000::getGyroSensitivity(){
-//     float factor;
-//     switch (currentGyroScale) {
-//     	case (GFS_250DPS):
-//       		factor = 131.0;
-//       		break;
-//     	case (GFS_500DPS):
-//       		factor = 65.5;
-//       		break;
-//     	case (GFS_1000DPS):
-//       		factor = 32.8;
-//       		break;
-//     	case (GFS_2000DPS):
-//       		factor = 16.4;
-//       		break;
-// 	}
-// 	currentGyroFactor = factor;
-// 	return factor;  
-// }
-

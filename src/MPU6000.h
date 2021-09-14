@@ -63,6 +63,17 @@ typedef enum {
     MPU6000_RANGE_2000_DEG = 0b11, // +/- 2000 deg/s
 } mpu6000_gyro_range_t;
 
+// From Adafruit Lib
+typedef enum {
+    MPU6000_BAND_260_HZ, ///< Docs imply this disables the filter
+    MPU6000_BAND_184_HZ, ///< 184 Hz
+    MPU6000_BAND_94_HZ,  ///< 94 Hz
+    MPU6000_BAND_44_HZ,  ///< 44 Hz
+    MPU6000_BAND_21_HZ,  ///< 21 Hz
+    MPU6000_BAND_10_HZ,  ///< 10 Hz
+    MPU6000_BAND_5_HZ,   ///< 5 Hz
+} mpu6000_bandwidth_t;
+
 class MPU6000:public Sensor{
     public:
         MPU6000(int _id, bool _debug = false);
@@ -106,6 +117,17 @@ class MPU6000:public Sensor{
 
         sensor_float_vec_t getSample();
         sensor_float_vec_t getGyroSample();
+
+        void reset();
+        void resetSigPath();
+
+        void setSampleRateDivisor(uint8_t divisor);
+        void setFilterBandwidth(mpu6000_bandwidth_t bandwidth)
+
+        // setFilterBandwidth
+        // setGyroRange
+        // setAccelerometerRange
+        // setPowerMgmt_1
 
     private:
         
