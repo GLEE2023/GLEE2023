@@ -59,9 +59,9 @@ void MPU6000::initialize(void){
 	
 	setSampleRateDivisor(0);
 
-	setFilterBandwidth(MPU6050_BAND_260_HZ);
+	setFilterBandwidth(MPU6000_BAND_260_HZ);
 
-	setAccelerometerRange(MPU6050_RANGE_2_G);
+	setAccelRange(MPU6000_RANGE_2_G);
 
 	writeByte(MPU6000_PWR_MGMT_1, 0x01);
 	delay(100);
@@ -87,7 +87,7 @@ void MPU6000::setSampleRateDivisor(uint8_t divisor){
 	writeByte(MPU6000_SMPLRT_DIV, divisor);
 }
 
-void MPU6000::setFilterBandwidth(npu6000_bandwidth_t bandwidth){
+void MPU6000::setFilterBandwidth(mpu6000_bandwidth_t bandwidth){
 	writeByte(MPU6000_CONFIG, bandwidth);
 }
 

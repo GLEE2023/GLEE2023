@@ -122,7 +122,7 @@ class MPU6000:public Sensor{
         void resetSigPath();
 
         void setSampleRateDivisor(uint8_t divisor);
-        void setFilterBandwidth(mpu6000_bandwidth_t bandwidth)
+        void setFilterBandwidth(mpu6000_bandwidth_t bandwidth);
 
         // setFilterBandwidth
         // setGyroRange
