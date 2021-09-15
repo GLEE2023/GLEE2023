@@ -291,10 +291,10 @@ void LunaRadio::readData(uint8_t* data, size_t len){
     }
 }
 
-int LunaRadio::getRSSI(void){
+float LunaRadio::getRSSI(void){
 	return(LunaRadio::radio.getRSSI());
 }
 
-int LunaRadio::getSNR(void){
+float LunaRadio::getSNR(void){
 	return(LunaRadio::radio.getSNR());
 }

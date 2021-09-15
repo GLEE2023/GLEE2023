@@ -34,8 +34,9 @@ class LunaRadio{
 		void startRecieve(void);
 		void readData(uint8_t* data, size_t len);
 
-		int getRSSI(void);
-		int getSNR(void);
+		// Signal Metrics
+		float getRSSI(void);
+		float getSNR(void);
 
 	private:
 		SX1272 radio = new Module(NSS_PIN, DIO0_PIN, RESET_PIN, DIO1_PIN); //creates new module (from radiolib)

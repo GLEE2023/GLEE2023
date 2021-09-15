@@ -1,4 +1,4 @@
-#include "ICM20602.h"
+#include "MPU6000.h"
 
 float startTime;    
 float endTime;
@@ -8,7 +8,9 @@ float accelDif;
 float impactThreshold = 0.1; // Defines impact threshold to be 0.001 m/s^2
 int LED = 4;
 
-ICM20602 accelerometer(1, false);
+MPU6000 accelerometer(1, false);
+
+sensor_float_vec_t acc; 
 
 sensor_float_vec_t accelMPS;
 sensor_float_vec_t accelG;
@@ -21,7 +23,7 @@ void setup(){
 
     accelerometer.initialize();
 
-    accelerometer.setAccelScale(0); // Scale: AFS_2G - 0
+    accelerometer.setAccelRange(MPU6000_RANGE_2_G);
 
     pinMode(LED, OUTPUT);
     
@@ -30,7 +32,7 @@ void setup(){
     for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds
         startTime = millis();
 
-        accelRaw = accelerometer.getRawAccel();
+        accelRaw = accelerometer.getRawAcc();
         accelG = accelerometer.getGAccel(accelRaw);
         accelMPS = accelerometer.getMPSAccel(accelG);
         
@@ -53,9 +55,9 @@ void setup(){
 
 void loop(){
 
-    //startTime = millis();
+    startTime = millis();
 
-    accelRaw = accelerometer.getRawAccel();
+    accelRaw = accelerometer.getRawAcc();
     accelG = accelerometer.getGAccel(accelRaw);
     accelMPS = accelerometer.getMPSAccel(accelG);
 
@@ -81,6 +83,6 @@ void loop(){
         digitalWrite(LED, LOW);
     };
     
-    //endTime = millis();
+    endTime = millis();
     delay(100); // get measurements every 0.1 second
 };

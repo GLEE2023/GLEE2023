@@ -25,8 +25,8 @@ LunaSat::LunaSat(int _id, int _conf[6], bool _debug){
     Serial.println(F("Done initalization"));
 
     // Set indicator LED pin modes
-    pinMode(LED1, OUTPUT);
-    pinMode(LED2, OUTPUT);
+    // pinMode(LED1, OUTPUT);
+    // pinMode(LED2, OUTPUT);
 
     //TODO: Handle passing modes/configurations as arguments into sensor constructors
     //TODO: LunaSat class should have has its own begin function which begins transmission with other sensors)
@@ -44,60 +44,115 @@ void LunaSat::begin(int baudRate){
     Serial.begin(baudRate);
     delay(5);
     if (debug){
-        Serial.println("LunaSat has begun serial communications");
+        Serial.println(F("Serial Coms Active"));
     }
+
+    // DEBUG PRINT
+    Serial.println(F("Serial Coms Active"));
 
     // Sensor specific begins and initializations
     if (info.conf[1]){
-        LunaSat::icm20602->begin();
-        LunaSat::icm20602->initialize();
+        LunaSat::mpu6000->begin();
+        LunaSat::mpu6000->initialize();
+        // LunaSat::mpu6000->setAccelRange(MPU6000_RANGE_2_G);
+
+        // Depricated 5.0 Accel Init
+        // LunaSat::icm20602->begin();
+        // LunaSat::icm20602->initialize();
+
+        if (debug) Serial.println(F("Accel Initialized"));
+
+        // DEBUG PRINT
         Serial.println(F("Accel Initialized"));
     }
+
+    if (info.conf[2]==1) {
+        LunaSat::mlx90393->begin_I2C();
+        Serial.println(F("MAG I2C Began")); // DEBUG PRINT
+        LunaSat::mlx90393->setGain(MLX90393_GAIN_2_5X);
+        Serial.println(F("Gain Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setResolution(MLX90393_X, MLX90393_RES_19);
+        Serial.println(F("X Resolution Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setResolution(MLX90393_Y, MLX90393_RES_19);
+        Serial.println(F("Y Resolution Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setResolution(MLX90393_Z, MLX90393_RES_16);
+        Serial.println(F("Z Resolution Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setOversampling(MLX90393_OSR_2);
+        Serial.println(F("Over Sampling Set")); // DEBUG PRINT
+        LunaSat::mlx90393->setFilter(MLX90393_FILTER_6);
+        Serial.println(F("Filter Set")); // DEBUG PRINT
+
+       if (debug) Serial.println(F("Mag Initialized"));
+    } 
 
     if (info.conf[3]==1){
         LunaSat::tpis1385->begin();
         LunaSat::tpis1385->readEEprom();
+
+        if (debug) Serial.println(F("T-Pile Initialized"));
     }
 
     if (info.conf[4]==1){
         LunaSat::cap->begin();
+        if (debug) Serial.println(F("Cap Initialized"));
     }
     if(info.conf[5]==1){
         // Default radio initialization
         LunaSat::rad.initialize_radio();
         delay(50);
+        if (debug) Serial.println(F("Radio Initialized"));
     }
 }
 
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
-    if (!debug){
-        sample.timeStamp = millis();
 
-        // Handle Temperature Sensor Sample base on configuration
-        if (info.conf[0] == 1){
-            sample.TMPtemperature = LunaSat::tmp117->getTemperatureC();
-        }else{
-            sample.TMPtemperature = 0;
-        }
+    sample.timeStamp = millis();
 
-        // Handle acceleration sample based on configuration
-        if (info.conf[1] == 1){
-            sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
-            sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
-        }
-
-        // Handle Thermopile Sample based on configuration
-        if (info.conf[3] == 1){
-            sample.TPTemperature = LunaSat::tpis1385->getSample();
-        }
-
-        if (info.conf[4] == 1){
-            sample.cap = LunaSat::cap->getRawData();
-        }
-        
+    // Handle Temperature Sensor Sample base on configuration
+    if (info.conf[0] == 1){
+        sample.TMPtemperature = LunaSat::tmp117->getTemperatureC();
+    }else{
+        sample.TMPtemperature = 0;
     }
 
+    // Handle acceleration sample based on configuration
+    if (info.conf[1] == 1){
+        
+        sample.acceleration = LunaSat::mpu6000->getSample();
+        
+        // 5.0 ICM [deprecated]
+        // sensor_int16_vec_t rawAccel = LunaSat::icm20602->getRawAccel();
+        // sample.acceleration = LunaSat::icm20602->getGAccel(rawAccel);
+    } else {
+        sample.acceleration.x = 0;
+        sample.acceleration.y = 0;
+        sample.acceleration.z = 0;
+    }
+
+    // Handle Magnetometer
+    if (info.conf[2] == 1){
+        sample.mag = LunaSat::mlx90393->getSample();
+    } else {
+        sample.mag.magnetic.x = 0;
+        sample.mag.magnetic.y = 0;
+        sample.mag.magnetic.z = 0;
+    }
+
+    // Handle Thermopile Sample based on configuration
+    if (info.conf[3] == 1){
+        sample.TPTemperature = LunaSat::tpis1385->getSample();
+    } else {
+        sample.TPTemperature.ambient = 0;
+        sample.TPTemperature.object = 0;
+    }
+
+    if (info.conf[4] == 1){
+        sample.cap = LunaSat::cap->getRawData();
+    } else {
+        sample.cap = 0;
+    }
+        
     return sample;
 }
 
@@ -124,11 +179,11 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
         Serial.print(sample.acceleration.z,5);
     }
     if (info.conf[2]==1){
-        Serial.print(sample.magnetic.x);
+        Serial.print(sample.mag.magnetic.x);
         Serial.print(',');
-        Serial.print(sample.magnetic.y);
+        Serial.print(sample.mag.magnetic.y);
         Serial.print(',');
-        Serial.print(sample.magnetic.z);
+        Serial.print(sample.mag.magnetic.z);
     }
     if (info.conf[3]==1){
         Serial.print(',');
@@ -170,11 +225,11 @@ void LunaSat::transmitSample(lunaSat_sample_t sample){
     }
     if (info.conf[2]==1){
         sampleString = sampleString + sep;
-        sampleString = sampleString + String(sample.magnetic.x);
+        sampleString = sampleString + String(sample.mag.magnetic.x);
         sampleString = sampleString + sep;
-        sampleString = sampleString + String(sample.magnetic.y);
+        sampleString = sampleString + String(sample.mag.magnetic.y);
         sampleString = sampleString + sep;
-        sampleString = sampleString + String(sample.magnetic.z);
+        sampleString = sampleString + String(sample.mag.magnetic.z);
 
     }
     if (info.conf[3]==1){

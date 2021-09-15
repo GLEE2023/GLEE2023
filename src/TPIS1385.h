@@ -129,7 +129,11 @@ class TPIS1385 : public Sensor{                       //Inheritied class from th
         uint32_t getTPobj(void);
         float getTobj(uint32_t TPobj, float Tamb);
 
+        float getCorrectedTobj(uint32_t TPobj, float Tamb, float emi);
+
         TPsample_t getSample(void);
+        TPsample_t getCorrectedSample(float emisivity);
+
         void updateSample(void);
 
     private:

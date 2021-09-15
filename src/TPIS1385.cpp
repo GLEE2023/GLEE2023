@@ -118,6 +118,12 @@ float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
     return pow((f1 + f2), 0.2631578947f); // Magic constant for inverse root efficency (1/3.8 = 0.2631578947f)
 }
 
+float TPIS1385::getCorrectedTobj(uint32_t TPobj, float Tamb, float emi){
+    float f1 = pow(Tamb, 3.8f);
+    float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / (sensorCalibration.K * emi); // EQ. from datasheet
+    return pow((f1 + f2), 0.2631578947f); // Magic constant for inverse root efficency (1/3.8 = 0.2631578947f)
+}
+
 TPsample_t TPIS1385::getSample(){
     TPsample_t sample; // observation sample to be returned
     
@@ -126,6 +132,21 @@ TPsample_t TPIS1385::getSample(){
     uint32_t TPobj = getTPobj();
     uint16_t Tamb = getTamb(TPamb);
     float Tobj = getTobj(TPobj, Tamb);
+    
+    sample.object = Tobj - SENSOR_CONV_K_to_C; 
+    sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
+    
+    return sample;
+}
+
+TPsample_t TPIS1385::getCorrectedSample(float emisivity){
+    TPsample_t sample; // observation sample to be returned
+    
+    // Build Sample
+    uint16_t TPamb = getTPamb();
+    uint32_t TPobj = getTPobj();
+    uint16_t Tamb = getTamb(TPamb);
+    float Tobj = getCorrectedTobj(TPobj, Tamb, emisivity);
     
     sample.object = Tobj - SENSOR_CONV_K_to_C; 
     sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
