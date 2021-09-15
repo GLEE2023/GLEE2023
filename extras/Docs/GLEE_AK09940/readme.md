@@ -5,7 +5,7 @@ Paired with GLEE's LunaSat object class, it can be used to monitor, configure an
 the AK09940. GLEE_AK09940 supports the basic functionality of the magnetometer with reading 
 and saving the three-axis magnetic field. It has nine operation modes, including: power-down mode, single measurement mode, continuous measurement modes 1 through 6, and self-test mode and four drive modes with to of each of low noise mode and low power mode. More details about these sensor modes can be found below.
 
-![Magnetometer](/Docs/Images/AK09940_close_up.jpg)
+![Magnetometer](/extras/Docs/Images/AK09940_close_up.jpg)
 
 ## Magnetometer Data Sheet
 [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
