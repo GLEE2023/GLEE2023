@@ -292,13 +292,23 @@ enum mlx90393_resolution MLX90393::getResolution(enum mlx90393_axis axis) {
  * This function sets the digital filter.
 **/
 bool MLX90393::setFilter(enum mlx90393_filter filter) {
+    uint8_t f;
+
+    if(filter == MLX90393_FILTER_6){
+        f = 0x06;
+    }
+
+    if(filter == MLX90393_FILTER_7){
+        f = 0x07;
+    }
+    
     _dig_filt = filter;
 
     uint16_t data;
     readRegister(MLX90393_CONF3, &data);
 
     data &= ~0x1C;
-    data |= filter << 2;
+    data |= f << 2;
 
     return writeRegister(MLX90393_CONF3, data);
 }
