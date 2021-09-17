@@ -8,55 +8,46 @@
 // Instantiate MLX90393 class with id of one and debugging set to true
 MLX90393 magnetometer = MLX90393(1,true);
 
-mlx_sample_t sample;
+mlx_sample_t sample; // Sample of type mlx_sample_t to hold magnetometer data
 
-// Magnetic compass heading (calculated later)
-float heading;
+float heading; // Magnetic compass heading (calculated later)
 
-// For storing output pin configuration of LED
-int LED = 4; // May need to be changed
+int LED = 4; // For storing output pin configuration of LED
 
-// Direction of compass as determined by heading
-String direction_str;
+String direction_str; // Direction of compass as determined by heading
 
-float minX = 180.0; // Minimum heading for between 0 and 180 degrees
-float maxX = 0.0; // Maximum heading for between 0 and 180 degrees
-float minY = 360.0; // Minimum heading for between 180 and 360 degrees
-float maxY = 180.0; // Maximum heading for between 180 and 360 degrees
+float minX = 3400000.0; // Minimum heading for between 0 and 180 degrees
+float maxX = -3400000.0; // Maximum heading for between 0 and 180 degrees
+float minY = 3400000.0; // Minimum heading for between 180 and 360 degrees
+float maxY = -3400000.0; // Maximum heading for between 180 and 360 degrees
+float minZ = 3400000.0;
+float maxZ = -3400000.0;
+float minHeadingOne = 180.0;
+float maxHeadingOne = 0.0;
+float minHeadingTwo = 360.0;
+float maxHeadingTwo = 180.0;
 
-float xMag = 0;
-float yMag = 0;
+float xMag = 0.0; // Magnitude of magnetic field in x direction
+float yMag = 0.0; // Magnitude of magnetic field in y direction
+float zMag = 0.0; // Magnitude of magnetic field in z direction
 
-int tmp = 0;
+float avg_delta_x = (maxX - minX) / 2;
+float avg_delta_y = (maxY - minY) / 2;
+float avg_delta_z = (maxZ - minZ) / 2;
 
-/**
- * Parameters: float xMag (magnitude of magnetic field in x direction), 
- * float yMag (magnitude of magnetic field in y direction)
- * Returns: compass heading 
- * This function uses the raw magnetometer readings to output
- * a heading. It does not take into account calibrated ranges so it is
- * only used in setup.
-**/
-float findHeading(float xMag, float yMag){
-    if(yMag > 0){
-        heading = 90 - (atan(yMag/xMag))*(180/M_PI); // M_PI = 3.141...
-    } else if (yMag < 0){
-        heading = 270 - (atan(yMag/xMag))*(180/M_PI);
-    } else {
-        if(yMag < 0){
-            heading = 180;
-        } else {
-            heading = 0.0;
-        }
-    }
-    return heading;
-};
+//int tmp = 0; // Temporary variable
 
 void setup (){
-    // Begin Serial Communications (Lunasat baud rate set to 9600)
+    // Begin Serial Communications (Set Lunasat baud rate set to 9600)
     Serial.begin(9600);
+
     delay(3000);
+
     magnetometer.begin_I2C();
+
+    // Set gain
+    magnetometer.setGain(MLX90393_GAIN_2_5X);
+
     // Set resolution
     magnetometer.setResolution(MLX90393_X, MLX90393_RES_19); // May need to be changed
     magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19); // May need to be changed
@@ -73,15 +64,17 @@ void setup (){
 
     Serial.println("Before using the magnetometer, it will be need to be calibrated by spinning it in all possible directions.");
     delay(3000);
-    Serial.println("To calibrate, orient the magnetometer and then send an input to the serial monitor. Do this repeatedly.");
-    delay(3000);
-    Serial.println("Starting calibration in 3");
+    //Serial.println("To calibrate, orient the magnetometer and then send an input to the serial monitor. Do this repeatedly.");
+    //delay(5000);
+    Serial.println("Make sure no wires are loose before spinning the LunaSat.");
+    delay(5000);
+    Serial.print("Starting calibration in 3,");
     delay(1000);
-    Serial.println("2");
+    Serial.print("2,");
     delay(1000);
-    Serial.println("1");
+    Serial.print("1,");
     delay(1000);
-    Serial.println("Go");
+    Serial.println("Go!");
     delay(1000);
 
     // Calibration Code
@@ -89,18 +82,16 @@ void setup (){
     int calibrationSize = 100; // Number of data points to be used for calibration
 
     for(int i = 0; i < calibrationSize; i++){
-        delay(100);
-        //while(!(Serial.available() > 0)){}
+        delay(10);
+        //while(!(Serial.available() > 0)){} // Rather than collecting data automatically, input can be used to gather data at chosen time by user
         //tmp = Serial.read();
         mlx_sample_t calMag = magnetometer.getSample();
 
         //Serial.println(calMag.magnetic.x);
         //Serial.println(calMag.magnetic.y);
 
-        //float heading = findHeading(calMag.magnetic.x,calMag.magnetic.y);
-
-        heading = atan2(calMag.magnetic.y,calMag.magnetic.x) - 0.119206;
-
+        
+        heading = atan2(calMag.magnetic.y,calMag.magnetic.x);
         heading = heading * (180/M_PI);
 
         while(heading < 0) {
@@ -111,33 +102,58 @@ void setup (){
             heading = heading - 360.0;
         }
 
-        Serial.println(heading,5);
+        if(heading < minHeadingOne && heading >= 0.0){
+            minHeadingOne = heading;
+        }
+        if(heading < minHeadingTwo && heading >= 180.0){
+            minHeadingTwo = heading;
+        }
+        
+        if(heading > maxHeadingOne && heading <= 180.0){
+            maxHeadingOne = heading;
+        }
+        if(heading > maxHeadingTwo && heading <= 360.0){
+            maxHeadingTwo = heading;
+        }
 
-        if(heading < minX && heading >= 0.0){
-            minX = heading;
+        
+        if(calMag.magnetic.x < minX){
+          minX = calMag.magnetic.x;
         }
-        if(heading < minY && heading >= 180.0){
-            minY = heading;
+
+        if(calMag.magnetic.x > maxX){
+          maxX = calMag.magnetic.x;
+        }
+
+        if(calMag.magnetic.y < minY){
+          minY = calMag.magnetic.y;
+        }
+        if(calMag.magnetic.y > maxY){
+          maxY = calMag.magnetic.y;
+        }
+        if(calMag.magnetic.z < minZ){
+          minZ = calMag.magnetic.z;
+        }
+        if(calMag.magnetic.z > maxZ){
+          maxZ = calMag.magnetic.z;
         }
         
-        if(heading > maxY && heading <= 360.0){
-            maxY = heading;
-        }
-        if(heading > maxX && heading <= 180.0){
-            maxX = heading;
-        }
-        
-        //delay(100);
     }
 
     Serial.println(minX);
     Serial.println(maxX);
     Serial.println(minY);
     Serial.println(maxY);
+    Serial.println(minZ);
+    Serial.println(maxZ);
 
-    Serial.println("Done.");
+    avg_delta_x = (maxX - minX) / 2;
+    avg_delta_y = (maxY - minY) / 2;
+    avg_delta_z = (maxZ - minZ) / 2;
+    
+    Serial.println("Completed calibration."); // Print that magnetometer has been calibrated
     delay(1000);
-    Serial.println("Ready to use."); // Print that magnetometer has been calibrated
+    Serial.println("Ready to use."); 
     delay(1000);
     Serial.println();
     Serial.println();
@@ -151,28 +167,57 @@ void loop (){
     // Set aside magnitude of magnetic field in x and y directions for calculations
     xMag = sample.magnetic.x;
     yMag = sample.magnetic.y;
-    //xMag = (1/(maxX - minY)) * (xMag - minX);
-    //yMag = (1/(maxY - minY)) * (yMag - minY);
+    zMag = sample.magnetic.z;
     
-    //Serial.println("X magnitude: " + (String)xMag);
-    //Serial.println("Y magnitude: " + (String)yMag);
-
+    float avg_delta = (avg_delta_x + avg_delta_y + avg_delta_z) / 3;
+    
+    float scale_x = avg_delta / avg_delta_x;
+    float scale_y = avg_delta / avg_delta_y;
+    float scale_z = avg_delta / avg_delta_z;
+    
+    xMag = xMag * scale_x;
+    yMag = yMag * scale_y;
+    zMag = zMag * scale_z;
+    
     // Determine compass heading
+    /*
+    float rads = atan2(xMag,yMag);
+    heading = rads;
+    heading = heading * (180/M_PI);
+    
+    if (yMag > 0){
+        heading = 90 - heading;
+        //heading = 180 + ((180 - 0) / (maxHeadingOne - minHeadingOne)) * (heading - minHeadingOne); // Use calibration values
+    } else if (yMag < 0){
+        heading = 270 - heading;
+        //heading = 0 + ((360 - 180) / (maxHeadingTwo - minHeadingTwo)) * (heading - minHeadingTwo); // Use calibration values
+    } else if (xMag < 0){
+      heading = 180.0;
+    } else {
+      heading = 0.0;
+    }
+    */
+
+    
     
 
-    if (yMag > 0){
-        heading = atan2(yMag,xMag) - 0.119206;
-        heading = heading * (180/M_PI);
-        heading = 90 - heading;
-        heading = 180 + ((360 - 180) / (maxY - minY)) * (heading - minY); // Use calibration values
-    }
+    
 
-    if (yMag < 0){
-        heading = atan2(yMag,xMag) - 0.119206;
-        heading = heading * (180/M_PI);
-        heading = 270 - heading;
-        heading = 0 + ((180 - 0) / (maxX - minX)) * (heading - minX); // Use calibration values
+        
+    if(yMag > 0){
+        heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
+        heading = 180 + ((360 - 180) / (maxHeadingOne - minHeadingOne)) * (heading - minHeadingOne); // Use calibration values   
+    } else if (yMag < 0){
+        heading = 270 - (atan(xMag/yMag))*(180/M_PI);
+        heading = 0 + ((180 - 0) / (maxHeadingTwo - minHeadingTwo)) * (heading - minHeadingTwo); // Use calibration values  
+    } else {
+        if(xMag < 0){
+            heading = 180;
+        } else {
+            heading = 0.0;
+        }
     }
+    
 
     while(heading < 0) {
         heading = 360.0 + heading;
@@ -182,26 +227,7 @@ void loop (){
         heading = heading - 360.0;
     }
 
-    Serial.print("Heading: "); Serial.println(heading,2);
-
-
-    /*       
-    if(yMag > 0){
-        heading = 90 - (atan(xMag/yMag))*(180/M_PI); // M_PI = 3.141...
-        heading = 180 + ((360 - 180) / (maxY - minY)) * (heading - minY); // Use calibration values   
-    } else if (yMag < 0){
-        heading = 270 - (atan(xMag/yMag))*(180/M_PI);
-        heading = 0 + ((180 - 0) / (maxX - minX)) * (heading - minX); // Use calibration values  
-    } else {
-        if(xMag < 0){
-            heading = 180;
-        } else {
-            heading = 0.0;
-        }
-    }
-    */
-
-    // // Set to Error by default in order to determine what information should be printed
+    // Set to Error by default in order to determine what information should be printed
     direction_str = "Error";
 
      // Determine if heading is valid and print general direction of compass
@@ -262,14 +288,14 @@ void loop (){
         Serial.print(heading,5);
         Serial.println(" degrees");
     }
-    
+    // Delay blink of LED based on value of heading. LED will blink faster when closer to magnetic North
     if(heading<=180.0){
         digitalWrite(LED, HIGH);
-        delay(50 + (heading*4)); // Delay blink of LED based on value of heading
+        delay(50 + (heading*4)); 
         digitalWrite(LED, LOW);
     } else {
         digitalWrite(LED, HIGH);
-        delay(50 + ((360-heading)*4)); // Delay blink of LED based on value of heading
+        delay(50 + ((360-heading)*4)); 
         digitalWrite(LED, LOW);
     }
 
