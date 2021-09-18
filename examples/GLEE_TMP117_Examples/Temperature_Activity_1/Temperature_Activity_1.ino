@@ -20,7 +20,7 @@ void setup(){
     Serial.begin(9600);
 
     // Set time between samples to 1000ms (1s)
-    timeBetweenSample = 500;
+    timeBetweenSample = 1000;
 };
 
 void loop(){
