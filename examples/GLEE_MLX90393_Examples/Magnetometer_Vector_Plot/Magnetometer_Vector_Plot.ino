@@ -4,14 +4,11 @@ MLX90393 magnetometer = MLX90393(1,false);
 
 mlx_sample_t sample;
 
-const int numOfPoints = 4;
+const int numOfPoints = 4; // Number of samples / coordinate pairs 
 
-String x_coordinates[numOfPoints];
-String y_coordinates[numOfPoints];
-mlx_sample_t data[numOfPoints];
-
-float tmp = 0.0;
-
+String x_coordinates[numOfPoints]; // X coordinates that will be inputted by user
+String y_coordinates[numOfPoints]; // Y coordinates that will be inputted by user
+mlx_sample_t data[numOfPoints]; // Samples taken by magnetometer
 
 void setup (){
     Serial.begin(9600);
@@ -32,8 +29,9 @@ void setup (){
     // Set digital filtering
     magnetometer.setFilter(MLX90393_FILTER_6);
 
-    String tmp;
-    String mTp;
+    String tmp; // Variable to hold user input
+    String mTp; // Variable to hold formatted user input
+    //Ask the user for x and y coordinates of the LunaSat relative to the magnetic source before taking each sample.
     for (int i = 0; i < numOfPoints; i++){
         Serial.println("Move LunaSat and then enter x coordinate of LunaSat relative to magnet. Do not rotate LunaSat while moving it.");
         while(!(Serial.available() > 0)){} // Rather than collecting data automatically, input can be used to gather data at chosen time by user
@@ -51,35 +49,33 @@ void setup (){
        
         delay(1000); // Take samples every one second
     }
+
     // Print out coordinates
     Serial.println("Coordinates");
     for(int i = 0; i < numOfPoints; i++){
       Serial.print("(");Serial.print(x_coordinates[i]);Serial.print(",");Serial.print(y_coordinates[i]);Serial.println(")");
     }
     Serial.println();
-    // Print out relevant measurements and calcualtions
-    Serial.println("Axes Measurements (xAxis,yAxis,zAxis,angle,fieldStrength)");
+
+    // Print out relevant measurements and calculations, including the axes measurements and the magnetic field strength
+    Serial.println("Axes Measurements (xAxis,yAxis,zAxis,fieldStrength)");
     for(int i = 0; i < numOfPoints; i++){
       Serial.print(data[i].magnetic.x); Serial.print("uT, "); 
       Serial.print(data[i].magnetic.y); Serial.print("uT, "); 
       Serial.print(data[i].magnetic.z); Serial.print("uT, ");
-      float angle = atan(data[i].magnetic.y/data[i].magnetic.x)*(180/M_PI);
-      if(data[i].magnetic.y<0){
-        angle = 270 - angle;
-      } else {
-        angle = 90 - angle;
-      }
-      Serial.print(angle); Serial.print("º, ");
       Serial.print(data[i].strength); Serial.println("uT");
     }
     Serial.println();
+
     // Print out vectors to be drawn by hand
+    // Prints out vector components, position coordinates, angle of vector, and magnitude of vector
     Serial.println("Vectors to draw");
     for(int i = 0; i < numOfPoints; i++){
       Serial.print("Vector: <");Serial.print(data[i].magnetic.x);
       Serial.print(","); Serial.print(data[i].magnetic.y);
       Serial.print(">, Location: ("); Serial.print(x_coordinates[i]);
       Serial.print(",");Serial.print(y_coordinates[i]);Serial.print(")");
+      // Calculuate angle using only x and y dimensions
       float angle = atan(data[i].magnetic.y/data[i].magnetic.x)*(180/M_PI);
       if(data[i].magnetic.y<0){
         angle = 270 - angle;
