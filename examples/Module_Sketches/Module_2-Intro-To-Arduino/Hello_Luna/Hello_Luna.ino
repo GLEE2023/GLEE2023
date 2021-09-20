@@ -3,7 +3,6 @@
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600); // This sets the baud rate
-  // Serial.println("Hello Luna!");  // This prints Hello Luna
 }
 
 void loop() {
