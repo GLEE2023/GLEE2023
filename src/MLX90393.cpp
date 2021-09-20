@@ -200,15 +200,27 @@ bool MLX90393::reset(void) {
  * This functions sets the sensor gain to the specified level.
 **/
 bool MLX90393::setGain(mlx90393_gain_t gain) {
+    uint8_t g;
+
+    if(gain == MLX90393_GAIN_2_5X){
+        g = 0x03;
+    }
+
+    if(gain == MLX90393_GAIN_1X){
+        g = 0x07;
+    }
     _gain = gain;
 
     uint16_t data;
     readRegister(MLX90393_CONF1, &data);
 
+    Serial.print("CONF1 Reg: "); Serial.println(data);
+    Serial.print("GAIN VAR: "); Serial.println(g);
+
     // mask off gain bits
     data &= ~0x0070;
     // set gain bits
-    data |= gain << MLX90393_GAIN_SHIFT;
+    data |= g << MLX90393_GAIN_SHIFT;
 
     return writeRegister(MLX90393_CONF1, data);
 }
@@ -280,13 +292,23 @@ enum mlx90393_resolution MLX90393::getResolution(enum mlx90393_axis axis) {
  * This function sets the digital filter.
 **/
 bool MLX90393::setFilter(enum mlx90393_filter filter) {
+    uint8_t f;
+
+    if(filter == MLX90393_FILTER_6){
+        f = 0x06;
+    }
+
+    if(filter == MLX90393_FILTER_7){
+        f = 0x07;
+    }
+    
     _dig_filt = filter;
 
     uint16_t data;
     readRegister(MLX90393_CONF3, &data);
 
     data &= ~0x1C;
-    data |= filter << 2;
+    data |= f << 2;
 
     return writeRegister(MLX90393_CONF3, data);
 }
