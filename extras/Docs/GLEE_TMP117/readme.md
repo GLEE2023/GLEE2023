@@ -50,7 +50,7 @@ GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
 
 | Method Name | return type | args | Comments  |
 |---|---|---|---|
-| dataReady | bool | void | Returns true or false on wether data is ready via looking at config register |
+| dataReady | bool | void | Returns true or false on whether data is ready via looking at config register |
 | getTemperatureC | double | void | Returns temperature processed temperature in degrees C |
 | getTemperatureF | double | void | Returns temperature processed temperature in degrees F |
 | getUncertainty | float | float Temperature Input | Takes an input temperature and returns calculated uncertainty |
