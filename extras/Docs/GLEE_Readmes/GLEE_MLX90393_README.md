@@ -15,13 +15,17 @@ This example is for making basic magnetic field observations.
 
 MLX90393 magnetometer = MLX90393(1,false);
 
-AK_Sample_t sample;
+mlx_sample_t sample;
 
 void setup (){
     Serial.begin(9600);
+
     magnetometer.begin_I2C();
-    //magnetometer.getSensor(/*Parameter*/);
+
+    // Set gain
     magnetometer.setGain(MLX90393_GAIN_2_5X);
+
+    // Set resolution
     magnetometer.setResolution(MLX90393_X, MLX90393_RES_19);
     magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19);
     magnetometer.setResolution(MLX90393_Z, MLX90393_RES_16);
@@ -32,29 +36,24 @@ void setup (){
     // Set digital filtering
     magnetometer.setFilter(MLX90393_FILTER_6);
 
-    //No apparent equivalency for setOpMode()
 };
 
 void loop (){   
-    float x, y, z;
 
     sample = magnetometer.getSample();
 
-    if (magnetometer.readData(&x, &y, &z)) {
-        Serial.println("Direct Measurements");
-        Serial.print("X: "); Serial.print(x, 4); Serial.println(" uT");
-        Serial.print("Y: "); Serial.print(y, 4); Serial.println(" uT");
-        Serial.print("Z: "); Serial.print(z, 4); Serial.println(" uT");
-        Serial.print(F("Magnetic Field Magnitude: ")); 
-        Serial.println(sample.strength);
-        Serial.println("Sample Measurements");
-        Serial.print("X: "); Serial.print(sample.magnetic.x, 4); Serial.println(" uT");
-        Serial.print("Y: "); Serial.print(sample.magnetic.y, 4); Serial.println(" uT");
-        Serial.print("Z: "); Serial.print(sample.magnetic.z, 4); Serial.println(" uT");
-    } else {
-        Serial.println("Unable to read XYZ data from the sensor.");
-    }
-    delay(1000); // Take samples every one sec
+    // Print out magnetic field measurements for each axis 
+    Serial.println("Magnetic Field Axes Measurements");
+    Serial.print("X: "); Serial.print(sample.magnetic.x,4); Serial.println(" uT");
+    Serial.print("Y: "); Serial.print(sample.magnetic.y,4); Serial.println(" uT");
+    Serial.print("Z: "); Serial.print(sample.magnetic.z,4); Serial.println(" uT");
+    Serial.println();
+    // Print out strength of magnetic field
+    Serial.println("Magnetic Field Strength (Magnitude)"); 
+    Serial.print(sample.strength,4); Serial.println(" uT");
+    Serial.println();
+   
+    delay(1000); // Take samples every one second
 };
 ```
 # Registers
@@ -76,7 +75,7 @@ void loop (){
 
 ## Memory map
 | Register | 15 | 14 | 13 | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 0x00h | Z-Series | Gain_SEL | Gain_SEL | Gain_SEL | HALLCONF | HALLCONF | HALLCONF | HALLCONF | ANA_RESERVED_LOW | ANA_RESERVED_LOW | ANA_RESERVED_LOW | ANA_RESERVED_LOW | ANA_RESERVED_LOW | ANA_RESERVED_LOW | ANA_RESERVED_LOW | BIST |
 | Ox01h | BURST_SEL (zyxt) | BURST_SEL (zyxt) | BURST_DATA_RATE (BDR) | BURST_DATA_RATE (BDR) | BURST_DATA_RATE (BDR) | BURST_DATA_RATE (BDR) | BURST_DATA_RATE (BDR) | BURST_DATA_RATE (BDR) | TRIG_INT | COMM_MODE | COMM_MODE | WOC_DIFF | EXT_TRG | TCMP_EN | BURST_SEL (zyxt) | BURST_SEL (zyxt) |
 | 0x02h | RES_Y | RES_X | RES_X | DIG_FILT | DIG_FILT | DIG_FILT | OSR | OSR | | | | OSR2 | OSR2 | RES_Z | RES_Z | RES_Y |
@@ -139,7 +138,7 @@ The first byte transmitted by the MLX90393 as a response to a command.
 | Method Name | return type | args | Comments |
 |---|---|---|---|
 | begin_I2C | bool | uint8_t, TwoWire | Sets up hardware and initializes I2C |
-| begin_SPI | bool | uint8_t, SPIClass | Sets up hardware and initializes hardware SPI |
+| begin_SPI | bool | uint8_t, SPIClass | Sets up hardware and initializes hardware SPI. Not currently implemented. |
 | reset | bool | void | Perform a soft reset | 
 | exitMode | bool | void | Perform a mode exit | 
 | readMeasurement | bool | float, float, float | Reads data from data register & returns the results |
@@ -154,9 +153,10 @@ The first byte transmitted by the MLX90393 as a response to a command.
 | getOversampling | mlx90393_oversampling | void | Gets the current oversampling setting | 
 | setTrigInt | bool | bool | Sets the TRIG_INT pin to the specified function | 
 | readData | bool | float, float, float | Performs a single X/Y/Z conversion and returns the results |
-| getEvent | sensors_event_t | bool | Gets the most recent sensor event, Adafruit Unified Sensor format | 
+| getEvent | sensors_event_t | bool | Gets the most recent sensor event, Adafruit Unified Sensor format. Not currently implemented. | 
 | getSensor | sensor_t | void | Gets the sensor_t device data, Adafruit Unified Sensor format |
 | readRegister | bool | uint8_t, uint16_t |
 | writeRegister | bool | uint8_t, uint16_t |
 | _init | bool | void |
-| transceive | uint8_t | uint8_t, uint8_t, uint8_t, uint8_t, uint8_t | Peforms a full read/write transcation with the sensor |
+| transceive | uint8_t | uint8_t, uint8_t, uint8_t, uint8_t, uint8_t | Performs a full read/write transaction with the sensor |
+| getSample | mlx_sample_t | void | Retrieves data from the magnetometer. |
