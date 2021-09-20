@@ -17,8 +17,8 @@ void setup(){
 };
 
 void loop(){
-    // The code declared within an Arduino sketches loop function runs contiously following setup, 
-    // so we'll use this to continously turn both LEDS on and off with previously defined time periods 
+    // The code declared within an Arduino sketches loop function runs continuously following setup, 
+    // so we'll use this to continuously turn both LEDS on and off with previously defined time periods 
 
     // DigitalWrite is used to set the LED1 and LED2 pins to a high voltage (3.3V) 
     // which will allow current to flow through the circuit and turn the LEDs on
@@ -32,6 +32,6 @@ void loop(){
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
 
-    // Too finalize the loop sequence, a delay of off_time is implemented
+    // To finalize the loop sequence, a delay of off_time is implemented
     delay(off_time);
 };
