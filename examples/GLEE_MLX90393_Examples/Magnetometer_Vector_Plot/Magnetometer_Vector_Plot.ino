@@ -4,7 +4,7 @@ MLX90393 magnetometer = MLX90393(1,false);
 
 mlx_sample_t sample;
 
-const int numOfPoints = 1; // Number of samples / coordinate pairs 
+const int numOfPoints = 4; // Number of samples / coordinate pairs 
 
 String x_coordinates[numOfPoints]; // X coordinates that will be inputted by user
 String y_coordinates[numOfPoints]; // Y coordinates that will be inputted by user
@@ -28,6 +28,28 @@ void setup (){
 
     // Set digital filtering
     magnetometer.setFilter(MLX90393_FILTER_6);
+
+    // Calibration
+
+    mlx_sample_t calibrationPoints[15];    
+    for(int i = 0; i < 15; i++){
+      calibrationPoints[i] = magnetometer.getSample();
+    }
+
+    float avgX = 0.0;
+    float avgY = 0.0;
+    float avgZ = 0.0;
+
+    for(int j = 0; j < 15; j++){
+      avgX = avgX + calibrationPoints[j].magnetic.x;
+      avgY = avgY + calibrationPoints[j].magnetic.y;
+      avgZ = avgZ + calibrationPoints[j].magnetic.z;
+    }
+
+    avgX = avgX/15;
+    avgY = avgY/15;
+    avgZ = avgZ/15;
+
     Serial.println();
     String input; // Variable to hold user input
     //Ask the user for x and y coordinates of the LunaSat relative to the magnetic source before taking each sample.
@@ -76,19 +98,19 @@ void setup (){
     Serial.println("Vectors to draw");
     Serial.println();
     for(int i = 0; i < numOfPoints; i++){
-      Serial.print("Vector: < ");Serial.print(data[i].magnetic.x);
-      Serial.print(" , "); Serial.print(data[i].magnetic.y);
+      Serial.print("Vector: < ");Serial.print(data[i].magnetic.x-avgX);
+      Serial.print(" , "); Serial.print(data[i].magnetic.y-avgY);
       Serial.print(" > , Location: ( "); Serial.print(x_coordinates[i]);
       Serial.print(" , ");Serial.print(y_coordinates[i]);Serial.print(" ) ");
       // Calculuate angle using only x and y dimensions
-      float angle = atan(data[i].magnetic.y/data[i].magnetic.x)*(180/M_PI);
-      if(data[i].magnetic.y<0){
+      float angle = atan((data[i].magnetic.y-avgY)/(data[i].magnetic.x-avgX))*(180/M_PI);
+      if((data[i].magnetic.y-avgY)<0){
         angle = 270 - angle;
       } else {
         angle = 90 - angle;
       }
       Serial.print(" , Angle: "); Serial.print(angle); Serial.print("º");
-      Serial.print(" , Magnitude: ");Serial.print(data[i].strength);Serial.println(" uT");
+      Serial.print(" , Magnitude: ");Serial.print(sqrt(pow(sample.magnetic.x-avgX,2) + pow(sample.magnetic.y-avgY,2)));Serial.println(" uT");
     }
 
 };
