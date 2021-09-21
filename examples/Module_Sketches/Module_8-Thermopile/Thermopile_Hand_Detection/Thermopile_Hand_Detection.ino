@@ -20,7 +20,7 @@ float tempDiff;
 
 double thresh = 0.4; // The bubble of certainty allowed between average Sensor and average Object
 
-TPsample_t temperatures; // Initialize sensor temperature to zero
+TPsample_t temperatures; // Initialize sensor temperature to Zero
 
 void setup(){
     // Begin Serial Communications
