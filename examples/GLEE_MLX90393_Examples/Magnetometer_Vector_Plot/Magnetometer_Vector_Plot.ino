@@ -31,8 +31,8 @@ void setup (){
 
     // Calibration
 
-    mlx_sample_t calibrationPoints[15];    
-    for(int i = 0; i < 15; i++){
+    mlx_sample_t calibrationPoints[20];    
+    for(int i = 0; i < 20; i++){
       calibrationPoints[i] = magnetometer.getSample();
     }
 
@@ -40,15 +40,15 @@ void setup (){
     float avgY = 0.0;
     float avgZ = 0.0;
 
-    for(int j = 0; j < 15; j++){
+    for(int j = 0; j < 20; j++){
       avgX = avgX + calibrationPoints[j].magnetic.x;
       avgY = avgY + calibrationPoints[j].magnetic.y;
       avgZ = avgZ + calibrationPoints[j].magnetic.z;
     }
 
-    avgX = avgX/15;
-    avgY = avgY/15;
-    avgZ = avgZ/15;
+    avgX = avgX/20;
+    avgY = avgY/20;
+    avgZ = avgZ/20;
 
     Serial.println();
     String input; // Variable to hold user input
@@ -72,7 +72,7 @@ void setup (){
     Serial.println();
 
     // Print out coordinates
-    Serial.println("Coordinates");
+    Serial.println("Coordinates of Measurements Taken");
     Serial.println();
     for(int i = 0; i < numOfPoints; i++){
       Serial.print(i);Serial.print(": (");Serial.print(x_coordinates[i]);Serial.print(" , ");Serial.print(y_coordinates[i]);Serial.println(")");
@@ -95,7 +95,7 @@ void setup (){
 
     // Print out vectors to be drawn by hand
     // Prints out vector components, position coordinates, angle of vector, and magnitude of vector
-    Serial.println("Vectors to draw");
+    Serial.println("Vectors for Magnet's Magnetic Field");
     Serial.println();
     for(int i = 0; i < numOfPoints; i++){
       Serial.print("Vector: < ");Serial.print(data[i].magnetic.x-avgX);
@@ -106,8 +106,12 @@ void setup (){
       float angle = atan((data[i].magnetic.y-avgY)/(data[i].magnetic.x-avgX))*(180/M_PI);
       if((data[i].magnetic.y-avgY)<0){
         angle = 270 - angle;
-      } else {
+      } else if ((data[i].magnetic.y-avgY)>0){
         angle = 90 - angle;
+      } else if (data[i].magnetic.x-avgX < 0){
+        angle = 180.0;
+      } else {
+        angle = 0.0;
       }
       Serial.print(" , Angle: "); Serial.print(angle); Serial.print("º");
       Serial.print(" , Magnitude: ");Serial.print(sqrt(pow(sample.magnetic.x-avgX,2) + pow(sample.magnetic.y-avgY,2)));Serial.println(" uT");
