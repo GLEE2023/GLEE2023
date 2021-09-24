@@ -5,7 +5,7 @@ float endTime;
 float staticAcceleration = 0; // Acceelration when still
 float dynamicAcceleration; // Acceleration during an impact
 float accelDif; // Change in acceleration
-float impactThreshold = 0.2; // Defines impact threshold to be 0.001 m/s^2
+float impactThreshold = 0.2; // Defines impact threshold to be 0.002 m/s^2
                              // Sets how sensitive the imapct sensor is
 int LED = 4;
 
