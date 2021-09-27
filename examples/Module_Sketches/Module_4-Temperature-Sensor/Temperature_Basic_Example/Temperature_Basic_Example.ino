@@ -20,7 +20,7 @@ void setup(){
     Serial.begin(9600);
 
     // Set time between samples to 1000ms (1s)
-    timeBetweenSample = 500;
+    timeBetweenSample = 1000;
 };
 
 void loop(){
@@ -29,9 +29,16 @@ void loop(){
 
     // Sample temperature in C
     temperatureC = thermometer.getTemperatureC();
-
+    
+    // Sample temperature in F
+    temperatureF = thermometer.getTemperatureF();
+    
     // Output the temperature via seiral
-    Serial.println(temperatureC);
+    Serial.print("Temperature: "); 
+    Serial.print(temperatureC);
+    Serial.print(" (degrees C), ");
+    Serial.print(temperatureF);
+    Serial.println(" (degrees F)");
 
     // Record the end time so we know how long it took to record the measurement
     endTime = millis();
