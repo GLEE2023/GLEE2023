@@ -4,7 +4,7 @@ MLX90393 magnetometer = MLX90393(1,false);
 
 mlx_sample_t sample;
 
-const int numOfPoints = 4; // Number of samples / coordinate pairs 
+const int numOfPoints = 8; // Number of samples / coordinate pairs 
 
 String x_coordinates[numOfPoints]; // X coordinates that will be inputted by user
 String y_coordinates[numOfPoints]; // Y coordinates that will be inputted by user
@@ -114,7 +114,7 @@ void setup (){
         angle = 0.0;
       }
       Serial.print(" , Angle: "); Serial.print(angle); Serial.print("º");
-      Serial.print(" , Magnitude: ");Serial.print(sqrt(pow(sample.magnetic.x-avgX,2) + pow(sample.magnetic.y-avgY,2)));Serial.println(" uT");
+      Serial.print(" , Magnitude: ");Serial.print(sqrt(pow(data[i].magnetic.x-avgX,2) + pow(data[i].magnetic.y-avgY,2)));Serial.println(" uT");
     }
 
 };
