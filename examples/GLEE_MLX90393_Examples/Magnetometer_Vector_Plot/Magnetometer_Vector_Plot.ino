@@ -4,7 +4,7 @@ MLX90393 magnetometer = MLX90393(1,false);
 
 mlx_sample_t sample;
 
-const int numOfPoints = 8; // Number of samples / coordinate pairs 
+const int numOfPoints = 4; // Number of samples / coordinate pairs 
 
 String x_coordinates[numOfPoints]; // X coordinates that will be inputted by user
 String y_coordinates[numOfPoints]; // Y coordinates that will be inputted by user
@@ -104,11 +104,11 @@ void setup (){
       Serial.print(" , ");Serial.print(y_coordinates[i]);Serial.print(" ) ");
       // Calculuate angle using only x and y dimensions
       float angle = atan((data[i].magnetic.y-avgY)/(data[i].magnetic.x-avgX))*(180/M_PI);
-      if((data[i].magnetic.y-avgY)<0){
+      if((data[i].magnetic.x-avgX)<0){
         angle = 270 - angle;
-      } else if ((data[i].magnetic.y-avgY)>0){
+      } else if ((data[i].magnetic.x-avgX)>0){
         angle = 90 - angle;
-      } else if (data[i].magnetic.x-avgX < 0){
+      } else if (data[i].magnetic.y-avgY < 0){
         angle = 180.0;
       } else {
         angle = 0.0;
