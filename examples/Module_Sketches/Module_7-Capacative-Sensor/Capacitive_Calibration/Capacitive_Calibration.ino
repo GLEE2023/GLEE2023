@@ -23,7 +23,7 @@ void setup() {
   
   Serial.println(""); 
   Serial.print("Dielectric Constant: ");
-  Serial.print(cap.getDieletricConstant(4.2)); // Test Regression and Find Dielectric Constant by plugging in an ADC Value
+  Serial.println(cap.getDieletricConstant(4.2)); // Test Regression and Find Dielectric Constant by plugging in an ADC Value
 
   Serial.print("First Coef: "); Serial.println(*coefs);
   Serial.print("Second Coef: "); Serial.println(*(coefs + 1));

@@ -11,4 +11,5 @@ void setup() {
 void loop(){
 	int rawData = cap.getRawData(); 
 	Serial.println(rawData); //Print raw data
+	delay(100);
 };
