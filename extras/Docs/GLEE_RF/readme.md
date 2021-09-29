@@ -64,23 +64,23 @@ void loop() {
 
 * freq
 
-    FREQuency of radio waves recieved or transmitted by RF Module. Typically 915-928MHz corresponding to LoRas opperation on unlicense ISM Radio Band in US
+    FREQuency of radio waves received or transmitted by RF Module. Typically 915-928MHz corresponding to LoRas operation on unlicensed ISM Radio Band in US
 
 * pwr
 
-    PoWeR of transciever transmission. (TODO: Add refernce to relevent calculations given antenna parameters)
+    PoWeR of transceiver transmission.  (TODO: Add refernce to relevent calculations given antenna parameters)
 
 * bw
   
-    BandWidth is requence range of chirps used to transmit data. Typically 250kHz for terestiral usage in the US.
+    BandWidth is the frequency range of chirps used to transmit data. Typically 250kHz for terrestrial usage in the US.
 
 * sf
 
-    Spreading Factor dictacts number of chirps used to send a signal.
+    Spreading Factor dictates the number of chirps used to send a signal.
 
 * cr 
 
-  Coding Rate effects data encoding redundances. CR value is proportional to interfernce tollerence. (Higher - Able to handle more interference)
+  Coding Rate effects data encoding redundancies. CR value is proportional to interference tolerance. (Higher - Able to handle more interference)
 
 
 
