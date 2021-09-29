@@ -1,8 +1,5 @@
-#include <Arduino.h>
-#include "TMP117.h"
-#include <GLEE_Radio.h>
-
-//only x-axis threshold implemented, but can add y and z if needed
+#include <TMP117.h> // Include Temperature Sensor Library dependency
+#include <GLEE_Radio.h> // Include GLEE_Radio library dependency 
 
 // Initiate LunaSat Radio (SX1272 Transciever)
 LunaRadio Rad;
@@ -10,24 +7,20 @@ LunaRadio Rad;
 // Instantiate TMP117 class with id of one and debugging set to true
 TMP117 thermometer(1,true);
 
-
 // Initialize buffer and string variables used in data conversion for transmission
-char data_buffer[16]; // Character array for string-numerical conversiona
-String temperature_string;
-
-// Initialize 2-Byte array for data transmission
-//byte temperature_data = {0x00, 0x00};
+char data_buffer[16]; // Character array (buffer) for string-numerical conversiona
+String temperature_string; 
 
 // Temperature Threshold Value
-int temperature_threshold = 79; //user-defined threshold
+int temperature_threshold = 79; // User-defined threshold
 
-// Dynamic Variable 
+//Delay between samples in ms
+int sampleDelay = 1000; // User-define sample period
+
+// Dynamic Variables 
 float temperatureF;  // Variable to store an observed temperature in Fahrenheit
 float startTime;    // Variables for timing offset calculations
 float endTime;
-
-//Delay between samples in ms
-int sampleDelay = 1000;
 
 void setup(){
     Serial.begin(9600);
