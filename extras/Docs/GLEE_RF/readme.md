@@ -7,7 +7,7 @@ central hub on the host lander with RF.
 This library is a port of Radiolib. Make sure to install radiolib via Arduino Libraries manager before using this library. (Huge thank you to Jgromes for that amazing lora library)
 
 PCB antenna and SX1272 pictured below\
-![PCB Antenna](/Docs/Images/SX1272_antenna_close_up.jpg) ![SX1272 Chip](/Docs/Images/SX1272_close_up.jpg) 
+![PCB Antenna](/extras/Docs/Images/SX1272_antenna_close_up.jpg) ![SX1272 Chip](/extras/Docs/Images/SX1272_close_up.jpg) 
 
 ## RF Receive Example
 ```C++
