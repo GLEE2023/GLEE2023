@@ -103,37 +103,31 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         };
         ```
 
-* GLEE_ICM20602 - Accelerometer Functionality 
+* GLEE_MPU6000 - Accelerometer Functionality 
     - Acceleration Observations
         ```C++
-        #include "ICM20602.h"
+        #include "MPU6000.h"
 
-        ICM20602 accelerometer(0);
-
-        sensor_int16_vec_t accelRaw;
-        sensor_float_vec_t acceleration; 
+        MPU6000 accelerometer(1, false); // Sets sensor ID to 1 and debugging to false
+        sensor_float_vec_t acc; // Saves acceleration readings in a vector structure
 
         void setup(){
-            Serial.begin(9600);
-
-            accelerometer.begin();
-
-            accelerometer.initialize();
-
-            accelerometer.setScale(AFS_2G);
-        };
+            Serial.begin(9600); // Sets baud rate to 9600 for serial transmission and starts serial communication
+            accelerometer.begin(); // Begins transmission to the I2C slave device
+            accelerometer.initialize(); // Set-up for MPU 
+            accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelrometer Range options: 2_G, 4_G, 8_G, 16_G
+        }
 
         void loop(){
-            
-            accelRaw = accelerometer.getRawAccel();
-            acceleration = accelerometer.getGAccel(accelRaw);
+            acc = accelerometer.getSample(); // Gets and saves 3-axis acceleration reading (G)
 
-            Serial.print("G, X-Axis: "); Serial.println(acceleration.x, 8);
-            Serial.print("G, Y-Axis: "); Serial.println(acceleration.y, 8);
-            Serial.print("G, Z-Axis: "); Serial.println(acceleration.z, 8);
+            Serial.print("Acceleration in Gs, X-Axis: "); Serial.print(acc.x, 8); // Prints out 3-axis acceleration (G)
+            Serial.print(" Y-Axis: "); Serial.print(acc.y, 8);
+            Serial.print(" Z-Axis: "); Serial.print(acc.z, 8);
+            Serial.println();
 
-            delay(200);
-        };
+            delay(100); // Waits 100ms between readings
+        }
         ```
 
 * GLEE_TPIS1385 - Thermopile Functionality
@@ -182,34 +176,52 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         };
         ```
 
-* GLEE_AK09940 - Magnetometer Functionality
+* GLEE_MLX90393 - Magnetometer Functionality
     - Magnetic Field Observations
         ```C++
-        #include "AK09940.h"
+        #include "MLX90393.h"
 
-        AK09940 magnetometer = AK09940(0);
+        MLX90393 magnetometer = MLX90393(1,false);
 
-        AK_Sample_t sample;
+        mlx_sample_t sample;
 
         void setup (){
             Serial.begin(9600);
-            magnetometer.begin();
-            magnetometer.readWAI();
-            magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
+
+            magnetometer.begin_I2C();
+
+            // Set gain
+            magnetometer.setGain(MLX90393_GAIN_2_5X);
+
+            // Set resolution
+            magnetometer.setResolution(MLX90393_X, MLX90393_RES_19);
+            magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19);
+            magnetometer.setResolution(MLX90393_Z, MLX90393_RES_16);
+
+            // Set oversampling
+            magnetometer.setOversampling(MLX90393_OSR_2);
+
+            // Set digital filtering
+            magnetometer.setFilter(MLX90393_FILTER_6);
+
         };
 
         void loop (){   
-            Serial.print(F("Data Ready Pin Showing: ")); Serial.println(magnetometer.dataReady());
 
             sample = magnetometer.getSample();
 
-            Serial.print(F("Magnetometer Temp: ")); Serial.println(sample.temp,5);
-            Serial.print(F("Mag X (nT): ")); Serial.println(sample.magnetic.x,5);
-            Serial.print(F("Mag Y (nT): ")); Serial.println(sample.magnetic.y,5);
-            Serial.print(F("Mag Z (nT): ")); Serial.println(sample.magnetic.z,5);
-            Serial.print(F("Magnetic Field Magnitude: ")); Serial.println(sample.strength);
+            // Print out magnetic field measurements for each axis 
+            Serial.println("Magnetic Field Axes Measurements");
+            Serial.print("X: "); Serial.print(sample.magnetic.x,4); Serial.println(" uT");
+            Serial.print("Y: "); Serial.print(sample.magnetic.y,4); Serial.println(" uT");
+            Serial.print("Z: "); Serial.print(sample.magnetic.z,4); Serial.println(" uT");
+            Serial.println();
+            // Print out strength of magnetic field
+            Serial.println("Magnetic Field Strength (Magnitude)"); 
+            Serial.print(sample.strength,4); Serial.println(" uT");
+            Serial.println();
 
-            delay(1000); // Take samples every one sec
+            delay(1000); // Take samples every one second
         };
         ```
 
