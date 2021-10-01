@@ -77,11 +77,11 @@ void loop(){
 | Register Name | Register Value (Hex) | Comments  |
 |---|---|---|
 | MPU6000_I2CADDR_DEFAULT | 0x69 | I2C slave address|
-| ICM20602_PWR_MGMT_1 | 0x6B | Power management 1, see "Configuration Details" below |
-| ICM20602_PWR_MGMT_2 | 0x6C | Power management 2 , see "Configuration Details" below |
-| MPU6000_CONFIG | 0x1A | Configuration, FIFO mode and more |
-| ICM20602_GYRO_CONFIG | 0x1B | Gyroscope Configuration |
-| ICM20602_ACCEL_CONFIG | 0x1C | Accelerometer Configuration |
+| MPU6000_PWR_MGMT_1 | 0x6B | Power management 1, see "Configuration Details" below |
+| MPU6000_PWR_MGMT_2 | 0x6C | Power management 2 , see "Configuration Details" below |
+| MPU6000_CONFIG | 0x1A | Digital low pass filter, frame synchronization and more |
+| MPU6000_GYRO_CONFIG | 0x1B | Gyroscope Configuration |
+| MPU6000_ACCEL_CONFIG | 0x1C | Accelerometer Configuration |
 
 ## Configuration Details
 | Configuration Name | Register Name | Function of Each Bit | Setting |
@@ -104,9 +104,9 @@ void loop(){
 | getGyro | sensor_float_vec_t | sensor_int16_vec_t | Converts raw angular acceleration to acceleration in degrees per second|
 | getSample | sensor_float_vec_t | none | Gets and returns the acceleration in G's |
 | getGyroSample | sensor_float_vec_t | none | Gets and returns the angular velocity in degrees per second |
-| getGAccel | sensor_float_vec_t | sensor_int16_vec_t rawAccel | Converts the raw acceleration in LSB/G to the acceleration in G's |
-| getMPSAccel | sensor_float_vec_t | sensor_float_vec_t GAccel | Converts the acceleration in G's to meters per second squared |
-| setAccelRange | void | mpu6000_accel_range_t | Writes the accelration configuration based on the new scale |
+| getGAccel | sensor_float_vec_t | sensor_int16_vec_t | Converts the raw acceleration in LSB/G to the acceleration in G's |
+| getMPSAccel | sensor_float_vec_t | sensor_float_vec_t | Converts the acceleration in G's to meters per second squared |
+| setAccelRange | void | mpu6000_accel_range_t | Writes the acceleration configuration based on the new scale |
 | setGyroRange | void | mpu6000_gyro_range_t | Writes the gyroscope configuration based on the new scale |
 | getAccelSensitivity | float | none | Returns the sensitivity scale factor for the acceleration depending on the current sensing accuracy scale |
 
