@@ -5,7 +5,7 @@ the MPU6000. GLEE_MPU6000 supports the basic functionality of the accelerometer 
 and saving the three-axis acceleration and angular velocity in different units depending on one of four sensing 
 accuracies. 
 
-![ICM20602](/Docs/Images/ICM20602_close_up.jpg)
+![ICM20602](/extras/Docs/Images/ICM20602_close_up.jpg)
 
 ## Accelerometer Datasheet
 [InvenSense MPU6000](https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/mpu-6000-datasheet1.pdf)
