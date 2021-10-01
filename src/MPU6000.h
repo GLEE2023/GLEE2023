@@ -88,8 +88,7 @@ class MPU6000:public Sensor{
 
         bool begin();
         void initialize();
-        // void disableGyro(bool disableGyro);
-        // int16_t read2Byte(uint8_t registerAddress);
+
         sensor_int16_vec_t getRawAcc();
         sensor_int16_vec_t getRawGyro();
 
@@ -98,16 +97,6 @@ class MPU6000:public Sensor{
         
         sensor_float_vec_t getMPSAccel(sensor_float_vec_t GAccel);
         sensor_float_vec_t getGAccel(sensor_int16_vec_t rawAccel);
-        
-        // sensor_float_vec_t getDPSAngVel(sensor_int16_vec_t rawAngVel);
-        // sensor_float_vec_t getGAccel_fuzzed();
-
-        // void updateRawAccel(sensor_int16_vec_t rawAccel);
-        // void updateMPSAccel(sensor_float_vec_t MPSAccel);
-        // void updateGAccel(sensor_float_vec_t GAccel);
-
-        // void updateRawAngVel(sensor_int16_vec_t rawAngVel);
-        // void updateDPSAngVel(sensor_float_vec_t DPSAngVel);
 
         void setAccelRange(mpu6000_accel_range_t new_range);
         void setGyroRange(mpu6000_gyro_range_t new_range);
@@ -123,11 +112,6 @@ class MPU6000:public Sensor{
 
         void setSampleRateDivisor(uint8_t divisor);
         void setFilterBandwidth(mpu6000_bandwidth_t bandwidth);
-
-        // setFilterBandwidth
-        // setGyroRange
-        // setAccelerometerRange
-        // setPowerMgmt_1
 
     private:
         
