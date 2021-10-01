@@ -41,10 +41,6 @@ void setup (){
       calibrationPoints[i] = magnetometer.getSample();
     }
 
-    float avgX = 0.0;
-    float avgY = 0.0;
-    float avgZ = 0.0;
-
     for(int j = 0; j < 20; j++){
       avgX = avgX + calibrationPoints[j].magnetic.x;
       avgY = avgY + calibrationPoints[j].magnetic.y;
