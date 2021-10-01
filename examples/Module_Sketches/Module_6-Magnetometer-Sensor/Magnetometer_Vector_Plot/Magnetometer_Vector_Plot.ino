@@ -39,6 +39,7 @@ void setup (){
     while(!Serial.available()){}
     input = Serial.readString();
 
+    // Get calibration points
     mlx_sample_t calibrationPoints[20];    
     for(int i = 0; i < 20; i++){
       calibrationPoints[i] = magnetometer.getSample();
@@ -48,12 +49,14 @@ void setup (){
     float avgY = 0.0;
     float avgZ = 0.0;
 
+    // Get sums of axes measurements
     for(int j = 0; j < 20; j++){
       avgX = avgX + calibrationPoints[j].magnetic.x;
       avgY = avgY + calibrationPoints[j].magnetic.y;
       avgZ = avgZ + calibrationPoints[j].magnetic.z;
     }
 
+    // Find average axes measurements
     avgX = avgX/20;
     avgY = avgY/20;
     avgZ = avgZ/20;
@@ -69,9 +72,11 @@ void loop (){
   // Wait for continue command from user (currently accepts anything)
   while(!Serial.available()){}
   input = Serial.readString();
-  
+
+  // Gets sample from magnetometer
   sample = magnetometer.getSample();
 
+  // Calculates angle
   angle = atan((sample.magnetic.y-avgY)/(sample.magnetic.x-avgX))*(180/M_PI);
   if((sample.magnetic.x-avgX)<0){
       angle = 270 - angle;
@@ -83,11 +88,13 @@ void loop (){
       angle = 0.0;
   }
   
-  magnitude = sample.strength;
+  // Calculates magnitude of angle from x and y axes measurements only
+  magnitude = sqrt(pow(sample.magnetic.x-avgX,2) + pow(sample.magnetic.y-avgY,2));
 
   // Prints angle and magnitude of vector at current location.
   Serial.println();
   Serial.print(String("Vector Data - "));
+  Serial.print(String("X and Y Components: < " +String(sample.magnetic.x-avgX) + " , " + String(sample.magnetic.y-avgY) + " > , "));
   Serial.print(String("Angle: " + String(angle) + "º , ")); 
   Serial.println(String("Magnitude: " + String(magnitude) + " uT"));
   Serial.println();
