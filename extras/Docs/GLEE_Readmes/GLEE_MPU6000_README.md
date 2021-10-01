@@ -76,37 +76,37 @@ void loop(){
 ## Baseline Configuration Registers
 | Register Name | Register Value (Hex) | Comments  |
 |---|---|---|
-| ICM20602_slave_addr | 0x69 | I2C Slave address|
+| MPU6000_I2CADDR_DEFAULT | 0x69 | I2C slave address|
 | ICM20602_PWR_MGMT_1 | 0x6B | Power management 1, see "Configuration Details" below |
 | ICM20602_PWR_MGMT_2 | 0x6C | Power management 2 , see "Configuration Details" below |
-| ICM20602_CONFIG | 0x1A | Configuration, FIFO mode and more |
+| MPU6000_CONFIG | 0x1A | Configuration, FIFO mode and more |
 | ICM20602_GYRO_CONFIG | 0x1B | Gyroscope Configuration |
 | ICM20602_ACCEL_CONFIG | 0x1C | Accelerometer Configuration |
 
 ## Configuration Details
 | Configuration Name | Register Name | Function of Each Bit | Setting |
 |---|---|---|---|
-| Default PWR MGMT 1 Configuration | ICM20602_PWR_MGMT_1 | DEVICE_RESET, SLEEP, CYCLE, GYRO_STANDBY, TEMP_DIS, CLKSEL | 0 0 0 0 0 001 |
-| Default PWR MGMT 2 Configuration | ICM20602_PWR_MGMT_2 | Reserved, Reserved, STBY_XA, STBY_YA, STBY_ZA, STBY_XG, STBY_YG, STBY_Z | 0 0 1 1 1 0 0 0 |
-| Accel Full Scale Select | ACCEL_FS_SEL[1:0] | ±2g, ±4g, ±8g, ±16g | 00, 01, 10, 11 |
+| Default PWR MGMT 1 Configuration | MPU6000_PWR_MGMT_1 | DEVICE_RESET, SLEEP, CYCLE, GYRO_STANDBY, TEMP_DIS, CLKSEL | 0 0 0 0 0 001 |
+| Default PWR MGMT 2 Configuration | MPU6000_PWR_MGMT_2 | Reserved, Reserved, STBY_XA, STBY_YA, STBY_ZA, STBY_XG, STBY_YG, STBY_Z | 0 0 1 1 1 0 0 0 |
+
 
 ## Methods 
 | Method Name | return type | args | Comments |
 |---|---|---|---|
 | begin | bool | none | Returns true or false based on whether communication was successful with the sensor |
-| initialize | void | none | Sets the clock to auto and sets the configuration registrations |
-| disableGyro | void | bool disableGyro | write configuration of gyroscope depending on whether the gyroscope is getting disabled or enabled
+| initialize | void | none | Sets the rate divisor and a couple of the other basic registers |
+| reset | void | none | Resets all the internal registers of the MPU6000 to their default values and resets signal paths |
+| setSampleRateDivisor | void | uint8_t divisor | Sets the sample rate divisor used to generate the sample rate |
+| setFilterBandwidth | void | mpu6000_bandwidth_t bandwidth | This function sets the bandwidth for the low pass filter. |
 | getRawAccel | sensor_uint16_vec_t | none | Gets and returns the current raw acceleration in LSB/G |
-| getRawAngVel | sensor_int16_vec_t | none | Gets and returns the current raw angular velocity |
-| getMPSAccel | sensor_float_vec_t | sensor_float_vec_t GAccel | Converts the raw acceleration in LSB/G to meters per second squared |
+| getRawGyro | sensor_uint16_vec_t | none | Gets and returns the current raw angular velocity |
+| getAcc | sensor_float_vec_t | sensor_int16_vec_t | Converts raw acceleration to acceleration in G's|
+| getGyro | sensor_float_vec_t | sensor_int16_vec_t | Converts raw angular acceleration to acceleration in degrees per second|
+| getSample | sensor_float_vec_t | none | Gets and returns the acceleration in G's |
+| getGyroSample | sensor_float_vec_t | none | Gets and returns the angular velocity in degrees per second |
 | getGAccel | sensor_float_vec_t | sensor_int16_vec_t rawAccel | Converts the raw acceleration in LSB/G to the acceleration in G's |
-| getDPSAngVel | sensor_float_vec_t | sensor_int16_vec_t rawAngVel | Converts the raw angular velocity to degrees per second |
-| updateRawAccel | none | sensor_int16_vec_t rawAccel | Saves the current raw acceleration into the private accelRaw struct |
-| updateMPSAccel | none | sensor_float_vec_t MPSAccel | Saves the current meters per second acceleration into the private accelMPSstruct |
-| updateGAccel | none | sensor_float_vec_t GAccel | Saves the current acceleration in G's into the private accelG struct |
-| updateRawAngVel | none | sensor_int16_vec_t rawAngVel | Saves the current raw angular velocity into the private angVelRaw struct |
-| updateDPSAngVel | none | sensor_float_vec_t DPSAngVel | Saves the current angular velocity in degrees per second into the private angVelDPS struct |
-| setAccelScale | none | enum Ascale newScale | Sets the global variable 'currentAccelScale' to a new scale |
-| setGyroScale | none | enum Gscale newScale | Sets the global variable 'currentGyroScale' to a new scale
-| getAccelSensitivity | float | none | Returns the sensitivity scale factor depending on the current sensing accuracy scale given by the public variable 'currentAccelScale' |
-| getGyroSensitivity | float | none | Returns the sensitivity scale factor depending on the current sensing accuracy scale given by the public variable 'currentGyroScale' |
+| getMPSAccel | sensor_float_vec_t | sensor_float_vec_t GAccel | Converts the acceleration in G's to meters per second squared |
+| setAccelRange | void | mpu6000_accel_range_t | Writes the accelration configuration based on the new scale |
+| setGyroRange | void | mpu6000_gyro_range_t | Writes the gyroscope configuration based on the new scale |
+| getAccelSensitivity | float | none | Returns the sensitivity scale factor for the acceleration depending on the current sensing accuracy scale |
+
