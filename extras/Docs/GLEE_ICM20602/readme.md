@@ -1,4 +1,4 @@
-# GLEE - LunaSat Inertial Measurement Unit Library (Accelerometer and Gyroscope) - GLEE_ICM20602
+# GLEE - LunaSat 5.0 Inertial Measurement Unit Library (Accelerometer and Gyroscope) - GLEE_ICM20602
 This library is intended for GLEE's Accelerometer Sensor, the ICM20602. 
 Paired with GLEE's LunaSat object class, it can be used to monitor, configure and control 
 the ICM20602. GLEE_ICM20602 supports the basic functionality of the accelerometer and the gyroscope with reading 

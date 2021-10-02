@@ -1,7 +1,7 @@
 # GLEE LunaSat Integrated Functionality Library
 This library puts all the basic functionality of the lunasat in one place. The lunasat library can be included and utilized to conduct quick and easy initialization of subsystems and controlled querying and transmission of sensor observations.
 
-![LunaSat Front](/Docs/Images/LunaSat_front.jpg) ![LunaSat Back](/Docs/Images/LunaSat_back.jpg)
+![LunaSat Front](/extras/Docs/Images/LunaSat_front.jpg) ![LunaSat Back](/extras/Docs/Images/LunaSat_back.jpg)
 
 ## Sensors
 
