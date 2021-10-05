@@ -5,14 +5,13 @@
 #include "CAP.h"
 #include "TPIS1385.h"
 #include <GLEE_Radio.h>
-#include <Wire.h>
 
 // Sensor Initializations
-TMP117 thermometer(1);
-MPU6000 accelerometer(2);
-MLX90393 magnetometer(3);
-TPIS1385 thermopile(1);
-CAP capacitive(5);
+TMP117 thermometer(1, false);
+MPU6000 accelerometer(2, false);
+MLX90393 magnetometer(3, false);
+TPIS1385 thermopile(4, false);
+CAP capacitive(5, false);
 
 // Sensor Data Variable Initialization
 float tempSample;
@@ -25,6 +24,7 @@ int capSample;
 LunaRadio Rad;
 
 String printOut;
+String printOut2;
 String sep = ",";
 int timeStamp;
 
@@ -64,7 +64,7 @@ void setup() {
     delay(1000); // Delay if issue with serial
   }
 
-  Serial.println("LunaSat Connection Succsessful");
+  Serial.println(F("LunaSat Connection Succsessful"));
 
   // Initalize Thermopile Sensor
   Wire.beginTransmission(0x00);     // Tx buffer
@@ -88,25 +88,24 @@ void setup() {
     err = Wire.endTransmission();
     
     if(!err){
-      numDevices++;
-      Serial.print(sensorNames[i]);
-      Serial.print(" sensor found at ");
-      
-      // Hex address formating "0x00"
-      Serial.print("0");
-      Serial.print(addr,HEX);
-      Serial.println("  !");
-      
-    }else if(err==4){
-      Serial.print("Error at ");
-      Serial.print("0");
-      Serial.println(addr, HEX);
+        numDevices++;
+        Serial.print(sensorNames[i]);
+        Serial.print(" sensor found at ");
+        
+        // Hex address formating "0x00"
+        Serial.print("0");
+        Serial.print(addr,HEX);
+        Serial.println("  !");
+        
+      }else if(err==4){
+        Serial.print("Error at ");
+        Serial.print("0");
+        Serial.println(addr, HEX);
+      }
     }
-  }
   
-    Serial.print("Scan Complete: ");
-    Serial.print(numDevices);
-    Serial.println(" devices found\n");
+    Serial.print(F("Found: "));
+    Serial.println(numDevices);
 
     delay(1000);
 
@@ -140,14 +139,14 @@ void setup() {
     thermopile.begin();
     thermopile.readEEprom();
     
-    Serial.println("Sensor Initialization\n");
+    Serial.println(F("Sensor Initi\n"));
 
     Rad.initialize_radio(915.0,17,250.0,12,8);
     
-    Serial.println("Radio initialization");
+    Serial.println(F("Rad Init"));
     
-    Serial.println("Sample Key: ");
-    Serial.println("TMP117, MPU6000, MLX90393, CAP, TPIS1385");
+    Serial.println(F("Sample Key: "));
+    Serial.println(F("TMP117, MPU6000, MLX90393, CAP, TPIS1385"));
 }
 
 void loop() {
@@ -186,13 +185,13 @@ void sensor_test_mode(){
     printOut = String(timeStamp) + " : TMP: "+
                 String(tempSample) + " : MPU: " +
                 String(accSample.x) + sep + String(accSample.y) + sep + String(accSample.z);
-                String printout2 = " MLX: " +
+    printOut2 = " MLX: " +
                 String(magSample.magnetic.x) + sep + String(magSample.magnetic.y) + sep + String(magSample.magnetic.z) + " : TPIS: " +
                 String(thermSample.object,5) + sep + String(thermSample.ambient,5) + " : CAP: " +
                 String(capSample);
    
     Serial.print(printOut);
-    Serial.println(printout2);
+    Serial.println(printOut2);
    
     delay(500);
 }
@@ -201,14 +200,23 @@ void recieve_mode(){
   String output = Rad.receive_data_string();
   
 	//Output the results 
-	Serial.print("Data Recieved: "); Serial.println(output);
+	Serial.print(F("Recieved: ")); Serial.println(output);
 	
 	// Print recieved signal strength indicator
-	Serial.print("Return Signal Strength Indicator: "); Serial.println(Rad.getRSSI());
+	Serial.print(F("RSSI: ")); Serial.println(Rad.getRSSI());
 }
 
 void transmit_mode(){
-  String message = String("Msg from" + String(id));
-  // Rad.transmit_data(message&); 
+  String msg = String("Msg from" + String(id));
+  
+  // Length (with one extra character for the null terminator)
+  int msg_len = msg.length() + 1; 
+  
+  // Prepare the character array (the buffer) 
+  char buff[msg_len];
+  
+  // Copy it over 
+  msg.toCharArray(buff, msg_len);
+  Rad.transmit_data(*buff); 
 	delay(1000); // Send the transmission once every ~1 sec
 }
