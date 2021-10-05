@@ -74,8 +74,8 @@ void setup() {
 
   delay(50);
 
-  pinMode(A3,OUTPUT); // TODO: Remove if depricated
-  digitalWrite(A3,HIGH);
+  // pinMode(A3,OUTPUT); // TODO: Remove if depricated
+  // digitalWrite(A3,HIGH);
 
   byte addr;          // Current address for scanning
   int numDevices = 0; // Number of devices found
