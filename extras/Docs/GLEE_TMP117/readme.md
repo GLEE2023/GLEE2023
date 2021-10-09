@@ -23,7 +23,7 @@ GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
         };
 
         void loop(){
-            temperature = thermometer.getTemperatureF();
+            temperature = thermometer.getTemperatureC();
             
             Serial.print("Temperature (C): "); Serial.println(temperature);
 
