@@ -1,6 +1,10 @@
 #include <TMP117.h> // Include Temperature Sensor Library dependency
 #include <GLEE_Radio.h> // Include GLEE_Radio library dependency 
 
+///////////////////////////////////////////////
+String id = "11"; // CHANGE TO YOUR TEAM NUMBER
+///////////////////////////////////////////////
+
 // Initiate LunaSat Radio (SX1272 Transciever)
 LunaRadio Rad;
 
@@ -10,6 +14,7 @@ TMP117 thermometer(1,true);
 // Initialize buffer and string variables used in data conversion for transmission
 char data_buffer[16]; // Character array (buffer) for string-numerical conversiona
 String temperature_string; 
+String full_message;
 
 // Temperature Threshold Value
 int temperature_threshold = 79; // User-defined threshold
@@ -31,7 +36,7 @@ void setup(){
     // Argument 3: Set Bandwidth to 250
     // Argument 4: Set spreading factor to 12
     // Argument 5: Set coding rate to 8
-    Rad.initialize_radio(915.0, 17, 250.0, 12, 8);
+    Rad.initialize_radio(915.0, 7, 250.0, 12, 8);
 }
 
 void loop(){
@@ -51,8 +56,13 @@ void loop(){
         
         // Convert int temperature to arduino String
         temperature_string = String(temperatureF);
+
+        // Format full message with ID preamble
+        full_message = String(id + " " + temperature_string);
+
         // Convert string to byte/char array stored in buffer
-        temperature_string.toCharArray(data_buffer,8);
+        full_message.toCharArray(data_buffer,10);
+
         // Transmit buffer containing temperature in the form of a byte array
         Rad.transmit_data(data_buffer);
     }
