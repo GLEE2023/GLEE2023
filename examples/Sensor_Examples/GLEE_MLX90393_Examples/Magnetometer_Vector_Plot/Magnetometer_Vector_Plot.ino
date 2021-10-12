@@ -94,8 +94,13 @@ void loop (){
   // Prints angle and magnitude of vector at current location.
   Serial.println();
   Serial.print(String("Vector Data - "));
-  Serial.print(String("X and Y Components: < " +String(sample.magnetic.x-avgX) + " , " + String(sample.magnetic.y-avgY) + " > , "));
   Serial.print(String("Angle: " + String(angle) + "º , ")); 
-  Serial.println(String("Magnitude: " + String(magnitude) + " uT"));
+  
+  // Length calculations
+  // A vector of magnitude 1000.0 uT translates to a 2cm vector, 
+  // but this is not a strictly defined limit
+  magnitude = ((2) / (1000.0)) * (magnitude); 
+  
+  Serial.println(String("Magnitude: " + String(magnitude) + " cm"));
   Serial.println();
 };
