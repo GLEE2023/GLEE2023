@@ -34,7 +34,8 @@ void setup (){
 
     // Calibration
     Serial.println("Place your LunaSat at your desk with the magnet away.");
-    Serial.println("Press Enter to calibrate your magnitometer.");
+    Serial.println("Your LunaSat should be oriented such that the solar panels are at the top.");
+    Serial.println("Press Enter to calibrate your magnetometer.");
 
     while(!Serial.available()){}
     input = Serial.readString();
@@ -87,14 +88,34 @@ void loop (){
   } else {
       angle = 0.0;
   }
-  
+
+  String direction_str = "";
+  // Determine the direction based on the angle
+  if (angle <= 22.5 || angle > 337.5){
+      direction_str = "North";
+  } else if (angle <= 67.5 && angle > 22.5){
+      direction_str = "Northeast";
+  } else if (angle <= 112.5 && angle > 67.5){   
+      direction_str = "East";
+  } else if (angle <= 157.5 && angle > 112.5){  
+      direction_str = "Southeast";
+  } else if (angle <= 202.5 && angle > 157.5){    
+      direction_str = "South";
+  } else if (angle <= 247.5 && angle > 202.5){   
+      direction_str = "Southwest";
+  } else if (angle <= 292.5 && angle > 247.5){    
+      direction_str = "West";
+  } else if (angle <= 337.5 && angle > 292.5){   
+      direction_str = "Northwest";
+  }
+
   // Calculates magnitude of angle from x and y axes measurements only
   magnitude = sqrt(pow(sample.magnetic.x-avgX,2) + pow(sample.magnetic.y-avgY,2));
 
-  // Prints angle and magnitude of vector at current location.
+  // Prints direction and magnitude of vector at current location.
   Serial.println();
   Serial.print(String("Vector Data - "));
-  Serial.print(String("Angle: " + String(angle) + "º , ")); 
+  Serial.print(String("Direction: " + direction_str + " , ")); 
   
   // Length calculations
   // A vector of magnitude 1000.0 uT translates to a 2cm vector, 
