@@ -15,5 +15,5 @@ void loop() {
   float voltage = solarCellReading * (3.3 / 1023.0);
   
   // print out the value you read:
-  Serial.println(voltage);
+  Serial.println(voltage, 5);
 }
