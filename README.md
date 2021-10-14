@@ -47,7 +47,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 * Infrared Temperature Sensor
   - [CalPile TPIS 1S 1385](https://media.digikey.com/pdf/Data%20Sheets/Excelitas%20PDFs/TPiS_1S_1385.pdf)
 * Magnetometer
-  - [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
+  - [Melexis MLX90393](https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90393)
 * Other
   - Camera and radiation sensors are also currently in development. 
 
