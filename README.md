@@ -29,25 +29,25 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
 Art by Daedalus Muse
 
 ## LunaSat - LUNAr Sensing ArchiTecture
-GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
+GLEE's current prototype LunaSat is approximately 6cm by 6cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
 
-This repo contains the Arduino libraries and sketches wich are used to control the LunaSats. 
+This repo contains the Arduino libraries and sketches which are used to control the LunaSats. 
 ### This is a v4 LunaSat
 ![LunaSat Front](./extras/Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./extras/Docs/Images/LunaSat_back.jpg)
 
-### LunaSat Tech (Data Sheets Linked)
+### LunaSat Tech (with linked Data Sheets)
 * Microprocessor
   - [Atmel ATmega328 (3.3v 16Mhz)](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf)
 * Transceiver (LoRA)
   - [Semtech SX1272](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/440000001NCE/v_VBhk1IolDgxwwnOpcS_vTFxPfSEPQbuneK3mWsXlU) 
 * Inertial Measurement Unit (IMU)
-  - [InvenSense ICM20602](https://invensense.tdk.com/wp-content/uploads/2016/10/DS-000176-ICM-20602-v1.0.pdf)
+  - [InvenSense MPU6000](https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/mpu-6000-datasheet1.pdf)
 * Dedicated Temperature Sensor 
   - [Texas Inst. TMP117](https://www.ti.com/lit/ds/symlink/tmp117.pdf?ts=1616690356997&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FTMP117)
 * Infrared Temperature Sensor
   - [CalPile TPIS 1S 1385](https://media.digikey.com/pdf/Data%20Sheets/Excelitas%20PDFs/TPiS_1S_1385.pdf)
 * Magnetometer
-  - [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
+  - [Melexis MLX90393](https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90393)
 * Other
   - Camera and radiation sensors are also currently in development. 
 
@@ -57,7 +57,7 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 1. Open Arduino
 2. Navigate to `file > tools > library manager`
 3. Search for GLEE2023
-4. Install with dependicies
+4. Install with dependencies
 
 ## Sensor Libraries
 * GLEE_Sensor: 
@@ -285,4 +285,3 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 
 # README TODOS
 * TODO: Embedded links to libraries
-
