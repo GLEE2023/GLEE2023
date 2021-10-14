@@ -22,7 +22,7 @@ int capSample;
 // Output Formatting Variables
 String printOut;
 String sep = ", ";
-int timeStamp;
+long timeStamp;
 
 void setup() {
     // Start up Serial (wired) Communications
