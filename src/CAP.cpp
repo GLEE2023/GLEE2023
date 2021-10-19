@@ -9,7 +9,7 @@
 **/
 CAP::CAP(int _id, bool _debug){
 	CAP::info.id = _id;
-	CAP::info.name = "Capacitive Sensor";
+	CAP::info.name = F("CAP");
 	CAP::info.address = 0x01;
 	CAP::sensorDebug = _debug;
 	CAP::pin = A0; // Hardcoded analog pin on LunaSat
@@ -76,13 +76,13 @@ double * CAP::getLinearRegression(){
 	coefs[0] = b;
 	coefs[1] = m;
 
-	Serial.println("LINEAR REGRESSION");
-	Serial.println("-----------------");
-	Serial.print("y = ");
+	Serial.println(F("LINEAR REGRESSION"));
+	Serial.println(F("-----------------"));
+	Serial.print(F("y = "));
 	Serial.print(b);
-	Serial.print("x + (");
+	Serial.print(F("x + ("));
 	Serial.print(yIntercept);
-	Serial.print(")");
+	Serial.print(F(")"));
 
 	return coefs;
 }
@@ -94,7 +94,7 @@ void CAP::addCalibrationPoint(double x, double y){
 		CAP::index = CAP::index+1;
 	}
 	else{
-		Serial.println("You have reached the max of 15 calibration points");
+		Serial.println(F("15 points max"));
 	}
 }
 

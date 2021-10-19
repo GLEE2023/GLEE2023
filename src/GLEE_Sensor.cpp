@@ -18,21 +18,21 @@ bool Sensor::isConnected(void){
     statusByte = Wire.endTransmission();
     
     if (statusByte==0){
-        if (Sensor::sensorDebug){
-            Serial.print("Sucessful Connection with: ");
-            Serial.print(Sensor::info.name);
-            Serial.print(" at address: ");
-            Serial.println(Sensor::info.address,HEX);
-        }
+        // if (Sensor::sensorDebug){
+        //     Serial.print(F"Sucessful Connection with: ");
+        //     Serial.print(Sensor::info.name);
+        //     Serial.print(F" at address: ");
+        //     Serial.println(Sensor::info.address,HEX);
+        // }
         return true;
     }
 
     else {
         if (Sensor::sensorDebug){
-            Serial.print("ERROR: UNABLE TO CONNECT TO ");
-            Serial.println(Sensor::info.name);
-		    Serial.print("Status Byte = ");
-		    Serial.println(statusByte);    
+            // Serial.print("ERROR: UNABLE TO CONNECT TO ");
+            // Serial.println(Sensor::info.name);
+		    // Serial.print("Status Byte = ");
+		    // Serial.println(statusByte);    
         }
         return false;
     }
@@ -45,9 +45,9 @@ bool Sensor::isConnected(void){
 **/
 
 void Sensor::whoAmI(void){
-    Serial.print("My sensor name is: ");
+    Serial.print(F("Name: "));
     Serial.println(Sensor::info.name);
-    Serial.print("My sensor I2C address is");
+    Serial.print(F("I2C address is"));
     Serial.println(Sensor::info.address,HEX);
 }
 

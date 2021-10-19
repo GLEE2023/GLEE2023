@@ -17,7 +17,7 @@ basic variables to get started.
 MPU6000::MPU6000(int _id, bool _debug){
 	MPU6000::info.id = _id;
     MPU6000::info.address = MPU6000_I2CADDR_DEFAULT;
-	MPU6000::info.name = "MPU6000 Inertial Measurement Unit";
+	MPU6000::info.name = F("MPU6000");
   	MPU6000::sensorDebug = _debug;
     MPU6000::accel_range = MPU6000_RANGE_2_G;
     MPU6000::gyro_range = MPU6000_RANGE_250_DEG;
@@ -35,9 +35,9 @@ MPU6000::MPU6000(int _id, bool _debug){
 */
 bool MPU6000::begin(void){
     Wire.begin();
-    if(MPU6000::sensorDebug){
-		Serial.println("Beginning Communication With MPU6000");
-	}
+    // if(MPU6000::sensorDebug){
+	// 	Serial.println("Beginning Communication With MPU6000");
+	// }
 
 	setAccelRange(accel_range);
 	//setGyroRange(gyro_range);
@@ -158,9 +158,9 @@ sensor_int16_vec_t MPU6000::getRawGyro(){
 */
 sensor_float_vec_t MPU6000::getAcc(sensor_int16_vec_t rawAcc){
 	sensor_float_vec_t acc;
-	acc.x = (float) rawAcc.x / MPU6000::accel_scale;
-    acc.y = (float) rawAcc.y / MPU6000::accel_scale;
-    acc.z = (float) rawAcc.z / MPU6000::accel_scale;
+	acc.x = (float) rawAcc.x / MPU6000::accel_scale * -1; // Multiplying by negative one to match axis on back of lunasat
+    acc.y = (float) rawAcc.y / MPU6000::accel_scale * -1;
+    acc.z = (float) rawAcc.z / MPU6000::accel_scale * -1;
 	return acc;
 }
 
@@ -173,9 +173,9 @@ sensor_float_vec_t MPU6000::getAcc(sensor_int16_vec_t rawAcc){
 */
 sensor_float_vec_t MPU6000::getGyro(sensor_int16_vec_t rawGyro){
 	sensor_float_vec_t gyro;
-    gyro.x = (float) rawGyro.x / gyro_scale;
-    gyro.y = (float) rawGyro.y / gyro_scale;
-    gyro.z = (float) rawGyro.z / gyro_scale;
+    gyro.x = (float) rawGyro.x / gyro_scale * -1;
+    gyro.y = (float) rawGyro.y / gyro_scale * -1;
+    gyro.z = (float) rawGyro.z / gyro_scale * -1;
 	return gyro;
 }
 

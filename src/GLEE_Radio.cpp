@@ -37,7 +37,7 @@ void LunaRadio::initialize_radio(float freq, uint8_t pwr, float bw, uint8_t sf, 
     //set coding rate
     LunaRadio::setCR(cr);
 
-    Serial.println("The radio is ready for use!");
+    Serial.println(F("The radio is ready for use!"));
 	
 }
 
@@ -56,7 +56,7 @@ void LunaRadio::setFreq(float freq){
     	Serial.println(LunaRadio::disp_buff);
   	} else {
 		//if failed and error
-    	Serial.print("Frequency set failed, code ");
+    	Serial.print(F("Frequency set failed, code "));
     	Serial.println(LunaRadio::err_state);
     	while (true);
   	}
@@ -77,7 +77,7 @@ void LunaRadio::setCR(uint8_t cr){
     	Serial.println(LunaRadio::disp_buff);
     } else {
 		//if failed and error
-    	Serial.print("Coding Rate set failed, code ");
+    	Serial.print(F("Coding Rate set failed, code "));
     	Serial.println(LunaRadio::err_state);
     	while(true);
     }
@@ -98,7 +98,7 @@ void LunaRadio::setSF(uint8_t sf){
      	Serial.println(LunaRadio::disp_buff);
     } else {
 		//if failed and error
-      	Serial.print("Spreading Factor set failed, code ");
+      	Serial.print(F("Spreading Factor set failed, code "));
       	Serial.println(LunaRadio::err_state);
       	while(true);
     }	
@@ -119,7 +119,7 @@ void LunaRadio::setBandwidth(float bw){
     	Serial.println(LunaRadio::disp_buff);
   	} else {
 		//if failed and error
-    	Serial.print("Bandwidth set failed, code ");
+    	Serial.print(F("Bandwidth set failed, code "));
     	Serial.println(LunaRadio::err_state);
     	while (true);
   	}
@@ -140,7 +140,7 @@ void LunaRadio::setPWR(uint8_t pwr){
       	Serial.println(LunaRadio::disp_buff);
   	} else{
 		//if error and failed
-    	Serial.print("Output Power set failed, code ");
+    	Serial.print(F("Output Power set failed, code "));
     	Serial.println(LunaRadio::err_state);
     	while(true);
   	}
@@ -153,7 +153,7 @@ void LunaRadio::setPWR(uint8_t pwr){
  * out the  easured data rate if successful and the error message if unsuccessful.
 **/
 void LunaRadio::transmit_data(char* buff){
-	Serial.println("Transmitting Data");
+	Serial.println(F("Transmitting Data"));
 	LunaRadio::err_state = LunaRadio::radio.transmit(buff); 		//saves error state when trasnmitting
 	if (LunaRadio::err_state == ERR_NONE){
 		// the packet was successfully transmitted
@@ -182,12 +182,12 @@ void LunaRadio::transmit_data(char* buff){
  * error if there is any.
 **/
 String LunaRadio::receive_data_string(void){
-	Serial.println("Waiting for Data");
+	Serial.println(F("Waiting for Data"));
 	String tmp_str;
 	LunaRadio::err_state = LunaRadio::radio.receive(tmp_str); 		//saves error state when receiving
 	if(LunaRadio::err_state == ERR_NONE){ 
 		//if no eror
-		Serial.println("Data received");
+		Serial.println(F("Data received"));
 		return tmp_str;
 	}else if(LunaRadio::err_state == ERR_RX_TIMEOUT){ 
 		//timeout error
@@ -219,11 +219,11 @@ String LunaRadio::receive_data_string_plotting(void){
 		return tmp_str;
 	}else if(LunaRadio::err_state == ERR_RX_TIMEOUT){ 
 		//timeout error
-		Serial.println("Receive Failed");
+		Serial.println(F("Receive Failed"));
 		return "Receiver Timeout";
 	}else if(LunaRadio::err_state == ERR_CRC_MISMATCH){ 
 		//CTC error
-		Serial.println("Receive Failed");
+		Serial.println(F("Receive Failed"));
 		return "CTC Error";
 	}else{
 		Serial.print(F("failed, code ")); 
