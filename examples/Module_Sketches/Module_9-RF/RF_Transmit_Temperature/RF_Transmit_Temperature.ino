@@ -27,6 +27,9 @@ float temperatureF;  // Variable to store an observed temperature in Fahrenheit
 float startTime;    // Variables for timing offset calculations
 float endTime;
 
+// Red LED Pin (for indicating transmission)
+int LED = 4;
+
 void setup(){
     Serial.begin(9600);
 
@@ -37,6 +40,9 @@ void setup(){
     // Argument 4: Set spreading factor to 12
     // Argument 5: Set coding rate to 8
     Rad.initialize_radio(915.0, 7, 250.0, 12, 8);
+
+    // Set LED (Red) pin as output
+    pinMode(LED, OUTPUT);
 }
 
 void loop(){
@@ -65,10 +71,20 @@ void loop(){
 
         // Transmit buffer containing temperature in the form of a byte array
         Rad.transmit_data(data_buffer);
+
+        // Blink LED on transmission 
+        digitalWrite(LED, HIGH);
+        delay(500);
+        digitalWrite(LED, LOW);
     }
 
     // Record the end time for delay offset
     endTime = millis();
     
-    delay(sampleDelay - (endTime - startTime));  
+    // Check if processing time between sample and possible transmission is less than sample delay
+    if((endTime - startTime)< sampleDelay){
+        delay(sampleDelay - (endTime - startTime));  
+    } else { // If it is larger, delay by constant 1s
+        delay(1000);
+    }
 }
