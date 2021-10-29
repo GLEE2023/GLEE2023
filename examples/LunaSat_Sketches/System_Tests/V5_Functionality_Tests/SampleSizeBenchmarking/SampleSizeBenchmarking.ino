@@ -1,15 +1,7 @@
 #include <LunaSat.h>    
 
 // Set lunasat configuration (1's equates to default mode)
-int lunaSatConfig[6] = {0,0,0,0,0,0}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
-
-/*int allConfigs[64][6] = {{0,0,0,0,0,0},{1,0,0,0,0,0},{0,1,0,0,0,0},
-{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1},{1,1,0,0,0,0},{1,0,0,1,0,0},
-{1,0,0,0,1,0}, {1,0,0,0,0,1}, {0,1,0,1,0,0}, {0,1,0,0,1,0}, {0,1,0,0,0,1},
-{0,0,0,1,1,0}, {0,0,0,1,0,1}, {0,0,0,0,1,1}, {1,1,0,1,0,0}, {1,1,0,0,1,0},
-{1,1,0,0,0,1}, {1,0,0,1,1,0}, {1,0,0,1,0,1}, {1,0,0,0,1,1}, {0,1,0,1,1,0}, 
-{0,1,0,1,0,1}, {0,1,0,0,1,1}, {0,0,0,1,1,1}, {1,1,0,1,0,1}, {1,1,0,0,1,1}, 
-{1,0,0,1,1,1}, {0,1,0,1,1,1}, {1,1,0,1,1,0}, {1,1,0,1,1,1}};*/
+int lunaSatConfig[6] = {1,1,1,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
 LunaSat lunaSat(0, lunaSatConfig, false);
@@ -30,12 +22,12 @@ void performTest(){
     Serial.println();
     Serial.print("LunaSat Configuration: ");    // Print current LunaSat Configuration
     Serial.print("{");
-    Serial.print(lunaSatConfig[0]); Serial.print(",");
-    Serial.print(lunaSatConfig[1]); Serial.print(",");
-    Serial.print(lunaSatConfig[2]); Serial.print(",");
-    Serial.print(lunaSatConfig[3]); Serial.print(",");
-    Serial.print(lunaSatConfig[4]); Serial.print(",");
-    Serial.print(lunaSatConfig[5]); Serial.println("}");
+    Serial.print(String(lunaSatConfig[0])+",");
+    Serial.print(String(lunaSatConfig[1])+",");
+    Serial.print(String(lunaSatConfig[2])+",");
+    Serial.print(String(lunaSatConfig[3])+",");
+    Serial.print(String(lunaSatConfig[4])+",");
+    Serial.print(String(lunaSatConfig[5])+"}");
     Serial.println();
 
     delay(100);
@@ -71,8 +63,9 @@ void performTest(){
 void setup() {
   
     Serial.begin(9600);    // Direct serial communications with computer
+    lunaSat.begin(9600);
     delay(5000);
-
+    lunaSatConfig[0] = lunaSatConfig[1] = lunaSatConfig[2] = lunaSatConfig[3] = lunaSatConfig[4] = lunaSatConfig[5] = 0;
     for(int n = 0; n < 64; n++){
       int j = 0;
       int k = n;
@@ -81,10 +74,12 @@ void setup() {
           k = k / 2;
           j++;
       }
+      for(int i = 0; i < 6; i++){
+          lunaSat.info.conf[i] = lunaSatConfig[i];
+      }
       performTest();
 
     }
-    //performTest();
     
 }
 
