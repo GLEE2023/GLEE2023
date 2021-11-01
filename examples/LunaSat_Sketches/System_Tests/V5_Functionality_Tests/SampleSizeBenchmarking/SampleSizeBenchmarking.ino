@@ -45,7 +45,7 @@ void performTest(){
       size = size + sizeof(sample.acceleration);
     }
     if(lunaSatConfig[2]==1){
-      size = size + sizeof(sample.magnetic);
+      size = size + sizeof(sample.mag);
     }
     if(lunaSatConfig[3]==1){
       size = size + sizeof(sample.TPTemperature);
