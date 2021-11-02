@@ -79,17 +79,21 @@ void loop(){
         timeReceived_string = String(timeReceived);
 
         //Read data from request
-
-        Rad.readData(RSP, RSP.length()+1);
-        String head = String(RSP[0])+String(RSP[1]);
+        char response[32];
+        Rad.readData(response, 32);
+        
+        String head = String(response[0])+String(response[1]);
+        Serial.println(head);
         //If the request matches the time request flag, send back time received and time sent
         if(head=="L2"){
             rsp = "";
-            Serial.println(F("Recieved request from LunaSat " + head + ", sending response"));
+            Serial.println(F("Recieved request from LunaSat, sending response"));
             //timeSinceLastUpdate = millis() - localTime;
             localTime += (millis()-localTime); // Change to microseconds for different tests
             localTime_string = String(localTime); // Time sent
             rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
+            Serial.println("Test1234");
+            Serial.println(rsp);
             rsp.toCharArray(RSP,32);
             Rad.transmit_data(RSP);
         }
