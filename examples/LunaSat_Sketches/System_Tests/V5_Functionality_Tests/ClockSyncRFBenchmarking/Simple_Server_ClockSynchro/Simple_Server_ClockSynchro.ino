@@ -16,7 +16,7 @@ volatile bool interruptEnabled = true;
 char RSP[32];
 String rsp;
 
-unsigned long localTime; // This is also unsigned
+float localTime; // This is also unsigned
 String localTime_string;
 
 unsigned long timeReceived; // Check here first! This is unsigned here, but signed in the client code.
@@ -61,29 +61,31 @@ void setup() {
 void loop(){
     //timeSinceLastUpdate = millis() - localTime;
     localTime += (millis()-localTime); // Change to microseconds for different tests
-    if(localTime % 1000 <= 5){ // Change to microseconds for different tests
+    if((localTime % 1000 > 310) && (localTime % 1000 < 315)){ // Change to microseconds for different tests
         //Blink LED
         digitalWrite(LED2, HIGH);
-    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 115)){
+    } else if ((localTime % 1000 > 510) && (localTime % 1000 < 515)){
         digitalWrite(LED2, LOW);
     }
     if(messageRecieved){
+        localTime += (millis()-localTime);
         // Disable interrupts during reception processing
         interruptEnabled = false;
 
         // reset reception flag 
         messageRecieved = false;
         //timeSinceLastUpdate = millis() - localTime;
-        localTime += (millis()-localTime);
+        
         timeReceived = localTime; // Change to microseconds for different tests
-        timeReceived_string = String(timeReceived);
+        
 
         //Read data from request
         char response[32];
         Rad.readData(response, 32);
         
         String head = String(response[0])+String(response[1]);
-        Serial.println(head);
+
+        timeReceived_string = String(timeReceived);
         //If the request matches the time request flag, send back time received and time sent
         if(head=="L2"){
             rsp = "";
@@ -92,8 +94,7 @@ void loop(){
             localTime += (millis()-localTime); // Change to microseconds for different tests
             localTime_string = String(localTime); // Time sent
             rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
-            Serial.println("Test1234");
-            Serial.println(rsp);
+            //Serial.println(rsp);
             rsp.toCharArray(RSP,32);
             Rad.transmit_data(RSP);
         }

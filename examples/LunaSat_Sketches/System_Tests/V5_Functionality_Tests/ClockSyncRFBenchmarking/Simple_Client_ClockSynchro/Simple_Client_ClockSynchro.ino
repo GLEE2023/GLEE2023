@@ -20,18 +20,11 @@ char RSP[32];
 String rsp;
 char *p;
 
-
+// Sync Algorithm variables
 float clockSkew = 0;
-
-void recieve_callback(void) {
-  // don't set flag if interrupt isn't enabled
-  if(!interruptEnabled) {
-    return;
-  }
-
-  // set flag signifying message was recieved
-  messageRecieved = true;
-}
+float serverTimeWhenClientReceived;
+long networkDelay;
+float change;
 
 //Clock skew and time variables
 long localTime;
@@ -56,6 +49,16 @@ unsigned long interval = 10000;
 int LED1 = 4; 
 int LED2 = 5; 
 
+void recieve_callback(void) {
+  // don't set flag if interrupt isn't enabled
+  if(!interruptEnabled) {
+    return;
+  }
+
+  // set flag signifying message was recieved
+  messageRecieved = true;
+}
+
 void setup() {
     //Set the data rate to 9600 bits per second
     Serial.begin(9600);
@@ -71,6 +74,8 @@ void setup() {
     // Argument 5: Set coding rate to 8
     Rad.initialize_radio(915.0,17,250.0,12,8);
     Rad.enable_recieve_interupt(recieve_callback);
+    Serial.println(interruptEnabled);
+
     Serial.println(F("Initial sync"));
     timeClientSent = millis(); // Change to microseconds for different tests
     rsp = String(id);
@@ -83,24 +88,22 @@ void loop(){
     //timeSinceLastUpdate = millis() - localTime;
     localTime += ((millis()-localTime) + (int)clockSkew);
     // Request a packet from the server every interval
-    if(localTime % interval <= 150){ // Adjust these values for different tests
+    if ((localTime % 1000 > 310) && (localTime % 1000 < 315)){ // Change to microseconds for different tests
+        //Blink LED
+        digitalWrite(LED2, HIGH);
+    } else if ((localTime % 1000 > 510) && (localTime % 1000 < 515)){
+        digitalWrite(LED2, LOW);
+    } else if(localTime % interval <= 150){ // Adjust these values for different tests
         //timeSinceLastUpdate = millis() - localTime;
         localTime += ((millis()-localTime) + (int)clockSkew);
         timeClientSent = localTime; // Change to microseconds for different tests
         rsp = String(id);
-        Serial.println(rsp);
         rsp.toCharArray(RSP,32);
         p = &RSP[0];
         Rad.transmit_data(p);
         Serial.println(F("Sent message"));
-        interval = 10000;
-    } else if ((localTime % 1000 <= 5)){ // Change to microseconds for different tests
-        //Blink LED
-        digitalWrite(LED2, HIGH);
-    } else if ((localTime % 1000 > 110) && (localTime % 1000 < 115)){
-        digitalWrite(LED2, LOW);
+        interval = 30000;
     }
-
     //Process packet from server
     if(messageRecieved){
         // Disable interrupts during reception processing
@@ -123,7 +126,6 @@ void loop(){
         }
 
         String head = String(response[0])+String(response[1]);
-        Serial.println(head);
         
         int i = rsp.indexOf(',',3);
         int j = rsp.indexOf(',',i+1);
@@ -135,12 +137,15 @@ void loop(){
         // If the data_buffer is the lunasat ID, then use the times in the packet to calculate the clock skew
         if(head=="L1"){
             //Calculate clock skew
-            long networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
-            float serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
+            networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
+            serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
+            Serial.println(localTime);
+            Serial.println(timeClientReceived);
+            Serial.println(serverTimeWhenClientReceived);
             clockSkew += (serverTimeWhenClientReceived - timeClientReceived);
-            float change = (serverTimeWhenClientReceived - timeClientReceived);
+            //change = (serverTimeWhenClientReceived - timeClientReceived);
             Serial.print("Cumulative Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
-            Serial.print("Change in Clock Skew: "); Serial.print(change); Serial.println(" milliseconds");
+            //Serial.print("Change in Clock Skew: "); Serial.print(change); Serial.println(" milliseconds");
         }
 
         // return to listening for transmissions 
