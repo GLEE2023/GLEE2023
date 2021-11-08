@@ -16,7 +16,7 @@ volatile bool interruptEnabled = true;
 
 // Assemble LunaSat Packet
 // Response char array and string variables
-char RSP[32];
+char RSP[40];
 String rsp;
 char *p;
 
@@ -27,7 +27,7 @@ long networkDelay;
 float change;
 
 //Clock skew and time variables
-long localTime;
+unsigned long localTime;
 String localTime_string;
 
 long timeClientReceived;
@@ -79,7 +79,7 @@ void setup() {
     Serial.println(F("Initial sync"));
     timeClientSent = millis(); // Change to microseconds for different tests
     rsp = String(id);
-    rsp.toCharArray(RSP,32);
+    rsp.toCharArray(RSP,40);
     p = &RSP[0];
     Rad.transmit_data(p); // Initial synchronization
 }
@@ -98,7 +98,7 @@ void loop(){
         localTime += ((millis()-localTime) + (int)clockSkew);
         timeClientSent = localTime; // Change to microseconds for different tests
         rsp = String(id);
-        rsp.toCharArray(RSP,32);
+        rsp.toCharArray(RSP,40);
         p = &RSP[0];
         Rad.transmit_data(p);
         Serial.println(F("Sent message"));
@@ -116,12 +116,12 @@ void loop(){
         messageRecieved = false;
 
         //Get data from packet
-        char response[32];
-        Rad.readData(response, 32);
+        char response[40];
+        Rad.readData(response, 40);
 
         rsp = "";
 
-        for(int i = 0; i < 32; i++){
+        for(int i = 0; i < 40; i++){
           rsp = rsp + response[i];
         }
 
@@ -139,10 +139,17 @@ void loop(){
             //Calculate clock skew
             networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
             serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
-            Serial.println(localTime);
+
+
+            Serial.println(timeClientSent);
+            Serial.println(timeServerReceived);
+            Serial.println(timeServerSent);
             Serial.println(timeClientReceived);
+            
+            Serial.println(networkDelay);
             Serial.println(serverTimeWhenClientReceived);
-            clockSkew += (serverTimeWhenClientReceived - timeClientReceived);
+            
+            clockSkew += (serverTimeWhenClientReceived - (float)timeClientReceived);
             //change = (serverTimeWhenClientReceived - timeClientReceived);
             Serial.print("Cumulative Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
             //Serial.print("Change in Clock Skew: "); Serial.print(change); Serial.println(" milliseconds");

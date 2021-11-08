@@ -13,10 +13,10 @@ volatile bool interruptEnabled = true;
 
 // Assemble LunaSat Packet
 // Response char array and string variables
-char RSP[32];
+char RSP[40];
 String rsp;
 
-float localTime; // This is also unsigned
+unsigned long localTime; // This is also unsigned
 String localTime_string;
 
 unsigned long timeReceived; // Check here first! This is unsigned here, but signed in the client code.
@@ -80,8 +80,8 @@ void loop(){
         
 
         //Read data from request
-        char response[32];
-        Rad.readData(response, 32);
+        char response[40];
+        Rad.readData(response, 40);
         
         String head = String(response[0])+String(response[1]);
 
@@ -95,7 +95,7 @@ void loop(){
             localTime_string = String(localTime); // Time sent
             rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
             //Serial.println(rsp);
-            rsp.toCharArray(RSP,32);
+            rsp.toCharArray(RSP,40);
             Rad.transmit_data(RSP);
         }
 
