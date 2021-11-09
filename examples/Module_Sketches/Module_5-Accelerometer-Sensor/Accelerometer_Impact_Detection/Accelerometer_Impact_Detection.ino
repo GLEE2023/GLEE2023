@@ -2,7 +2,7 @@
 
 float startTime;    
 float endTime;
-float staticAcceleration = 0; // Acceelration when still
+float staticAcceleration = 0; // Acceleration when not moving 
 float dynamicAcceleration; // Acceleration during an impact
 float accelDif; // Change in acceleration
 float impactThreshold = 0.1; // Defines impact threshold to be 0.001 m/s^2
@@ -29,7 +29,7 @@ void setup(){
 
     pinMode(LED, OUTPUT); // Sets LED
     
-    delay(50); // Allow time for sensor initialization to complete
+    delay(50); // Allow time for sensor initialization to finish
 
     for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds
         startTime = millis(); // Keeps track of start time before getting measurements
@@ -78,7 +78,7 @@ void loop(){
 
     Serial.print(F("Calculated Difference in Acceleration: ")); Serial.println(accelDif); // Print out difference in acceleration
 
-    if(accelDif >= impactThreshold){ // If the difference in acceleration is greater than or equal to the threshhold set above
+    if(accelDif >= impactThreshold){ // If the difference in acceleration is greater than or equal to the threshold set above
         Serial.println("Impact detected"); // Notify impact has been detected
 
         digitalWrite(LED, HIGH); // LEDs blink
@@ -87,5 +87,5 @@ void loop(){
     };
     
     endTime = millis(); // Keeps track of end time after getting measurements 
-    delay(100); // Gets measurements every 0.1 second
+    delay(100); // Gets measurements every 0.1 seconds (100 milliseconds)
 };

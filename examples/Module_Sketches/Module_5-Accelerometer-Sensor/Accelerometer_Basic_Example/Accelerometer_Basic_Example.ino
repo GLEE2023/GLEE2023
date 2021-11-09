@@ -7,7 +7,7 @@ void setup(){
     Serial.begin(9600); // Sets baud rate to 9600 for serial transmission and starts serial communication
     accelerometer.begin(); // Begins transmission to the I2C slave device
     accelerometer.initialize(); // Set-up for MPU 
-    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelrometer Range options: 2_G, 4_G, 8_G, 16_G
+    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of accelerometer Range options: 2_G, 4_G, 8_G, 16_G
 }
 
 void loop(){
