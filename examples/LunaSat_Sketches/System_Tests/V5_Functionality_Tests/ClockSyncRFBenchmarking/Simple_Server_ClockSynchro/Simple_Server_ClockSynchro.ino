@@ -19,10 +19,9 @@ String rsp;
 unsigned long localTime; // This is also unsigned
 String localTime_string;
 
-unsigned long timeReceived; // Check here first! This is unsigned here, but signed in the client code.
+long timeReceived; // Check here first! This is unsigned here, but signed in the client code.
 String timeReceived_string;
 
-long timeSinceLastUpdate;
 
 //For storing output pin configuration of LEDs
 int LED1 = 4; 
@@ -59,12 +58,11 @@ void setup() {
 }
 
 void loop(){
-    //timeSinceLastUpdate = millis() - localTime;
     localTime += (millis()-localTime); // Change to microseconds for different tests
-    if((localTime % 1000 > 310) && (localTime % 1000 < 315)){ // Change to microseconds for different tests
+    if((localTime % 1000 > 540) && (localTime % 1000 < 545)){ // Change to microseconds for different tests
         //Blink LED
         digitalWrite(LED2, HIGH);
-    } else if ((localTime % 1000 > 510) && (localTime % 1000 < 515)){
+    } else if ((localTime % 1000 > 740) && (localTime % 1000 < 745)){
         digitalWrite(LED2, LOW);
     }
     if(messageRecieved){
@@ -74,7 +72,6 @@ void loop(){
 
         // reset reception flag 
         messageRecieved = false;
-        //timeSinceLastUpdate = millis() - localTime;
         
         timeReceived = localTime; // Change to microseconds for different tests
         
@@ -90,13 +87,13 @@ void loop(){
         if(head=="L2"){
             rsp = "";
             Serial.println(F("Recieved request from LunaSat, sending response"));
-            //timeSinceLastUpdate = millis() - localTime;
             localTime += (millis()-localTime); // Change to microseconds for different tests
             localTime_string = String(localTime); // Time sent
             rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
-            //Serial.println(rsp);
+            Serial.println(rsp);
             rsp.toCharArray(RSP,40);
             Rad.transmit_data(RSP);
+            
         }
 
         // return to listening for transmissions 

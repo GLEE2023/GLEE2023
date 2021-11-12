@@ -23,7 +23,7 @@ char *p;
 // Sync Algorithm variables
 float clockSkew = 0;
 float serverTimeWhenClientReceived;
-long networkDelay;
+float networkDelay;
 float change;
 
 //Clock skew and time variables
@@ -40,12 +40,10 @@ long timeClientSent;
 long timeServerSent;
 String timeServerSent_string;
 
-long timeSinceLastUpdate;
-
 //Interval between synchronizations, 120000ms or 2 minutes by default
-unsigned long interval = 10000;
+unsigned long interval = 20000;
 
-//For storing output pin configuration of LEDs
+//For storing output pin contfiguration of LEDs
 int LED1 = 4; 
 int LED2 = 5; 
 
@@ -85,16 +83,14 @@ void setup() {
 }
 
 void loop(){
-    //timeSinceLastUpdate = millis() - localTime;
     localTime += ((millis()-localTime) + (int)clockSkew);
     // Request a packet from the server every interval
-    if ((localTime % 1000 > 310) && (localTime % 1000 < 315)){ // Change to microseconds for different tests
+    if ((localTime % 1000 > 340) && (localTime % 1000 < 345)){ // Change to microseconds for different tests
         //Blink LED
         digitalWrite(LED2, HIGH);
-    } else if ((localTime % 1000 > 510) && (localTime % 1000 < 515)){
+    } else if ((localTime % 1000 > 540) && (localTime % 1000 < 545)){
         digitalWrite(LED2, LOW);
     } else if(localTime % interval <= 150){ // Adjust these values for different tests
-        //timeSinceLastUpdate = millis() - localTime;
         localTime += ((millis()-localTime) + (int)clockSkew);
         timeClientSent = localTime; // Change to microseconds for different tests
         rsp = String(id);
@@ -102,12 +98,12 @@ void loop(){
         p = &RSP[0];
         Rad.transmit_data(p);
         Serial.println(F("Sent message"));
-        interval = 30000;
+        interval = 20000;
     }
     //Process packet from server
+    
     if(messageRecieved){
         // Disable interrupts during reception processing
-        //timeSinceLastUpdate = millis() - localTime;
         localTime += ((millis()-localTime) + (int)clockSkew);
         timeClientReceived = localTime; // Change to microseconds for different tests
         interruptEnabled = false;
@@ -120,7 +116,6 @@ void loop(){
         Rad.readData(response, 40);
 
         rsp = "";
-
         for(int i = 0; i < 40; i++){
           rsp = rsp + response[i];
         }
@@ -138,9 +133,11 @@ void loop(){
         if(head=="L1"){
             //Calculate clock skew
             networkDelay = (timeClientReceived - timeClientSent) - (timeServerSent - timeServerReceived);
-            serverTimeWhenClientReceived = timeServerSent + (networkDelay/2);
+            serverTimeWhenClientReceived = timeServerSent + (long)(networkDelay/2);
 
-
+            Serial.println(rsp);
+            /*
+            
             Serial.println(timeClientSent);
             Serial.println(timeServerReceived);
             Serial.println(timeServerSent);
@@ -148,8 +145,9 @@ void loop(){
             
             Serial.println(networkDelay);
             Serial.println(serverTimeWhenClientReceived);
+            */
             
-            clockSkew += (serverTimeWhenClientReceived - (float)timeClientReceived);
+            clockSkew += (serverTimeWhenClientReceived - timeClientReceived);
             //change = (serverTimeWhenClientReceived - timeClientReceived);
             Serial.print("Cumulative Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
             //Serial.print("Change in Clock Skew: "); Serial.print(change); Serial.println(" milliseconds");
