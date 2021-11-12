@@ -17,10 +17,12 @@ char RSP[40];
 String rsp;
 
 unsigned long localTime; // This is also unsigned
-String localTime_string;
+//String localTime_string; 
+char localTime_string[8] = {' '};
 
-long timeReceived; // Check here first! This is unsigned here, but signed in the client code.
-String timeReceived_string;
+unsigned long timeReceived; // Check here first! This is unsigned here, but signed in the client code.
+//String timeReceived_string;
+char timeReceived_string[8] = {' '};
 
 
 //For storing output pin configuration of LEDs
@@ -75,23 +77,29 @@ void loop(){
         
         timeReceived = localTime; // Change to microseconds for different tests
         
-
         //Read data from request
         char response[40];
         Rad.readData(response, 40);
         
         String head = String(response[0])+String(response[1]);
 
-        timeReceived_string = String(timeReceived);
+        //timeReceived_string = String(timeReceived);
+        sprintf(timeReceived_string, "%lu", timeReceived);
         //If the request matches the time request flag, send back time received and time sent
         if(head=="L2"){
             rsp = "";
             Serial.println(F("Recieved request from LunaSat, sending response"));
             localTime += (millis()-localTime); // Change to microseconds for different tests
-            localTime_string = String(localTime); // Time sent
-            rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
-            Serial.println(rsp);
-            rsp.toCharArray(RSP,40);
+            sprintf(localTime_string, "%lu", localTime);
+            //localTime_string = String(localTime); // Time sent
+            //rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
+            strcpy(RSP, "L1");
+            strcat(RSP,",");
+            strcat(RSP,timeReceived_string);
+            strcat(RSP,",");
+            strcat(RSP,localTime_string);
+            strcat(RSP,",");
+   
             Rad.transmit_data(RSP);
             
         }

@@ -6,6 +6,7 @@
 LunaRadio Rad;
 
 String id = "L2"; // Change as necessary
+char id_str[2] = {' '};
 String serverid = "L1"; // Change as necessary
 
 // flag to indicate that a packet was received
@@ -29,15 +30,17 @@ float change;
 //Clock skew and time variables
 unsigned long localTime;
 String localTime_string;
+char timeStamp_str[8] = {' '};
 
-long timeClientReceived;
+unsigned long timeClientReceived;
 
-long timeServerReceived;
+unsigned long timeServerReceived;
 String timeServerRecieved_string;
 
-long timeClientSent;
 
-long timeServerSent;
+unsigned long timeClientSent;
+
+unsigned long timeServerSent;
 String timeServerSent_string;
 
 //Interval between synchronizations, 120000ms or 2 minutes by default
@@ -76,10 +79,9 @@ void setup() {
 
     Serial.println(F("Initial sync"));
     timeClientSent = millis(); // Change to microseconds for different tests
-    rsp = String(id);
-    rsp.toCharArray(RSP,40);
-    p = &RSP[0];
-    Rad.transmit_data(p); // Initial synchronization
+    strcpy(RSP, "L2");
+    //rsp.toCharArray(RSP,40);
+    Rad.transmit_data(RSP); // Initial synchronization
 }
 
 void loop(){
@@ -93,10 +95,9 @@ void loop(){
     } else if(localTime % interval <= 150){ // Adjust these values for different tests
         localTime += ((millis()-localTime) + (int)clockSkew);
         timeClientSent = localTime; // Change to microseconds for different tests
-        rsp = String(id);
-        rsp.toCharArray(RSP,40);
-        p = &RSP[0];
-        Rad.transmit_data(p);
+        //rsp = String(id);
+        strcpy(RSP, "L2");
+        Rad.transmit_data(RSP);
         Serial.println(F("Sent message"));
         interval = 20000;
     }
@@ -112,15 +113,15 @@ void loop(){
         messageRecieved = false;
 
         //Get data from packet
-        char response[40];
-        Rad.readData(response, 40);
+        //char response[40];
+        Rad.readData(RSP, 40);
 
         rsp = "";
         for(int i = 0; i < 40; i++){
-          rsp = rsp + response[i];
+          rsp = rsp + RSP[i];
         }
 
-        String head = String(response[0])+String(response[1]);
+        String head = String(RSP[0])+String(RSP[1]);
         
         int i = rsp.indexOf(',',3);
         int j = rsp.indexOf(',',i+1);
