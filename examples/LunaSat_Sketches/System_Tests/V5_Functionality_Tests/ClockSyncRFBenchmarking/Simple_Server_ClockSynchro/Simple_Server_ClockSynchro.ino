@@ -78,15 +78,16 @@ void loop(){
         timeReceived = localTime; // Change to microseconds for different tests
         
         //Read data from request
-        char response[40];
-        Rad.readData(response, 40);
+        Rad.readData(RSP, 40);
+        //String packet = Rad.receive_data_string();
+        //String message_id = packet.substring(0,2);
         
-        String head = String(response[0])+String(response[1]);
+        String message_id = String(RSP[0])+String(RSP[1]);
 
         //timeReceived_string = String(timeReceived);
         sprintf(timeReceived_string, "%lu", timeReceived);
         //If the request matches the time request flag, send back time received and time sent
-        if(head=="L2"){
+        if(message_id=="L2"){
             rsp = "";
             Serial.println(F("Recieved request from LunaSat, sending response"));
             localTime += (millis()-localTime); // Change to microseconds for different tests
@@ -99,6 +100,7 @@ void loop(){
             strcat(RSP,",");
             strcat(RSP,localTime_string);
             strcat(RSP,",");
+            strcat(RSP,"|||");
    
             Rad.transmit_data(RSP);
             
