@@ -108,7 +108,7 @@ float TPIS1385::getTamb(uint16_t TPamb){
 uint32_t TPIS1385::getTPobj(){
     uint8_t data[3] = {0,0,0};
     readBytes(TP_OBJECT, 3, &data[0]);
-    uint16_t temp = ( (uint32_t) ( (uint32_t)data[0] << 24) | ( (uint32_t)data[1] << 16) | ( (uint32_t)data[2] & 0x80) << 8) >> 15; 
+    uint32_t temp = ( (uint32_t) ( (uint32_t)data[0] << 24) | ( (uint32_t)data[1] << 16) | ( (uint32_t)data[2] & 0x80) << 8) >> 15; 
     return temp;
 }
 
@@ -132,7 +132,7 @@ TPsample_t TPIS1385::getSample(){
     uint32_t TPobj = getTPobj();
     uint16_t Tamb = getTamb(TPamb);
     float Tobj = getTobj(TPobj, Tamb);
-    
+
     sample.object = Tobj - SENSOR_CONV_K_to_C; 
     sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
     
