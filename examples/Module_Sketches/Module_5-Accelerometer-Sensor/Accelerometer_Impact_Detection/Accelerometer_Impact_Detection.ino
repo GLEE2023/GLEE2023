@@ -5,8 +5,8 @@ float endTime;
 float staticAcceleration = 0; // Acceleration when not moving 
 float dynamicAcceleration; // Acceleration during an impact
 float accelDif; // Change in acceleration
-float impactThreshold = 0.1; // Defines impact threshold to be 0.001 m/s^2
-                             // Sets how sensitive the imapct sensor is
+float impactThreshold = 0.35; // Defines impact threshold 
+                             // Sets how sensitive the impact sensor is
 int LED = 4;
 
 MPU6000 accelerometer(1, false);
@@ -72,6 +72,7 @@ void loop(){
     Serial.println(accelMPS.z, 8);
     Serial.println();
 
+
     dynamicAcceleration = sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2)); // Adds up magnitude of current acceleration
 
     accelDif = abs(dynamicAcceleration - staticAcceleration); // Subtracts and saves static acceleration from dynamic accelration
@@ -80,7 +81,6 @@ void loop(){
 
     if(accelDif >= impactThreshold){ // If the difference in acceleration is greater than or equal to the threshold set above
         Serial.println("Impact detected"); // Notify impact has been detected
-
         digitalWrite(LED, HIGH); // LEDs blink
         delay(500);
         digitalWrite(LED, LOW);
