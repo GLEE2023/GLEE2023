@@ -1,3 +1,5 @@
+/* NOTE: The output of this sketch may be skewed if the LunaSat undergoes a force that isn't gravity */
+
 #include "MPU6000.h"
 
 MPU6000 accelerometer(1, false); // Sets sensor ID to 1 and debugging to false
@@ -23,7 +25,7 @@ void setup(){
                         // and starts serial communication
     accelerometer.begin(); // Begins transmission to the I2C slave device
     accelerometer.initialize(); // Set-up for MPU 
-    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelrometer 
+    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelerometer 
                                                     // Range options: 2_G, 4_G, 8_G, 16_G
     /*
     // Calibration (LunaSat flat on table)
@@ -49,19 +51,36 @@ void setup(){
 
 void loop(){
     acc = accelerometer.getSample(); // Gets and saves 3-axis acceleration reading (G)
-    accMPS = accelerometer.getMPSAccel(acc);
+
+    // For later debugging
+    Serial.println(acc.x);
+    Serial.println(acc.y);
+    Serial.println(acc.z);
+
+    accMPS = accelerometer.getMPSAccel(acc); // Acceleration in meters per second squared
+
+    // For later debugging
+    Serial.println(accMPS.x);
+    Serial.println(accMPS.y);
+    Serial.println(accMPS.z);
+
     // Step 1: Simplify LunaSat to 3 axes and consider 3 sets of 2 axes - X&Z, Y&Z, X&Y
     // Step 2: For each set of axes: Use F = mgcos(x) and F = mgsin(x) using the two relevant accelerations to find the angle x
 
     // Find the net acceleration for each pair of axes
-    xzAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.z,2));
-    yzAcceleration = sqrt(pow(accMPS.y,2) + pow(accMPS.z,2));
-    xyAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.y,2));
+    xzAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.z,2)); 
+    yzAcceleration = sqrt(pow(accMPS.y,2) + pow(accMPS.z,2)); 
+    xyAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.y,2)); 
+
+    // For later debugging
+    Serial.println(xzAcceleration);
+    Serial.println(yzAcceleration);
+    Serial.println(xyAcceleration);
 
     // Use a = gsin(x) to find angle "along direction of motion" (pretend lunasat is moving in direction of net acceleration) 
-    roll = asin(xzAcceleration/-MPU_ONE_G); //[Math may not be correct?]
-    pitch = asin(yzAcceleration/-MPU_ONE_G);
-    yaw = asin(xyAcceleration/-MPU_ONE_G);
+    roll = (asin(xzAcceleration/MPU_ONE_G)*(180/3.141))-90; // Math may not be correct
+    pitch = (asin(yzAcceleration/MPU_ONE_G)*(180/3.141))-90;
+    yaw = (asin(xyAcceleration/MPU_ONE_G)*(180/3.141));
 
     // Print out results
     Serial.print(F("XZ Angle (Roll): "));
@@ -71,5 +90,5 @@ void loop(){
     Serial.print(F("XY Angle (Yaw): "));
     Serial.println(yaw);
 
-    delay(500); // Waits half a second
+    delay(1000); // Waits 1 second
 };
