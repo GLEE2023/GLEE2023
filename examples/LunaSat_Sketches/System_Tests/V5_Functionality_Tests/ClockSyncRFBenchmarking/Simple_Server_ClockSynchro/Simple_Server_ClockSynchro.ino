@@ -13,7 +13,7 @@ volatile bool interruptEnabled = true;
 
 // Assemble LunaSat Packet
 // Response char array and string variables
-char RSP[40];
+char RSP[50];
 String rsp;
 
 unsigned long localTime; // This is also unsigned
@@ -60,8 +60,8 @@ void setup() {
 }
 
 void loop(){
-    localTime += (millis()-localTime); // Change to microseconds for different tests
-    if((localTime % 1000 > 540) && (localTime % 1000 < 545)){ // Change to microseconds for different tests
+    localTime += (millis()-localTime); 
+    if((localTime % 1000 > 540) && (localTime % 1000 < 545)){ 
         //Blink LED
         digitalWrite(LED2, HIGH);
     } else if ((localTime % 1000 > 740) && (localTime % 1000 < 745)){
@@ -75,25 +75,21 @@ void loop(){
         // reset reception flag 
         messageRecieved = false;
         
-        timeReceived = localTime; // Change to microseconds for different tests
+        timeReceived = localTime; 
         
         //Read data from request
-        Rad.readData(RSP, 40);
-        //String packet = Rad.receive_data_string();
-        //String message_id = packet.substring(0,2);
+        Rad.readData(RSP, 50);
         
         String message_id = String(RSP[0])+String(RSP[1]);
 
-        //timeReceived_string = String(timeReceived);
         sprintf(timeReceived_string, "%lu", timeReceived);
+        
         //If the request matches the time request flag, send back time received and time sent
         if(message_id=="L2"){
             rsp = "";
             Serial.println(F("Recieved request from LunaSat, sending response"));
             localTime += (millis()-localTime); // Change to microseconds for different tests
             sprintf(localTime_string, "%lu", localTime);
-            //localTime_string = String(localTime); // Time sent
-            //rsp = String(id + "," + timeReceived_string + "," + localTime_string + ",");
             strcpy(RSP, "L1");
             strcat(RSP,",");
             strcat(RSP,timeReceived_string);

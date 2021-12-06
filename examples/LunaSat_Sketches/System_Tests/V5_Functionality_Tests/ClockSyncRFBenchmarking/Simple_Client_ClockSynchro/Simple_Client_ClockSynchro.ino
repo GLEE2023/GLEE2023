@@ -5,9 +5,8 @@
 //Initialize RF Object
 LunaRadio Rad;
 
-String id = "L2"; // Change as necessary
-char id_str[2] = {' '};
-String serverid = "L1"; // Change as necessary
+String id = "L2"; 
+String serverid = "L1"; 
 
 // flag to indicate that a packet was received
 volatile bool messageRecieved = false;
@@ -15,17 +14,14 @@ volatile bool messageRecieved = false;
 // disable interrupt when it's not needed
 volatile bool interruptEnabled = true;
 
-// Assemble LunaSat Packet
 // Response char array and string variables
-char RSP[40];
+char RSP[50];
 String rsp;
-char *p;
 
 // Sync Algorithm variables
 long clockSkew = 0;
 unsigned long serverTimeWhenClientReceived;
 long networkDelay;
-//float change;
 
 //Clock skew and time variables
 unsigned long localTime;
@@ -44,7 +40,7 @@ unsigned long timeServerSent;
 String timeServerSent_string;
 
 //Interval between synchronizations, 120000ms or 2 minutes by default
-unsigned long interval = 20000;
+unsigned long interval = 1000;
 
 //For storing output pin contfiguration of LEDs
 int LED1 = 4; 
@@ -78,25 +74,23 @@ void setup() {
     Serial.println(interruptEnabled);
 
     Serial.println(F("Initial sync"));
-    timeClientSent = millis(); // Change to microseconds for different tests
+    timeClientSent = millis(); 
     strcpy(RSP, "L2,");
     strcat(RSP,"|||");
-    //rsp.toCharArray(RSP,40);
     Rad.transmit_data(RSP); // Initial synchronization
 }
 
 void loop(){
-    localTime += ((millis()-localTime) + (int)clockSkew);
+    localTime += ((millis()-localTime) + (long)clockSkew);
     // Request a packet from the server every interval
-    if ((localTime % 1000 > 340) && (localTime % 1000 < 345)){ // Change to microseconds for different tests
+    if ((localTime % 1000 > 340) && (localTime % 1000 < 345)){
         //Blink LED
         digitalWrite(LED2, HIGH);
     } else if ((localTime % 1000 > 540) && (localTime % 1000 < 545)){
         digitalWrite(LED2, LOW);
-    } else if(localTime % interval <= 150){ // Adjust these values for different tests
+    } else if(localTime % interval <= 150){ 
         localTime += ((millis()-localTime) + (long)clockSkew);
-        timeClientSent = localTime; // Change to microseconds for different tests
-        //rsp = String(id);
+        timeClientSent = localTime; 
         strcpy(RSP, "L2,");
         strcat(RSP,"|||");
         Rad.transmit_data(RSP);
@@ -108,21 +102,18 @@ void loop(){
     if(messageRecieved){
         // Disable interrupts during reception processing
         localTime += ((millis()-localTime) + (long)clockSkew);
-        timeClientReceived = localTime; // Change to microseconds for different tests
+        timeClientReceived = localTime; 
         interruptEnabled = false;
 
         // reset reception flag 
         messageRecieved = false;
 
         //Get data from packet
-        char response[40];
-        Rad.readData(RSP, 40);
-
-        //String packet = Rad.receive_data_string();
-        //String message_id = packet.substring(0,2);
+        char response[50];
+        Rad.readData(RSP, 50);
 
         rsp = "";
-        for(int i = 0; i < 40; i++){
+        for(int i = 0; i < 50; i++){
           rsp = rsp + RSP[i];
         }
 
@@ -143,21 +134,9 @@ void loop(){
 
             Serial.print(rsp);
             Serial.println();
-            /*
-            
-            Serial.println(timeClientSent);
-            Serial.println(timeServerReceived);
-            Serial.println(timeServerSent);
-            Serial.println(timeClientReceived);
-            
-            Serial.println(networkDelay);
-            Serial.println(serverTimeWhenClientReceived);
-            */
             
             clockSkew += (serverTimeWhenClientReceived - timeClientReceived);
-            //change = (serverTimeWhenClientReceived - timeClientReceived);
             Serial.print("Cumulative Clock Skew: "); Serial.print(clockSkew); Serial.println(" milliseconds");
-            //Serial.print("Change in Clock Skew: "); Serial.print(change); Serial.println(" milliseconds");
         }
 
         // return to listening for transmissions 
