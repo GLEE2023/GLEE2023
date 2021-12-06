@@ -12,15 +12,16 @@ float xzAcceleration;
 float yzAcceleration;
 float xyAcceleration;
 
-float roll; // XZ Angle
-float pitch; // YZ Angle
-float yaw; // XY Angle
+float xAngle = 0.0;
+float yAngle = 0.0;
+float zAngle = 0.0;
 
-//float avgX = 0.0;
-//float avgY = 0.0;
-//float avgZ = 0.0;
+float avgX = 0.0;
+float avgY = 0.0;
+float avgZ = 0.0;
 
-//int calibrationSize = 20;
+
+int calibrationSize = 40;
 
 void setup(){
     Serial.begin(9600); // Sets baud rate to 9600 for serial transmission 
@@ -29,86 +30,70 @@ void setup(){
     accelerometer.initialize(); // Set-up for MPU 
     accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelerometer 
                                                     // Range options: 2_G, 4_G, 8_G, 16_G
-    /*
+
     // Calibration (LunaSat flat on table)
     sensor_float_vec_t calibrationPoints[calibrationSize];    
     for(int i = 0; i < calibrationSize; i++){
-      calibrationPoints[i] = accelerometer.getSample();
+        calibrationPoints[i] = accelerometer.getSample();
     }
 
     // Get sums of axes measurements
     for(int j = 0; j < calibrationSize; j++){
-      avgX = avgX + calibrationPoints[j].x;
-      avgY = avgY + calibrationPoints[j].y;
-      avgZ = avgZ + calibrationPoints[j].z;
+        avgX = avgX + calibrationPoints[j].x;
+        avgY = avgY + calibrationPoints[j].y;
+        //avgZ = avgZ + calibrationPoints[j].z;
     }
 
     // Find average axes measurements
     avgX = avgX/calibrationSize;
     avgY = avgY/calibrationSize;
-    avgZ = avgZ/calibrationSize;
-    */
+    //avgZ = avgZ/calibrationSize;
+    Serial.println(avgX*9.81);
 
 };
+
 
 void loop(){
     
     acc = accelerometer.getSample(); // Gets and saves 3-axis acceleration reading (G)
 
-    // For later debugging
-    //Serial.println(acc.x);
-    //Serial.println(acc.y);
-    //Serial.println(acc.z);
-
     accMPS = accelerometer.getMPSAccel(acc); // Acceleration in meters per second squared
 
-    // For later debugging
-    //Serial.println(accMPS.x);
-    //Serial.println(accMPS.y);
-    //Serial.println(accMPS.z);
+    // Math/logic mostly based on following code: https://www.hobbytronics.co.uk/accelerometer-info
 
-    // Step 1: Simplify LunaSat to 3 axes and consider 3 sets of 2 axes - X&Z, Y&Z, X&Y
-    // Step 2: For each set of axes: Use F = mgcos(x) and F = mgsin(x) using the two relevant accelerations to find the angle x
+    // Subtract baseline values from current sample
+
+    accMPS.x = accMPS.x - avgX*9.81;
+    accMPS.y = accMPS.y - avgY*9.81;
+    accMPS.z = accMPS.z;
     
     // Find the net acceleration for each pair of axes
-    xzAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.z,2)); 
     yzAcceleration = sqrt(pow(accMPS.y,2) + pow(accMPS.z,2)); 
+    xzAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.z,2)); 
     xyAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.y,2)); 
 
-    // For later debugging
-    //Serial.println(xzAcceleration);
-    //Serial.println(yzAcceleration);
-    //Serial.println(xyAcceleration);
+    // Calculate x angle
+    xAngle = accMPS.x/yzAcceleration;
+    xAngle = atan(xAngle)*(180/3.141);
+    Serial.print("X Angle: ");
+    Serial.print(xAngle);
+    Serial.println("º");
 
-    // Use a = gsin(x) to find angle "along direction of motion" (pretend lunasat is moving in direction of net acceleration) 
-    if((xzAcceleration/measuredGravity) > 1 || (xzAcceleration/measuredGravity) < -1){
-      roll = 0.0;
-    } else {
-      roll = (asin(xzAcceleration/measuredGravity)*(180/3.141))+90; // Math may not be correct
-    }
+    // Calculate y angle
+    yAngle = accMPS.y/xzAcceleration;
+    yAngle = atan(yAngle)*(180/3.141);
+    Serial.print("Y Angle: ");
+    Serial.print(yAngle);
+    Serial.println("º");
 
-    if((yzAcceleration/measuredGravity) > 1 || (yzAcceleration/measuredGravity) < -1){
-      pitch = 0.0;
-    } else {   
-      pitch = (asin(yzAcceleration/measuredGravity)*(180/3.141))+90;
-    }
-    
-    if((xyAcceleration/measuredGravity) > 1 || (xyAcceleration/measuredGravity) < -1){
-      yaw = 0.0; 
-    } else {
-      yaw = (asin(xyAcceleration/measuredGravity)*(180/3.141));
-    }
-    
+    // Calculate z angle
+    zAngle = accMPS.z/xyAcceleration;
+    zAngle = atan(zAngle)*(180/3.141);
+    Serial.print("Z Angle: ");
+    Serial.print(zAngle);
+    Serial.println("º");
+    Serial.println();
     
 
-    // Print out results
-    Serial.print(F("XZ Angle (Roll): "));
-    Serial.println(roll);
-    Serial.print(F("YZ Angle (Pitch): "));
-    Serial.println(pitch);
-    Serial.print(F("XY Angle (Yaw): "));
-    Serial.println(yaw);
-    
-
-    delay(3000); // Waits 1 second
+    delay(1000); // Waits 1 second
 };
