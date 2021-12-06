@@ -1,7 +1,7 @@
 /*
 * Description: This is an Arduino (C++) .cpp file required for the VT03 RADFET
 * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
-* Library Authors: Yvonne Liu, Lawson Nerenberg,
+* Library Authors: Yvonne Liu, Lawson Nerenberg
 * Resources Used in Creation:
 * VT03 Datasheet
 *
@@ -11,14 +11,14 @@
 
 /*
  * Constructor
- * Parameters: the sensor ID as an integer and the debug mode as a booelan
+ * Parameters: the sensor ID as an integer and the debug mode as a boolean
  * Returns: none
- * This is the constructor for the Capacitive class.
+ * This is the constructor for the RADFET class.
 */
 VT03::VT03(int _id, bool _debug){
     VT03::info.id = _id;
     VT03::info.name = "RADFET Sensor";
-    VT03::info.address = 0x01
+    VT03::info.address = 0x01;
     VT03::sensorDebug = _debug;
     VT03::pin = A0; // Hardcoded analog pin on LunaSat???
 }
@@ -46,6 +46,6 @@ uint8_t VT03::getAddress(){
  * Returns: none
  * This function gets the raw data for the RADFET.
 **/
-int CAP::getRawData(){
+int VT03::getRawData(){
 	return analogRead(VT03::pin);
 }
