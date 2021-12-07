@@ -6,7 +6,7 @@
 int sizeOfBuffer = 100;
 char buff[100];
 
-char tempBuffer[50] = {' '};
+char tempBuffer[5] = {' '};
 
 float temperatureC;
 String bufString;
@@ -23,27 +23,28 @@ TMP117 thermometer(1,false);
 
 void setup(){
     Serial.begin(9600);
-    temperatureC = 1.0;
-    snprintf(tempBuffer,5,"%f",temperatureC);
-    Serial.print((tempBuffer[0]));
+    /*
+    temperatureC = thermometer.getTemperatureC();
+    snprintf(tempBuffer,5,"%d",int(temperatureC));
     strcpy(buff,"Test");
     strcat(buff,",");
     strcat(buff,tempBuffer);
     for(int i = 0; i < 100; i++){
       Serial.print(buff[i]);
     }
-
-    
-    /*
+    */
+  
     int counter = 0;
     while(counter < numOfSamples){
         
         counter++;
         startTime = millis();
         temperatureC = thermometer.getTemperatureC();
-        sprintf(tempBuffer, "%f", temperatureC);
-        strcpy(buff, tempBuffer);
+        sprintf(tempBuffer, "%d", int(temperatureC));
+        strcat(buff, tempBuffer);
+        delay(10);
         strcat(buff,",");
+        delay(10);
         bufString = "";
         for(int i = 0; i < sizeOfBuffer; i++){
             bufString = bufString + buff[i];
@@ -59,7 +60,7 @@ void setup(){
     }
     Serial.println("Buffer: " + bufString);
     Serial.println("Checking performance...");
-    */
+    
 }
 
 void loop(){
