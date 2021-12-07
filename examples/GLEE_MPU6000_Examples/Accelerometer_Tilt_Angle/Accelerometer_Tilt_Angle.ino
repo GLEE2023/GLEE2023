@@ -4,9 +4,7 @@
 
 MPU6000 accelerometer(1, false); // Sets sensor ID to 1 and debugging to false
 sensor_float_vec_t acc; // Saves acceleration readings in a vector structure
-sensor_float_vec_t accMPS;
-
-float measuredGravity = -1.1*MPU_ONE_G;
+sensor_float_vec_t accMPS; // Acceleration readings in meters per second squared
 
 float xzAcceleration;
 float yzAcceleration;
@@ -32,7 +30,7 @@ void setup(){
                                                     // Range options: 2_G, 4_G, 8_G, 16_G
 
     // Calibration (LunaSat flat on table)
-    sensor_float_vec_t calibrationPoints[calibrationSize];    
+    sensor_float_vec_t calibrationPoints[calibrationSize];  // Array of vectors for storing calibration points  
     for(int i = 0; i < calibrationSize; i++){
         calibrationPoints[i] = accelerometer.getSample();
     }
@@ -41,59 +39,56 @@ void setup(){
     for(int j = 0; j < calibrationSize; j++){
         avgX = avgX + calibrationPoints[j].x;
         avgY = avgY + calibrationPoints[j].y;
-        //avgZ = avgZ + calibrationPoints[j].z;
+        //avgZ = avgZ + calibrationPoints[j].z; // Calibration for z-axis seems to ruin calculations, so leaving it out
     }
 
     // Find average axes measurements
     avgX = avgX/calibrationSize;
     avgY = avgY/calibrationSize;
     //avgZ = avgZ/calibrationSize;
-    Serial.println(avgX*9.81);
 
 };
-
 
 void loop(){
     
     acc = accelerometer.getSample(); // Gets and saves 3-axis acceleration reading (G)
 
-    accMPS = accelerometer.getMPSAccel(acc); // Acceleration in meters per second squared
+    accMPS = accelerometer.getMPSAccel(acc); // Converts acceleration measurements from G's to meters per second squared
 
     // Math/logic mostly based on following code: https://www.hobbytronics.co.uk/accelerometer-info
 
     // Subtract baseline values from current sample
 
-    accMPS.x = accMPS.x - avgX*9.81;
+    accMPS.x = accMPS.x - avgX*9.81; // Multiply by 9.81 to convert G's to m/s^2
     accMPS.y = accMPS.y - avgY*9.81;
-    accMPS.z = accMPS.z;
+    accMPS.z = accMPS.z; // Calibration here seems to ruin calculations, so leaving it out
     
     // Find the net acceleration for each pair of axes
     yzAcceleration = sqrt(pow(accMPS.y,2) + pow(accMPS.z,2)); 
     xzAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.z,2)); 
     xyAcceleration = sqrt(pow(accMPS.x,2) + pow(accMPS.y,2)); 
 
-    // Calculate x angle
+    // Calculate x angle (roll)
     xAngle = accMPS.x/yzAcceleration;
     xAngle = atan(xAngle)*(180/3.141);
-    Serial.print("X Angle: ");
+    Serial.print("X Angle (Roll): ");
     Serial.print(xAngle);
     Serial.println("º");
 
-    // Calculate y angle
+    // Calculate y angle (pitch)
     yAngle = accMPS.y/xzAcceleration;
     yAngle = atan(yAngle)*(180/3.141);
-    Serial.print("Y Angle: ");
+    Serial.print("Y Angle (Pitch): ");
     Serial.print(yAngle);
     Serial.println("º");
 
-    // Calculate z angle
+    // Calculate z angle (yaw)
     zAngle = accMPS.z/xyAcceleration;
-    zAngle = atan(zAngle)*(180/3.141);
-    Serial.print("Z Angle: ");
+    zAngle = (atan(zAngle)*(180/3.141));
+    Serial.print("Z Angle (Yaw): "); // Not sure if this is actually yaw, but it is derived from the third combo of axes
     Serial.print(zAngle);
     Serial.println("º");
     Serial.println();
     
-
-    delay(1000); // Waits 1 second
+    delay(500); // Waits half a second
 };
