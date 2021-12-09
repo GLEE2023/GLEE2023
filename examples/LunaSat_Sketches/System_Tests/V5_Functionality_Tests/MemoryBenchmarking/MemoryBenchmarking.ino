@@ -3,15 +3,15 @@
 #include "TMP117.h"
 
 
-int sizeOfBuffer = 100;
-char buff[100];
+int sizeOfBuffer = 12;
+char buff[12] = {'\0'};
 
 char tempBuffer[5] = {' '};
 
-float temperatureC;
+double temperatureC;
 String bufString;
 
-int numOfSamples = 10;
+int numOfSamples = 1;
 
 float startTime;    // Variables for timing offset calculations
 float endTime;
@@ -23,6 +23,7 @@ TMP117 thermometer(1,false);
 
 void setup(){
     Serial.begin(9600);
+    memset(buff, 0, 12);
     /*
     temperatureC = thermometer.getTemperatureC();
     snprintf(tempBuffer,5,"%d",int(temperatureC));
@@ -36,11 +37,10 @@ void setup(){
   
     int counter = 0;
     while(counter < numOfSamples){
-        
         counter++;
         startTime = millis();
         temperatureC = thermometer.getTemperatureC();
-        sprintf(tempBuffer, "%d", int(temperatureC));
+        dtostrf(temperatureC, 4, 2, tempBuffer);
         strcat(buff, tempBuffer);
         delay(10);
         strcat(buff,",");
@@ -50,9 +50,11 @@ void setup(){
             bufString = bufString + buff[i];
         }
         Serial.println("Buffer: " + bufString);
+        tempBuffer[5] = {' '};
         endTime = millis();
         delay(timeBetweenSample - (endTime - startTime));
     }
+    /*
     Serial.println("Checking buffer...");
     bufString = "";
     for(int i = 0; i < sizeOfBuffer; i++){
@@ -60,6 +62,7 @@ void setup(){
     }
     Serial.println("Buffer: " + bufString);
     Serial.println("Checking performance...");
+    */
     
 }
 
