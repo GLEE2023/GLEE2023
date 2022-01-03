@@ -16,7 +16,7 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
 
 ### Announcement Video
 <center>
-<href="https://www.youtube.com/watch?v=24ujpW5nN5Q"> <img height=300 src="https://img.youtube.com/vi/24ujpW5nN5Q/0.jpg">
+<a href="https://www.youtube.com/watch?v=24ujpW5nN5Q" target="_blank" rel="noopener noreferrer"> <img height=300 src="https://img.youtube.com/vi/24ujpW5nN5Q/0.jpg"> </a>
 </center>
 
 
