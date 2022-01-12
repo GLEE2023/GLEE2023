@@ -33,7 +33,7 @@ void loop(){
     // Sample temperature in F
     temperatureF = thermometer.getTemperatureF();
     
-    // Output the temperature via seiral
+    // Output the temperature via serial
     Serial.print("Temperature: ");  // Comment this line if using serial plotter
     Serial.print(temperatureC);     // Comment this line if using serial plotter
     Serial.print(" (degrees C), "); // Comment this line if using serial plotter
