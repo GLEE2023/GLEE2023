@@ -1,4 +1,5 @@
 /* NOTE: The output of this sketch may be skewed if the LunaSat undergoes a force that isn't gravity */
+/* Math/logic mostly based on following code: https://www.hobbytronics.co.uk/accelerometer-info */
 
 #include "MPU6000.h"
 
@@ -39,13 +40,11 @@ void setup(){
     for(int j = 0; j < calibrationSize; j++){
         avgX = avgX + calibrationPoints[j].x;
         avgY = avgY + calibrationPoints[j].y;
-        //avgZ = avgZ + calibrationPoints[j].z; // Calibration for z-axis seems to ruin calculations, so leaving it out
     }
 
     // Find average axes measurements
     avgX = avgX/calibrationSize;
     avgY = avgY/calibrationSize;
-    //avgZ = avgZ/calibrationSize;
 
 };
 
@@ -55,13 +54,11 @@ void loop(){
 
     accMPS = accelerometer.getMPSAccel(acc); // Converts acceleration measurements from G's to meters per second squared
 
-    // Math/logic mostly based on following code: https://www.hobbytronics.co.uk/accelerometer-info
-
     // Subtract baseline values from current sample
 
     accMPS.x = accMPS.x - avgX*9.81; // Multiply by 9.81 to convert G's to m/s^2
     accMPS.y = accMPS.y - avgY*9.81;
-    accMPS.z = accMPS.z; // Calibration here seems to ruin calculations, so leaving it out
+    accMPS.z = accMPS.z;
     
     // Find the net acceleration for each pair of axes
     yzAcceleration = sqrt(pow(accMPS.y,2) + pow(accMPS.z,2)); 
