@@ -38,40 +38,6 @@ void loop(){
     delay(500); // Waits half a second
 };
 ```
-# Gyroscope- outputting the angular velocity in degrees per second for the x, y, and z axes
-```C++
-#include "ICM20602.h"
-
-float startTime;    
-float endTime;
-
-ICM20602 gyroscope(2);
-
-sensor_int16_vec_t angVelRaw;
-sensor_float_vec_t angVelDPS; 
-
-void setup(){
-    Serial.begin(9600);
-
-    gyroscope.begin();
-
-    gyroscope.initialize();
-
-    gyroscope.setGyroScale(GFS_250DPS);
-};
-
-void loop(){
-    angVelRaw = gyroscope.getRawAngVel();
-    angVelDPS = gyroscope.getDPSAngVel(angVelRaw);
-
-    Serial.print("Angular Velocity in DPS, X-Axis: "); Serial.print(angVelDPS.x, 8);
-    Serial.print(" Y-Axis: "); Serial.print(angVelDPS.y, 8);
-    Serial.print(" Z-Axis: "); Serial.print(angVelDPS.z, 8);
-    Serial.println();
-    
-    delay(1000);
-};
-```
 
 ## Baseline Configuration Registers
 | Register Name | Register Value (Hex) | Comments  |
