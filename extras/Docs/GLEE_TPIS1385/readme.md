@@ -34,3 +34,17 @@ This library is intended for GLEE's Thermopile Sensor, the TPIS1385. Paired with
         delay(1000);
     }
     ```
+
+## Methods 
+| Method Name | return type | args | Comments |
+|---|---|---|---|
+| begin | void | void | Begin comunications with TPIS1385 |
+| readEEprom | void | void | |
+| getTPamb | uint16_t | void | |
+| getTamb | float | uint16_t | |
+| getTPobj | uint32_t | void | |
+| getTobj | float | uint32_t , float | |
+| getCorrectedTobj | float | uint32_t , float , float | |
+| getSample | TPsample_t | void | |
+| getCorrectedSample | TPsample_t | float | |
+| updateSample | void | void | |
