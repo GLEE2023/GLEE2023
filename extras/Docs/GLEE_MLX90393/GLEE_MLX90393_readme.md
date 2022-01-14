@@ -157,6 +157,8 @@ The first byte transmitted by the MLX90393 as a response to a command.
 | getSensor | sensor_t | void | Gets the sensor_t device data, Adafruit Unified Sensor format |
 | readRegister | bool | uint8_t, uint16_t |
 | writeRegister | bool | uint8_t, uint16_t |
-| _init | bool | void |
+| _init | bool | void | Not currently implemented |
 | transceive | uint8_t | uint8_t, uint8_t, uint8_t, uint8_t, uint8_t | Performs a full read/write transaction with the sensor |
 | getSample | mlx_sample_t | void | Retrieves data from the magnetometer. |
+| getMagnetic | sensor_float_vec_t | float*, float*, float* | Not currently implemented |
+| getMagFieldStrength | float | sensor_float_vec_t | Not currently implemented |
