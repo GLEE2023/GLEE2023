@@ -8,7 +8,7 @@ This library is intended for GLEE's Temperature Sensor, the TMP117. Paired with 
 
 ## Examples
 
-GLEE_TMP117 - Dedicated Temperature Sesnor Functionality
+GLEE_TMP117 - Dedicated Temperature Sensor Functionality
 - Board temperature observations
 ```C++
         #include "TMP117.h"
