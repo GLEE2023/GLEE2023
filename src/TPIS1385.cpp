@@ -27,7 +27,7 @@ TPIS1385::TPIS1385(int _id, bool _debug){
 /**
  * Begin comunications with TPIS1385
  * Parameters: none
- * Returns: gets the calibration value
+ * Returns: none
  **/ 
 
 void TPIS1385::begin(void){
