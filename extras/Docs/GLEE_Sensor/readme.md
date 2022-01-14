@@ -4,8 +4,8 @@ This is a library houses standard functionality for sensors used by GLEE. Common
 
 ## Children (Sensor) Libraries: ##
 * GLEE_TMP117 - Temperature Sensor 
-* GLEE_AK09940 - Magnetometer
-* GLEE_ICM20602 - IMU
+* GLEE_MLX90393 - Magnetometer
+* GLEE_MPU6000 - IMU
 * GLEE_TPIS1385 - IR Temperature Sensor
 * GLEE_CAP - Capacitive Sensor
 
