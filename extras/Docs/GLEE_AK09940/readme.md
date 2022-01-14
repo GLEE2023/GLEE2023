@@ -91,9 +91,9 @@ These registers are used for device information and control settings.
 # Customized Data Types
 | Data Type Name | Data Structure | Usage |
 |---|---|---|
-| ak09940_RawData_s | struct | Holds raw sensors readings of temperature and the magnetic field in all three axis |
-| ak09940_CalculatedData_s | struct | Holds processed temperature and magnetic field in all three axis |
-| ak09940_DataStatus_s | struct | Holds the two data status- data valid and data overflow |
+| ak09940_RawData_s | struct | Holds raw sensors readings of temperature and the magnetic field in all three axes |
+| ak09940_CalculatedData_s | struct | Holds processed temperature and magnetic field in all three axes |
+| ak09940_DataStatus_s | struct | Holds two data statuses - data valid and data overflow |
 | ak09940_Measurement_Mode_t | enum | Holds measurement modes |
 | ak09940_Drive_Mode_ | enum | Holds drive mode options |
 
@@ -101,7 +101,7 @@ These registers are used for device information and control settings.
 # Methods 
 | Method Name | return type | args | Comments |
 |---|---|---|---|
-| ak09940WAI | bool | none | Who Am I function to check or proper sensor initialition |
+| ak09940WAI | bool | none | Who Am I function to check for proper sensor initialition |
 | softReset | void | none | Resets all the registers to the values defined |
 | interpret18BitAs32Bit | int32_t | int32_t | Converts 18 bit magnetic sensor output to 32 bit output for ardiuno|
 | getRawData | bool | none | Reads in and stores the raw data |

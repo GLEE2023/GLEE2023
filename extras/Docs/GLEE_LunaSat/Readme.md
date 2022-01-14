@@ -1,5 +1,5 @@
 # GLEE LunaSat Integrated Functionality Library
-This library puts all the basic functionality of the lunasat in one place. The lunasat library can be included and utilized to conduct quick and easy initialization of subsystems and controlled querying and transmission of sensor observations.
+This library puts all the basic functionality of the lunasat in one place. The LunaSat library can be included and utilized to conduct quick and easy initialization of subsystems and controlled querying and transmission of sensor observations.
 
 ![LunaSat Front](/extras/Docs/Images/LunaSat_front.jpg) ![LunaSat Back](/extras/Docs/Images/LunaSat_back.jpg)
 
@@ -8,13 +8,11 @@ This library puts all the basic functionality of the lunasat in one place. The l
 * TMP117:
   * Digital Temperature Sensor
   
-* AK09940:
-  * 3-axis magnetometer
-  
-* ICM20602:
+* MLX90393:
   * 3-axis Magnetometer
-  * 3-axis gyroscope (currently unused)
-  * Digital Temperature 
+  
+* MPU6000:
+  * 3-axis Accelerometer
   
 * CAP:
   * Interdigitated analog capacitance Sensor
@@ -27,7 +25,7 @@ Basic Sample Functionality Example
 ```C++
 #include <LunaSat.h>    
 
-// Set lunasat configuration (1's equates to default mode)
+// Set LunaSat configuration (1's equates to default mode)
 int lunaSatConfig[6] = {1,1,0,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
@@ -82,8 +80,8 @@ void loop() {
 ```
 
 ### Lunasat Info
-* ID: Lunasat identification number (helpfull when working with collections of lunasats)
-* Name: String representing the name of the lunasat
+* ID: LunaSat identification number (helpful when working with collections of LunaSats)
+* Name: String representing the name of the LunaSat
 * Sensor Config: Configurations parameters for sensors (TODO)
 * RF Config: Wireless communication system configuration parameters (TODO)
 
@@ -93,8 +91,8 @@ Configuration Description: All sensors enabled and in default single measurement
 
 ### Configuration Format
 * config[0] - TMP117 (Board Temperature Sensor)
-* config[1] - ICM20602 (Inertial Measurement Unit)
-* config[2] - AK09940 (Magnetometer)
+* config[1] - MPU6000 (Inertial Measurement Unit)
+* config[2] - MLX90393 (Magnetometer)
 * config[3] - TPiS1385 (IR Thermopile)
 * config[4] - CAP (Capacitance Sensor) 
 * config[5] - SX1272 (LoRA Transciever) 
