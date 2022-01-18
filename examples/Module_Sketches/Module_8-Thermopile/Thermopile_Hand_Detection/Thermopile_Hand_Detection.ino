@@ -36,7 +36,7 @@ void setup(){
 
     delay(50);
 
-    for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds
+    for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds, calibrates to get current temps
 
         temperatures = thermopile.getSample();
         
@@ -48,7 +48,7 @@ void setup(){
         delay(200);
     };
 
-    avgTempDiff = sumTempDiff/3;
+    avgTempDiff = sumTempDiff/3; // Saves average temperature difference 
 };
 
 void loop(){
@@ -60,15 +60,15 @@ void loop(){
     if(accumulator == 500){ // Once accumulated a specific number of samples to average
         accumulator = 0; // Reset accumulator
 
-        tempDiff = abs(temperatures.object - temperatures.ambient);
+        tempDiff = abs(temperatures.object - temperatures.ambient); // Find temp difference
 
         Serial.print("Object: "); Serial.println(temperatures.object, 4);
         Serial.print("Ambient: "); Serial.println(temperatures.ambient, 4);
         Serial.print("Deviation from Avg Difference: "); Serial.println(abs(tempDiff-avgTempDiff));
 
-        if(abs(tempDiff-avgTempDiff) > thresh){ // If Object and Sensor are the same
+        if(abs(tempDiff-avgTempDiff) > thresh){ // If Object and Sensor are the same, if the difference is greater than the threshold
             Serial.println("Hand is detected.");
-            digitalWrite(LED, HIGH);
+            digitalWrite(LED, HIGH); // Blink LED
             delay(500);
             digitalWrite(LED, LOW);
         }

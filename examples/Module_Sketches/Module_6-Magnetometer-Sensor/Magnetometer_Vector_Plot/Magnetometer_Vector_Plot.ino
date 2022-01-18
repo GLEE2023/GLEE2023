@@ -1,13 +1,13 @@
 #include "MLX90393.h"
 
-MLX90393 magnetometer = MLX90393(1,false);
+MLX90393 magnetometer = MLX90393(1,false); // Set-up for the magnetometer with debugging set to false
 
-mlx_sample_t sample;
+mlx_sample_t sample; // Saves the sample
 
-float angle;
-float magnitude;
+float angle; // Saves the measured angle
+float magnitude; // Saves the measured magnitude
 
-float avgX = 0.0;
+float avgX = 0.0; // Saves average axes measurements
 float avgY = 0.0;
 float avgZ = 0.0;
 

@@ -7,15 +7,15 @@ MPU6000 accelerometer(1, false); // Sets sensor ID to 1 and debugging to false
 sensor_float_vec_t acc; // Saves acceleration readings in a vector structure
 sensor_float_vec_t accMPS; // Acceleration readings in meters per second squared
 
-float xzAcceleration;
+float xzAcceleration; // Saves net accelerations 
 float yzAcceleration;
 float xyAcceleration;
 
-float xAngle = 0.0;
+float xAngle = 0.0; // Saves different angles
 float yAngle = 0.0;
 float zAngle = 0.0;
 
-float avgX = 0.0;
+float avgX = 0.0; // Saves the average accelerations of different axes
 float avgY = 0.0;
 float avgZ = 0.0;
 

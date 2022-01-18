@@ -1,8 +1,8 @@
 #include "MLX90393.h"
 
-MLX90393 magnetometer = MLX90393(1,false);
+MLX90393 magnetometer = MLX90393(1,false); // Magnetometer set up, debug is false
 
-mlx_sample_t sample;
+mlx_sample_t sample; // Saves sample reading
 
 void setup (){
     Serial.begin(9600);
@@ -27,7 +27,7 @@ void setup (){
 
 void loop (){   
 
-    sample = magnetometer.getSample();
+    sample = magnetometer.getSample(); // Get sample measurements
 
     // Print out magnetic field measurements for each axis 
     Serial.println("Magnetic Field Axes Measurements");

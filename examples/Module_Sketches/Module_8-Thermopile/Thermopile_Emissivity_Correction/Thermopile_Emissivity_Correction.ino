@@ -1,7 +1,7 @@
 #include "TPIS1385.h"
 
 TPIS1385 thermopile(1);
-TPsample_t temperatures;
+TPsample_t temperatures; // Saves temperature samples
 
 float objectEmissivity = 0.9; // Emissivity value of the individual object being measured
 
@@ -12,9 +12,9 @@ void setup(){
 }
 
 void loop(){
-    temperatures = thermopile.getCorrectedSample(objectEmissivity); 
-    Serial.print("Object temperature (F): "); Serial.println(CtoF(temperatures.object));
-    Serial.print("Ambient temperature (F): "); Serial.println(CtoF(temperatures.ambient));
+    temperatures = thermopile.getCorrectedSample(objectEmissivity); // Gets corrected temp samples
+    Serial.print("Object temperature (F): "); Serial.println(CtoF(temperatures.object)); // Print object temp
+    Serial.print("Ambient temperature (F): "); Serial.println(CtoF(temperatures.ambient)); // Print ambient temp
     delay(1000);
 }
 

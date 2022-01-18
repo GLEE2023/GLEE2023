@@ -1,7 +1,7 @@
 #include "MPU6000.h"
 
-float startTime;    
-float endTime;
+float startTime; //when a measurement has started to be taken    
+float endTime; 
 float staticAcceleration = 0; // Acceleration when not moving 
 float dynamicAcceleration; // Acceleration during an impact
 float accelDif; // Change in acceleration
