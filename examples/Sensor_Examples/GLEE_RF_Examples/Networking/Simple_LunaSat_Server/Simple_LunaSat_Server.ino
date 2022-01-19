@@ -1,12 +1,12 @@
 #include <GLEE_Radio.h>
 
-//Initialize RF Object
+// Initialize RF Object
 LunaRadio Rad;
 
-// flag to indicate that a packet was received
+// Flag to indicate that a packet was received
 volatile bool messageRecieved = false;
 
-// disable interrupt when it's not needed
+// Disable interrupt when it's not needed
 volatile bool interruptEnabled = true;
 
 String rqst;
@@ -14,20 +14,20 @@ String rqst;
 int turn = 1;
 
 void recieve_callback(void) {
-  // don't set flag if interrupt isn't enabled
+  // Don't set flag if interrupt isn't enabled
   if(!interruptEnabled) {
     return;
   }
 
-  // set flag signifying message was recieved
+  // Set flag signifying message was recieved
   messageRecieved = true;
 }
 
 void setup() {
-    //Set the data rate to 9600 bits pere second
+    // Set the data rate to 9600 bits per second
     Serial.begin(9600);
 
-    //Initialize the radio settings by using the initialize_radio function
+    // Initialize the radio settings by using the initialize_radio function
     // Argument 1: Set frequency to 915
     // Argument 2: Set output power to 17
     // Argument 3: Set Bandwidth to 250
@@ -44,23 +44,24 @@ void loop(){
 
         interruptEnabled = false;
 
-        // reset reception flag 
+        // Reset reception flag 
         messageRecieved = false;
 
         byte data_buffer[8];
 
         Rad.readData(data_buffer, 8);
         rqst = String((char*)data_buffer);
-        // print data of the packet
+        // Print data of the packet
         Serial.print(F("Data:\t\t"));
         Serial.println(rqst);
 
-        // return to listening for transmissions 
+        // Return to listening for transmissions 
         Rad.startRecieve();
-        // we're ready to receive more packets,
+        // We're ready to receive more packets,
         // enable interrupt service routine
         interruptEnabled = true;
     }
+    // Send alternating messages every other second
     if(millis()%1000==0){
         if(turn == 1){
             Rad.transmit_data("1");

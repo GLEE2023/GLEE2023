@@ -16,7 +16,7 @@ String msg;
 // Observation configuration
 int sampleRate; // Sample rate in samples per second (Hz)
 
-// Dynamic Variable 
+// Dynamic Variables 
 float temperatureC;  // Variable to store an observed temperature in Celsius
 float temperatureF;  // Variable to store an observed temperature in Fahrenheit
 float startTime;    // Variables for timing offset calculations

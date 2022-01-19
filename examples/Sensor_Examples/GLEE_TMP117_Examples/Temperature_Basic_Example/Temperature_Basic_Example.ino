@@ -9,14 +9,14 @@ TMP117 thermometer(1,false);
 // Observation configuration
 int timeBetweenSample; // Time between samples in ms 
 
-// Dynamic Variable 
+// Dynamic Variables
 float temperatureC;  // Variable to store an observed temperature in Celsius
 float temperatureF;  // Variable to store an observed temperature in Fahrenheit
 float startTime;    // Variables for timing offset calculations
 float endTime;
 
 void setup(){
-    // Begin Serial Communications (Lunasat baud rate set to 9600)
+    // Begin Serial Communications (Lunasat baud rate set to 9600 bits per second)
     Serial.begin(9600);
 
     // Set time between samples to 1000ms (1s)
@@ -33,7 +33,7 @@ void loop(){
     // Sample temperature in F
     temperatureF = thermometer.getTemperatureF();
     
-    // Output the temperature via seiral
+    // Output the temperature via serial
     Serial.print("Temperature: "); 
     Serial.print(temperatureC);
     Serial.print(" (degrees C), ");

@@ -14,13 +14,13 @@ const int LED = 4; // For storing output pin configuration of LED
 
 int accumulator = 0; // Counter for average loops
 
-float sumTempDiff;
+float sumTempDiff; // Sum of differences between object and ambient temperature
 float avgTempDiff;
-float tempDiff;
+float tempDiff; // Absolute difference between object and ambient temperature
 
 double thresh = 0.4; // The bubble of certainty allowed between average Sensor and average Object
 
-TPsample_t temperatures; // Initialize sensor temperature to zero
+TPsample_t temperatures; // Initialize sensor temperature samples
 
 void setup(){
     // Begin Serial Communications
@@ -28,7 +28,7 @@ void setup(){
 
     thermopile.begin();
 
-    // set calibration values from by reading eeprom
+    // set calibration values by reading from EEprom
     thermopile.readEEprom();
     
     // Set pinMode for LED
@@ -36,7 +36,7 @@ void setup(){
 
     delay(50);
 
-    for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds
+    for(int i = 0; i < 3; i++){ // Calibration period of 3 seconds, calibrates to get current temps
 
         temperatures = thermopile.getSample();
         
@@ -66,13 +66,14 @@ void loop(){
         Serial.print("Ambient: "); Serial.println(temperatures.ambient, 4);
         Serial.print("Diveation from Avg Difference: "); Serial.println(abs(tempDiff-avgTempDiff));
 
-        if(abs(tempDiff-avgTempDiff) > thresh){ // If Object and Sensor are the same
-            Serial.println("Hand is detected.");
-            digitalWrite(LED, HIGH);
+        if(abs(tempDiff-avgTempDiff) > thresh){ // If the difference of the current temperature difference
+                                                // and average temperature difference is greater than the threshold,
+            Serial.println("Hand is detected."); // Print message to serial monitor
+            digitalWrite(LED, HIGH); // Blink LED
             delay(500);
             digitalWrite(LED, LOW);
         }
-        else{ // If Object and Sensor are NOT the same
+        else{ 
             Serial.println("Hand is NOT detected.");
         }
     }

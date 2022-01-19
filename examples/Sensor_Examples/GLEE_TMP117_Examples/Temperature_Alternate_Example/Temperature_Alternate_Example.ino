@@ -9,7 +9,7 @@ TMP117 thermometer(1,false);
 // Observation configuration
 int timeBetweenSample; // Time between samples in ms 
 
-// Dynamic Variable 
+// Dynamic Variables
 float temperatureC;  // Variable to store an observed temperature in Celsius
 float temperatureF;  // Variable to store an observed temperature in Fahrenheit
 float startTime;    // Variables for timing offset calculations
@@ -30,12 +30,12 @@ void loop(){
     // Sample temperature in C
     temperatureC = thermometer.getTemperatureC();
 
-    // Output the temperature via seiral
+    // Output the temperature via serial
     Serial.println(temperatureC);
 
     // Record the end time so we know how long it took to record the measurement
     endTime = millis();
 
-    // Delay each loop by the sample rate off set by the time it took to get the temperature
+    // Delay each loop by the sample rate offset by the time it took to get the temperature
     delay(timeBetweenSample - (endTime - startTime));
 };

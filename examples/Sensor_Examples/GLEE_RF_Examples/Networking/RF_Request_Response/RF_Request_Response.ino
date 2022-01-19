@@ -1,6 +1,6 @@
 #include <GLEE_Radio.h>
 
-//Initialize RF Object
+// Initialize RF Object
 LunaRadio Rad;
 
 // flag to indicate that a packet was received
@@ -10,17 +10,17 @@ volatile bool messageRecieved = false;
 volatile bool interruptEnabled = true;
 
 void recieve_callback(void) {
-  // don't set flag if interrupt isn't enabled
+  // dDn't set flag if interrupt isn't enabled
   if(!interruptEnabled) {
     return;
   }
 
-  // set flag signifying message was recieved
+  // Set flag signifying message was recieved
   messageRecieved = true;
 }
 
 void setup() {
-    //Set the data rate to 9600 bits pere second
+    // Set the data rate to 9600 bits per second
     Serial.begin(9600);
 
     //Initialize the radio settings by using the initialize_radio function
@@ -40,22 +40,22 @@ void loop(){
 
         interruptEnabled = false;
 
-        // reset reception flag 
+        // Reset reception flag 
         messageRecieved = false;
 
         byte data_buffer[8];
 
         Rad.readData(data_buffer, 8);
         
-        // print data of the packet
+        // Print data contained in packet
         Serial.print(F("Data:\t\t"));
         Serial.println(data_buffer[0]);
 
         Rad.transmit_data("Test");
 
-        // return to listening for transmissions 
+        // Return to listening for transmissions 
         Rad.startRecieve();
-        // we're ready to receive more packets,
+        // We're ready to receive more packets,
         // enable interrupt service routine
         interruptEnabled = true;
     }

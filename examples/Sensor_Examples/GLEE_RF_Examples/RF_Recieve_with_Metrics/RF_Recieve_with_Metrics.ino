@@ -1,13 +1,13 @@
 #include <GLEE_Radio.h>
 
-//Initialize RF Object
+// Initialize RF Object
 LunaRadio Rad;
 
 void setup() {
-  //Set the data rate to 9600 bits pere second
+  // Set the data rate to 9600 bits per second
   Serial.begin(9600);
   
-  //Initialize the radio settings by using the initialize_radio function
+  // Initialize the radio settings by using the initialize_radio function
   // Argument 1: Set frequency to 915
   // Argument 2: Set output power to 17
   // Argument 3: Set Bandwidth to 250
@@ -17,12 +17,12 @@ void setup() {
 }
 
 void loop() {
-  //Check if RF successfully recieved tranmsission using the recieve_data_string() function
-  //Store Results in a string variable
+  // Check if RF successfully recieved tranmsission using the recieve_data_string() function
+  // Store Results in a string variable
   String output = Rad.receive_data_string();
   int rssi = Rad.getRSSI();
   int snr = Rad.getSNR();
-  //Output the results 
+  // Output the results 
   Serial.println(output);
   Serial.println(rssi);
   Serial.println(snr);

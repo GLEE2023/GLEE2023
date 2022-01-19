@@ -10,7 +10,7 @@ void setup(){
 }
 
 void loop(){
-    temperatures = thermopile.getSample(); // Gets the temp samples
+    temperatures = thermopile.getSample(); // Gets a temp sample
     Serial.print("Object temperature (F): "); Serial.println(CtoF(temperatures.object)); // Print out object temp
     Serial.print("Ambient temperature (F): "); Serial.println(CtoF(temperatures.ambient)); // Print out ambient temp
     delay(1000);
