@@ -1,6 +1,6 @@
 #include <CAP.h>
 
-CAP cap(2,1); //Initialize Capactitive Object (Id, Debug)
+CAP cap(2,1); // Initialize Capactitive Object (Id, Debug)
 
 double *coefs; // Double pointer to store returned calibration coefficents
 

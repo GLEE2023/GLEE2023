@@ -19,7 +19,7 @@ sensor_int16_vec_t accelRaw; // Acceleration in LSB/G, raw output
 
 void setup(){
     Serial.begin(9600); // Sets baud rate to 9600 for serial transmission 
-                        // and starts serial 
+                        // and starts serial communication
     accelerometer.begin(); // Begins transmission to the I2C slave device
 
     accelerometer.initialize(); // Set-up for MPU 
@@ -74,7 +74,7 @@ void loop(){
 
     dynamicAcceleration = sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2)); // Adds up magnitude of current acceleration
 
-    accelDif = abs(dynamicAcceleration - staticAcceleration); // Subtracts and saves static acceleration from dynamic accelration
+    accelDif = abs(dynamicAcceleration - staticAcceleration); // Subtracts and saves static acceleration from dynamic acceleration
 
     Serial.print(F("Calculated Difference in Acceleration: ")); Serial.println(accelDif); // Print out difference in acceleration
 

@@ -4,7 +4,7 @@ MPU6000 accelerometer(1, false); // Sets sensor ID to 1 and debugging to false
 sensor_float_vec_t acc; // Saves acceleration readings in a vector structure
 
 void setup(){
-    Serial.begin(9600); // Sets baud rate to 9600 for serial transmission 
+    Serial.begin(9600); // Sets baud rate to 9600 bits per second for serial transmission 
                         // and starts serial communication
     accelerometer.begin(); // Begins transmission to the I2C slave device
     accelerometer.initialize(); // Set-up for MPU 
@@ -20,5 +20,5 @@ void loop(){
     Serial.print(" Z-Axis: "); Serial.print(acc.z, 8);
     Serial.println();
     
-    delay(500); // Waits half a second
+    delay(500); // Waits 500ms (half a second)
 };

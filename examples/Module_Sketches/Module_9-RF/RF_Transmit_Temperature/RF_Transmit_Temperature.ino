@@ -19,8 +19,8 @@ String full_message;
 // Temperature Threshold Value
 int temperature_threshold = 79; // User-defined threshold
 
-//Delay between samples in ms
-int sampleDelay = 1000; // User-define sample period
+// Delay between samples in ms
+int sampleDelay = 1000; // User-defined sample period
 
 // Dynamic Variables 
 float temperatureF;  // Variable to store an observed temperature in Fahrenheit
@@ -84,7 +84,7 @@ void loop(){
     // Check if processing time between sample and possible transmission is less than sample delay
     if((endTime - startTime)< sampleDelay){
         delay(sampleDelay - (endTime - startTime));  
-    } else { // If it is larger, delay by constant 1s
+    } else { // If it is larger, delay by constant 1000ms (1s)
         delay(1000);
     }
 }

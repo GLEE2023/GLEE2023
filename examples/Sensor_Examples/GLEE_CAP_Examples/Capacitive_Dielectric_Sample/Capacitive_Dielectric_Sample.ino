@@ -1,6 +1,6 @@
 #include <CAP.h> // Include Capacitive sensor library dependency
 
-CAP cap(2,1); //Initialize Capactitive Object (Id, Debug)
+CAP cap(2,1); // Initialize Capactitive Object (Id, Debug)
 
 // Enter calibration coefficient here. Fit Function: Dielectric const = c1*ADC + c2
 double c1 = 30;

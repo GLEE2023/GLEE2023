@@ -87,7 +87,7 @@ void setup() {
     Wire.beginTransmission(addr);
     err = Wire.endTransmission();
     
-    if(!err){
+    if(!err){ // Check for error
         numDevices++;
         Serial.print(sensorNames[i]);
         Serial.print(" sensor found at ");

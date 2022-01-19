@@ -1,6 +1,6 @@
 #include <LunaSat.h>    
 
-// Set lunasat configuration (1's equates to default mode)
+// Set LunaSat configuration (1's equates to default mode)
 int lunaSatConfig[6] = {1,1,0,1,1,1}; // Configuration format: {TMP117, ICM20602, AK09940, TIPS1385, CAP, SX1272}
 
 // LunaSat object initialization is used for declaration of parameters such as ID and debugging mode
@@ -16,12 +16,12 @@ void setup() {
 }
 
 void loop() {
-    // Simple fetching of sensor observation using lunasat class 
+    // Simple fetching of sensor observation using lunaSat class 
     // Later versions will allow for dynamic sampling based on user defined config
     sample = lunaSat.getSample(); 
 
     // Simple examples of interacting with an observation sample
     lunaSat.dispSample(sample); // Observation samples can be directly displayed via serial
     
-    delay(100);
+    delay(100); // 100 ms (0.1s) delay
 }

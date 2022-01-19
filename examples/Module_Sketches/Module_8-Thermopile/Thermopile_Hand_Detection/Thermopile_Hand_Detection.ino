@@ -73,7 +73,7 @@ void loop(){
             delay(500);
             digitalWrite(LED, LOW);
         }
-        else{ // If Object and Sensor are NOT the same
+        else{
             Serial.println("Hand is NOT detected.");
         }
     }

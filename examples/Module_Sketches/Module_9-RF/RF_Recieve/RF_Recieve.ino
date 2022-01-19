@@ -11,7 +11,7 @@ String id = "11"; // CHANGE TO YOUR TEAM NUMBER
 int LED = 5;
 
 void setup() {
-	//Set the data rate to 9600 bits pere second
+	//Set the data rate to 9600 bits per second and begin serial communication
 	Serial.begin(9600);
 
 	//Initialize the radio settings by using the initialize_radio function
@@ -32,11 +32,11 @@ void loop() {
 	String output = Rad.receive_data_string();
 
 	String message_id = output.substring(0,2); // ID is contained in the first two characters of message
-	String message_content = output.substring(3); // Message content coms after ID_
+	String message_content = output.substring(3); // Message content comes after ID
 
 	// Check Transmission ID, ignore unless reciever and transmitter IDs match
 	if(output && message_id == id){
-		//Output the results 
+		// Output the results 
 		Serial.print("Message: "); Serial.println(message_content);
 
 		// Print recieved signal strength indicator

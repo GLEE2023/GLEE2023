@@ -45,7 +45,7 @@ void setup() {
 
   delay(50);
 
-  Serial.println("Sensor initialization Initialization Succsessful\n");
+  Serial.println("Sensor Initialization Successful\n");
 
   pinMode(A3,OUTPUT);
   digitalWrite(A3,HIGH);
@@ -63,7 +63,7 @@ void loop() {
     Wire.beginTransmission(addr);
     err = Wire.endTransmission();
     
-    if(!err){
+    if(!err){ // Check for error
       numDevices++;
       Serial.print(sensorNames[i]);
       Serial.print(" sensor found at ");
