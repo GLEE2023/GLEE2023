@@ -6,8 +6,8 @@ TPsample_t temperatures; // Saves temperature samples
 float objectEmissivity = 0.9; // Emissivity value of the individual object being measured
 
 void setup(){
-    Serial.begin(9600);
-    thermopile.begin();
+    Serial.begin(9600); // Sets baud rate to 9600 for serial transmission and starts serial communication
+    thermopile.begin(); // Thermopile start-up
     thermopile.readEEprom(); // Prints eeprom and updates calibration constants
 }
 

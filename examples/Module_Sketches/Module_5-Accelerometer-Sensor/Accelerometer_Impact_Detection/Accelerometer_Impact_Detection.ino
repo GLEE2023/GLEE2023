@@ -1,12 +1,11 @@
 #include "MPU6000.h"
 
-float startTime; //when a measurement has started to be taken    
-float endTime; 
+float startTime; // When a measurement has started being taken    
+float endTime; // When a measurement has finished being taken
 float staticAcceleration = 0; // Acceleration when not moving 
 float dynamicAcceleration; // Acceleration during an impact
 float accelDif; // Change in acceleration
-float impactThreshold = 0.35; // Defines impact threshold 
-                             // Sets how sensitive the impact sensor is
+float impactThreshold = 0.35; // Defines impact threshold (how sensitive the impact sensor is)
 int LED = 4;
 
 MPU6000 accelerometer(1, false);
@@ -24,7 +23,7 @@ void setup(){
 
     accelerometer.initialize(); // Set-up for MPU 
 
-    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelrometer 
+    accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelerometer 
                                                     // Range options: 2_G, 4_G, 8_G, 16_G
 
     pinMode(LED, OUTPUT); // Sets LED
@@ -46,7 +45,7 @@ void setup(){
         Serial.println(accelMPS.z, 8);
         Serial.println();
     
-        staticAcceleration = staticAcceleration + sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2)); // Adds up magnitude of 
+        staticAcceleration = staticAcceleration + sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2)); // Calculates magnitude of 
                                                                                                                    // current acceleration
         endTime = millis(); // Keeps track of end time after getting measurements 
         delay(1000 - (endTime - startTime)); // Change of time factored into a one second delay
@@ -73,7 +72,7 @@ void loop(){
     Serial.println();
 
 
-    dynamicAcceleration = sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2)); // Adds up magnitude of current acceleration
+    dynamicAcceleration = sqrt(pow(accelMPS.x,2) + pow(accelMPS.y,2) + pow(accelMPS.z,2)); // Calculates magnitude of current acceleration
 
     accelDif = abs(dynamicAcceleration - staticAcceleration); // Subtracts and saves static acceleration from dynamic accelration
 

@@ -29,13 +29,13 @@ void loop (){
 
     sample = magnetometer.getSample(); // Get sample measurements
 
-    // Print out magnetic field measurements for each axis 
+    // Print out magnetic field measurements in units of microteslas for each axis 
     Serial.println("Magnetic Field Axes Measurements");
     Serial.print("X: "); Serial.print(sample.magnetic.x,4); Serial.println(" uT");
     Serial.print("Y: "); Serial.print(sample.magnetic.y,4); Serial.println(" uT");
     Serial.print("Z: "); Serial.print(sample.magnetic.z,4); Serial.println(" uT");
     Serial.println();
-    // Print out strength of magnetic field
+    // Print out strength of magnetic field in units of microteslas
     Serial.println("Magnetic Field Strength (Magnitude)"); 
     Serial.print(sample.strength,4); Serial.println(" uT");
     Serial.println();

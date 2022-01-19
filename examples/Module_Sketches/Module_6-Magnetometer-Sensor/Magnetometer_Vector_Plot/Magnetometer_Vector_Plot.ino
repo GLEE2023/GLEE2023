@@ -11,7 +11,7 @@ float avgX = 0.0; // Saves average axes measurements
 float avgY = 0.0;
 float avgZ = 0.0;
 
-String input = "";
+String input = ""; // Variable reserved for user input
 
 void setup (){
     Serial.begin(9600);
@@ -37,7 +37,7 @@ void setup (){
     Serial.println("Your LunaSat should be oriented such that the solar panels are at the top.");
     Serial.println("Press Enter to calibrate your magnetometer.");
 
-    while(!Serial.available()){}
+    while(!Serial.available()){} // While no input from user, wait
     input = Serial.readString();
 
     // Get calibration points
@@ -70,14 +70,14 @@ void loop (){
   Serial.println("Place your LunaSat above the point where you wish to draw a vector.");
   Serial.println("Press Enter to generate a vector.");
   
-  // Wait for continue command from user (currently accepts anything)
+  // Wait for continue command from user (currently accepts any input)
   while(!Serial.available()){}
   input = Serial.readString();
 
   // Gets sample from magnetometer
   sample = magnetometer.getSample();
 
-  // Calculates angle
+  // Calculates angle of magnetic field vector
   angle = atan((sample.magnetic.y-avgY)/(sample.magnetic.x-avgX))*(180/M_PI);
   if((sample.magnetic.x-avgX)<0){
       angle = 270 - angle;
@@ -90,7 +90,7 @@ void loop (){
   }
 
   String direction_str = "";
-  // Determine the direction based on the angle
+  // Determine the direction of magnetic field vector based on the angle
   if (angle <= 22.5 || angle > 337.5){
       direction_str = "Up";
   } else if (angle <= 67.5 && angle > 22.5){
@@ -109,7 +109,7 @@ void loop (){
       direction_str = "Up Right";
   }
 
-  // Calculates magnitude of angle from x and y axes measurements only
+  // Calculates magnitude of vector from x and y axes measurements only
   magnitude = sqrt(pow(sample.magnetic.x-avgX,2) + pow(sample.magnetic.y-avgY,2));
 
   // Prints direction and magnitude of vector at current location.

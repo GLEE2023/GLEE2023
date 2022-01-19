@@ -5,7 +5,7 @@
 CAP cap(2,1);
 
 void setup() {
-	Serial.begin(9600); // open serial port, set the baud rate to 9600 bps
+	Serial.begin(9600); // Open serial port, set the baud rate to 9600 bps
 	cap.begin(); // Call begin method of cap library for secondary initialization
 }
 

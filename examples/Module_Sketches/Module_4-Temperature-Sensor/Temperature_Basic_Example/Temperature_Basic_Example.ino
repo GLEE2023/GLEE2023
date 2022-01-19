@@ -9,7 +9,7 @@ TMP117 thermometer(1,false);
 // Observation configuration
 int timeBetweenSample; // Time between samples in ms 
 
-// Dynamic Variable 
+// Dynamic Variables  
 float temperatureC;  // Variable to store an observed temperature in Celsius
 float temperatureF;  // Variable to store an observed temperature in Fahrenheit
 float startTime;    // Variables for timing offset calculations

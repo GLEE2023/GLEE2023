@@ -86,5 +86,5 @@ void loop(){
     Serial.println("º");
     Serial.println();
     
-    delay(500); // Waits half a second
+    delay(500); // Waits 500ms (half a second)
 };
