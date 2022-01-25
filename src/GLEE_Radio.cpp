@@ -291,10 +291,21 @@ void LunaRadio::readData(uint8_t* data, size_t len){
     }
 }
 
+
+/**
+ * Parameters: None
+ * Returns: Luna Radio RSSI
+ * This function returns locally stored RSSI
+**/
 float LunaRadio::getRSSI(void){
 	return(LunaRadio::radio.getRSSI());
 }
 
+/**
+ * Parameters: None
+ * Returns: Luna Radio SNR
+ * This function returns locally stored SNR
+**/
 float LunaRadio::getSNR(void){
 	return(LunaRadio::radio.getSNR());
 }
