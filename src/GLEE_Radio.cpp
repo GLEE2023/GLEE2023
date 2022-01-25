@@ -65,7 +65,7 @@ void LunaRadio::setFreq(float freq){
 /**
  * Parameters: coding rate as an 8-bit unsigned integer
  * Returns: none
- * This function sets the bandwith and if successful, it will construct a
+ * This function sets the Coding Rate and if successful, it will construct a
  * display message and send that message to serial to notify the user. If
  * the frequency failed, it will output a message.
 **/
@@ -86,7 +86,7 @@ void LunaRadio::setCR(uint8_t cr){
 /**
  * Parameters: spreading factor as an 8-bit unsigned integer
  * Returns: none
- * This function sets the bandwith and if successful, it will construct a
+ * This function sets the Spreading Factor and if successful, it will construct a
  * display message and send that message to serial to notify the user. If
  * the frequency failed, it will output a message.
 **/
