@@ -1,4 +1,4 @@
-/*
+/* 
 * Description: This is an Arduino (C++) .cpp file required for the MLX90393 Magnetometer
 * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
 * Library Author: Adafruit
