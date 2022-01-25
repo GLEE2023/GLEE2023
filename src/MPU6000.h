@@ -86,26 +86,26 @@ class MPU6000:public Sensor{
         
         bool gyroOn;
 
-        bool begin();
-        void initialize();
+        bool begin(); //Begins a transmission
+        void initialize(); //Sets the rate divisor and a couple of the other basic registers
 
-        sensor_int16_vec_t getRawAcc();
-        sensor_int16_vec_t getRawGyro();
+        sensor_int16_vec_t getRawAcc(); //Gets Raw Acceleration
+        sensor_int16_vec_t getRawGyro(); //Gets Raw Gyro
 
-        sensor_float_vec_t getAcc(sensor_int16_vec_t rawAcc);
-        sensor_float_vec_t getGyro(sensor_int16_vec_t rawGyro);
+        sensor_float_vec_t getAcc(sensor_int16_vec_t rawAcc); //Get Acceleration from raw Acceleration
+        sensor_float_vec_t getGyro(sensor_int16_vec_t rawGyro); //Get Gyro from raw gyro
         
-        sensor_float_vec_t getMPSAccel(sensor_float_vec_t GAccel);
-        sensor_float_vec_t getGAccel(sensor_int16_vec_t rawAccel);
+        sensor_float_vec_t getMPSAccel(sensor_float_vec_t GAccel); //Converts the acceleration in G's to meters per second squared
+        sensor_float_vec_t getGAccel(sensor_int16_vec_t rawAccel); //Converts the raw acceleration in LSB/G to the acceleration in G's
 
-        void setAccelRange(mpu6000_accel_range_t new_range);
-        void setGyroRange(mpu6000_gyro_range_t new_range);
+        void setAccelRange(mpu6000_accel_range_t new_range); //Sets acceleration range
+        void setGyroRange(mpu6000_gyro_range_t new_range); //Sets Gyro Range
 
         float getAccelSensitivity();
         // float getGyroSensitivity();
 
-        sensor_float_vec_t getSample();
-        sensor_float_vec_t getGyroSample();
+        sensor_float_vec_t getSample(); //Gets Sample
+        sensor_float_vec_t getGyroSample(); //Gets Gyro Sample
 
         void reset();
         void resetSigPath();
