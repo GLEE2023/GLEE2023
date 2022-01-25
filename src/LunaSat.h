@@ -85,7 +85,10 @@ class LunaSat{
         lunaSat_info_t info;
         void blink(int _pin, int _delay);
 
+        //Display Acceleration
         void dispAccel(sensor_float_vec_t accel);
+    
+        //Transmit Data
         void transmit_data(char *buff);
     
     private:
