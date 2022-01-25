@@ -51,19 +51,17 @@ typedef struct{
 
 class Sensor {
     public:
-        bool isConnected(void);             //Using the wire interface we check to see if we can communicate with the sensor
-        void whoAmI(void);                  //Returns info about the sensor!
-        bool sensorDebug;
-        void setDebugMode(bool);
-        uint8_t readByte(uint8_t registerAddress);
-        void readBytes(uint8_t registerAddress, uint8_t len, uint8_t *data);
-        void writeByte(uint8_t registerAddress, uint8_t writeData);
-        void writeBits(uint8_t registerAddress, uint8_t startBit, uint8_t length, uint8_t data);
-        // change
-
-        sensor_info_t info;
+        bool isConnected(void); //Using the wire interface we check to see if we can communicate with the sensor
+        void whoAmI(void); //Returns info about the sensor!
+        bool sensorDebug; //Stores sensor debug
+        void setDebugMode(bool); //Set Debug Mode
+        uint8_t readByte(uint8_t registerAddress); //Read Bytes
+        void readBytes(uint8_t registerAddress, uint8_t len, uint8_t *data); //Read Bytes of specified Length
+        void writeByte(uint8_t registerAddress, uint8_t writeData); //Write Bytes
+        void writeBits(uint8_t registerAddress, uint8_t startBit, uint8_t length, uint8_t data); //UNFINISHED: Writes Bits with Specified Length
+        sensor_info_t info; //Initialize Info variable 
 
     private:
-        bool debug;
+        bool debug; //Debug Variable
 };
 #endif
