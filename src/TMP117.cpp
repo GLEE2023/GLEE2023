@@ -1,4 +1,4 @@
-// GLEE 2023 TMP117 Library
+// GLEE 2023 TMP117 Library 
 
 #include "TMP117.h"
 
