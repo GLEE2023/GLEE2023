@@ -104,6 +104,12 @@ void LunaSat::begin(int baudRate){
     }
 }
 
+
+/**
+ * Parameters: None
+ * Returns: Sample
+ * This function returns sample
+**/
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
 
