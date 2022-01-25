@@ -20,19 +20,36 @@ enum TMP117_Register{
 
 class TMP117:public Sensor{
     public:
-        TMP117(int _id, bool _debug = false);                       // Constructor
-        bool dataReady();              
+        TMP117(int _id, bool _debug = false); //Constructor
+        
+        bool dataReady(); //Check if data is ready
+    
+        //Get Temperature
         double getTemperatureC();     
         double getTemperatureF();
+    
+        //Get Uncertainty
         float getUncertainty(float inputTemperature);
+        
+        //Set and Get Low Limits
         void setLowLimit(float lowLimit);
         float getLowLimit();
+    
+        //Set and Get High Limits
         void setHighLimit(float highLimit);
         float getHighLimit();
+        
+        //Get Low and High Alerts
         bool getHighAlert();
         bool getLowAlert();
+        
+        //Reset
         void reset();
+    
+        //Get Address
         uint8_t getAddress();
+    
+        //Read and write 2 bytes
         uint16_t read2Byte(uint8_t registerAddress);
         void write2Byte(uint8_t reg, uint16_t data); 
 };
