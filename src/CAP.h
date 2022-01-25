@@ -22,7 +22,7 @@ class CAP:public Sensor{
 		double getDieletricConstant(double analogReadIn); //Calculates Dielectric Constant using ADC value and the calculated linear regression
 		void addCalibrationPoint(double x, double y); //Stores calibration points to local array if it is not full (Max 15 Calibration Points)
 		double *  getLinearRegression(); //Calculates and returns the linear regression for ADC values vs Dielectric constants
-		void materialIdent(double DielectricConst); //UNIMPLEMENTED: Identifies Material based of Dielectric Constants
+		void materialIdent(double DielectricConst); //UNFINISHED: Identifies Material based of Dielectric Constants
 		void setCal(double c1, double c2); //Sets m and b points locally
 		double getDielectric(); //Returns Dielectric Constant
 		
