@@ -40,7 +40,11 @@ void TPIS1385::begin(void){
     Serial.println(F("TPIS coms Init complete"));
 }
 
-
+/**
+ * Reads EEprom
+ * Parameters: None
+ * Returns: None
+ **/ 
 void TPIS1385::readEEprom(void){
     uint8_t data[2] = {0,0};
 
@@ -93,6 +97,11 @@ void TPIS1385::readEEprom(void){
     TPIS1385::sensorCalibration.K = ((float) (TPIS1385::sensorCalibration.UOut1 - TPIS1385::sensorCalibration.U0)/ (pow((float) (TPIS1385::sensorCalibration.TObj1 + 273.15f),3.8f) - pow(25.0f + 273.15f,3.8f)));
 }
 
+/**
+ * Get and return temp
+ * Parameters: none
+ * Returns: none
+ **/ 
 uint16_t TPIS1385::getTPamb(){
     uint8_t data[2] = {0,0};
     readBytes(TP_AMBIENT, 2, &data[0]);
@@ -100,11 +109,21 @@ uint16_t TPIS1385::getTPamb(){
     return temp;
 }
 
+/**
+ * Gets Tamb
+ * Parameters: TPamb
+ * Returns: Tamb
+ **/ 
 float TPIS1385::getTamb(uint16_t TPamb){
     float temp = 298.15f + ((float) TPamb - (float) TPIS1385::sensorCalibration.PTAT25) * (1.0f/(float) TPIS1385::sensorCalibration.M);
     return temp;
 }
 
+/**
+ * Gets TPobj
+ * Parameters: None
+ * Returns: TPobj
+ **/ 
 uint32_t TPIS1385::getTPobj(){
     uint8_t data[3] = {0,0,0};
     readBytes(TP_OBJECT, 3, &data[0]);
@@ -112,18 +131,33 @@ uint32_t TPIS1385::getTPobj(){
     return temp;
 }
 
+/**
+ * Gets Tobj
+ * Parameters: TPobj, Tamb
+ * Returns: Tobj
+ **/ 
 float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
     float f1 = pow(Tamb, 3.8f);
     float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K; // EQ. from datasheet
     return pow((f1 + f2), 0.2631578947f); // Magic constant for inverse root efficency (1/3.8 = 0.2631578947f)
 }
 
+/**
+ * Gets corrected Tobj using emisivity
+ * Parameters: emisivity
+ * Returns: Corrected Tobj
+ **/ 
 float TPIS1385::getCorrectedTobj(uint32_t TPobj, float Tamb, float emi){
     float f1 = pow(Tamb, 3.8f);
     float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / (sensorCalibration.K * emi); // EQ. from datasheet
     return pow((f1 + f2), 0.2631578947f); // Magic constant for inverse root efficency (1/3.8 = 0.2631578947f)
 }
 
+/**
+ * Gets sample 
+ * Parameters: none
+ * Returns: Sample
+ **/ 
 TPsample_t TPIS1385::getSample(){
     TPsample_t sample; // observation sample to be returned
     
@@ -139,6 +173,12 @@ TPsample_t TPIS1385::getSample(){
     return sample;
 }
 
+
+/**
+ * Gets corrected sample using emisivity
+ * Parameters: emisivity
+ * Returns: Sample
+ **/ 
 TPsample_t TPIS1385::getCorrectedSample(float emisivity){
     TPsample_t sample; // observation sample to be returned
     
@@ -154,6 +194,11 @@ TPsample_t TPIS1385::getCorrectedSample(float emisivity){
     return sample;
 }
 
+/**
+ * Updates Sample
+ * Parameters: none
+ * Returns: none
+ **/ 
 void TPIS1385::updateSample(){
     staticSample = TPIS1385::getSample();
 }
