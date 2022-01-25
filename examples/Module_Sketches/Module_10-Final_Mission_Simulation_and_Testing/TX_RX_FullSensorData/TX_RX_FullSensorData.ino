@@ -42,7 +42,7 @@ char data_buffer[80];
 // Output Formatting Variables
 String printOut;
 char sep = ",";
-long timeStamp;
+unsigned long timeStamp;
 
 // RED Led Pin
 int LED = 4;
@@ -117,7 +117,7 @@ void loop() {
     // Using STRing CoPY to construction of transmission buffer with ID for transmission filtering
     
     ///////////////////////////////////////////////
-    strcpy(data_buffer, "11"); // CHANGE TO YOUR TEAM NUMBER
+    strcpy(data_buffer, "11,"); // CHANGE TO YOUR TEAM NUMBER
     ///////////////////////////////////////////////
 
     // Using STRing ConCaT to append indiviual character arrays (psudo strings) to 
