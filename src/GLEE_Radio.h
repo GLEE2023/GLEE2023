@@ -21,17 +21,29 @@ class LunaRadio{
 	public:
 		String cr_buff; //buffer
 		int err_state; //error state
+	
+		//Begins communications with the radio and notifies if the communication was successful or not.
 		void initialize_radio(float freq = 915.0, uint8_t pwr = 17, float bw = 250.0, uint8_t sf = 12, uint8_t cr = 8);
+	
+		//Transmits data from parameters and prints out the neasured data rate
 		void transmit_data(char* buff);
+	
+		
 		String receive_data_string(void);
 		String receive_data_string_plotting(void);
+	
+		//Sets frequency, Coding Rate, Spreading Factor, Bandwidth and Power
 		void setFreq(float freq);
 		void setCR(uint8_t cr);
 		void setSF(uint8_t sf);
 		void setBandwidth(float bw);
 		void setPWR(uint8_t pwr);
+		
+		//Sets and Starts Recieve
 		void enable_recieve_interupt(void (*func));
 		void startRecieve(void);
+	
+		//Determines if data holds error
 		void readData(uint8_t* data, size_t len);
 
 		// Signal Metrics
