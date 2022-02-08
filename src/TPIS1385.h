@@ -134,13 +134,11 @@ class TPIS1385 : public Sensor{                       //Inheritied class from th
         TPsample_t getSample(void);
         TPsample_t getCorrectedSample(float emisivity);
 
-        void updateSample(void);
 
     private:
         CalibrationCoef sensorCalibration;              //Structure containing the sensor Calibration Details
         //RawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
         SensorADC sensorADC;
-        uint8_t TEMPADDRESS;
         TPsample_t staticSample;
 };
 

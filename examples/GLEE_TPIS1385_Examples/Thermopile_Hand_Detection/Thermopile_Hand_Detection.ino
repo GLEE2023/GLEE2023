@@ -64,7 +64,7 @@ void loop(){
 
         Serial.print("Object: "); Serial.println(temperatures.object, 4);
         Serial.print("Ambient: "); Serial.println(temperatures.ambient, 4);
-        Serial.print("Diveation from Avg Difference: "); Serial.println(abs(tempDiff-avgTempDiff));
+        Serial.print("Deviation from Avg Difference: "); Serial.println(abs(tempDiff-avgTempDiff));
 
         if(abs(tempDiff-avgTempDiff) > thresh){ // If Object and Sensor are the same
             Serial.println("Hand is detected.");

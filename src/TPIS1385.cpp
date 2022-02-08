@@ -153,7 +153,3 @@ TPsample_t TPIS1385::getCorrectedSample(float emisivity){
     
     return sample;
 }
-
-void TPIS1385::updateSample(){
-    staticSample = TPIS1385::getSample();
-}
