@@ -9,6 +9,7 @@ const int numOfPoints = 1; // Number of samples / coordinate pairs
 String x_coordinates[numOfPoints]; // X coordinates that will be inputted by user
 String y_coordinates[numOfPoints]; // Y coordinates that will be inputted by user
 mlx_sample_t data[numOfPoints]; // Samples taken by magnetometer
+float strength;
 
 void setup (){
     Serial.begin(9600);
@@ -66,7 +67,8 @@ void setup (){
       Serial.print(data[i].magnetic.x); Serial.print("uT , "); 
       Serial.print(data[i].magnetic.y); Serial.print("uT , "); 
       Serial.print(data[i].magnetic.z); Serial.print("uT , ");
-      Serial.print(data[i].strength); Serial.println("uT");
+      strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
+      Serial.print(strength); Serial.println("uT");
     }
     Serial.println();
     Serial.println();
@@ -88,7 +90,7 @@ void setup (){
         angle = 90 - angle;
       }
       Serial.print(" , Angle: "); Serial.print(angle); Serial.print("º");
-      Serial.print(" , Magnitude: ");Serial.print(data[i].strength);Serial.println(" uT");
+      Serial.print(" , Magnitude: ");Serial.print(strength);Serial.println(" uT");
     }
 
 };

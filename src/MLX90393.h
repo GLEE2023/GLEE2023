@@ -181,8 +181,8 @@ const float mlx90393_tconv[2][4] = {
 
 typedef struct{
     sensor_float_vec_t magnetic;
-    float strength;
-    float temp;
+    //float strength;
+    //float temp;
 } mlx_sample_t;
 
 // Primary Magnetometor class inharents parent sensor class variables and methods

@@ -3,6 +3,7 @@
 MLX90393 magnetometer = MLX90393(1,false);
 
 mlx_sample_t sample;
+float strength;
 
 void setup (){
     Serial.begin(9600);
@@ -28,7 +29,7 @@ void setup (){
 void loop (){   
 
     sample = magnetometer.getSample();
-
+    strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
     // Print out magnetic field measurements for each axis 
     Serial.println("Magnetic Field Axes Measurements");
     Serial.print("X: "); Serial.print(sample.magnetic.x,4); Serial.println(" uT");
@@ -37,7 +38,7 @@ void loop (){
     Serial.println();
     // Print out strength of magnetic field
     Serial.println("Magnetic Field Strength (Magnitude)"); 
-    Serial.print(sample.strength,4); Serial.println(" uT");
+    Serial.print(strength,4); Serial.println(" uT");
     Serial.println();
    
     delay(1000); // Take samples every one second
