@@ -23,7 +23,6 @@ class TMP117:public Sensor{
         TMP117(int _id, bool _debug = false);                       // Constructor
         bool dataReady();              
         double getTemperatureC();     
-        double getTemperatureF();
         float getUncertainty(float inputTemperature);
         void setLowLimit(float lowLimit);
         float getLowLimit();
@@ -32,7 +31,6 @@ class TMP117:public Sensor{
         bool getHighAlert();
         bool getLowAlert();
         void reset();
-        uint8_t getAddress();
         uint16_t read2Byte(uint8_t registerAddress);
         void write2Byte(uint8_t reg, uint16_t data); 
 };

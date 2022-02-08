@@ -18,15 +18,6 @@ TMP117::TMP117(int _id, bool _debug){
 
 /**
  * Parameters: none
- * Returns: TMP117 address
- * This function returns the TMP117 I2C address.
-**/
-uint8_t TMP117::getAddress(){
-    return TMP117::info.address;
-}
-
-/**
- * Parameters: none
  * Returns: double final temperature in celcius 
  * This function pulls the bits to store in an array
  * then multiplies by resolution for digital to final temp. 
@@ -35,16 +26,6 @@ double TMP117::getTemperatureC(){
     int16_t digitalTempC = read2Byte(TMP117_TEMP_REG);      // Calls to read registers to pull all the bits to store in an array
     double finalTempC = digitalTempC * TMP117_RESOLUTION;    // Multiplies by the resolution for digital to final temp
     return finalTempC;
-}
-
-/**
- * Parameters: none
- * Returns: double Fahrenheit temperature 
- * This function takes the celcius temperature and 
- * converts to fahrenheit.
-**/
-double TMP117::getTemperatureF(){
-    return getTemperatureC() * 9.0 / 5.0 + 32.0;
 }
 
 /**

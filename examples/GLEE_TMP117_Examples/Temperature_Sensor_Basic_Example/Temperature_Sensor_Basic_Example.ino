@@ -29,8 +29,8 @@ void loop(){
 
     // Call the getTemperatureC() function of the TMP117 thermometer  
     temperatureC = thermometer.getTemperatureC();
-    // Call the getTemperatureF() function of the TMP117 thermometer 
-    temperatureF = thermometer.getTemperatureF();
+    // Convert temperature from Celsius into Farenheit 
+    temperatureF = temperatureC * 9.0 / 5.0 + 32.0;
     // Output the temperature via seiral
     Serial.print("Temperature: "); 
     Serial.print(temperatureC);
