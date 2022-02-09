@@ -133,8 +133,8 @@ TPsample_t TPIS1385::getSample(){
     uint16_t Tamb = getTamb(TPamb);
     float Tobj = getTobj(TPobj, Tamb);
     
-    sample.object = Tobj - SENSOR_CONV_K_to_C; 
-    sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
+    sample.object = Tobj - 273.15; 
+    sample.ambient = Tamb - 273.15; // Ambient temperature sample in deg c (k to c conversion needed)
     
     return sample;
 }
@@ -148,8 +148,8 @@ TPsample_t TPIS1385::getCorrectedSample(float emisivity){
     uint16_t Tamb = getTamb(TPamb);
     float Tobj = getCorrectedTobj(TPobj, Tamb, emisivity);
     
-    sample.object = Tobj - SENSOR_CONV_K_to_C; 
-    sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
+    sample.object = Tobj - 273.15; 
+    sample.ambient = Tamb - 273.15; // Ambient temperature sample in deg c (k to c conversion needed)
     
     return sample;
 }
