@@ -93,7 +93,7 @@ class AK09940: public Sensor{
 
     private:
         bool FIFO;
-        uint8_t watermarkLevel;  
+        //uint8_t watermarkLevel;  
         ak09940_Measurement_Mode_t measurementMode;
         ak09940_Drive_Mode_t driveMode;
 };

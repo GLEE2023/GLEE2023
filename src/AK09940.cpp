@@ -110,8 +110,9 @@ float AK09940::getMagFieldStrength(sensor_float_vec_t magnetic){
 }
 
 bool AK09940::dataReady(){
-    if (digitalRead(7)) return true; // TODO: Change for const pin declaration
-    else return false;
+    if (digitalRead(7)) 
+        return true; // TODO: Change for const pin declaration
+    return false;
 }
 
 AK_Sample_t AK09940::getSample(void){
