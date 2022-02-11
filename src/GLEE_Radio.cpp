@@ -12,7 +12,7 @@ void LunaRadio::initialize_radio(float freq, uint8_t pwr, float bw, uint8_t sf, 
 	
 	Serial.print(F("Radio Initializing ... "));
 	LunaRadio::err_state = LunaRadio::radio.begin(); //begin communication with radio
-	if (LunaRadio::err_state == ERR_NONE) {
+	if (LunaRadio::err_state == RADIOLIB_ERR_NONE) {
 		//if no error
 		Serial.println(F("success!"));
 	} else {
@@ -50,7 +50,7 @@ void LunaRadio::initialize_radio(float freq, uint8_t pwr, float bw, uint8_t sf, 
 **/
 void LunaRadio::setFreq(float freq){
 	LunaRadio::err_state = LunaRadio::radio.setFrequency(freq); 		//saves the error state and sets frequency
-  	if (LunaRadio::err_state == ERR_NONE){
+  	if (LunaRadio::err_state == RADIOLIB_ERR_NONE){
 		//constructing display message, then sends message to serial if no error 
   		snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff),"Frequency set to %d.%01d MHz, success!",(int)freq,(int)(freq*10)%10);
     	Serial.println(LunaRadio::disp_buff);
@@ -71,7 +71,7 @@ void LunaRadio::setFreq(float freq){
 **/
 void LunaRadio::setCR(uint8_t cr){
 	LunaRadio::err_state = LunaRadio::radio.setCodingRate(cr); //sets coding rate and saves error state
-    if (LunaRadio::err_state == ERR_NONE){
+    if (LunaRadio::err_state == RADIOLIB_ERR_NONE){
 		//constructing display message, then sends message to serial if no error
     	snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff),"Coding Rate set to %d, success!",cr);
     	Serial.println(LunaRadio::disp_buff);
@@ -92,7 +92,7 @@ void LunaRadio::setCR(uint8_t cr){
 **/
 void LunaRadio::setSF(uint8_t sf){
   	LunaRadio::err_state = LunaRadio::radio.setSpreadingFactor(sf); 		//saves the error state and sets spreading factor
-    if (LunaRadio::err_state == ERR_NONE){
+    if (LunaRadio::err_state == RADIOLIB_ERR_NONE){
 		//constructing display message, then sends message to serial if no error
       	snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff),"Spreading factor set to %d, success!",sf);
      	Serial.println(LunaRadio::disp_buff);
@@ -113,7 +113,7 @@ void LunaRadio::setSF(uint8_t sf){
 **/
 void LunaRadio::setBandwidth(float bw){
 	LunaRadio::err_state = LunaRadio::radio.setBandwidth(bw); //saves the error state and sets bandwith
-  	if (LunaRadio::err_state == ERR_NONE) {
+  	if (LunaRadio::err_state == RADIOLIB_ERR_NONE) {
 		//constructing display message, then sends message to serial if no error
     	snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff),"Bandwidth set to %d.%01d, success!",(int)bw,(int)(bw*10)%10);
     	Serial.println(LunaRadio::disp_buff);
@@ -134,7 +134,7 @@ void LunaRadio::setBandwidth(float bw){
 **/
 void LunaRadio::setPWR(uint8_t pwr){
   	LunaRadio::err_state = LunaRadio::radio.setOutputPower(pwr); //sets output and saves error state
-  	if (LunaRadio::err_state == ERR_NONE) { 
+  	if (LunaRadio::err_state == RADIOLIB_ERR_NONE) { 
 		//constructing display message, then sends message to serial if no error
     	snprintf(LunaRadio::disp_buff, sizeof(LunaRadio::disp_buff),"Output Power set to %d, success!",pwr); //
       	Serial.println(LunaRadio::disp_buff);
@@ -155,17 +155,17 @@ void LunaRadio::setPWR(uint8_t pwr){
 void LunaRadio::transmit_data(char* buff){
 	Serial.println(F("Transmitting Data"));
 	LunaRadio::err_state = LunaRadio::radio.transmit(buff); 		//saves error state when trasnmitting
-	if (LunaRadio::err_state == ERR_NONE){
+	if (LunaRadio::err_state == RADIOLIB_ERR_NONE){
 		// the packet was successfully transmitted
 		Serial.println(F("Tranmission success!"));
 		// print measured data rate
 		Serial.print(F("Datarate: "));
 		Serial.print(LunaRadio::radio.getDataRate());
 		Serial.println(F(" bps"));
-	} else if (LunaRadio::err_state == ERR_PACKET_TOO_LONG){
+	} else if (LunaRadio::err_state == RADIOLIB_ERR_PACKET_TOO_LONG){
 		// the supplied packet was longer than 256 bytes
 		Serial.println(F("too long!"));
-	} else if (LunaRadio::err_state == ERR_TX_TIMEOUT){
+	} else if (LunaRadio::err_state == RADIOLIB_ERR_TX_TIMEOUT){
 		// timeout occurred while transmitting packet
 		Serial.println(F("timeout!"));
 	} else {
@@ -185,15 +185,15 @@ String LunaRadio::receive_data_string(void){
 	Serial.println(F("Waiting for Data"));
 	String tmp_str;
 	LunaRadio::err_state = LunaRadio::radio.receive(tmp_str); 		//saves error state when receiving
-	if(LunaRadio::err_state == ERR_NONE){ 
+	if(LunaRadio::err_state == RADIOLIB_ERR_NONE){ 
 		//if no eror
 		Serial.println(F("Data received"));
 		return tmp_str;
-	}else if(LunaRadio::err_state == ERR_RX_TIMEOUT){ 
+	}else if(LunaRadio::err_state == RADIOLIB_ERR_RX_TIMEOUT){ 
 		//timeout error
 		Serial.println("Receive Failed");
 		return "Receiver Timeout";
-	}else if(LunaRadio::err_state == ERR_CRC_MISMATCH){ 
+	}else if(LunaRadio::err_state == RADIOLIB_ERR_CRC_MISMATCH){ 
 		//CTC error
 		Serial.println("Receive Failed");
 		return "CTC Error";
@@ -214,14 +214,14 @@ String LunaRadio::receive_data_string(void){
 String LunaRadio::receive_data_string_plotting(void){
 	String tmp_str;
 	LunaRadio::err_state = LunaRadio::radio.receive(tmp_str); //saves error state when receiving
-	if(LunaRadio::err_state == ERR_NONE){ 
+	if(LunaRadio::err_state == RADIOLIB_ERR_NONE){ 
 		//if no eror
 		return tmp_str;
-	}else if(LunaRadio::err_state == ERR_RX_TIMEOUT){ 
+	}else if(LunaRadio::err_state == RADIOLIB_ERR_RX_TIMEOUT){ 
 		//timeout error
 		Serial.println(F("Receive Failed"));
 		return "Receiver Timeout";
-	}else if(LunaRadio::err_state == ERR_CRC_MISMATCH){ 
+	}else if(LunaRadio::err_state == RADIOLIB_ERR_CRC_MISMATCH){ 
 		//CTC error
 		Serial.println(F("Receive Failed"));
 		return "CTC Error";
@@ -243,7 +243,7 @@ void LunaRadio::enable_recieve_interupt(void (*func)){
 	radio.setDio0Action(func);
 
 	int state = radio.startReceive();
-  	if(state == ERR_NONE){
+  	if(state == RADIOLIB_ERR_NONE){
     	Serial.println(F("Now listening for transmissions"));
   	} else{
     	Serial.print(F("failed, code "));
@@ -259,7 +259,7 @@ void LunaRadio::enable_recieve_interupt(void (*func)){
 **/
 void LunaRadio::startRecieve(void){
 	int state = radio.startReceive();
-  	if(state == ERR_NONE){
+  	if(state == RADIOLIB_ERR_NONE){
     	Serial.println(F("Now listening for transmissions"));
   	} else{
     	Serial.print(F("failed, code "));
@@ -276,11 +276,11 @@ void LunaRadio::startRecieve(void){
 **/
 void LunaRadio::readData(uint8_t* data, size_t len){
 	int state = radio.readData(data,len);
-	if(state == ERR_NONE){
+	if(state == RADIOLIB_ERR_NONE){
     	// packet was successfully received
     	Serial.println(F("Packet received!"));
 
-    } else if(state == ERR_CRC_MISMATCH) {
+    } else if(state == RADIOLIB_ERR_CRC_MISMATCH) {
     	// malformed packet reception
     	Serial.println(F("Malformed Packet!"));
 
