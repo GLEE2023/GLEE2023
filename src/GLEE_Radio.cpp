@@ -217,11 +217,11 @@ String LunaRadio::receive_data_string_plotting(void){
 	if(LunaRadio::err_state == RADIOLIB_ERR_NONE){ 
 		//if no eror
 		return tmp_str;
-	}else if(LunaRadio::err_state == ERR_RX_TIMEOUT){ 
+	}else if(LunaRadio::err_state == RADIOLIB_ERR_RX_TIMEOUT){ 
 		//timeout error
 		Serial.println("Receive Failed");
 		return "Receiver Timeout";
-	}else if(LunaRadio::err_state == ERR_CRC_MISMATCH){ 
+	}else if(LunaRadio::err_state == RADIOLIB_ERR_CRC_MISMATCH){ 
 		//CTC error
 		Serial.println("Receive Failed");
 		return "CTC Error";
