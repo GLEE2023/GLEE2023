@@ -19,7 +19,7 @@ TODO: Add Arduino connections for enable, direction and ready
 | 1 | 6 | - | V_hall (5V) |
 | 2 | 9 | - | Hall 3 |
 | 3 | 7 | - | Hall 1 |
-| 4 | 6 | - | Hall 2 |
+| 4 | 8 | - | Hall 2 |
 | 5 | 5 | - | GND |
 | 6 | 3 | - | Winding 3 |
 | 7 | 2 | - | Winding 2 |
