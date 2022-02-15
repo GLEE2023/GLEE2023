@@ -4,8 +4,8 @@ Motor Input/Outputs:
 |----------|:-------------:|
 | Pin 1 | V_hall |
 | Pin 2 | Hall Sensor 3 | 
-| Pin 3 | Hall Sensor 2 |
-| Pin 4 | Hall Sensor 1 |
+| Pin 3 | Hall Sensor 1 |
+| Pin 4 | Hall Sensor 2 |
 | Pin 5 | GND | 
 | Pin 6 | Motor Winding 3 |
 | Pin 7 | Motor Winding 2 |
