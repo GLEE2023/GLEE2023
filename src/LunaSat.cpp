@@ -198,13 +198,13 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.println("");
 }
 
-void LunaSat::dispAccel(sensor_float_vec_t accel){
-    Serial.print(accel.x,5);
-    Serial.print(" ");
-    Serial.print(accel.y,5);
-    Serial.print(' ');
-    Serial.println(accel.z,5);
-}
+// void LunaSat::dispAccel(sensor_float_vec_t accel){
+//     Serial.print(accel.x,5);
+//     Serial.print(" ");
+//     Serial.print(accel.y,5);
+//     Serial.print(' ');
+//     Serial.println(accel.z,5);
+// }
 
 void LunaSat::transmitSample(lunaSat_sample_t sample){
     char dataBuffer[46];
@@ -263,9 +263,9 @@ void LunaSat::blink(int _LED, int _delay){
     int pin;
     
     if (_LED == 1){
-        pin = LED1;
+        pin = 4;
     }else if (_LED == 2){
-        pin = LED2;
+        pin = 5;
     }else{
         // Invalid Pin
     }

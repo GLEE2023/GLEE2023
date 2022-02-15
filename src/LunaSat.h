@@ -19,8 +19,8 @@
 // #include "AK09940.h"   // 5.0 Magnetometer Library
 // #include "ICM20602.h"  // 5.0 IMU Library
 
-#define LED1 4 // Indicator LED Pin Constants defined here
-#define LED2 5 
+// #define LED1 4 // Indicator LED Pin Constants defined here
+// #define LED2 5 
 
 
 typedef struct{
@@ -85,7 +85,7 @@ class LunaSat{
         lunaSat_info_t info;
         void blink(int _pin, int _delay);
 
-        void dispAccel(sensor_float_vec_t accel);
+       // void dispAccel(sensor_float_vec_t accel);
         void transmit_data(char *buff);
     
     private:
