@@ -1,3 +1,5 @@
+/* This sketch is just to test basic window transmit and receive functionality. */
+
 /* This sketch is intended to turn the LunaSat into a Class B LoRa device, where packets
 can only be received during two designated windows following transmission. Once 
 gateway development is underway, this sketch may need to be modified so that packets
@@ -22,9 +24,10 @@ unsigned long windowTwoStart = 0;
 unsigned long windowTwoEnd = 0;
 unsigned long windowLength = 10;
 unsigned long tmp = 0;
-unsigned long classBWindows[10]; // This array will hold the start times of additional windows that the LunaSat
-                                // can receive packets during. These windows fall after the first two windows 
-                                // following transmission.
+unsigned long classBWindows[6] = {1,10,20,30,40,50}; // This array will hold the start times of additional windows that the LunaSat
+                                // can receive packets during (in minutes). These windows fall after the first two windows 
+                                // following transmission. These windows would ideally be set by the gateway but they are
+                                // hardcoded for now.
 
 void recieve_callback(void) {
   // don't set flag if interrupt isn't enabled
@@ -56,6 +59,7 @@ void setup() {
     windowTwoStart = tmp + 50; // Replace with appropriate constant
     windowOneEnd = windowOneStart + windowLength; // Replace with length of window
     windowTwoEnd = windowTwoStart + windowLength; // Replace with length of window
+
 }
 
 void loop(){
@@ -72,9 +76,7 @@ void loop(){
             
             // print data of the packet
             Serial.println(recieved_msg);
-
-            Rad.transmit_data("Pong");
-            delay(500);
+            delay(50);
             // return to listening for transmissions 
             Rad.startRecieve();
             // we're ready to receive more packets,

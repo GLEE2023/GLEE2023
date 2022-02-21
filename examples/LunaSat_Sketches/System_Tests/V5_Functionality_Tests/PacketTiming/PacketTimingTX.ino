@@ -1,3 +1,5 @@
+/* This sketch is just to test basic window transmit and receive functionality. */
+
 /* This sketch is intended to turn the LunaSat into a Class B LoRa device, where packets
 can only be received during two designated windows following transmission. Once 
 gateway development is underway, this sketch may be discarded as the gateway may not support
@@ -55,7 +57,7 @@ void loop(){
         Serial.println(recieved_msg);
 
         Rad.transmit_data("Pong");
-        delay(500);
+        delay(50);
         // return to listening for transmissions 
         Rad.startRecieve();
         // we're ready to receive more packets,
