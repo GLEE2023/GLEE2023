@@ -22,12 +22,16 @@ unsigned long windowOneStart = 0;
 unsigned long windowOneEnd = 0;
 unsigned long windowTwoStart = 0;
 unsigned long windowTwoEnd = 0;
-unsigned long windowLength = 10;
+unsigned long windowLength = 1000;
 unsigned long tmp = 0;
 unsigned long classBWindows[6] = {1,10,20,30,40,50}; // This array will hold the start times of additional windows that the LunaSat
                                 // can receive packets during (in minutes). These windows fall after the first two windows 
                                 // following transmission. These windows would ideally be set by the gateway but they are
                                 // hardcoded for now.
+
+char RSP[5];
+String rsp;
+bool check = true;
 
 void recieve_callback(void) {
   // don't set flag if interrupt isn't enabled
@@ -53,35 +57,41 @@ void setup() {
 
     Rad.enable_recieve_interupt(recieve_callback);
     delay(50);
-    Rad.transmit_data("Pong");
+    Serial.println("I am the client.");
+    strcpy(RSP, "Ping");
+    Rad.transmit_data(RSP);
     tmp = millis();
     windowOneStart = tmp + 0; // Replace with appropriate constant
-    windowTwoStart = tmp + 50; // Replace with appropriate constant
+    windowTwoStart = tmp + 1000; // Replace with appropriate constant
     windowOneEnd = windowOneStart + windowLength; // Replace with length of window
     windowTwoEnd = windowTwoStart + windowLength; // Replace with length of window
 
 }
 
 void loop(){
-    if((millis() > windowOneStart && millis() < windowOneEnd) || (millis() > windowTwoStart && millis() < windowTwoEnd)){
-        if(messageRecieved){
-            // Disable interrupts during reception processing
+      if(messageRecieved && (millis() > windowOneStart && millis() < windowOneEnd) || (millis() > windowTwoStart && millis() < windowTwoEnd) && check){
+          // Disable interrupts during reception processing
 
-            interruptEnabled = false;
+          interruptEnabled = false;
+          check = false;
+          // reset reception flag 
+          messageRecieved = false;
 
-            // reset reception flag 
-            messageRecieved = false;
+          Rad.readData(RSP, 5);
 
-            String recieved_msg = Rad.receive_data_string();
-            
-            // print data of the packet
-            Serial.println(recieved_msg);
-            delay(50);
-            // return to listening for transmissions 
-            Rad.startRecieve();
-            // we're ready to receive more packets,
-            // enable interrupt service routine
-            interruptEnabled = true;
-        }
-    }
+          rsp = "";
+          for(int i = 0; i < 5; i++){
+            rsp = rsp + RSP[i];
+          }
+
+          Serial.println(rsp);
+          
+          delay(50);
+          // return to listening for transmissions 
+          Rad.startRecieve();
+          // we're ready to receive more packets,
+          // enable interrupt service routine
+          interruptEnabled = true;
+          
+      }
 }

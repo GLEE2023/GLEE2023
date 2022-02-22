@@ -17,6 +17,9 @@ volatile bool messageRecieved = false;
 // disable interrupt when it's not needed
 volatile bool interruptEnabled = true;
 
+char RSP[5];
+String rsp;
+
 void recieve_callback(void) {
   // don't set flag if interrupt isn't enabled
   if(!interruptEnabled) {
@@ -40,6 +43,7 @@ void setup() {
     Rad.initialize_radio(915.0,17,250.0,12,8);
 
     Rad.enable_recieve_interupt(recieve_callback);
+    Serial.println("I am the server.");
 }
 
 void loop(){
@@ -52,11 +56,18 @@ void loop(){
         messageRecieved = false;
 
         String recieved_msg = Rad.receive_data_string();
-        
-        // print data of the packet
-        Serial.println(recieved_msg);
 
-        Rad.transmit_data("Pong");
+        Rad.readData(RSP, 5);
+
+        rsp = "";
+        for(int i = 0; i < 5; i++){
+          rsp = rsp + RSP[i];
+        }
+
+        Serial.println(rsp);
+
+        strcpy(RSP, "Pong");
+        Rad.transmit_data(RSP);
         delay(50);
         // return to listening for transmissions 
         Rad.startRecieve();
