@@ -1,78 +1,39 @@
-/* This sketch is just to test basic window transmit and receive functionality. */
+#include <GLEE_Radio.h> // Include Radio Library
 
-/* This sketch is intended to turn the LunaSat into a Class B LoRa device, where packets
-can only be received during two designated windows following transmission. Once 
-gateway development is underway, this sketch may be discarded as the gateway may not support
-this code at all. For now, this sketch is intended to be run on a server LunaSat that will
-pretend to be the gateway device. */
-
-#include <GLEE_Radio.h>
-
-//Initialize RF Object
+// Initialize Radio Object
 LunaRadio Rad;
 
-// flag to indicate that a packet was received
-volatile bool messageRecieved = false;
+String message = "Pong"; 
 
-// disable interrupt when it's not needed
-volatile bool interruptEnabled = true;
+String fullMessage = String(message);
 
-char RSP[5];
-String rsp;
+char buff[40]; // Buffer for passing of message to transciever
+char *p = &buff[0]; // Pointer (address) to character array buffer
 
-void recieve_callback(void) {
-  // don't set flag if interrupt isn't enabled
-  if(!interruptEnabled) {
-    return;
-  }
-
-  // set flag signifying message was recieved
-  messageRecieved = true;
-}
+// Indicator LED (Red) connected to pin 4
+int LED = 4;
 
 void setup() {
-    //Set the data rate to 9600 bits per second
-    Serial.begin(9600);
+	Serial.begin(9600); // Begin serial communications at 9600 baud rate
 
-    //Initialize the radio settings by using the initialize_radio function
-    // Argument 1: Set frequency to 915
-    // Argument 2: Set output power to 17
-    // Argument 3: Set Bandwidth to 250
-    // Argument 4: Set spreading factor to 12
-    // Argument 5: Set coding rate to 8
-    Rad.initialize_radio(915.0,17,250.0,12,8);
+	Rad.initialize_radio(915.0,7,250.0,12,8); // Initialize Radio (with default parameters)
 
-    Rad.enable_recieve_interupt(recieve_callback);
-    Serial.println("I am the server.");
+	// Convert full formated message to character array stored in buffer (at address p)
+	fullMessage.toCharArray(buff, fullMessage.length()+1);
+
+	// Set LED Pin to output
+	pinMode(LED, OUTPUT);
 }
 
-void loop(){
-    if(messageRecieved){
-        // Disable interrupts during reception processing
+void loop() {
+  // Check if RF successfully recieved tranmsission using the recieve_data_string() function
+	// Store Results in a string variable
+	String output = Rad.receive_data_string();
 
-        interruptEnabled = false;
-
-        // reset reception flag 
-        messageRecieved = false;
-
-        String recieved_msg = Rad.receive_data_string();
-
-        Rad.readData(RSP, 5);
-
-        rsp = "";
-        for(int i = 0; i < 5; i++){
-          rsp = rsp + RSP[i];
-        }
-
-        Serial.println(rsp);
-
-        strcpy(RSP, "Pong");
-        Rad.transmit_data(RSP);
-        delay(50);
-        // return to listening for transmissions 
-        Rad.startRecieve();
-        // we're ready to receive more packets,
-        // enable interrupt service routine
-        interruptEnabled = true;
-    }
+	// Check Transmission ID, ignore unless reciever and transmitter IDs match
+	if(output){
+		// Output the results 
+		Serial.print("Message: "); Serial.println(output);
+    Rad.transmit_data(p);
+	}
 }
