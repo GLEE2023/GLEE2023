@@ -12,7 +12,7 @@ unsigned long windowTwoStart = 0;
 unsigned long windowTwoEnd = 0;
 unsigned long windowLength = 1000;
 unsigned long tmp = 0;
-unsigned long classBWindows[6] = {1,10,20,30,40,50}; // This array will hold the start times of additional windows that the LunaSat
+unsigned long classBWindows[6] = {-1,-1,-1,-1,-1,-1}; // This array will hold the start times of additional windows that the LunaSat
                                 // can receive packets during (in minutes). These windows fall after the first two windows 
                                 // following transmission. These windows would ideally be set by the gateway but they are
                                 // hardcoded for now.
@@ -47,13 +47,59 @@ void setup() {
 void loop() {
 	// Check if RF successfully recieved tranmsission using the recieve_data_string() function
 	// Store Results in a string variable
-	String output = Rad.receive_data_string();
-
-	// Check Transmission ID, ignore unless reciever and transmitter IDs match
-	if(output && (millis() > windowOneStart && millis() < windowOneEnd) || (millis() > windowTwoStart && millis() < windowTwoEnd)){
-		// Output the results 
-		Serial.print("Message: "); Serial.println(output);
-
-
+	if((millis() > windowOneStart && millis() < windowOneEnd) || (millis() > windowTwoStart && millis() < windowTwoEnd)){
+		String output = Rad.receive_data_string();
+		String header = output.substring(0,3);
+		// Check Transmission ID, ignore unless reciever and transmitter IDs match
+		if(output && header=="SRX"){
+			// Output the results 
+			Serial.print("Message: "); Serial.println(output);
+			int firstloc = output.find('|',0);
+			int secondloc = output.find('|',firstloc);
+			for(int i = 0; i < 6; i++){
+				classBWindow[0] = (unsigned long)output.substring(firstloc,secondloc)
+				firstloc = secondloc;
+				int secondloc = output.find('|',firstloc);
+			}
+			Serial.println(String(classBWindow[4]));
+		}
+	} else if ((millis() > classBWindows[0]*1000 && millis() < (classBWindows[0]*1000)+1000)) {
+		if(output){
+			// Output the results 
+			Serial.println("Inside window 0.");
+			Serial.print("Message: "); Serial.println(output);		
+		}
+	} else if ((millis() > classBWindows[1]*1000 && millis() < (classBWindows[1]*1000)+1000)) {
+		if(output){
+			// Output the results 
+			Serial.println("Inside window 0.");
+			Serial.print("Message: "); Serial.println(output);		
+		}
+	} else if ((millis() > classBWindows[2]*1000 && millis() < (classBWindows[2]*1000)+1000)) {
+		if(output){
+			// Output the results 
+			Serial.println("Inside window 0.");
+			Serial.print("Message: "); Serial.println(output);		
+		}
+	} else if ((millis() > classBWindows[3]*1000 && millis() < (classBWindows[3]*1000)+1000)) {
+		if(output){
+			// Output the results 
+			Serial.println("Inside window 0.");
+			Serial.print("Message: "); Serial.println(output);		
+		}
+	} else if ((millis() > classBWindows[4]*1000 && millis() < (classBWindows[4]*1000)+1000)) {
+		if(output){
+			// Output the results 
+			Serial.println("Inside window 0.");
+			Serial.print("Message: "); Serial.println(output);		
+		}
+	} else if ((millis() > classBWindows[5]*1000 && millis() < (classBWindows[5]*1000)+1000)) {
+		if(output){
+			// Output the results 
+			Serial.println("Inside window 0.");
+			Serial.print("Message: "); Serial.println(output);		
+		}
+	} else {
+		Serial.println("Outside receive window.");
 	}
 }

@@ -5,7 +5,12 @@ LunaRadio Rad;
 
 String message = "Pong"; 
 
-String fullMessage = String(message);
+unsigned long classBWindows[6] = {1,10,20,30,40,50}; // This array will hold the start times of additional windows that the LunaSat
+                                // can receive packets during (in minutes). These windows fall after the first two windows 
+                                // following transmission. These windows would ideally be set by the gateway but they are
+                                // hardcoded for now.
+
+String fullMessage = String("SRX|1|10|20|30|40|50");
 
 char buff[40]; // Buffer for passing of message to transciever
 char *p = &buff[0]; // Pointer (address) to character array buffer
@@ -34,6 +39,6 @@ void loop() {
 	if(output){
 		// Output the results 
 		Serial.print("Message: "); Serial.println(output);
-    Rad.transmit_data(p);
+    	Rad.transmit_data(p);
 	}
 }
