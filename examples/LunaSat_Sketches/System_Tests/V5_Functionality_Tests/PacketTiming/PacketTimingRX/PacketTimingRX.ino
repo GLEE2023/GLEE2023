@@ -50,50 +50,72 @@ void loop() {
 	if((millis() > windowOneStart && millis() < windowOneEnd) || (millis() > windowTwoStart && millis() < windowTwoEnd)){
 		String output = Rad.receive_data_string();
 		String header = output.substring(0,3);
+    output = output.substring(3);
 		// Check Transmission ID, ignore unless reciever and transmitter IDs match
 		if(output && header=="SRX"){
 			// Output the results 
 			Serial.print("Message: "); Serial.println(output);
-			int firstloc = output.find('|',0);
-			int secondloc = output.find('|',firstloc);
-			for(int i = 0; i < 6; i++){
-				classBWindow[0] = (unsigned long)output.substring(firstloc,secondloc)
-				firstloc = secondloc;
-				int secondloc = output.find('|',firstloc);
+			int firstloc = output.indexOf('|');
+			int secondloc = output.indexOf('|',firstloc);
+      classBWindows[0] = stoul(output.substring(firstloc,secondloc).c_str());
+      Serial.println(String(classBWindows[0]));
+			for(int i = 1; i < 6; i++){
+        firstloc = secondloc;
+        secondloc = output.indexOf('|',firstloc);
+				classBWindows[i] = stol(output.substring(firstloc,secondloc).c_str());
+        Serial.println(String(classBWindows[i]));
 			}
-			Serial.println(String(classBWindow[4]));
+			
 		}
 	} else if ((millis() > classBWindows[0]*1000 && millis() < (classBWindows[0]*1000)+1000)) {
+    String output = Rad.receive_data_string();
+    String header = output.substring(0,3);
+    output = output.substring(3);
 		if(output){
 			// Output the results 
 			Serial.println("Inside window 0.");
 			Serial.print("Message: "); Serial.println(output);		
 		}
 	} else if ((millis() > classBWindows[1]*1000 && millis() < (classBWindows[1]*1000)+1000)) {
+    String output = Rad.receive_data_string();
+    String header = output.substring(0,3);
+    output = output.substring(3);
 		if(output){
 			// Output the results 
 			Serial.println("Inside window 0.");
 			Serial.print("Message: "); Serial.println(output);		
 		}
 	} else if ((millis() > classBWindows[2]*1000 && millis() < (classBWindows[2]*1000)+1000)) {
+    String output = Rad.receive_data_string();
+    String header = output.substring(0,3);
+    output = output.substring(3);
 		if(output){
 			// Output the results 
 			Serial.println("Inside window 0.");
 			Serial.print("Message: "); Serial.println(output);		
 		}
 	} else if ((millis() > classBWindows[3]*1000 && millis() < (classBWindows[3]*1000)+1000)) {
+    String output = Rad.receive_data_string();
+    String header = output.substring(0,3);
+    output = output.substring(3);
 		if(output){
 			// Output the results 
 			Serial.println("Inside window 0.");
 			Serial.print("Message: "); Serial.println(output);		
 		}
 	} else if ((millis() > classBWindows[4]*1000 && millis() < (classBWindows[4]*1000)+1000)) {
+    String output = Rad.receive_data_string();
+    String header = output.substring(0,3);
+    output = output.substring(3);
 		if(output){
 			// Output the results 
 			Serial.println("Inside window 0.");
 			Serial.print("Message: "); Serial.println(output);		
 		}
 	} else if ((millis() > classBWindows[5]*1000 && millis() < (classBWindows[5]*1000)+1000)) {
+    String output = Rad.receive_data_string();
+    String header = output.substring(0,3);
+    output = output.substring(3);
 		if(output){
 			// Output the results 
 			Serial.println("Inside window 0.");
