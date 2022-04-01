@@ -153,7 +153,7 @@ typedef enum {
 #endif
 } dataRates_t;
 
-typedef enum {CLASS_A, CLASS_C} devclass_t;
+typedef enum {CLASS_A/*, CLASS_C*/} devclass_t;
 
 typedef enum {NO_RX, NEW_RX} rx_t;
 

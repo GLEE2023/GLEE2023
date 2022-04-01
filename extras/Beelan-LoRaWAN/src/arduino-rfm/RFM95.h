@@ -104,7 +104,7 @@ typedef enum {
 bool RFM_Init();
 void RFM_Send_Package(sBuffer *RFM_Tx_Package, sSettings *LoRa_Settings);
 message_t RFM_Single_Receive(sSettings *LoRa_Settings);
-void RFM_Continuous_Receive(sSettings *LoRa_Settings);
+//void RFM_Continuous_Receive(sSettings *LoRa_Settings);
 message_t RFM_Get_Package(sBuffer *RFM_Rx_Package);
 void RFM_Write(unsigned char RFM_Address, unsigned char RFM_Data);
 void RFM_Switch_Mode(unsigned char Mode);

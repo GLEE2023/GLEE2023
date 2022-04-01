@@ -689,6 +689,7 @@ message_t RFM_Single_Receive(sSettings *LoRa_Settings)
 * Arguments   : *LoRa_Settings pointer to sSettings struct
 *****************************************************************************************
 */
+/*
 void RFM_Continuous_Receive(sSettings *LoRa_Settings)
 {
   //Change DIO 0 back to RxDone and DIO 1 to rx timeout
@@ -717,6 +718,7 @@ void RFM_Continuous_Receive(sSettings *LoRa_Settings)
 	//Switch to continuous receive
 	RFM_Switch_Mode(RFM_MODE_RXCONT);
 }
+*/
 
 /*
 *****************************************************************************************

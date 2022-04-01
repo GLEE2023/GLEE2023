@@ -426,6 +426,7 @@ void LoRaWANClass::update(void)
     }
 
     //Type C mote transmit and receive handling
+    /*
     if (LoRa_Settings.Mote_Class == CLASS_C)
     {
         //Transmit
@@ -451,6 +452,7 @@ void LoRaWANClass::update(void)
         }
         RFM_Command_Status = NO_RFM_COMMAND;
     }
+    */
 }
 
 void LoRaWANClass::randomChannel()
