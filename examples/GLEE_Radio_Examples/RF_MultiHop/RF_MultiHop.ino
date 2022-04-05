@@ -31,11 +31,11 @@ void loop() {
   Serial.println("Received: " + received);
 
   //Add to buffer
-  //strcat(buff, received); //appends recevied message to buff
-  received.toCharArray(buff, 5);
+  received.toCharArray(buff, 5); // appends received message to buffer
   Serial.print("Buff: ");
   Serial.println(buff);
   strcat(buff,","); // appends comma to buff
+  
   //Transmit to another LunaSat
   //Rad.transmit_data();
   if(buff[sizeOfBuffer - 4] != 0){
