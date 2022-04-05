@@ -31,12 +31,14 @@ void loop() {
   Serial.println("Received: " + received);
 
   //Add to buffer
-  strcat(buff, received); //appends recevied message to buff
-  Serial.println("Buff: " + buff);
+  //strcat(buff, received); //appends recevied message to buff
+  received.toCharArray(buff, 5);
+  Serial.print("Buff: ");
+  Serial.println(buff);
   strcat(buff,","); // appends comma to buff
   //Transmit to another LunaSat
   //Rad.transmit_data();
-  if(buff[sizeOfBuffer - 4] != NULL){
+  if(buff[sizeOfBuffer - 4] != 0){
     Serial.println("Maximum memory reached. Stopping receipt and transmission.");
     delay(500);
     exit(0);

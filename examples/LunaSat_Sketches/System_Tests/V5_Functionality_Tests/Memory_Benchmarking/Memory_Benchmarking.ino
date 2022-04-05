@@ -31,7 +31,7 @@ void loop() {
   strcat(buff, tempBuffer); // appends tempBuffer to buff
   Serial.println(buff);
   strcat(buff,","); // appends comma to buff
-  if(buff[sizeOfBuffer - 4] != NULL){
+  if(buff[sizeOfBuffer - 4] != 0){
     Serial.println("Maximum memory reached.");
     delay(500);
     exit(0);
