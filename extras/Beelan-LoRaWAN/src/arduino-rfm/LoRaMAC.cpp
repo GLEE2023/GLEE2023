@@ -1,3 +1,20 @@
+/* !!!! Functionality we need to add is the following: !!!!*/
+/* Class B functionality (extra receive windows spaced out over intervals, provided from OBC/Gateway) */
+/* Forwarding (a extra function to handle the temporary storage and resending of data from other LunaSats) */
+/* Some sort of activation. If OTAA, do nothing. If ABP, remove OTAA and replace with ABP functionaltiy */
+/* Acknowledgement (LunaSat should keep resending OG packet until it is acknowledged) */
+
+
+
+
+
+
+
+
+
+
+
+
 /******************************************************************************************
 * Copyright 2017 Ideetron B.V.
 *
