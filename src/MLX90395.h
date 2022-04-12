@@ -20,14 +20,21 @@
 //Registers
 
 // MLX90395 Sensor ADDRESS as given by data sheet: 0x0C
-#define MLX90395_DEFAULT_ADDR 0x0C
+#define MLX90395_DEFAULT_ADDR 0x0C		
 
-#define MLX90395_STATUS_RESET 0x02
-#define MLX90395_STATUS_SMMODE 0x20
-#define MLX90395_STATUS_DRDY 0x01
-#define MLX90395_REG_0 0x0
-#define MLX90395_REG_1 0x2
-#define MLX90395_REG_2 0x4
+#define MLX90395_AXIS_ALL (0x0E)      /**< X+Y+Z axis bits for commands. */
+#define MLX90395_CONF1 (0x00)         /**< Gain */
+#define MLX90395_CONF2 (0x01)         /**< Burst, comm mode */
+#define MLX90395_CONF3 (0x02)         /**< Oversampling, filter, res. */
+#define MLX90395_CONF4 (0x03)         /**< Sensitivty drift. */
+#define MLX90395_GAIN_SHIFT (0x04)       /**< Left-shift for gain bits. */
+#define MLX90395_HALL_CONF (0x0C)     /**< Hall plate spinning rate adj. */
+#define MLX90395_STATUS_OK (0x00)     /**< OK value for status response. */
+#define MLX90395_STATUS_SMMODE (0x20) /**< SM Mode status response. */
+#define MLX90395_STATUS_RESET (0x02)  /**< Reset value for status response. */
+#define MLX90395_STATUS_ERROR (0xFF)  /**< OK value for status response. */
+#define MLX90395_STATUS_MASK (0xFC)   /**< Mask for status OK checks. */
+
 
 /** Register map. */
 enum {
