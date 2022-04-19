@@ -770,12 +770,12 @@ bool MLX90395::startSingleMeasurement(void) {
  * Get the current oversampling setting
  * @return MLX90395_OSR_1, MLX90395_OSR_2, MLX90395_OSR_4, or MLX90395_OSR_8
  */
-mlx90393_osr_t MLX90395::getOSR(void) {
+mlx90395_osr_t MLX90395::getOSR(void) {
   Adafruit_BusIO_Register reg2 =
       Adafruit_BusIO_Register(i2c_dev, MLX90395_REG_2, 2, MSBFIRST);
   Adafruit_BusIO_RegisterBits osr_bits =
       Adafruit_BusIO_RegisterBits(&reg2, 2, 0);
-  return (mlx90393_osr_t)osr_bits.read();
+  return (mlx90395_osr_t)osr_bits.read();
 }
 
 /**
@@ -784,7 +784,7 @@ mlx90393_osr_t MLX90395::getOSR(void) {
  *  or MLX90395_OSR_8
  * @return True on command success
  */
-bool MLX90395::setOSR(mlx90393_osr_t osrval) {
+bool MLX90395::setOSR(mlx90395_osr_t osrval) {
   Adafruit_BusIO_Register reg2 =
       Adafruit_BusIO_Register(i2c_dev, MLX90395_REG_2, 2, MSBFIRST);
   Adafruit_BusIO_RegisterBits osr_bits =
@@ -826,12 +826,12 @@ bool MLX90395::setGain(uint8_t gainval) {
  * @return MLX90395_RES_16, MLX90395_RES_17, MLX90395_RES_18 or
  *  MLX90395_RES_19
  */
-mlx90393_res_t MLX90395::getResolution(void) {
+mlx90395_res_t MLX90395::getResolution(void) {
   Adafruit_BusIO_Register reg2 =
       Adafruit_BusIO_Register(i2c_dev, MLX90395_REG_2, 2, MSBFIRST);
   Adafruit_BusIO_RegisterBits resX_bits =
       Adafruit_BusIO_RegisterBits(&reg2, 2, 5);
-  return (mlx90393_res_t)resX_bits.read();
+  return (mlx90395_res_t)resX_bits.read();
 }
 
 /**
@@ -841,7 +841,7 @@ mlx90393_res_t MLX90395::getResolution(void) {
  *  MLX90395_RES_19
  * @return True on command success
  */
-bool MLX90395::setResolution(mlx90393_res_t resval) {
+bool MLX90395::setResolution(mlx90395_res_t resval) {
   _resolution = resval; // cache it
 
   Adafruit_BusIO_Register reg2 =

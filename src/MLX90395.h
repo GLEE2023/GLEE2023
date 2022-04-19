@@ -20,7 +20,7 @@
 // //Registers
 
 // // MLX90395 Sensor ADDRESS as given by data sheet: 0x0C
-// #define MLX90395_DEFAULT_ADDR 0x0C		
+// #define MLX90395_DEFAULT_ADDR 0x0C
 
 // #define MLX90395_AXIS_ALL (0x0E)      /**< X+Y+Z axis bits for commands. */
 // #define MLX90395_CONF1 (0x00)         /**< Gain */
@@ -136,7 +136,7 @@
 //         /* GAIN_SEL = 7, 1x gain */
 //         {{0.150, 0.242}, {0.300, 0.484}, {0.601, 0.968}, {1.202, 1.936}},
 //     },
-    
+
 //     /* HALLCONF = 0x0 */
 //     // {
 //     //     /* GAIN_SEL = 0, 5x gain */
@@ -156,7 +156,7 @@
 //     //     /* GAIN_SEL = 7, 1x gain */
 //     //     {{0.157, 0.253}, {0.315, 0.507}, {0.629, 1.014}, {1.258, 2.027}},
 //     // }
-    
+
 //     };
 
 // /** Lookup table for conversion time based on [DIF_FILT][OSR].
@@ -188,7 +188,7 @@
 
 // // Primary Magnetometor class inharents parent sensor class variables and methods
 // class MLX90395: public Sensor{
-//     // Initialization for Sensor Data, Sensor Info and Data Structures 
+//     // Initialization for Sensor Data, Sensor Info and Data Structures
 //     public:
 //         MLX90395(int _id, bool _debug = false);
 //             //float getMagFieldStrength(sensor_float_vec_t magnetic);
@@ -257,7 +257,7 @@
 #define MLX90395_REG_1 (0x2)
 #define MLX90395_REG_2 (0x4)
 
-#define MLX90395_DEFAULT_ADDR 0x0C		
+#define MLX90395_DEFAULT_ADDR 0x0C
 
 #define MLX90395_AXIS_ALL (0x0E)      /**< X+Y+Z axis bits for commands. */
 #define MLX90395_CONF1 (0x00)         /**< Gain */
@@ -295,19 +295,19 @@ enum {
     MLX90395_REG_NOP = (0x00), /**< NOP. */
 };
 
-typedef enum mlx90393_osr {
+typedef enum mlx90395_osr {
   MLX90395_OSR_1,
   MLX90395_OSR_2,
   MLX90395_OSR_4,
   MLX90395_OSR_8,
-} mlx90393_osr_t;
+} mlx90395_osr_t;
 
-typedef enum mlx90393_res {
+typedef enum mlx90395_res {
   MLX90395_RES_16,
   MLX90395_RES_17,
   MLX90395_RES_18,
   MLX90395_RES_19,
-} mlx90393_res_t;
+} mlx90395_res_t;
 
 typedef struct{
      sensor_float_vec_t magnetic;
@@ -333,10 +333,10 @@ public:
   bool readMeasurement(float *x, float *y, float *z);
   bool readData(float *x, float *y, float *z);
 
-  mlx90393_osr_t getOSR(void);
-  bool setOSR(mlx90393_osr_t osrval);
-  mlx90393_res_t getResolution(void);
-  bool setResolution(mlx90393_res_t resval);
+  mlx90395_osr_t getOSR(void);
+  bool setOSR(mlx90395_osr_t osrval);
+  mlx90395_res_t getResolution(void);
+  bool setResolution(mlx90395_res_t resval);
   uint8_t getGain(void);
   bool setGain(uint8_t gainval);
 
@@ -353,7 +353,7 @@ private:
   uint8_t command(uint8_t cmd);
   bool readRegister(uint8_t reg, uint16_t *data);
 
-  mlx90393_res_t _resolution = MLX90395_RES_17;
+  mlx90395_res_t _resolution = MLX90395_RES_17;
   uint8_t _gain = 0;
   float _uTLSB = 0;
   int32_t _sensorID = 90395;
