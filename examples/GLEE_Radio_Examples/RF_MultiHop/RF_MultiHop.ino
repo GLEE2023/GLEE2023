@@ -3,9 +3,17 @@
 // Initialize RF Object
 LunaRadio Rad;
 
-int sizeOfBuffer = 20; //comfortable max is around 1500
-char buff[20] = {'\0'};
-char tempBuffer[5] = {' '};
+int sizeOfBuffer = 40; //comfortable max is around 1500
+char output[5] = {'\0'};
+int lenBuff = 0;
+String received = "";
+
+// conversion for transmission
+char MSG[16];
+
+int sampleRate; // Sample rate in samples per second (Hz)
+float startTime;    // Variables for timing offset calculations
+float endTime;
 
 int numTransmissions = 0;
 
@@ -20,27 +28,31 @@ void setup() {
     // Argument 4: Set spreading factor to 12
     // Argument 5: Set coding rate to 8
     Rad.initialize_radio(915.0, 17, 250.0, 12, 8);
+    delay(50);
+
+    sampleRate = 1;
 }
 
 void loop() {
-  //Check if RF successfully received tranmsission using the recieve_data_string() function
-  //Store Results in a string variable
+  startTime = millis(); //Check if RF successfully received tranmsission using the recieve_data_string() function
   numTransmissions++;
   Serial.println(numTransmissions);
-  String received = Rad.receive_data_string();
+  received = Rad.receive_data_string();
   Serial.println("Received: " + received);
+  delay(500);
 
-  //Add to buffer
-  received.toCharArray(buff, 5); // appends received message to buffer
-  Serial.print("Buff: ");
-  Serial.println(buff);
-  strcat(buff,","); // appends comma to buff
-  
-  //Transmit to another LunaSat
-  //Rad.transmit_data();
-  if(buff[sizeOfBuffer - 4] != 0){
+  lenBuff += 4;
+  // Check buffer size 
+  if(sizeOfBuffer - lenBuff < 4){
     Serial.println("Maximum memory reached. Stopping receipt and transmission.");
     delay(500);
     exit(0);
   }
+  
+  endTime = millis();
+  delay(sampleRate * 3000 - (endTime - startTime));
+
+  //Transmit to another LunaSat
+  received.toCharArray(MSG,8);
+  Rad.transmit_data(MSG);
 }
