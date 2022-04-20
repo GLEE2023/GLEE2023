@@ -315,6 +315,12 @@ typedef struct{
      //float temp;
 } mlx_sample_t;
 
+/** Digital filter settings for CONF3 register (Modified) */
+typedef enum mlx90395_filter {
+    MLX90395_FILTER_6,
+    MLX90395_FILTER_7,
+} mlx90395_filter_t;
+
 static const float gainMultipliers[16] = {
     0.2, 0.25,  0.3333, 0.4, 0.5,  0.6, 0.75,  1,
     0.1, 0.125, 0.1667, 0.2, 0.25, 0.3, 0.375, 0.5};
@@ -336,7 +342,7 @@ public:
   mlx90395_osr_t getOSR(void);
   bool setOSR(mlx90395_osr_t osrval);
   mlx90395_res_t getResolution(void);
-  bool setResolution(mlx90395_res_t resval);
+  bool setResolution(enum mlx90395_res resX, enum mlx90395_res resY, enum mlx90395_res resZ);
   uint8_t getGain(void);
   bool setGain(uint8_t gainval);
 
@@ -344,6 +350,8 @@ public:
   bool getEvent(sensors_event_t *event);
   mlx_sample_t getSample(void);
   uint16_t uniqueID[3]; ///< 48 bits of unique identifier, read during init
+  enum mlx90395_filter getFilter(void);
+  bool setFilter(enum mlx90395_filter filter);
 
 private:
   Adafruit_I2CDevice *i2c_dev = NULL;
@@ -353,10 +361,14 @@ private:
   uint8_t command(uint8_t cmd);
   bool readRegister(uint8_t reg, uint16_t *data);
 
-  mlx90395_res_t _resolution = MLX90395_RES_17;
+  enum mlx90395_res _resolutionX = MLX90395_RES_16;
+  enum mlx90395_res _resolutionY = MLX90395_RES_16;
+  enum mlx90395_res _resolutionZ = MLX90395_RES_16;
   uint8_t _gain = 0;
   float _uTLSB = 0;
   int32_t _sensorID = 90395;
+
+  enum mlx90395_filter _dig_filt;
 };
 
 #endif

@@ -619,10 +619,10 @@
 #include "MLX90395.h"
 
 MLX90395::MLX90395(int _id, bool _debug){
-     //MLX90395::info.id = _id;
-     //MLX90395::info.name = "MLX90395 Magnetometer";		// assign sensor name
-     //MLX90395::info.address = MLX90395_DEFAULT_ADDR;		// assign sensor i2c address
-     //MLX90395::sensorDebug = _debug;						// debug flag status
+    //  MLX90395::info.id = _id;
+    //  MLX90395::info.name = "MLX90395 Magnetometer";		// assign sensor name
+    //  MLX90395::info.address = MLX90395_DEFAULT_ADDR;		// assign sensor i2c address
+    //  MLX90395::sensorDebug = _debug;						// debug flag status
 }
 
 /*!
@@ -665,7 +665,7 @@ bool MLX90395::_init(void) {
     _uTLSB = 2.5; // medium field gain
   }
 
-  _resolution = getResolution();
+  _resolutionX = getResolution();
 
   if (!readRegister(0x26, &uniqueID[0]) || !readRegister(0x27, &uniqueID[1]) ||
       !readRegister(0x28, &uniqueID[2])) {
@@ -841,20 +841,22 @@ mlx90395_res_t MLX90395::getResolution(void) {
  *  MLX90395_RES_19
  * @return True on command success
  */
-bool MLX90395::setResolution(mlx90395_res_t resval) {
-  _resolution = resval; // cache it
+bool MLX90395::setResolution(enum mlx90395_res resX, enum mlx90395_res resY, enum mlx90395_res resZ) {
+  _resolutionX = resX; // cache it
+  _resolutionY = resY;
+  _resolutionZ = resZ;
 
   Adafruit_BusIO_Register reg2 =
       Adafruit_BusIO_Register(i2c_dev, MLX90395_REG_2, 2, MSBFIRST);
   Adafruit_BusIO_RegisterBits resX_bits =
       Adafruit_BusIO_RegisterBits(&reg2, 2, 5);
-  resX_bits.write(resval);
+  resX_bits.write(resX);
   Adafruit_BusIO_RegisterBits resY_bits =
       Adafruit_BusIO_RegisterBits(&reg2, 2, 7);
-  resY_bits.write(resval);
+  resY_bits.write(resY);
   Adafruit_BusIO_RegisterBits resZ_bits =
       Adafruit_BusIO_RegisterBits(&reg2, 2, 9);
-  return resZ_bits.write(resval);
+  return resZ_bits.write(resZ);
 }
 
 /****************************************************************/
@@ -953,4 +955,21 @@ mlx_sample_t MLX90395::getSample(void){
      }
 
      return sample;
+}
+
+enum mlx90395_filter MLX90395::getFilter(void) { return _dig_filt; }
+/**
+ * Parameters: filter - the digital filter setting
+ * Returns: True if successful, false if not
+ * This function sets the digital filter.
+**/
+bool MLX90395::setFilter(enum mlx90395_filter filter) {
+    _dig_filt = filter; // cache it
+
+  Adafruit_BusIO_Register reg2 =
+      Adafruit_BusIO_Register(i2c_dev, MLX90395_REG_2, 2, MSBFIRST);
+  Adafruit_BusIO_RegisterBits filterX_bits =
+      Adafruit_BusIO_RegisterBits(&reg2, 3, 2);
+  filterX_bits.write(filter);
+  return filterX_bits.write(filter);
 }
