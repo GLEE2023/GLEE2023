@@ -24,6 +24,10 @@ String printOut;
 String sep = ", ";
 unsigned long timeStamp;
 
+int LED1 = 4;
+int LED2 = 5;
+
+
 void setup() {
     // Start up Serial (wired) Communications
     Serial.begin(9600);
@@ -56,6 +60,9 @@ void setup() {
     // Print out data header
     Serial.println("Sample Key: ");
     Serial.println("Time, TMP117, MPU6000-X, MPU6000-Y, MPU6000-Z, MLX90393-X, MLX90393-Y, MLX90393-Z, TPIS1385-Object, TPIS1385-Ambient, CAP");
+
+    pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
 }
 
 void loop() {
@@ -78,6 +85,14 @@ void loop() {
     // Print the 
     Serial.println(printOut);
 
+    //LED blink test
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED2,HIGH);
+    delay(1000); // change delays to change sample rate
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    delay(1000);// change delays to change sample rate
+
     // Repeate every ~500ms INCREASE TO CHANGE SAMPLE RATE
-    delay(500);
+    //delay(500);
 }
