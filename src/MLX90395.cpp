@@ -946,8 +946,8 @@ mlx_sample_t MLX90395::getSample(void){
          sample.strength = MLX90395::getMagFieldStrength(sample.magnetic);
          */
 
-         sample.magnetic.x = x;
-         sample.magnetic.y = y;
+         sample.magnetic.x = -y;
+         sample.magnetic.y = x;
          sample.magnetic.z = z;
          //sample.strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
      }else{
