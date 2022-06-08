@@ -27,7 +27,7 @@ void setup (){
 
     //Setup done
     Serial.println("Begin printing data:");
-    Serial.println("X [uT],Y [uT],Z [uT],Magnitude [uT]");
+    Serial.println("X[uT],Y[uT],Z[uT],Magnitude[uT]");
 };
 
 void loop (){
