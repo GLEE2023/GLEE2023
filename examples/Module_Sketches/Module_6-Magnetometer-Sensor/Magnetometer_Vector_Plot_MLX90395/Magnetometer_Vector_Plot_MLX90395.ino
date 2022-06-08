@@ -1,5 +1,7 @@
 #include "MLX90395.h"
 
+const int NUM_SAMPLES = 20;
+
 MLX90395 magnetometer = MLX90395(1,false); // Set-up for the magnetometer with debugging set to false
 
 mlx_sample_t sample; // Saves the sample
@@ -27,38 +29,7 @@ void setup (){
     // Set digital filtering
     magnetometer.setFilter(MLX90395_FILTER_6);
 
-    // Calibration
-    Serial.println("Place your LunaSat at your desk with the magnet away.");
-    Serial.println("Your LunaSat should be oriented such that the solar panels are at the top.");
-    Serial.println("Press Enter to calibrate your magnetometer.");
-    while(!Serial.available()){} // While no input from user, wait
-    input = Serial.readString();
-
-    // Get calibration points
-    mlx_sample_t calibrationPoints[20];
-    for(int i = 0; i < 20; i++){
-      calibrationPoints[i] = magnetometer.getSample();
-      delay(100); //Wait to ensure mag has new measurement
-    }
-
-    float calX,sumX = 0.0;
-    float calY,sumY = 0.0;
-    float calZ,sumZ = 0.0;
-
-    // Get sums of axes measurements
-    for(int j = 0; j < 20; j++){
-      sumX = sumX + calibrationPoints[j].magnetic.x;
-      sumY = sumY + calibrationPoints[j].magnetic.y;
-      sumZ = sumZ + calibrationPoints[j].magnetic.z;
-    }
-
-    // Find average axes measurements to use as calibration
-    calX = sumX/20;
-    calY = sumY/20;
-    calZ = sumZ/20;
-
-    Serial.println("Calibration is complete. You may now begin the activity.");
-    Serial.println();
+    Serial.println("Begin Activity");
 }
 
 
@@ -71,56 +42,59 @@ void loop (){
   input = Serial.readString();
 
   // Get samples from magnetometer
-  mlx_sample_t samples[20];
-  for(int i = 0; i < 20; i++){
+  mlx_sample_t samples[NUM_SAMPLES];
+  for(int i = 0; i < NUM_SAMPLES; i++){
     samples[i] = magnetometer.getSample();
+    Serial.print(".");
     delay(100); //Wait to ensure mag has new measurement
   }
+  Serial.println();
 
   float sumX = 0.0;
   float sumY = 0.0;
   float sumZ = 0.0;
 
   // Get sums of axes measurements
-  for(int j = 0; j < 20; j++){
+  for(int j = 0; j < NUM_SAMPLES; j++){
     sumX = sumX + samples[j].magnetic.x;
     sumY = sumY + samples[j].magnetic.y;
     sumZ = sumZ + samples[j].magnetic.z;
   }
 
-  float valX = sumX/20;
-  float valY = sumY/20;
-  float valZ = sumZ/20;
+  float valX = sumX/NUM_SAMPLES;
+  float valY = sumY/NUM_SAMPLES;
+  float valZ = sumZ/NUM_SAMPLES;
 
   // Calculates angle of magnetic field vector
-  angle = atan((valY-calY)/(valX-calX))*(180/M_PI);
-  if((valX-calX)<0){
-      angle = 270 - angle;
-  } else if ((valX-calX)>0){
-      angle = 90 - angle;
-  } else if (valY-calY < 0){
-      angle = 180.0;
-  } else {
-      angle = 0.0;
-  }
+  angle = atan2((valY-calY),(valX-calX))*180/3.14;
+  // if((valX-calX)<0){
+  //     angle = 270 - angle;
+  // } else if ((valX-calX)>0){
+  //     angle = 90 - angle;
+  // } else if (valY-calY < 0){
+  //     angle = 180.0;
+  // } else {
+  //     angle = 0.0;
+  // }
   String direction_str = "";
 
   // Determine the direction of magnetic field vector based on the angle
-  if (angle <= 22.5 || angle > 337.5){
-      direction_str = "Up";
+
+  if (angle <= 22.5 && angle > -22.5){
+      direction_str = "Right";
   } else if (angle <= 67.5 && angle > 22.5){
-      direction_str = "Up Left";
+      direction_str = "Down Right";
   } else if (angle <= 112.5 && angle > 67.5){
-      direction_str = "Left";
+      direction_str = "Down";
   } else if (angle <= 157.5 && angle > 112.5){
       direction_str = "Down Left";
-  } else if (angle <= 202.5 && angle > 157.5){
-      direction_str = "Down";
-  } else if (angle <= 247.5 && angle > 202.5){
-      direction_str = "Down Right";
-  } else if (angle <= 292.5 && angle > 247.5){
-      direction_str = "Right";
-  } else if (angle <= 337.5 && angle > 292.5){
+  } else if (angle <= -157.5 || angle > 157.5){
+      direction_str = "Left";
+  } else if (angle <= -113.5 && angle > -157.5){
+      direction_str = "Up Left";
+  } else if (angle <= -67.5 && angle > -112.5){
+      direction_str = "Up";
+  } else if (angle <= -22.5 && angle > -67.5){
       direction_str = "Up Right";
   }
 
@@ -137,5 +111,6 @@ void loop (){
   // but this is not a strictly defined limit
   magnitude = ((2) / (1000.0)) * (magnitude);
   Serial.println(String("Magnitude: " + String(magnitude) + " cm"));
+  Serial.println(String("(Average values: X = " + String(valX-calX) + " Y = " + String(valY-calY) + " Angle = " + String(angle) + ")"));
   Serial.println();
 }

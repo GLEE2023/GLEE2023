@@ -27,7 +27,7 @@ void setup (){
 
     //Setup done
     Serial.println("Begin printing data:");
-    Serial.println("X [uT],Y [uT],Z [uT],Magnitude [uT]");
+    Serial.println("X[uT],Y[uT],Z[uT],Magnitude[uT]");
 };
 
 void loop (){
@@ -38,8 +38,8 @@ void loop (){
     float strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
 
     // Print out magnetic field measurements for each axis
-    Serial.print(sample.magnetic.x,4); Serial.print(","); Serial.print(sample.magnetic.y,4); Serial.print(",");
-    Serial.print(sample.magnetic.z,4); Serial.print(","); Serial.print(strength,4); Serial.println("");
+    Serial.print(sample.magnetic.x,4); Serial.print(", \t"); Serial.print(sample.magnetic.y,4); Serial.print(", \t");
+    Serial.print(sample.magnetic.z,4); Serial.print(", \t"); Serial.print(strength,4); Serial.println("");
 
-    delay(1000); // Take samples approx every one second
+    delay(100); // Take samples approx 10Hz
 };
