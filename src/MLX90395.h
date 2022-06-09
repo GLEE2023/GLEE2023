@@ -81,8 +81,6 @@ static const float gainMultipliers[16] = {
     0.2, 0.25,  0.3333, 0.4, 0.5,  0.6, 0.75,  1,
     0.1, 0.125, 0.1667, 0.2, 0.25, 0.3, 0.375, 0.5};
 
-#define MLX90395_DEFAULT_ADDR (0x0C) /* Can also be 0x18, depending on IC */
-
 /** Class for interfacing with MLX90395 magnetometer */
 class MLX90395 : public Adafruit_Sensor {
 public:
