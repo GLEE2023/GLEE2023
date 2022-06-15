@@ -12,22 +12,30 @@ void setup (){
         while (1) { delay(10); }
     }
 
+
+    // see 18.3.1 in the mlx90395 datasheet for info on default values.
+    // The following enumerators are defined in MLX90395.h.
+
     // Set gain
-    //magnetometer.setGain(MLX90393_GAIN_2_5X); //this line may or may not work
+    magnetometer.setGain(8); //default value is 8, can range from 0-15
 
     // Set resolution
-    magnetometer.setResolution(MLX90395_RES_19,MLX90395_RES_19,MLX90395_RES_16);
+    // See section 18.6 Sensitivity in the MLX90395 datasheet for explanation.
+    // These values are equivalent to 1 and are the default
+    magnetometer.setResolution(MLX90395_RES_17,MLX90395_RES_17,MLX90395_RES_17);
 
-    // Set oversampling
-    magnetometer.setOSR(MLX90395_OSR_2);
 
-    // Set digital filtering
-    magnetometer.setFilter(MLX90395_FILTER_6);
+    // Set oversampling. See 18.4 in the datasheet
+    magnetometer.setOSR(MLX90395_OSR_4); //not default. default is MLX90395_OSR_1 and is equivalent to 0
+
+    // Set digital filtering. (Built in rolling average)
+    magnetometer.setFilter(MLX90395_FILTER_8); //default. MLX90395_FILTER_1 is equivalent to 0
+
 
 
     //Setup done
     Serial.println("Begin printing data:");
-    Serial.println("X[uT],Y[uT],Z[uT],Magnitude[uT]");
+    Serial.println("X[uT],Y[uT],Z[uT],Magnitude[uT],Agnle[deg]");
 };
 
 void loop (){
@@ -36,10 +44,11 @@ void loop (){
 
     // get strength by square rooting the sum of squares of each element
     float strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
+    float angle = atan2(sample.magnetic.y,sample.magnetic.x)*180/3.14;
 
     // Print out magnetic field measurements for each axis
     Serial.print(sample.magnetic.x,4); Serial.print(", \t"); Serial.print(sample.magnetic.y,4); Serial.print(", \t");
-    Serial.print(sample.magnetic.z,4); Serial.print(", \t"); Serial.print(strength,4); Serial.println("");
+    Serial.print(sample.magnetic.z,4); Serial.print(", \t"); Serial.print(strength,4); Serial.print(", \t"); Serial.print(angle,4); Serial.println("");
 
     delay(100); // Take samples approx 10Hz
 };

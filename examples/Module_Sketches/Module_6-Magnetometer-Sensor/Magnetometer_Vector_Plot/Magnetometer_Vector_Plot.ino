@@ -1,6 +1,6 @@
 #include "MLX90395.h"
 
-const int NUM_SAMPLES = 20;
+const int NUM_SAMPLES = 5;
 
 MLX90395 magnetometer = MLX90395(1,false); // Set-up for the magnetometer with debugging set to false
 
@@ -18,16 +18,23 @@ void setup (){
     magnetometer.begin_I2C();
 
     // Set gain
-    //magnetometer.setGain(gainMultipliers[0]);
-
+    magnetometer.setGain(8); //default value is 8, can range from 0-15
     // Set resolution
-    magnetometer.setResolution(MLX90395_RES_19,MLX90395_RES_19,MLX90395_RES_16);
-
-    // Set oversampling
-    magnetometer.setOSR(MLX90395_OSR_2);
-
+    magnetometer.setResolution(MLX90395_RES_17,MLX90395_RES_17,MLX90395_RES_17);
+    // Set oversampling. See 18.4 in the datasheet
+    magnetometer.setOSR(MLX90395_OSR_4); //not default. default is MLX90395_OSR_1 and is equivalent to 0
     // Set digital filtering
-    magnetometer.setFilter(MLX90395_FILTER_6);
+    magnetometer.setFilter(7); //default. MLX90395_FILTER_6 is equivalent to 0
+
+    // Remove bias in axes
+    Serial.println("Press Enter to calibrate LunaSat.\nKeep LunaSat a few feet away from the magnet.");
+
+    //waaaiit
+    while(!Serial.available()){}
+    sample = magnetometer.getSample();
+    calX = sample.magnetic.x;
+    calY = sample.magnetic.y;
+    calZ = sample.magnetic.z;
 
     Serial.println("Begin Activity");
 }

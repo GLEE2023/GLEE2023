@@ -951,7 +951,7 @@ mlx_sample_t MLX90395::getSample(void){
          sample.magnetic.z = z;
          //sample.strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
      }else{
-         Serial.println(F("Waiting for data to get ready"));
+         Serial.println(F("Did not collect data from Magnetometer."));
      }
 
      return sample;
