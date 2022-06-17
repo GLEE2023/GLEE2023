@@ -10,14 +10,14 @@
 
 #include "TPIS1385.h"
 
-/** 
+/**
  * Constructor
  * Parameters: none
  * Returns: if initialization is satisfied.
  * This is a constructor for the IR_Thermopile class
- **/ 
+ **/
 TPIS1385::TPIS1385(int _id, bool _debug){
-	TPIS1385::info.id = _id;     
+	TPIS1385::info.id = _id;
 	TPIS1385::info.address = TPIS1385_I2C_ADDR;
 	TPIS1385::info.name = "IRTpile";
     TPIS1385::sensorDebug = _debug;
@@ -28,13 +28,13 @@ TPIS1385::TPIS1385(int _id, bool _debug){
  * Begin comunications with TPIS1385
  * Parameters: none
  * Returns: none
- **/ 
+ **/
 
 void TPIS1385::begin(void){
     Wire.begin();                          // Begin i2c coms at standard speed
-	Wire.beginTransmission(0x00);    // Reload all call   
+	  Wire.beginTransmission(0x00);    // Reload all call   
     Wire.write(0x04);
-    Wire.write(0x00);         
+    Wire.write(0x00);
 	if(Wire.endTransmission()!=0) Serial.println(F("Init call failiure"));
     delay(50);  // Wait on i2c transmission
     Serial.println(F("TPIS coms Init complete"));
@@ -44,7 +44,7 @@ void TPIS1385::begin(void){
  * Reads EEprom
  * Parameters: None
  * Returns: None
- **/ 
+ **/
 void TPIS1385::readEEprom(void){
     uint8_t data[2] = {0,0};
 
@@ -58,14 +58,14 @@ void TPIS1385::readEEprom(void){
 
     // Read PTAT25 calibration value
     readBytes(TP_PTAT25, 2, &data[0]);
-    TPIS1385::sensorCalibration.PTAT25 = ((uint16_t) data[0] << 8) | data[1]; 
-    
+    TPIS1385::sensorCalibration.PTAT25 = ((uint16_t) data[0] << 8) | data[1];
+
     Serial.print(F("PTAT25 Value: "));
     Serial.println(TPIS1385::sensorCalibration.PTAT25);
 
     // Read M calibration value
     readBytes(TP_M, 2, &data[0]);
-    TPIS1385::sensorCalibration.M = ((uint16_t) data[0] << 8) | data[1]; 
+    TPIS1385::sensorCalibration.M = ((uint16_t) data[0] << 8) | data[1];
     TPIS1385::sensorCalibration.M /= 100; // Apply appropriate offset
 
     Serial.print(F("M Value: "));
@@ -101,7 +101,7 @@ void TPIS1385::readEEprom(void){
  * Get and return temp
  * Parameters: none
  * Returns: none
- **/ 
+ **/
 uint16_t TPIS1385::getTPamb(){
     uint8_t data[2] = {0,0};
     readBytes(TP_AMBIENT, 2, &data[0]);
@@ -113,7 +113,7 @@ uint16_t TPIS1385::getTPamb(){
  * Gets Tamb
  * Parameters: TPamb
  * Returns: Tamb
- **/ 
+ **/
 float TPIS1385::getTamb(uint16_t TPamb){
     float temp = 298.15f + ((float) TPamb - (float) TPIS1385::sensorCalibration.PTAT25) * (1.0f/(float) TPIS1385::sensorCalibration.M);
     return temp;
@@ -123,11 +123,11 @@ float TPIS1385::getTamb(uint16_t TPamb){
  * Gets TPobj
  * Parameters: None
  * Returns: TPobj
- **/ 
+ **/
 uint32_t TPIS1385::getTPobj(){
     uint8_t data[3] = {0,0,0};
     readBytes(TP_OBJECT, 3, &data[0]);
-    uint32_t temp = ( (uint32_t) ( (uint32_t)data[0] << 24) | ( (uint32_t)data[1] << 16) | ( (uint32_t)data[2] & 0x80) << 8) >> 15; 
+    uint32_t temp = ( (uint32_t) ( (uint32_t)data[0] << 24) | ( (uint32_t)data[1] << 16) | ( (uint32_t)data[2] & 0x80) << 8) >> 15;
     return temp;
 }
 
@@ -135,7 +135,7 @@ uint32_t TPIS1385::getTPobj(){
  * Gets Tobj
  * Parameters: TPobj, Tamb
  * Returns: Tobj
- **/ 
+ **/
 float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
     float f1 = pow(Tamb, 3.8f);
     float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / sensorCalibration.K; // EQ. from datasheet
@@ -146,7 +146,7 @@ float TPIS1385::getTobj(uint32_t TPobj, float Tamb){
  * Gets corrected Tobj using emisivity
  * Parameters: emisivity
  * Returns: Corrected Tobj
- **/ 
+ **/
 float TPIS1385::getCorrectedTobj(uint32_t TPobj, float Tamb, float emi){
     float f1 = pow(Tamb, 3.8f);
     float f2 = ( ((float) TPobj) - ((float) sensorCalibration.U0)  ) / (sensorCalibration.K * emi); // EQ. from datasheet
@@ -154,22 +154,22 @@ float TPIS1385::getCorrectedTobj(uint32_t TPobj, float Tamb, float emi){
 }
 
 /**
- * Gets sample 
+ * Gets sample
  * Parameters: none
  * Returns: Sample
- **/ 
+ **/
 TPsample_t TPIS1385::getSample(){
     TPsample_t sample; // observation sample to be returned
-    
+
     // Build Sample
     uint16_t TPamb = getTPamb();
     uint32_t TPobj = getTPobj();
     uint16_t Tamb = getTamb(TPamb);
     float Tobj = getTobj(TPobj, Tamb);
 
-    sample.object = Tobj - SENSOR_CONV_K_to_C; 
+    sample.object = Tobj - SENSOR_CONV_K_to_C;
     sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
-    
+
     return sample;
 }
 
@@ -178,19 +178,19 @@ TPsample_t TPIS1385::getSample(){
  * Gets corrected sample using emisivity
  * Parameters: emisivity
  * Returns: Sample
- **/ 
+ **/
 TPsample_t TPIS1385::getCorrectedSample(float emisivity){
     TPsample_t sample; // observation sample to be returned
-    
+
     // Build Sample
     uint16_t TPamb = getTPamb();
     uint32_t TPobj = getTPobj();
     uint16_t Tamb = getTamb(TPamb);
     float Tobj = getCorrectedTobj(TPobj, Tamb, emisivity);
-    
-    sample.object = Tobj - SENSOR_CONV_K_to_C; 
+
+    sample.object = Tobj - SENSOR_CONV_K_to_C;
     sample.ambient = Tamb - SENSOR_CONV_K_to_C; // Ambient temperature sample in deg c (k to c conversion needed)
-    
+
     return sample;
 }
 
@@ -198,7 +198,7 @@ TPsample_t TPIS1385::getCorrectedSample(float emisivity){
  * Updates Sample
  * Parameters: none
  * Returns: none
- **/ 
+ **/
 void TPIS1385::updateSample(){
     staticSample = TPIS1385::getSample();
 }
