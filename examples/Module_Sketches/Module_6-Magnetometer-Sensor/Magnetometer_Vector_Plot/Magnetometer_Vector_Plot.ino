@@ -74,15 +74,8 @@ void loop (){
 
   // Calculates angle of magnetic field vector
   angle = atan2((valY-calY),(valX-calX))*180/3.14;
-  // if((valX-calX)<0){
-  //     angle = 270 - angle;
-  // } else if ((valX-calX)>0){
-  //     angle = 90 - angle;
-  // } else if (valY-calY < 0){
-  //     angle = 180.0;
-  // } else {
-  //     angle = 0.0;
-  // }
+
+  // Decalre direction_str
   String direction_str = "";
 
   // Determine the direction of magnetic field vector based on the angle
@@ -111,13 +104,6 @@ void loop (){
   // Prints direction and magnitude of vector at current location.
   Serial.println();
   Serial.print(String("Vector Data - "));
-  Serial.print(String("Direction: " + direction_str + " , "));
+  Serial.println(String("Direction: " + direction_str));
 
-  // Length calculations
-  // A vector of magnitude 1000.0 uT translates to a 2cm vector,
-  // but this is not a strictly defined limit
-  magnitude = ((2) / (1000.0)) * (magnitude);
-  Serial.println(String("Magnitude: " + String(magnitude) + " cm"));
-  Serial.println(String("(Average values: X = " + String(valX-calX) + " Y = " + String(valY-calY) + " Angle = " + String(angle) + ")"));
-  Serial.println();
 }

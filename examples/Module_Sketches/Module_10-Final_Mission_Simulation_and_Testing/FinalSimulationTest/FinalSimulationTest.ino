@@ -71,11 +71,11 @@ void loop() {
     timeStamp = millis();
 
     // Get samples from each sensor
-    tempSample = thermometer.getTemperatureC();
-    accSample = accelerometer.getSample();
-    magSample = magnetometer.getSample();
+    tempSample  = thermometer.getTemperatureC();
+    accSample   = accelerometer.getSample();
+    magSample   = magnetometer.getSample();
     thermSample = thermopile.getSample();
-    capSample = capacitive.getRawData();
+    capSample   = capacitive.getRawData();
 
     // Translate sample data to Strings, combine with seperators (", ") inbetween
     printOut = String(timeStamp) + sep + String(tempSample) + sep + String(accSample.x) + sep +
@@ -93,7 +93,4 @@ void loop() {
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,LOW);
     delay(1000);// change delays to change sample rate
-
-    // Repeate every ~500ms INCREASE TO CHANGE SAMPLE RATE
-    //delay(500);
 }
