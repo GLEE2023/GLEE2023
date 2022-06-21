@@ -35,25 +35,22 @@ void setup (){
 
     //Setup done
     Serial.println("Begin printing data:");
-    Serial.println("X[uT],Y[uT],Z[uT],Magnitude[uT],Agnle[deg]");
+    Serial.println("X[uT],Y[uT],Z[uT],Magnitude[uT]");
 };
 
 void loop (){
+
     // Get a sample
     sample = magnetometer.getSample();
 
     // get strength by square rooting the sum of squares of each element
     float strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
 
-    //get angle using atan2(). Returns value from -pi to pi
-    float angle = atan2(sample.magnetic.y,sample.magnetic.x)*180/3.14;
-
     // Print out magnetic field measurements for each axis
     Serial.print(sample.magnetic.x,4); Serial.print(", \t");
     Serial.print(sample.magnetic.y,4); Serial.print(", \t");
     Serial.print(sample.magnetic.z,4); Serial.print(", \t");
-    Serial.print(strength,4); Serial.print(", \t");
-    Serial.print(angle,4); Serial.println("");
+    Serial.print(strength,4); Serial.println("");
 
     delay(100); // Take samples approx 10Hz
 };

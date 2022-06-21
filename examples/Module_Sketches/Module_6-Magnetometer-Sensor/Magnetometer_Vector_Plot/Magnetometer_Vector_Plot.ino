@@ -1,5 +1,6 @@
 #include "MLX90395.h"
 
+//Take NUM_SAMPLES samples and average them to return a direction
 const int NUM_SAMPLES = 5;
 
 MLX90395 magnetometer = MLX90395(1,false); // Set-up for the magnetometer with debugging set to false
@@ -31,11 +32,14 @@ void setup (){
 
     //waaaiit
     while(!Serial.available()){}
+    input = Serial.readString();
+
     sample = magnetometer.getSample();
     calX = sample.magnetic.x;
     calY = sample.magnetic.y;
     calZ = sample.magnetic.z;
 
+    delay(100);
     Serial.println("Begin Activity");
 }
 
@@ -75,11 +79,9 @@ void loop (){
   // Calculates angle of magnetic field vector
   angle = atan2((valY-calY),(valX-calX))*180/3.14;
 
-  // Decalre direction_str
-  String direction_str = "";
 
   // Determine the direction of magnetic field vector based on the angle
-
+  String direction_str = "";
   if (angle <= 22.5 && angle > -22.5){
       direction_str = "Right";
   } else if (angle <= 67.5 && angle > 22.5){
@@ -105,5 +107,6 @@ void loop (){
   Serial.println();
   Serial.print(String("Vector Data - "));
   Serial.println(String("Direction: " + direction_str));
-
+  Serial.println(String("(Average values: X = " + String(valX-calX) + " Y = " + String(valY-calY) + " Angle = " + String(angle) + ")"));
+  Serial.println();
 }
