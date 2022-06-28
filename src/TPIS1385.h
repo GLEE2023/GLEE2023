@@ -119,26 +119,28 @@ class TPIS1385 : public Sensor{                       //Inheritied class from th
         double getObjectTemperature(void);              //Retreive most recent ADC Values and store in temperature data structure
         double convertTempKtoF(double inputTemp);       //Converts a kelvin output to fahrenheit
         void checkStatus(void);                         //Reads status registers
-        void begin(void);
+        void begin(void);                               //Begins Transmission
 
-        void readEEprom(void);
+        void readEEprom(void);                          //Reads EEprom
 
-        float getTamb(uint16_t TPamb);
-        uint16_t getTPamb(void);
+        float getTamb(uint16_t TPamb);                  //Gets Tamb
+        uint16_t getTPamb(void);                        //Gets Tpamb
 
-        uint32_t getTPobj(void);
-        float getTobj(uint32_t TPobj, float Tamb);
+        uint32_t getTPobj(void);                        //Gets TPobj
+        float getTobj(uint32_t TPobj, float Tamb);      //Gets Tobj
 
-        float getCorrectedTobj(uint32_t TPobj, float Tamb, float emi);
+        float getCorrectedTobj(uint32_t TPobj, float Tamb, float emi);  //Gets Correct Tobj using emisivity
 
-        TPsample_t getSample(void);
-        TPsample_t getCorrectedSample(float emisivity);
+        TPsample_t getSample(void);                     //Gets sample
+        TPsample_t getCorrectedSample(float emisivity); //Gets corrected sample using emisivity
 
+        void updateSample(void);
 
     private:
         CalibrationCoef sensorCalibration;              //Structure containing the sensor Calibration Details
         //RawADC sensorRawADC;                            //Structure containing the sensors most recently read raw ADC values
         SensorADC sensorADC;
+        uint8_t TEMPADDRESS;
         TPsample_t staticSample;
 };
 

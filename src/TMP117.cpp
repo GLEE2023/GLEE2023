@@ -1,4 +1,4 @@
-// GLEE 2023 TMP117 Library
+// GLEE 2023 TMP117 Library 
 
 #include "TMP117.h"
 
@@ -10,10 +10,19 @@
 **/
 TMP117::TMP117(int _id, bool _debug){
     TMP117::info.id = _id;
-    TMP117::info.name = "TMP117 Temperature Sensor";
+    TMP117::info.name = F("TMP117");
   	TMP117::info.address = 0x48;
     TMP117::sensorDebug = _debug;
     Wire.begin(TMP117::info.address);     // Might need to move this out of the initializer
+}
+
+/**
+ * Parameters: none
+ * Returns: TMP117 address
+ * This function returns the TMP117 I2C address.
+**/
+uint8_t TMP117::getAddress(){
+    return TMP117::info.address;
 }
 
 /**
@@ -26,6 +35,16 @@ double TMP117::getTemperatureC(){
     int16_t digitalTempC = read2Byte(TMP117_TEMP_REG);      // Calls to read registers to pull all the bits to store in an array
     double finalTempC = digitalTempC * TMP117_RESOLUTION;    // Multiplies by the resolution for digital to final temp
     return finalTempC;
+}
+
+/**
+ * Parameters: none
+ * Returns: double Fahrenheit temperature 
+ * This function takes the celcius temperature and 
+ * converts to fahrenheit.
+**/
+double TMP117::getTemperatureF(){
+    return getTemperatureC() * 9.0 / 5.0 + 32.0;
 }
 
 /**

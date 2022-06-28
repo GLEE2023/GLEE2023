@@ -181,8 +181,8 @@ const float mlx90393_tconv[2][4] = {
 
 typedef struct{
     sensor_float_vec_t magnetic;
-    //float strength;
-    //float temp;
+    float strength;
+    float temp;
 } mlx_sample_t;
 
 // Primary Magnetometor class inharents parent sensor class variables and methods
@@ -199,23 +199,23 @@ class MLX90393: public Sensor{
             bool reset(void);
             bool exitMode(void);
 
-            bool readMeasurement(float *x, float *y, float *z);
-            bool startSingleMeasurement(void);
+            bool readMeasurement(float *x, float *y, float *z); //Reads data from the data register and returns the readings.
+            bool startSingleMeasurement(void); //Starts a single measurement (single measurement mode) on all 3 axes.
 
-            bool setGain(enum mlx90393_gain gain);
-            enum mlx90393_gain getGain(void);
+            bool setGain(enum mlx90393_gain gain); //Sets the sensor gain to the specified level
+            enum mlx90393_gain getGain(void); //Gets the current sensor gain.
 
-            bool setResolution(enum mlx90393_axis, enum mlx90393_resolution resolution);
-            enum mlx90393_resolution getResolution(enum mlx90393_axis);
+            bool setResolution(enum mlx90393_axis, enum mlx90393_resolution resolution); //Sets the sensor resolution to the specified level.
+            enum mlx90393_resolution getResolution(enum mlx90393_axis); //Gets the current sensor resolution
 
-            bool setFilter(enum mlx90393_filter filter);
-            enum mlx90393_filter getFilter(void);
+            bool setFilter(enum mlx90393_filter filter);//Sets the digital filter.
+            enum mlx90393_filter getFilter(void); //Gets the current digital filter setting.
 
-            bool setOversampling(enum mlx90393_oversampling oversampling);
-            enum mlx90393_oversampling getOversampling(void);
+            bool setOversampling(enum mlx90393_oversampling oversampling); //Sets the oversampling value.
+            enum mlx90393_oversampling getOversampling(void); //Gets the current oversampling setting.
 
-            bool setTrigInt(bool state);
-            bool readData(float *x, float *y, float *z);
+            bool setTrigInt(bool state); //Sets the TRIG_INT pin to one of two specified functions.
+            bool readData(float *x, float *y, float *z); //Performs a X/Y/Z conversion and returns the readings
 
             //sensor_float_vec_t getMagnetic(float *x, float *y, float *z);
 

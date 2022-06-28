@@ -1,4 +1,4 @@
-/*
+/* 
 * Description: This is an Arduino (C++) .cpp file required for the MLX90393 Magnetometer
 * Project Info: Created For GLEE (The Great Lunar Expedition for Everyone)
 * Library Author: Adafruit
@@ -18,7 +18,7 @@
 **/
 MLX90393::MLX90393(int _id, bool _debug){
     MLX90393::info.id = _id;
-    MLX90393::info.name = "MLX90393 Magnetometer";		// assign sensor name
+    MLX90393::info.name = F("MLX90393");		// assign sensor name
     MLX90393::info.address = MLX90393_DEFAULT_ADDR;		// assign sensor i2c address
     MLX90393::sensorDebug= _debug;						// debug flag status
 }
@@ -213,9 +213,6 @@ bool MLX90393::setGain(mlx90393_gain_t gain) {
 
     uint16_t data;
     readRegister(MLX90393_CONF1, &data);
-
-    Serial.print("CONF1 Reg: "); Serial.println(data);
-    Serial.print("GAIN VAR: "); Serial.println(g);
 
     // mask off gain bits
     data &= ~0x0070;
@@ -549,9 +546,9 @@ mlx_sample_t MLX90393::getSample(void){
         sample.magnetic.x = x;
         sample.magnetic.y = y;
         sample.magnetic.z = z;
-        //sample.strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
+        sample.strength = sqrt(pow(sample.magnetic.x,2) + pow(sample.magnetic.y,2) + pow(sample.magnetic.z,2));
     }else{
-        Serial.println(F("Waiting for data to get ready"));
+        Serial.println(F("Waiting for data"));
     }
 
     return sample;

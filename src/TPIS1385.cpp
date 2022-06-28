@@ -32,7 +32,7 @@ TPIS1385::TPIS1385(int _id, bool _debug){
 
 void TPIS1385::begin(void){
     Wire.begin();                          // Begin i2c coms at standard speed
-    Wire.beginTransmission(0x00);    // Reload all call
+	  Wire.beginTransmission(0x00);    // Reload all call   
     Wire.write(0x04);
     Wire.write(0x00);
 	if(Wire.endTransmission()!=0) Serial.println(F("Init call failiure"));

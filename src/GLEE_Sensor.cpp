@@ -18,21 +18,21 @@ bool Sensor::isConnected(void){
     statusByte = Wire.endTransmission();
     
     if (statusByte==0){
-        if (Sensor::sensorDebug){
-            Serial.print("Sucessful Connection with: ");
-            Serial.print(Sensor::info.name);
-            Serial.print(" at address: ");
-            Serial.println(Sensor::info.address,HEX);
-        }
+        // if (Sensor::sensorDebug){
+        //     Serial.print(F"Sucessful Connection with: ");
+        //     Serial.print(Sensor::info.name);
+        //     Serial.print(F" at address: ");
+        //     Serial.println(Sensor::info.address,HEX);
+        // }
         return true;
     }
 
     else {
         if (Sensor::sensorDebug){
-            Serial.print("ERROR: UNABLE TO CONNECT TO ");
-            Serial.println(Sensor::info.name);
-		    Serial.print("Status Byte = ");
-		    Serial.println(statusByte);    
+            // Serial.print("ERROR: UNABLE TO CONNECT TO ");
+            // Serial.println(Sensor::info.name);
+		    // Serial.print("Status Byte = ");
+		    // Serial.println(statusByte);    
         }
         return false;
     }
@@ -43,20 +43,29 @@ bool Sensor::isConnected(void){
  * inputs: none
  * outputs: None. currently will print sensor details to serial monitor
 **/
-
 void Sensor::whoAmI(void){
-    Serial.print("My sensor name is: ");
+    Serial.print(F("Name: "));
     Serial.println(Sensor::info.name);
-    Serial.print("My sensor I2C address is");
+    Serial.print(F("I2C address is"));
     Serial.println(Sensor::info.address,HEX);
 }
 
+/**
+ * Parameters: Debug Bool
+ * Returns: None
+ * This function stores debug mode bool locally
+**/
 void Sensor::setDebugMode(bool _debug){
     Sensor::sensorDebug = _debug;
 }
 
 // I2C Helper Functions 
 
+/**
+ * Parameters: Register Address
+ * Returns: Read data byte
+ * This function returns read data byte
+**/
 uint8_t Sensor::readByte(uint8_t registerAddress){
     uint8_t readByte;                                       // byte to store data that is read
     Wire.beginTransmission(Sensor::info.address);           // begins comms with sensor specified
@@ -67,6 +76,11 @@ uint8_t Sensor::readByte(uint8_t registerAddress){
     return readByte;                                        // return the read data byte
 }
 
+/**
+ * Parameters: Register Address, nBytes, and data
+ * Returns: Read None
+ * This function stores read bytes in data array
+**/
 void Sensor::readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
     Wire.beginTransmission(Sensor::info.address);           // begins forming transmission to sensor
     Wire.write(registerAddress);                            // Add register address to transmission
@@ -80,6 +94,11 @@ void Sensor::readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
     }
 }
 
+/**
+ * Parameters: Register Address, Write Data
+ * Returns: None
+ * This function writes data to specified address
+**/
 void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
     Wire.beginTransmission(Sensor::info.address);               // begin communication with the sensor 
     Wire.write(registerAddress);                                // point to address to be written to
@@ -87,9 +106,12 @@ void Sensor::writeByte (uint8_t registerAddress, uint8_t writeData){
     Wire.endTransmission();                                     // end communication
 }
 
+/**
+ * Parameters: Register Address, Starting Bit, Length, Data
+ * Returns: None
+ * This function  writes data byte for specified length
+**/
 void Sensor::writeBits(uint8_t registerAddress, uint8_t startBit, uint8_t length, uint8_t data){
-
-
     uint8_t buff; 
     if (readByte(registerAddress) != 0){
         uint8_t mask = ((1 << length) - 1) << (startBit - length + 1);
@@ -98,9 +120,7 @@ void Sensor::writeBits(uint8_t registerAddress, uint8_t startBit, uint8_t length
         buff &= ~(mask);
         buff |= data;
         writeByte(registerAddress, buff);
-        //return;
     } else {
-        // ERROR
-        //return;
+	//TODO
     }
 }

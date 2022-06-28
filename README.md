@@ -16,7 +16,7 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
 
 ### Announcement Video
 <center>
-<href="https://www.youtube.com/watch?v=24ujpW5nN5Q"> <img height=300 src="https://img.youtube.com/vi/24ujpW5nN5Q/0.jpg">
+<a href="https://www.youtube.com/watch?v=24ujpW5nN5Q" target="_blank" rel="noopener noreferrer"> <img height=300 src="https://img.youtube.com/vi/24ujpW5nN5Q/0.jpg"> </a>
 </center>
 
 
@@ -25,55 +25,39 @@ The Great Lunar Expedition for Everyone mission will provide accessible opportun
  
 <center>
 <img height=300 src="./extras/Docs/Images/GLEE_concept_art_small.png">
-</center>
+</center> 
+Art by Daedalus Muse
 
 ## LunaSat - LUNAr Sensing ArchiTecture
-GLEE's current prototype LunaSat is approximately 5cm by 5cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
+GLEE's current prototype LunaSat is approximately 6cm by 6cm, has a mass of about 5 grams, is solar powered, controlled via an ATMEGA328P and uses LoRA to wirelessly transmit environmental data. 
 
-This repo contains the Arduino libraries and sketches wich are used to control the LunaSats. 
+This repo contains the Arduino libraries and sketches which are used to control the LunaSats. 
 ### This is a v4 LunaSat
 ![LunaSat Front](./extras/Docs/Images/LunaSat_front.jpg) ![LunaSat Back](./extras/Docs/Images/LunaSat_back.jpg)
 
-### LunaSat Tech (Data Sheets Linked)
+### LunaSat Tech (with linked Data Sheets)
 * Microprocessor
   - [Atmel ATmega328 (3.3v 16Mhz)](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf)
 * Transceiver (LoRA)
   - [Semtech SX1272](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/440000001NCE/v_VBhk1IolDgxwwnOpcS_vTFxPfSEPQbuneK3mWsXlU) 
 * Inertial Measurement Unit (IMU)
-  - [InvenSense ICM20602](https://invensense.tdk.com/wp-content/uploads/2016/10/DS-000176-ICM-20602-v1.0.pdf)
+  - [InvenSense MPU6000](https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/mpu-6000-datasheet1.pdf)
 * Dedicated Temperature Sensor 
   - [Texas Inst. TMP117](https://www.ti.com/lit/ds/symlink/tmp117.pdf?ts=1616690356997&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FTMP117)
 * Infrared Temperature Sensor
   - [CalPile TPIS 1S 1385](https://media.digikey.com/pdf/Data%20Sheets/Excelitas%20PDFs/TPiS_1S_1385.pdf)
 * Magnetometer
-  - [AsahiKASEI AK09940](https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK09940_Prelim_DS_11-2-18.pdf)
+  - [Melexis MLX90393](https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90393)
 * Other
   - Camera and radiation sensors are also currently in development. 
 
 
 # How To Use
 ## Installation Instructions
-1. Download and unzip GLEE2023 folder.
-
-2. Select the following library folders.
-    >GLEE_LunaSat\
-    >GLEE_Sensor\
-    >GLEE_TMP117\
-    >GLEE_TPIS1385\
-    >GLEE_ICM20602\
-    >GLEE_AK09940\
-    >GLEE_CAP
-    >
-
-3. Move to the following directory (Same directories for Mac and PC).
-    >Documents\Arduino\Libraries\
-    >
-    Note: Arduino must be installed and previously ran before arduino libraries forlder appears. <!-- TODO: This directory can also be found via Tools>"Add Librarie" from Arduino IDE -->
-
-4. Move Module Sketches folder to the following directory
-    >Documents\Arduino\
-
-    Module sketches can now be accsessed directly within arduino ide (File > Sketch Book). Library examples will also appear. 
+1. Open Arduino
+2. Navigate to `file > tools > library manager`
+3. Search for GLEE2023
+4. Install with dependencies
 
 ## Sensor Libraries
 * GLEE_Sensor: 
@@ -102,37 +86,31 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         };
         ```
 
-* GLEE_ICM20602 - Accelerometer Functionality 
+* GLEE_MPU6000 - Accelerometer Functionality 
     - Acceleration Observations
         ```C++
-        #include "ICM20602.h"
+        #include "MPU6000.h"
 
-        ICM20602 accelerometer(0);
-
-        sensor_int16_vec_t accelRaw;
-        sensor_float_vec_t acceleration; 
+        MPU6000 accelerometer(1, false); // Sets sensor ID to 1 and debugging to false
+        sensor_float_vec_t acc; // Saves acceleration readings in a vector structure
 
         void setup(){
-            Serial.begin(9600);
-
-            accelerometer.begin();
-
-            accelerometer.initialize();
-
-            accelerometer.setScale(AFS_2G);
-        };
+            Serial.begin(9600); // Sets baud rate to 9600 for serial transmission and starts serial communication
+            accelerometer.begin(); // Begins transmission to the I2C slave device
+            accelerometer.initialize(); // Set-up for MPU 
+            accelerometer.setAccelRange(MPU6000_RANGE_2_G); // Sets range of acccelrometer Range options: 2_G, 4_G, 8_G, 16_G
+        }
 
         void loop(){
-            
-            accelRaw = accelerometer.getRawAccel();
-            acceleration = accelerometer.getGAccel(accelRaw);
+            acc = accelerometer.getSample(); // Gets and saves 3-axis acceleration reading (G)
 
-            Serial.print("G, X-Axis: "); Serial.println(acceleration.x, 8);
-            Serial.print("G, Y-Axis: "); Serial.println(acceleration.y, 8);
-            Serial.print("G, Z-Axis: "); Serial.println(acceleration.z, 8);
+            Serial.print("Acceleration in Gs, X-Axis: "); Serial.print(acc.x, 8); // Prints out 3-axis acceleration (G)
+            Serial.print(" Y-Axis: "); Serial.print(acc.y, 8);
+            Serial.print(" Z-Axis: "); Serial.print(acc.z, 8);
+            Serial.println();
 
-            delay(200);
-        };
+            delay(100); // Waits 100ms between readings
+        }
         ```
 
 * GLEE_TPIS1385 - Thermopile Functionality
@@ -181,34 +159,52 @@ This repo contains the Arduino libraries and sketches wich are used to control t
         };
         ```
 
-* GLEE_AK09940 - Magnetometer Functionality
+* GLEE_MLX90393 - Magnetometer Functionality
     - Magnetic Field Observations
         ```C++
-        #include "AK09940.h"
+        #include "MLX90393.h"
 
-        AK09940 magnetometer = AK09940(0);
+        MLX90393 magnetometer = MLX90393(1,false);
 
-        AK_Sample_t sample;
+        mlx_sample_t sample;
 
         void setup (){
             Serial.begin(9600);
-            magnetometer.begin();
-            magnetometer.readWAI();
-            magnetometer.setOpMode(true, LOW_POWER_1, POWER_DOWN);
+
+            magnetometer.begin_I2C();
+
+            // Set gain
+            magnetometer.setGain(MLX90393_GAIN_2_5X);
+
+            // Set resolution
+            magnetometer.setResolution(MLX90393_X, MLX90393_RES_19);
+            magnetometer.setResolution(MLX90393_Y, MLX90393_RES_19);
+            magnetometer.setResolution(MLX90393_Z, MLX90393_RES_16);
+
+            // Set oversampling
+            magnetometer.setOversampling(MLX90393_OSR_2);
+
+            // Set digital filtering
+            magnetometer.setFilter(MLX90393_FILTER_6);
+
         };
 
         void loop (){   
-            Serial.print(F("Data Ready Pin Showing: ")); Serial.println(magnetometer.dataReady());
 
             sample = magnetometer.getSample();
 
-            Serial.print(F("Magnetometer Temp: ")); Serial.println(sample.temp,5);
-            Serial.print(F("Mag X (nT): ")); Serial.println(sample.magnetic.x,5);
-            Serial.print(F("Mag Y (nT): ")); Serial.println(sample.magnetic.y,5);
-            Serial.print(F("Mag Z (nT): ")); Serial.println(sample.magnetic.z,5);
-            Serial.print(F("Magnetic Field Magnitude: ")); Serial.println(sample.strength);
+            // Print out magnetic field measurements for each axis 
+            Serial.println("Magnetic Field Axes Measurements");
+            Serial.print("X: "); Serial.print(sample.magnetic.x,4); Serial.println(" uT");
+            Serial.print("Y: "); Serial.print(sample.magnetic.y,4); Serial.println(" uT");
+            Serial.print("Z: "); Serial.print(sample.magnetic.z,4); Serial.println(" uT");
+            Serial.println();
+            // Print out strength of magnetic field
+            Serial.println("Magnetic Field Strength (Magnitude)"); 
+            Serial.print(sample.strength,4); Serial.println(" uT");
+            Serial.println();
 
-            delay(1000); // Take samples every one sec
+            delay(1000); // Take samples every one second
         };
         ```
 
@@ -289,4 +285,3 @@ This repo contains the Arduino libraries and sketches wich are used to control t
 
 # README TODOS
 * TODO: Embedded links to libraries
-

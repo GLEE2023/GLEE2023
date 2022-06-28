@@ -72,9 +72,16 @@ typedef struct{
 } mlx_sample_t;
 
 /** Digital filter settings for CONF3 register (Modified) */
+// Essentially a build in rolling average
 typedef enum mlx90395_filter {
+    MLX90395_FILTER_1,
+    MLX90395_FILTER_2,
+    MLX90395_FILTER_3,
+    MLX90395_FILTER_4,
+    MLX90395_FILTER_5,
     MLX90395_FILTER_6,
     MLX90395_FILTER_7,
+    MLX90395_FILTER_8
 } mlx90395_filter_t;
 
 static const float gainMultipliers[16] = {

@@ -104,6 +104,12 @@ void LunaSat::begin(int baudRate){
     }
 }
 
+
+/**
+ * Parameters: None
+ * Returns: Sample
+ * This function returns sample
+**/
 lunaSat_sample_t LunaSat::getSample(void){
     lunaSat_sample_t sample;
 
@@ -198,13 +204,13 @@ void LunaSat::dispSample(lunaSat_sample_t sample){
     Serial.println("");
 }
 
-// void LunaSat::dispAccel(sensor_float_vec_t accel){
-//     Serial.print(accel.x,5);
-//     Serial.print(" ");
-//     Serial.print(accel.y,5);
-//     Serial.print(' ');
-//     Serial.println(accel.z,5);
-// }
+void LunaSat::dispAccel(sensor_float_vec_t accel){
+    Serial.print(accel.x,5);
+    Serial.print(" ");
+    Serial.print(accel.y,5);
+    Serial.print(' ');
+    Serial.println(accel.z,5);
+}
 
 void LunaSat::transmitSample(lunaSat_sample_t sample){
     char dataBuffer[46];
@@ -263,9 +269,9 @@ void LunaSat::blink(int _LED, int _delay){
     int pin;
     
     if (_LED == 1){
-        pin = 4;
+        pin = LED1;
     }else if (_LED == 2){
-        pin = 5;
+        pin = LED2;
     }else{
         // Invalid Pin
     }
