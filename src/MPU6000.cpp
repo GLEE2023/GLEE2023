@@ -1,9 +1,9 @@
-#include "MPU6000.h" 
+#include "MPU6000.h"
 
 bool ICM_DEBUG = false;
 
 // Scale resolutions per LSB for the sensors
-float aRes, gRes; 
+float aRes, gRes;
 //int Ascale = AFS_2G;
 //int Gscale = GFS_1000DPS;
 
@@ -16,33 +16,33 @@ basic variables to get started.
 */
 MPU6000::MPU6000(int _id, bool _debug){
 	MPU6000::info.id = _id;
-    MPU6000::info.address = MPU6000_I2CADDR_DEFAULT;
+  MPU6000::info.address = MPU6000_I2CADDR_DEFAULT;
 	MPU6000::info.name = F("MPU6000");
-  	MPU6000::sensorDebug = _debug;
-    MPU6000::accel_range = MPU6000_RANGE_2_G;
-    MPU6000::gyro_range = MPU6000_RANGE_250_DEG;
-    MPU6000::accel_scale = 16384.0; // Defaults to 4gs for some reason
-    MPU6000::gyro_scale = 131.0;
+	MPU6000::sensorDebug = _debug;
+  MPU6000::accel_range = MPU6000_RANGE_2_G;
+  MPU6000::gyro_range = MPU6000_RANGE_250_DEG;
+  MPU6000::accel_scale = 16384.0; // Defaults to 4gs for some reason
+  MPU6000::gyro_scale = 131.0;
 	//MPU6000::gyroOn = _gyroOn;
 }
 
 /*
 	Parameters: none
 	Returns: whether communication with sensor was successful as a BOOL
-	This function begins a transmission to the I2C slave 
+	This function begins a transmission to the I2C slave
 	device with the given address and notifies the user
 	that communication with the sensor has begun.
 */
 bool MPU6000::begin(void){
-    Wire.begin();
+  Wire.begin();
     // if(MPU6000::sensorDebug){
 	// 	Serial.println("Beginning Communication With MPU6000");
 	// }
 
 	setAccelRange(accel_range);
 	//setGyroRange(gyro_range);
-	
-    return true;
+
+  return true;
 }
 
 /*
@@ -52,7 +52,7 @@ bool MPU6000::begin(void){
 */
 void MPU6000::initialize(void){
 	reset();
-	
+
 	setSampleRateDivisor(0);
 
 	setFilterBandwidth(MPU6000_BAND_260_HZ);
@@ -64,7 +64,7 @@ void MPU6000::initialize(void){
 	// setGyroRange(MPU6050_RANGE_500_DEG);
 
 
-  	// TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
+	// TODO: Dynamically initialize accel config with respect to sensitivity mode provided at initialization
 }
 
 /*
@@ -76,7 +76,7 @@ MPU6000 to their default values and resets signal paths.
 void MPU6000::reset(void){
 
 	//reset internal registers
-	writeByte(MPU6000_PWR_MGMT_1, 0b10000000); 
+	writeByte(MPU6000_PWR_MGMT_1, 0b10000000);
 	while(readByte(MPU6000_PWR_MGMT_1) == 0b10000000){
 		delay(1);
 	}
@@ -90,7 +90,7 @@ void MPU6000::reset(void){
 Parameters: the rate divisor as an 8-bit unsigned integer
 Returns: none
 This function sets the sample rate divisor used to generate the
-sample rate. 
+sample rate.
 */
 void MPU6000::setSampleRateDivisor(uint8_t divisor){
 	//this register specifies the divider from the gyroscope output rate used to generate the Sample Rate for the MPU-6000
@@ -109,7 +109,7 @@ void MPU6000::setFilterBandwidth(mpu6000_bandwidth_t bandwidth){
 /*
 	Parameters: none
 	Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
-	This function reads in the high bytes of the accel for each of the three 
+	This function reads in the high bytes of the accel for each of the three
 	axis, performs a bitwise operation, then saves and returns the raw acceleration
 	struct.
 */
@@ -119,19 +119,19 @@ sensor_int16_vec_t MPU6000::getRawAcc(){
 
 	// Read 6 bytes at accel_out register
 	readBytes(MPU6000_ACCEL_OUT, 6, &buffer[0]);
-	
+
 	// 2xBytes per raw axis reading
 	rawAcc.x = buffer[0] << 8 | buffer[1];
 	rawAcc.y = buffer[2] << 8 | buffer[3];
 	rawAcc.z = buffer[4] << 8 | buffer[5];
 
-    return rawAcc;
+  return rawAcc;
 }
 
 /*
 	Parameters: none
 	Returns: The raw angular velocity as a struct of sensor_uint16_vec_t type
-	This function reads in the high bytes of the angular velocity for each of the three 
+	This function reads in the high bytes of the angular velocity for each of the three
 	axis, performs a bitwise operation, then saves and returns the raw angular velocity
 	struct.
 */
@@ -141,41 +141,41 @@ sensor_int16_vec_t MPU6000::getRawGyro(){
 
 	// Read 6 bytes at accel_out register
 	readBytes(MPU6000_GYRO_OUT, 6, &buffer[0]);
-	
+
 	// 2xBytes per raw axis reading
 	rawGyro.x = buffer[0] << 8 | buffer[1];
 	rawGyro.y = buffer[2] << 8 | buffer[3];
 	rawGyro.z = buffer[4] << 8 | buffer[5];
 
-    return rawGyro;
+  return rawGyro;
 }
 
 /*
 	Parameters: the raw acceleration as a struct of sensor_int16_vec_t type
 	Returns: the accelerations in G's as a sensor_float_vec_t type
-	This function converts the raw acceleration in LSB/G to the acceleration in 
+	This function converts the raw acceleration in LSB/G to the acceleration in
 	G's by dividing the sensitivity factor based on the current  accelerometer sensitivity scale.
 */
 sensor_float_vec_t MPU6000::getAcc(sensor_int16_vec_t rawAcc){
 	sensor_float_vec_t acc;
 	acc.x = (float) rawAcc.x / MPU6000::accel_scale * -1; // Multiplying by negative one to match axis on back of lunasat
-    acc.y = (float) rawAcc.y / MPU6000::accel_scale * -1;
-    acc.z = (float) rawAcc.z / MPU6000::accel_scale * -1;
+  acc.y = (float) rawAcc.y / MPU6000::accel_scale * -1;
+  acc.z = (float) rawAcc.z / MPU6000::accel_scale * -1;
 	return acc;
 }
 
 /*
 	Parameters: the raw angular velocity as a struct of sensor_int16_vec_t type
-	Returns: the angular velocity in degrees per second as a sensor_float_vec_t type 
+	Returns: the angular velocity in degrees per second as a sensor_float_vec_t type
 	This function converts the raw gyroscope reading in LSB/DPS to the angular
 	velocity in DPS by dividing the sensitivity factor based on the current gyroscope
 	sensitivity scale.
 */
 sensor_float_vec_t MPU6000::getGyro(sensor_int16_vec_t rawGyro){
 	sensor_float_vec_t gyro;
-    gyro.x = (float) rawGyro.x / gyro_scale * -1;
-    gyro.y = (float) rawGyro.y / gyro_scale * -1;
-    gyro.z = (float) rawGyro.z / gyro_scale * -1;
+  gyro.x = (float) rawGyro.x / gyro_scale * -1;
+  gyro.y = (float) rawGyro.y / gyro_scale * -1;
+  gyro.z = (float) rawGyro.z / gyro_scale * -1;
 	return gyro;
 }
 
@@ -186,8 +186,8 @@ sensor_float_vec_t MPU6000::getGyro(sensor_int16_vec_t rawGyro){
 	in G's using the getAcc function and returns it.
 */
 sensor_float_vec_t MPU6000::getSample(){
-	sensor_int16_vec_t rawAcc = getRawAcc();
-	sensor_float_vec_t acc = getAcc(rawAcc); 
+  sensor_int16_vec_t rawAcc = getRawAcc();
+  sensor_float_vec_t acc = getAcc(rawAcc);
 	return(acc);
 }
 
@@ -199,21 +199,21 @@ sensor_float_vec_t MPU6000::getSample(){
 */
 sensor_float_vec_t MPU6000::getGyroSample(){
 	sensor_int16_vec_t rawGyro = getRawGyro();
-	sensor_float_vec_t gyro = getGyro(rawGyro); 
+	sensor_float_vec_t gyro = getGyro(rawGyro);
 	return(gyro);
 }
 
 /*
 Parameters: the raw acceleration as a struct of sensor_int16_vec_t type
 Returns: the accelerations in G's as a sensor_float_vec_t type
-This function converts the raw acceleration in LSB/G to the acceleration in 
+This function converts the raw acceleration in LSB/G to the acceleration in
 G's by dividing the sensitivity factor based on the current sensitivity scale.
 */
 sensor_float_vec_t MPU6000::getGAccel(sensor_int16_vec_t rawAccel){
 	sensor_float_vec_t accelG;
 	accelG.x = (float) rawAccel.x / MPU6000::accel_scale;
-    accelG.y = (float) rawAccel.y / MPU6000::accel_scale;
-    accelG.z = (float) rawAccel.z / MPU6000::accel_scale;
+  accelG.y = (float) rawAccel.y / MPU6000::accel_scale;
+  accelG.z = (float) rawAccel.z / MPU6000::accel_scale;
 	return accelG;
 }
 
@@ -227,24 +227,23 @@ sensor_float_vec_t MPU6000::getMPSAccel(sensor_float_vec_t GAccel){
 	accelMPS.x = GAccel.x * MPU_ONE_G;
 	accelMPS.y = GAccel.y * MPU_ONE_G;
 	accelMPS.z = GAccel.z * MPU_ONE_G;
-	return accelMPS;    
+	return accelMPS;
 }
 
 /*
 Parameters: new scale of the sensor wished to be set to as an mpu6000_accel_range_t enumeration
 Returns: none
-This function allows a new scale to be passed in, with the global variable 
+This function allows a new scale to be passed in, with the global variable
 accel_scale set to the new scale, and writesthe accelration configuration
 based on the new scale.
 */
 void MPU6000::setAccelRange(mpu6000_accel_range_t new_range){
-    accel_range = new_range;
+  accel_range = new_range;
 
 	if(accel_range == MPU6000_RANGE_2_G){
 		writeByte(MPU6000_ACCEL_CONFIG, 0b00000000);
 		accel_scale = 16384.0;
 	}
-
 	if(accel_range == MPU6000_RANGE_4_G){
 		writeByte(MPU6000_ACCEL_CONFIG, 0b00001000);
 		accel_scale = 8192.0;
@@ -257,18 +256,17 @@ void MPU6000::setAccelRange(mpu6000_accel_range_t new_range){
 		writeByte(MPU6000_ACCEL_CONFIG, 0b00011000);
 		accel_scale = 2048.0;
 	}
-
 }
 
 /*
 Parameters: new scale of the sensor wished to be set to as an Gscale enumeration
 Returns: none
-This function allows a new scale to be passed in with the global variable 
+This function allows a new scale to be passed in with the global variable
 gyro_scale set to the new scale and writing the gyroscope configuration
 based on the new scale.
 */
 void MPU6000::setGyroRange(mpu6000_gyro_range_t new_range){
-    gyro_range = new_range;
+  gyro_range = new_range;
 
 	switch(accel_range){
 		case(MPU6000_RANGE_250_DEG):
@@ -293,27 +291,27 @@ void MPU6000::setGyroRange(mpu6000_gyro_range_t new_range){
 
 /*
 Parameters: none
-Returns: the accelerometer sensitivity scale factor as a float 
+Returns: the accelerometer sensitivity scale factor as a float
 This function uses a switch statement to return the sensitivity scale factor
 for the acceleration depending on the current sensing accuracy scale.
 */
 float MPU6000::getAccelSensitivity(){
   // TODO: Write setter for sensity a variable, possibly private
-  	float factor;
+  float factor;
 	switch (accel_range) {
 		case (MPU6000_RANGE_2_G):
-      		factor = 16384.0;
-      		break;
-    	case (MPU6000_RANGE_4_G):
-      		factor = 8192.0;
-      		break;
-    	case (MPU6000_RANGE_8_G):
-     		factor = 4096.0;
-      		break;
-    	case (MPU6000_RANGE_16_G):
-      		factor = 2048.0;
-      		break;
+  		factor = 16384.0;
+  		break;
+  	case (MPU6000_RANGE_4_G):
+		  factor = 8192.0;
+  		break;
+  	case (MPU6000_RANGE_8_G):
+   		factor = 4096.0;
+    	break;
+  	case (MPU6000_RANGE_16_G):
+    	factor = 2048.0;
+    	break;
 	}
 	accel_scale = factor;
-	return factor;  
+	return factor;
 }

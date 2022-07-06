@@ -6,6 +6,8 @@ non-volitile, it will store the data even after being shutdown or restarted
 #include <EEPROM.h>
 #include "TMP117.h"
 
+//modify these if you change data type or number of measurements taken and recorded
+//If NUM_MEASUREMENTS*BYTES_PER_MEAS is greater than 1024, may seg fault
 #define NUM_MEASUREMENTS 100
 #define BYTES_PER_MEAS 4
 
