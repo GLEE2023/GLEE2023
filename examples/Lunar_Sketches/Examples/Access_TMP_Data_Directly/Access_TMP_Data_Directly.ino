@@ -22,13 +22,10 @@ void loop(){
   uint8_t buffer[2];
   readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
 
-  int16_t temp;
-  temp = buffer[0] << 8 | buffer[1];
-
-  float data = (float)temp * TMP117_RESOLUTION;
+  float temp = (float)(buffer[0] << 8 | buffer[1]) * TMP117_RESOLUTION;
 
   timestamp = micros()-timestamp;
-  Serial.println(String(timestamp)+" "+String(data));
+  Serial.println(String(timestamp)+" "+String(temp));
 }
 
 
