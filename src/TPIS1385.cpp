@@ -7,7 +7,6 @@
 *
 */
 
-
 #include "TPIS1385.h"
 
 /**
@@ -48,9 +47,19 @@ void TPIS1385::begin(void){
 void TPIS1385::readEEprom(void){
     uint8_t data[2] = {0,0};
 
-    TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x80); // Set eeprom control to read
+    //TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x80); // Set eeprom control to read
+    //Wire.beginTransmission(0x0D);               // begin communication with the sensor 
+    Wire.write(TP_EEPROM_CONTROL);                                // point to address to be written to
+    Wire.write(0x80);                                      // write data to adress specificed above
+    //Wire.endTransmission();                                     // end communication
 
-    data[0] = TPIS1385::readByte(TP_PROTOCOL);
+    //data[0] = TPIS1385::readByte(TP_PROTOCOL);
+    //Wire.beginTransmission(0x0D);           // begins comms with sensor specified
+    Wire.write(TP_PROTOCOL);                            // identifies register for data to be read from
+    //Wire.endTransmission();                                 // end transmission
+    //Wire.requestFrom(0x0D, uint8_t (1) );   // request 1 byte from the sensor address
+    data[0] = Wire.read();                                 // read data and store in the readByte variable
+
     Serial.print(F("EEPROM Protocol: "));
     Serial.println(data[0]);
 
@@ -88,11 +97,22 @@ void TPIS1385::readEEprom(void){
     Serial.println(TPIS1385::sensorCalibration.UOut1);
 
     // Read Tobject 1 cal value
-    TPIS1385::sensorCalibration.TObj1 = TPIS1385::readByte(TP_T_OBJ_1);
+    //TPIS1385::sensorCalibration.TObj1 = TPIS1385::readByte(TP_T_OBJ_1);
+    //Wire.beginTransmission(0x0D);           // begins comms with sensor specified
+    Wire.write(TP_T_OBJ_1);                            // identifies register for data to be read from
+    //Wire.endTransmission();                                 // end transmission
+    Wire.requestFrom(0x0D, uint8_t (1) );   // request 1 byte from the sensor address
+    TPIS1385::sensorCalibration.TObj1 = Wire.read();                                 // read data and store in the readByte variable
+
+
     Serial.print(F("T_obj_1 Value: "));
     Serial.println(TPIS1385::sensorCalibration.TObj1);
 
-    TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
+    //TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
+    //Wire.beginTransmission(0x0D);               // begin communication with the sensor 
+    Wire.write(TP_EEPROM_CONTROL);                                // point to address to be written to
+    Wire.write(0x00);                                      // write data to adress specificed above
+    Wire.endTransmission();                                     // end communication
 
     TPIS1385::sensorCalibration.K = ((float) (TPIS1385::sensorCalibration.UOut1 - TPIS1385::sensorCalibration.U0)/ (pow((float) (TPIS1385::sensorCalibration.TObj1 + 273.15f),3.8f) - pow(25.0f + 273.15f,3.8f)));
 }
@@ -178,7 +198,7 @@ TPsample_t TPIS1385::getSample(){
  * Gets corrected sample using emisivity
  * Parameters: emisivity
  * Returns: Sample
- **/
+
 TPsample_t TPIS1385::getCorrectedSample(float emisivity){
     TPsample_t sample; // observation sample to be returned
 
@@ -193,12 +213,14 @@ TPsample_t TPIS1385::getCorrectedSample(float emisivity){
 
     return sample;
 }
+ **/
 
 /**
  * Updates Sample
  * Parameters: none
  * Returns: none
- **/
+
 void TPIS1385::updateSample(){
     staticSample = TPIS1385::getSample();
 }
+ **/
