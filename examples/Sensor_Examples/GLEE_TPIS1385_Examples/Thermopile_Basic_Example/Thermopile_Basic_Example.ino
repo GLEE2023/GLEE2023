@@ -1,6 +1,6 @@
-#include "TPIS1385.h"
+#include "TPIS1385_LunarVersion.h"
 
-TPIS1385 thermopile(1);
+TPIS1385_New thermopile(1);
 TPsample_t temperatures;
 
 void setup(){
