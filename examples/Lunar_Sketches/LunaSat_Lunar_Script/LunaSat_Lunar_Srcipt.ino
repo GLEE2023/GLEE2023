@@ -19,6 +19,8 @@
 #define CAP_PIN 14 //this is the pin number for analog 0 (A0)
 
 
+
+
 void writeByte (uint8_t registerAddress, uint8_t writeData);
 void readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
 
