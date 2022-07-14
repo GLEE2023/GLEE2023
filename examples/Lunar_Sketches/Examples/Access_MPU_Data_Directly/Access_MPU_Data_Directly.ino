@@ -1,30 +1,4 @@
-/*
-Bitstring to define config of accelerometer
-Bits from LSB to MSB:
-(bits): description
-0-6: duration where the LSB increments by 10 seconds
-7-10: mode
-    modes:
-      "low_power_wakeup_1.25": "0000",
-      "low_power_wakeup_5": "0001",
-      "low_power_wakeup_20": "0010",
-      "low_power_wakeup_40": "0011",
-      "accelerometer_only": "0100",
-      "gyroscope_only": "0101",
-      "gyroscope_DMP": "0110",
-      "gyroscope_accelerometer": "0111",
-      "gyroscope_accelerometer_DMP": "1000"
-11-18: sample rate div, 0 to 255
-19-21: digital low pass filter (DLPF), 0-6
-    000: 260Hz, DLPF off
-    001: 184 Hz
-    010: 94 Hz
-    011: 44 Hz
-    100: 21 Hz
-    101: 10 Hz
-    110: 5 Hz
-    111: invalid
-*/
+
 
 #include <Wire.h>
 
@@ -66,17 +40,20 @@ void setup(){
 
   Wire.begin();
 
-  // Set limits to +/- 2g
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_ACCEL_CONFIG, 0b00000000);
+  // Set limits to +/- 2g, don't change
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_ACCEL_CONFIG, 0x00);
+
+  // sets which clock the acc uses, don't change this
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,0x01);
 
   // Set accelerometer division
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV, 0);
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,MPU6000_SMPLRT_DIV_VAL); //last argument
 
-  // Set bandwidth
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG, MPU6000_CONFIG_DLPF_BW);
+  // Set digital low pass filter bandwidth
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,MPU6000_CONFIG_DLPF_BW);
 
-  // sets which clock the acc uses
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1, 0x01);
+
+  // Only one of the following sections (code after '------') should be uncommented
 
   //-----accelerometer only
   // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_ONLY);
@@ -86,7 +63,7 @@ void setup(){
 
   //-----Low power acc only wakup mode
   // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
-  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ);
+  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ); //change the last argument to change frequncy of wakeups
 
   //-----sleep
   // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_SLEEP_VAL);
@@ -105,7 +82,7 @@ void loop(){
   acc_z = (float)(buffer[4] << 8 | buffer[5]) / MPU6000_LSB_PER_G * -1;
 
   readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_GYRO_OUT, 6, &buffer[0]);
-  gyro_x = (float)(buffer[0] << 8 | buffer[1]) / 131 * -1;
+  gyro_x = (float)(buffer[0] << 8 | buffer[1]) / 131 * -1; //131 deg/LSB
   gyro_y = (float)(buffer[2] << 8 | buffer[3]) / 131 * -1;
   gyro_z = (float)(buffer[4] << 8 | buffer[5]) / 131 * -1;
 
