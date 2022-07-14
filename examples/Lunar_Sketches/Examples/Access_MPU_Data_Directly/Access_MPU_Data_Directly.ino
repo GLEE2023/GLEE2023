@@ -44,11 +44,11 @@ Bits from LSB to MSB:
 #define MPU6000_PWR_MGMT_2 0x6C
 #define MPU6000_LSB_PER_G 16384.0       // How many bits per LSB
 #define MPU6000_ACCEL_OUT 0x3B          // base raw accel address (6 bytes for 3 axis)
-#define MPU6000_GYRO_OUT 0x43           //
+#define MPU6000_GYRO_OUT 0x43           // location of gyro output
 #define MPU6000_ACC_ONLY 0x07           //write this to MPU6000_PWR_MGMT_2 to put gyro to sleep
 #define MPU6000_GYRO_ONLY 0x38          //write this to MPU6000_PWR_MGMT_2 to put acc to sleep
 
-//see register 6B and 6C in the register map
+//see register 6B and 6C in the register map for more info
 #define MPU6000_LP_WAKE_REG_6B_VAL 0b00101001    // To turn on Low Power Wake up, this bit in MPU6000_PWR_MGMT_1 must be set high
 #define MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ 0b00000111
 #define MPU6000_LP_WAKE_UP_REG_6C_5HZ 0b01000111
@@ -73,18 +73,18 @@ void setup(){
   writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV, 0);
 
   // Set bandwidth
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG, MPU6000_CONFIG_DLPF);
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG, MPU6000_CONFIG_DLPF_BW);
 
   // sets which clock the acc uses
   writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1, 0x01);
 
   //-----accelerometer only
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_ONLY);
+  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_ONLY);
 
   //-----Gyro only
-  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_GYRO_ONLY);
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_GYRO_ONLY);
 
-  //-----Low power wakup mode
+  //-----Low power acc only wakup mode
   // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
   // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ);
 
@@ -96,20 +96,21 @@ void loop(){
 
   long timestamp = micros();
 
-  float x,y,z;
+  float acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z;
+
   uint8_t buffer[6];
   readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_ACCEL_OUT, 6, &buffer[0]);
-  x = (float)(buffer[0] << 8 | buffer[1]) / MPU6000_LSB_PER_G * -1;
-  y = (float)(buffer[2] << 8 | buffer[3]) / MPU6000_LSB_PER_G * -1;
-  z = (float)(buffer[4] << 8 | buffer[5]) / MPU6000_LSB_PER_G * -1;
+  acc_x = (float)(buffer[0] << 8 | buffer[1]) / MPU6000_LSB_PER_G * -1;
+  acc_y = (float)(buffer[2] << 8 | buffer[3]) / MPU6000_LSB_PER_G * -1;
+  acc_z = (float)(buffer[4] << 8 | buffer[5]) / MPU6000_LSB_PER_G * -1;
 
   readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_GYRO_OUT, 6, &buffer[0]);
-  x = (float)(buffer[0] << 8 | buffer[1]) / MPU6000_LSB_PER_G * -1;
-  y = (float)(buffer[2] << 8 | buffer[3]) / MPU6000_LSB_PER_G * -1;
-  z = (float)(buffer[4] << 8 | buffer[5]) / MPU6000_LSB_PER_G * -1;
+  gyro_x = (float)(buffer[0] << 8 | buffer[1]) / 131 * -1;
+  gyro_y = (float)(buffer[2] << 8 | buffer[3]) / 131 * -1;
+  gyro_z = (float)(buffer[4] << 8 | buffer[5]) / 131 * -1;
 
   timestamp = micros()-timestamp;
-  Serial.println(String(timestamp)+" "+String(x)+" "+String(y)+" "+String(z));
+  Serial.println(String(timestamp)+" "+String(acc_x)+" "+String(acc_y)+" "+String(acc_z)+" "+String(gyro_x)+" "+String(gyro_y)+" "+String(gyro_z));
 }
 
 
