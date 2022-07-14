@@ -38,79 +38,39 @@ void writeByte (uint8_t registerAddress, uint8_t writeData);
 void readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
 
 void setup(){
-  Serial.begin(9600);
-
+  Serial.begin(9600); // Sets baud rate to 9600 bits per second and starts serial communications
+  
+  //thermopile.begin(); // Thermopile start-up
   Wire.begin();                          // Begin i2c coms at standard speed
-	  Wire.beginTransmission(0x00);    // Reload all call   
-    Wire.write(0x04);
-    Wire.write(0x00);
+	Wire.beginTransmission(0x00);    // Reload all call   
+  Wire.write(0x04);
+  Wire.write(0x00);
 	if(Wire.endTransmission()!=0) Serial.println(F("Init call failiure"));
     delay(50);  // Wait on i2c transmission
     Serial.println(F("TPIS coms Init complete"));
-
-  uint8_t data[2] = {0,0};
-
-  writeByte(TP_EEPROM_CONTROL, 0x80); // Set eeprom control to read
-
-  data[0] = readByte(TP_PROTOCOL);
-  Serial.print(F("EEPROM Protocol: "));
-  Serial.println(data[0]);
-
-    readBytes(TP_PTAT25, 2, &data[0]);
-    TPIS1385::sensorCalibration.PTAT25 = ((uint16_t) data[0] << 8) | data[1];
-
-    Serial.print(F("PTAT25 Value: "));
-    Serial.println(TPIS1385::sensorCalibration.PTAT25);
-
-    // Read M calibration value
-    readBytes(TP_M, 2, &data[0]);
-    TPIS1385::sensorCalibration.M = ((uint16_t) data[0] << 8) | data[1];
-    TPIS1385::sensorCalibration.M /= 100; // Apply appropriate offset
-
-    Serial.print(F("M Value: "));
-    Serial.println(TPIS1385::sensorCalibration.M);
-
-    // Read U0 calibration value
-    readBytes(TP_U0, 2, &data[0]);
-    TPIS1385::sensorCalibration.U0 = ((uint16_t) data[0] << 8) | data[1];
-    TPIS1385::sensorCalibration.U0 += 32768;
-
-    Serial.print(F("U0 Value: "));
-    Serial.println(TPIS1385::sensorCalibration.U0);
-
-    // Read Uout1 calibration value
-    readBytes(TP_UOUT1, 2, &data[0]);
-    TPIS1385::sensorCalibration.UOut1 = ((uint16_t) data[0] << 8) | data[1];
-    TPIS1385::sensorCalibration.UOut1 *= 2;
-
-    Serial.print(F("UOut1 Value: "));
-    Serial.println(TPIS1385::sensorCalibration.UOut1);
-
-    // Read Tobject 1 cal value
-    TPIS1385::sensorCalibration.TObj1 = TPIS1385::readByte(TP_T_OBJ_1);
-    Serial.print(F("T_obj_1 Value: "));
-    Serial.println(TPIS1385::sensorCalibration.TObj1);
-
-    TPIS1385::writeByte(TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
-
-    TPIS1385::sensorCalibration.K = ((float) (TPIS1385::sensorCalibration.UOut1 - TPIS1385::sensorCalibration.U0)/ (pow((float) (TPIS1385::sensorCalibration.TObj1 + 273.15f),3.8f) - pow(25.0f + 273.15f,3.8f)));
-
+  
+  //thermopile.readEEprom(); // Prints eeprom and updates calibration constants
 }
 
 void loop(){
+  
+  //getTPamb
+  uint8_t data[2] = {0,0};
+  readBytes(TPIS1385_I2C_ADDR, TP_AMBIENT, 2, &data[0]);
+  uint16_t getTPamb = ( (uint16_t)(data[0] & 0x7F) << 8) | data[1] ; // See data sheet for calc
 
-  long timestamp = micros();
+  //getTPobj
+  uint8_t data1[3] = {0,0,0};
+  readBytes(TPIS1385_I2C_ADDR, TP_OBJECT, 3, &data1[0]);
+  uint32_t getTPobj = ( (uint32_t) ( (uint32_t)data1[0] << 24) | ( (uint32_t)data1[1] << 16) | ( (uint32_t)data1[2] & 0x80) << 8) >> 15;
 
-  uint8_t buffer[2];
-  readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
+  //Serial.print("Ambient temperature: "); 
+  Serial.println(getTPamb);
+  
+  //Serial.print("Object temperature: "); 
+  Serial.println(getTPobj);
+  delay(1000);
 
-  int16_t temp;
-  temp = buffer[0] << 8 | buffer[1];
-
-  float data = (float)temp * TMP117_RESOLUTION;
-
-  timestamp = micros()-timestamp;
-  Serial.println(String(timestamp)+" "+String(data));
 }
 
 
