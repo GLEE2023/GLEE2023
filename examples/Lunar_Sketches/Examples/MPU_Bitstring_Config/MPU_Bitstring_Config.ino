@@ -1,4 +1,43 @@
+/*
+Authors: Luke Roberson
+
+Made to take in a bitstring from GLEE2023 ModeUserInterface Model and setup
+MPU6000 accordingly
+*/
+
+/*
+Bitstring to define config of accelerometer
+Bits from LSB to MSB:
+(bits): description
+
+0-3: mode
+  modes:
+    0x00: sleep
+    0x01: low_power_wakeup_1.25
+    0x02  low_power_wakeup_5
+    0x03  low_power_wakeup_20
+    0x04  low_power_wakeup_40
+    0x05  accelerometer_only
+    0x06  gyroscope_only
+    0x07  gyroscope_DMP
+    0x08  gyroscope_accelerometer
+    0x09  gyroscope_accelerometer_DMP
+4-11: sample rate div, 0 to 255
+12-14: digital low pass filter (DLPF), 0-6
+    000: 260Hz, DLPF off
+    001: 184 Hz
+    010: 94 Hz
+    011: 44 Hz
+    100: 21 Hz
+    101: 10 Hz
+    110: 5 Hz
+    111: invalid
+*/
+
 #include <Wire.h>
+
+#define ACC_CONFIG_STRING 0b1111111110001
+#define DURATION 0xA //100 seconds
 
 
 //Things that john is letting users change - MPU6000_SMPLRT_DIV, DLPF
@@ -50,21 +89,34 @@ void setup(){
   // Set digital low pass filter bandwidth
   writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,MPU6000_CONFIG_DLPF_BW);
 
+  switch(ACC_CONFIG_STRING<<0 & F){
+    case 0b0000:
+      // sleep
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_SLEEP_VAL);
+      break;
+    case 0b0001:
+      // low power wakeup @ 1.25 Hz
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ);
+      break;
+    case 0b0010:
+      // low power wakeup @ 1.25 Hz
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_5HZ);
+  }
 
-  // Only one of the following sections (code after '------') should be uncommented
 
-  //-----accelerometer only
-  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_ONLY);
-
-  //-----Gyro only
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_GYRO_ONLY);
-
-  //-----Low power acc only wakup mode
-  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
-  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ); //change the last argument to change frequncy of wakeups
-
-  //-----sleep
-  // writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_SLEEP_VAL);
+  if((ACC_CONFIG_STRING<<0 & F)==0x00){
+    //sleep
+    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_SLEEP_VAL);
+  }else if((ACC_CONFIG_STRING<<0 & F)==0x01){
+    //low power wakeup @ 1.25 Hz
+    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
+    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ); //change the last argument to change frequncy of wakeups
+  }else if((ACC_CONFIG_STRING<<0 & F)==0x02){
+    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
+    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_5HZ);
+  }
 }
 
 void loop(){
