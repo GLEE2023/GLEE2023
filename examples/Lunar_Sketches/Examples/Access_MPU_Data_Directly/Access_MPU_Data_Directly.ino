@@ -10,7 +10,7 @@
 #define MPU6000_SMPLRT_DIV_VAL 0x0      // afffects the sampling rate, ranges from 0x00 to 0xFF
 
 #define MPU6000_CONFIG 0x1A             // General configuration register
-#define MPU6000_CONFIG_DLPF_BW 0x0        // changes bandwidth for digital low pass filter. Ranges from 0x0 to 0x7
+#define MPU6000_CONFIG_DLPF_BW 0x0      // changes bandwidth for digital low pass filter. Ranges from 0x0 to 0x7
 
 #define MPU6000_PWR_MGMT_1 0x6B         // Primary power/sleep control register
 #define MPU6000_PWR_MGMT_2 0x6C

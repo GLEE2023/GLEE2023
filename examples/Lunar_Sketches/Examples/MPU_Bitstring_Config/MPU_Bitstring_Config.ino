@@ -19,24 +19,22 @@ Bits from LSB to MSB:
     0x04  low_power_wakeup_40
     0x05  accelerometer_only
     0x06  gyroscope_only
-    0x07  gyroscope_DMP
-    0x08  gyroscope_accelerometer
-    0x09  gyroscope_accelerometer_DMP
+    0x07  gyroscope_accelerometer
 4-11: sample rate div, 0 to 255
 12-14: digital low pass filter (DLPF), 0-6
-    000: 260Hz, DLPF off
-    001: 184 Hz
-    010: 94 Hz
-    011: 44 Hz
-    100: 21 Hz
-    101: 10 Hz
-    110: 5 Hz
-    111: invalid
+    0x0: 260Hz, DLPF off
+    0x1: 184 Hz
+    0x2: 94 Hz
+    0x3: 44 Hz
+    0x4: 21 Hz
+    0x5: 10 Hz
+    0x6: 5 Hz
+    0x7: invalid
 */
 
 #include <Wire.h>
 
-#define ACC_CONFIG_STRING 0b1111111110001
+#define ACC_CONFIG_STRING 0b000000000001111
 #define DURATION 0xA //100 seconds
 
 
@@ -51,6 +49,7 @@ Bits from LSB to MSB:
 #define MPU6000_CONFIG 0x1A             // General configuration register
 #define MPU6000_CONFIG_DLPF_BW 0x0        // changes bandwidth for digital low pass filter. Ranges from 0x0 to 0x7
 
+
 #define MPU6000_PWR_MGMT_1 0x6B         // Primary power/sleep control register
 #define MPU6000_PWR_MGMT_2 0x6C
 #define MPU6000_LSB_PER_G 16384.0       // How many bits per LSB
@@ -58,9 +57,10 @@ Bits from LSB to MSB:
 #define MPU6000_GYRO_OUT 0x43           // location of gyro output
 #define MPU6000_ACC_ONLY 0x07           //write this to MPU6000_PWR_MGMT_2 to put gyro to sleep
 #define MPU6000_GYRO_ONLY 0x38          //write this to MPU6000_PWR_MGMT_2 to put acc to sleep
+#define MPU6000_ACC_AND_GYRO 0x3F       ////write this to MPU6000_PWR_MGMT_2 to use both acc and gyro
 
 //see register 6B and 6C in the register map for more info
-#define MPU6000_LP_WAKE_REG_6B_VAL 0b00101001    // To turn on Low Power Wake up, this bit in MPU6000_PWR_MGMT_1 must be set high
+#define MPU6000_LP_WAKE_REG_6B_VAL 0b00101001    // To turn on Low Power Wake up
 #define MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ 0b00000111
 #define MPU6000_LP_WAKE_UP_REG_6C_5HZ 0b01000111
 #define MPU6000_LP_WAKE_UP_REG_6C_20HZ 0b10000111
@@ -70,7 +70,7 @@ Bits from LSB to MSB:
 #define MPU6000_RESET_VAL 0x80 // write to MPU6000_PWR_MGMT_1 to reset
 
 void writeByte (uint8_t registerAddress, uint8_t writeData);
-void readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
+void readBytes (uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
 
 void setup(){
   Serial.begin(9600);
@@ -83,40 +83,69 @@ void setup(){
   // sets which clock the acc uses, don't change this
   writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,0x01);
 
-  // Set accelerometer division
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,MPU6000_SMPLRT_DIV_VAL); //last argument
-
-  // Set digital low pass filter bandwidth
-  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,MPU6000_CONFIG_DLPF_BW);
-
-  switch(ACC_CONFIG_STRING<<0 & F){
-    case 0b0000:
+  //This switch sets the mode
+  switch(ACC_CONFIG_STRING<<0 & 0xF){
+    //gets the first 4 bits
+    case 0x0:
       // sleep
       writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_SLEEP_VAL);
+      Serial.println(F("Mode Set to sleep"));
       break;
-    case 0b0001:
+    case 0x1:
       // low power wakeup @ 1.25 Hz
       writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
       writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ);
+      Serial.println(F("Mode Set to MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ"));
       break;
-    case 0b0010:
-      // low power wakeup @ 1.25 Hz
+    case 0x2:
+      // low power wakeup @ 5 Hz
       writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
       writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_5HZ);
+      Serial.println(F("Mode Set to MPU6000_LP_WAKE_UP_REG_6C_5HZ"));
+      break;
+    case 0x3:
+      // low power wakeup @ 20 Hz
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_20HZ);
+      Serial.println(F("Mode Set to MPU6000_LP_WAKE_UP_REG_6C_20HZ"));
+      break;
+    case 0x4:
+      // low power wakeup @ 40 Hz
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_40HZ);
+      Serial.println(F("Mode Set to MPU6000_LP_WAKE_UP_REG_6C_40HZ"));
+      break;
+    case 0x5:
+      //accerometer only
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_ONLY);
+      Serial.println(F("Mode Set to MPU6000_ACC_ONLY"));
+      break;
+    case 0x6:
+      //gyro only
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_GYRO_ONLY);
+      Serial.println(F("Mode Set to MPU6000_GYRO_ONLY"));
+      break;
+    case 0x7:
+      // Accelerometer & Gyro
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_AND_GYRO);
+      Serial.println(F("Mode Set to MPU6000_ACC_AND_GYRO"));
+      break;
+    default:
+      // default to only accelerometer
+      writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2, MPU6000_ACC_ONLY);
+      Serial.println(F("Unknown Mode. Mode Set to MPU6000_ACC_ONLY"));
+      break;
   }
 
+  //set sampling rate div
+  uint8_t sampling_rate_div = (uint8_t)(ACC_CONFIG_STRING>>4 & 0xFF);
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,sampling_rate_div);
+  Serial.println("Sampling rate division set to "+String(sampling_rate_div));
 
-  if((ACC_CONFIG_STRING<<0 & F)==0x00){
-    //sleep
-    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_SLEEP_VAL);
-  }else if((ACC_CONFIG_STRING<<0 & F)==0x01){
-    //low power wakeup @ 1.25 Hz
-    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
-    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_1PT25HZ); //change the last argument to change frequncy of wakeups
-  }else if((ACC_CONFIG_STRING<<0 & F)==0x02){
-    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,MPU6000_LP_WAKE_REG_6B_VAL);
-    writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_2,MPU6000_LP_WAKE_UP_REG_6C_5HZ);
-  }
+  // Set digital low pass filter bandwidth
+  uint8_t dlpf_value = (uint8_t)(ACC_CONFIG_STRING>>12 & 0x7);
+  writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,dlpf_value);
+  Serial.println("Digtal low pass filter set to "+String(dlpf_value));
 }
 
 void loop(){
