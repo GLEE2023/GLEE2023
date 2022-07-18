@@ -1,4 +1,33 @@
+/*
+Bitstring to define config of Temperature Sensor
+Bits from LSB to MSB:
+(bits): description
+
+0-1: mode
+  modes:
+    01: Shutdown (SD)
+    00: Continuous conversion (CC)
+    10: Continuous conversion (CC), Same as 00 (reads back = 00)
+    11: One-shot conversion (OS)
+2-4: Conversion Time
+    000
+    001
+    010
+    011
+    100
+    101
+    110
+    111
+5-6: Averaging
+    00: No averaging
+    01: 8 Averaged conversions
+    10: 32 averaged conversions
+    11: 64 averaged conversions
+*/
+
 #include <Wire.h>
+
+#define TMP_CONFIG_STRING 0b1100000
 
 #define TMP117_TEMP_I2C 0x48    // TMP I2C Register
 #define TMP117_TEMP_REG 0x00    // TMP Data Register
@@ -13,28 +42,39 @@
 #define TMP117_DEVICE_ID 0X0F
 #define TMP117_RESOLUTION (double)0.0078125
 
+#define TMP_SLEEP_VAL 0x20
+
 
 void writeByte (uint8_t registerAddress, uint8_t writeData);
 void readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
 
 void setup(){
-  Serial.begin(9600);
+    Serial.begin(9600);
+    Wire.begin();
+    
+    //0b1000011000010010
+    uint8_t buffer[2];
+    readBytes(TMP117_TEMP_I2C, TMP117_CONFIG_REG, 2, &buffer[0]);
+    
+    //Baseline:
+    //writeByte(TMP117_TEMP_I2C,TMP117_CONFIG_REG, 0b110101101000);
+    //writeByte(TMP117_TEMP_I2C,TMP117_CONFIG_REG, 0b110101101000);
 
-  Wire.begin();
+
+
 
 }
 
 void loop(){
-
-  long timestamp = micros();
-
-  uint8_t buffer[2];
-  readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
-
-  float temp = (float)(buffer[0] << 8 | buffer[1]) * TMP117_RESOLUTION;
-
-  timestamp = micros()-timestamp;
-  Serial.println(String(timestamp)+" "+String(temp));
+    //long timestamp = micros();
+    
+    //uint8_t buffer[2];
+    //readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
+    //float temp = (float)(buffer[0] << 8 | buffer[1]) * TMP117_RESOLUTION;
+    
+    //timestamp = micros()-timestamp;
+    //Serial.println(String(temp));
+    //delay(500);
 }
 
 
@@ -47,6 +87,7 @@ void readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes
     int i = 0;
     while(Wire.available()){
         data[i] = Wire.read();
+        //Serial.print(data[i]);
         i++;
     }
 }
@@ -62,3 +103,4 @@ void writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t write
     Wire.write(writeData);                                      // write data to adress specificed above
     Wire.endTransmission();                                     // end communication
 }
+
