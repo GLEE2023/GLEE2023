@@ -27,7 +27,7 @@ Bits from LSB to MSB:
 
 #include <Wire.h>
 
-#define TMP_CONFIG_STRING 0b1100000
+#define TMP_CONFIG_STRING 0b0010100
 
 #define TMP117_TEMP_I2C 0x48    // TMP I2C Register
 #define TMP117_TEMP_REG 0x00    // TMP Data Register
@@ -42,7 +42,6 @@ Bits from LSB to MSB:
 #define TMP117_DEVICE_ID 0X0F
 #define TMP117_RESOLUTION (double)0.0078125
 
-#define TMP_SLEEP_VAL 0x20
 
 
 void writeByte (uint8_t registerAddress, uint8_t writeData);
@@ -51,29 +50,29 @@ void readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
 void setup(){
     Serial.begin(9600);
     Wire.begin();
-    
-    //0b1000011000010010
-    uint8_t buffer[2];
-    readBytes(TMP117_TEMP_I2C, TMP117_CONFIG_REG, 2, &buffer[0]);
-    
-    //Baseline:
-    //writeByte(TMP117_TEMP_I2C,TMP117_CONFIG_REG, 0b110101101000);
-    //writeByte(TMP117_TEMP_I2C,TMP117_CONFIG_REG, 0b110101101000);
+    delay(1000);
 
+    uint16_t first = 0b0010;
+    uint16_t second = ((uint16_t)TMP_CONFIG_STRING);
+    uint16_t result = ((0b0010 << 12) | (TMP_CONFIG_STRING << 5)); 
 
+    //Serial.println(result, BIN);
+    Wire.beginTransmission(TMP117_TEMP_I2C);
+    Wire.write(TMP117_CONFIG_REG);
+    Wire.write((uint8_t)(result >> 8));
+    Wire.write((uint8_t)result);
+    Wire.endTransmission();
 
-
+    //Serial.println("setup done");
 }
 
 void loop(){
-    //long timestamp = micros();
     
-    //uint8_t buffer[2];
-    //readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
-    //float temp = (float)(buffer[0] << 8 | buffer[1]) * TMP117_RESOLUTION;
+    uint8_t buffer[2];
+    readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
+    float temp = (float)(buffer[0] << 8 | buffer[1]) * TMP117_RESOLUTION;
     
-    //timestamp = micros()-timestamp;
-    //Serial.println(String(temp));
+    Serial.println(String(temp));
     //delay(500);
 }
 
@@ -87,7 +86,6 @@ void readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes
     int i = 0;
     while(Wire.available()){
         data[i] = Wire.read();
-        //Serial.print(data[i]);
         i++;
     }
 }
@@ -102,5 +100,7 @@ void writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t write
     Wire.write(registerAddress);                                // point to address to be written to
     Wire.write(writeData);                                      // write data to adress specificed above
     Wire.endTransmission();                                     // end communication
+    Serial.println(writeData, BIN);
+    Serial.println("Out of writebyte");
 }
 
