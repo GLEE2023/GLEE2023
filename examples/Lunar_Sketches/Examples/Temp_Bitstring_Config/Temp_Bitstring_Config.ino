@@ -2,7 +2,6 @@
 Bitstring to define config of Temperature Sensor
 Bits from LSB to MSB:
 (bits): description
-
 0-1: mode
   modes:
     01: Shutdown (SD)
