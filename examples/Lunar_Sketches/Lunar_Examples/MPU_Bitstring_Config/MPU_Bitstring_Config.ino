@@ -33,8 +33,9 @@ Bits from LSB to MSB:
 */
 
 #include <Wire.h>
+#include <EEPROM.h>
 
-#define ACC_CONFIG_STRING 0b000000000001111
+#define ACC_CONFIG_STRING 0b000000000000010
 #define DURATION 0xA //100 seconds
 
 
@@ -68,6 +69,9 @@ Bits from LSB to MSB:
 
 #define MPU6000_SLEEP_VAL 0x40 //  write to MPU6000_PWR_MGMT_1 to put into sleep
 #define MPU6000_RESET_VAL 0x80 // write to MPU6000_PWR_MGMT_1 to reset
+
+#define ACC_MEM_LOC 0x000
+#define GYRO_MEM_LOC 0x200
 
 void writeByte (uint8_t registerAddress, uint8_t writeData);
 void readBytes (uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
@@ -149,26 +153,51 @@ void setup(){
 }
 
 void loop(){
+  Serial.println("Begining");
 
   long timestamp = micros();
 
   float acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z;
 
-  uint8_t buffer[6];
-  readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_ACCEL_OUT, 6, &buffer[0]);
-  acc_x = (float)(buffer[0] << 8 | buffer[1]) / MPU6000_LSB_PER_G * -1;
-  acc_y = (float)(buffer[2] << 8 | buffer[3]) / MPU6000_LSB_PER_G * -1;
-  acc_z = (float)(buffer[4] << 8 | buffer[5]) / MPU6000_LSB_PER_G * -1;
+  for(int i=0; i<512; i+=12){
 
-  readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_GYRO_OUT, 6, &buffer[0]);
-  gyro_x = (float)(buffer[0] << 8 | buffer[1]) / 131 * -1; //131 deg/LSB
-  gyro_y = (float)(buffer[2] << 8 | buffer[3]) / 131 * -1;
-  gyro_z = (float)(buffer[4] << 8 | buffer[5]) / 131 * -1;
+    uint8_t buffer[6];
+
+    readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_ACCEL_OUT, 6, &buffer[0]);
+    for(int j=0; j<6; j++){EEPROM.write(ACC_MEM_LOC+i+j,buffer[j]);}
+
+    readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_GYRO_OUT, 6, &buffer[0]);
+    for(int j=6; j<12; j++) EEPROM.write(GYRO_MEM_LOC+i+j,buffer[j]);
+  }
 
   timestamp = micros()-timestamp;
-  Serial.println(String(timestamp)+" "+String(acc_x)+" "+String(acc_y)+" "+String(acc_z)+" "+String(gyro_x)+" "+String(gyro_y)+" "+String(gyro_z));
-}
 
+
+  for(int i=ACC_MEM_LOC; i<512+ACC_MEM_LOC; i+=6){
+    acc_x = (float)(EEPROM.read(i) << 8 | EEPROM.read(i+1)) / MPU6000_LSB_PER_G * -1;
+    acc_y = (float)(EEPROM.read(i+2) << 8 | EEPROM.read(i+3)) / MPU6000_LSB_PER_G * -1;
+    acc_z = (float)(EEPROM.read(i+4) << 8 | EEPROM.read(i+5)) / MPU6000_LSB_PER_G * -1;
+
+    Serial.println(String(acc_x)+" "+String(acc_y)+" "+String(acc_z));
+  }
+
+  // Serial.println("Printing Gyro data");
+  //
+  // for(int i=GYRO_MEM_LOC; i<512+GYRO_MEM_LOC; i+=6){
+  //   gyro_x = (float)(EEPROM.read(i) << 8 | EEPROM.read(i+1)) / 131 * -1; //131 deg/LSB
+  //   gyro_y = (float)(EEPROM.read(i+2) << 8 | EEPROM.read(i+3)) / 131 * -1;
+  //   gyro_z = (float)(EEPROM.read(i+4) << 8 | EEPROM.read(i+5)) / 131 * -1;
+  //
+  //   Serial.println(String(gyro_x)+" "+String(gyro_y)+" "+String(gyro_z));
+  // }
+
+  Serial.print("It took ");
+  Serial.print(timestamp);
+  Serial.println(" to run.");
+
+  Serial.println("Restarting in 5 seconds");
+  delay(5000);
+}
 
 void readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
     Wire.beginTransmission(I2CsensorAddress);           // begins forming transmission to sensor
@@ -194,22 +223,3 @@ void writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t write
     Wire.write(writeData);                                      // write data to adress specificed above
     Wire.endTransmission();                                     // end communication
 }
-
-// /**
-//  * Parameters: Register Address, Starting Bit, Length, Data
-//  * Returns: None
-//  * This function  writes data byte for specified length
-// **/
-// void writeBits(uint8_t registerAddress, uint8_t startBit, uint8_t length, uint8_t data){
-//     uint8_t buff;
-//     if (readByte(registerAddress) != 0){
-//         uint8_t mask = ((1 << length) - 1) << (startBit - length + 1);
-//         data <<= (startBit - length + 1);
-//         data &= mask;
-//         buff &= ~(mask);
-//         buff |= data;
-//         writeByte(registerAddress, buff);
-//     } else {
-// 	//TODO
-//     }
-// }
