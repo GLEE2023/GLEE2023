@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "__locale": "cpp",
-        "ostream": "cpp",
-        "cstddef": "cpp"
-    }
-}
