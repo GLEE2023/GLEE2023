@@ -1,6 +1,5 @@
-#include <Wire.h>
 #include <Arduino.h>
-
+#include "Lunar_I2C.h"
 
 //Things that john is letting users change - MPU6000_SMPLRT_DIV, DLPF
 
@@ -33,30 +32,7 @@
 #define MPU6000_SLEEP_VAL 0x40 //  write to MPU6000_PWR_MGMT_1 to put into sleep
 #define MPU6000_RESET_VAL 0x80 // write to MPU6000_PWR_MGMT_1 to reset
 
-void readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
-    Wire.beginTransmission(I2CsensorAddress);           // begins forming transmission to sensor
-    Wire.write(registerAddress);                     // Add register address to transmission
-    Wire.endTransmission();
-    Wire.requestFrom(I2CsensorAddress, nBytes);         // Request and listen for response
-    // Record response, wire will be available until nBytes are read
-    int i = 0;
-    while(Wire.available()){
-        data[i] = Wire.read();
-        i++;
-    }
-}
 
-/**
- * Parameters: Register Address, Write Data
- * Returns: None
- * This function writes data to specified address
-**/
-void writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t writeData){
-    Wire.beginTransmission(I2CsensorAddress);               // begin communication with the sensor
-    Wire.write(registerAddress);                                // point to address to be written to
-    Wire.write(writeData);                                      // write data to adress specificed above
-    Wire.endTransmission();                                     // end communication
-}
 
 namespace MPU6000_Lunar{
 
@@ -74,7 +50,7 @@ namespace MPU6000_Lunar{
     writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_PWR_MGMT_1,0x01);
 
     //This switch sets the mode
-    switch(config_string & 0xF){
+    switch(config_string>>0 & 0xF){
       //gets the first 4 bits
       case 0x0:
         // sleep
