@@ -25,6 +25,7 @@ Bits from LSB to MSB:
 */
 
 #include <Wire.h>
+#include "Lunar_I2C.h"
 
 #define TMP_CONFIG_STRING 0b0010100
 
@@ -42,10 +43,6 @@ Bits from LSB to MSB:
 #define TMP117_RESOLUTION (double)0.0078125
 
 
-
-void writeByte (uint8_t registerAddress, uint8_t writeData);
-void readBytes(uint8_t registerAddress, uint8_t nBytes, uint8_t * data);
-
 void setup(){
     Serial.begin(9600);
     Wire.begin();
@@ -53,7 +50,7 @@ void setup(){
 
     uint16_t first = 0b0010;
     uint16_t second = ((uint16_t)TMP_CONFIG_STRING);
-    uint16_t result = ((0b0010 << 12) | (TMP_CONFIG_STRING << 5)); 
+    uint16_t result = ((0b0010 << 12) | (TMP_CONFIG_STRING << 5));
 
     //Serial.println(result, BIN);
     Wire.beginTransmission(TMP117_TEMP_I2C);
@@ -66,40 +63,11 @@ void setup(){
 }
 
 void loop(){
-    
+
     uint8_t buffer[2];
-    readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
+    Lunar_I2C::readBytes(TMP117_TEMP_I2C, TMP117_TEMP_REG, 2, &buffer[0]);
     float temp = (float)(buffer[0] << 8 | buffer[1]) * TMP117_RESOLUTION;
-    
+
     Serial.println(String(temp));
     //delay(500);
 }
-
-
-void readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
-    Wire.beginTransmission(I2CsensorAddress);           // begins forming transmission to sensor
-    Wire.write(registerAddress);                     // Add register address to transmission
-    Wire.endTransmission();
-    Wire.requestFrom(I2CsensorAddress, nBytes);         // Request and listen for response
-    // Record response, wire will be available until nBytes are read
-    int i = 0;
-    while(Wire.available()){
-        data[i] = Wire.read();
-        i++;
-    }
-}
-
-/**
- * Parameters: Register Address, Write Data
- * Returns: None
- * This function writes data to specified address
-**/
-void writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t writeData){
-    Wire.beginTransmission(I2CsensorAddress);               // begin communication with the sensor
-    Wire.write(registerAddress);                                // point to address to be written to
-    Wire.write(writeData);                                      // write data to adress specificed above
-    Wire.endTransmission();                                     // end communication
-    Serial.println(writeData, BIN);
-    Serial.println("Out of writebyte");
-}
-
