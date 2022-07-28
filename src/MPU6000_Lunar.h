@@ -37,5 +37,5 @@
 namespace MPU6000_Lunar{
 
   void readAccData(uint8_t* buffer);
-  void setMPU(uint16_t config_string);
+  void setConfig(uint16_t config_string);
 }

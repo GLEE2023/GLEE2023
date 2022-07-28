@@ -1,36 +1,11 @@
 #include "MPU6000_Lunar.h"
 #include <Wire.h>
 
-// void readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
-//     Wire.beginTransmission(I2CsensorAddress);           // begins forming transmission to sensor
-//     Wire.write(registerAddress);                     // Add register address to transmission
-//     Wire.endTransmission();
-//     Wire.requestFrom(I2CsensorAddress, nBytes);         // Request and listen for response
-//     // Record response, wire will be available until nBytes are read
-//     int i = 0;
-//     while(Wire.available()){
-//         data[i] = Wire.read();
-//         i++;
-//     }
-// }
-//
-// /**
-//  * Parameters: Register Address, Write Data
-//  * Returns: None
-//  * This function writes data to specified address
-// **/
-// void writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t writeData){
-//     Wire.beginTransmission(I2CsensorAddress);               // begin communication with the sensor
-//     Wire.write(registerAddress);                                // point to address to be written to
-//     Wire.write(writeData);                                      // write data to adress specificed above
-//     Wire.endTransmission();                                     // end communication
-// }
-
 void MPU6000_Lunar::readAccData(uint8_t* buffer){
   Lunar_I2C::readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_ACCEL_OUT, 6, &buffer[0]);
 }
 
-void MPU6000_Lunar::setMPU(uint16_t config_string){
+void MPU6000_Lunar::setConfig(uint16_t config_string){
   Serial.print("Acc Config string: ");
   Serial.println(config_string,HEX);
   // Set limits to +/- 2g, don't change

@@ -63,7 +63,7 @@ void setConfig(long config){
   // uint8_t mag_config    = (config<<25) & 0x2;
 
   // setTMP((config<<0) & 0xFF);
-  MPU6000_Lunar::setMPU((config>>4) & 0x7FF);
+  MPU6000_Lunar::setConfig((config>>4) & 0x7FF);
   // setTPIS((config<<23) & 0x1);
   // setCAP()
   // setBM14()

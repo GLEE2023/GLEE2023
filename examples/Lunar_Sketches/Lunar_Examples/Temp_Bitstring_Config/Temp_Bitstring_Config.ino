@@ -2,7 +2,7 @@
 Bitstring to define config of Temperature Sensor
 Bits from LSB to MSB:
 (bits): description
-0-1: mode
+5-6: mode
   modes:
     01: Shutdown (SD)
     00: Continuous conversion (CC)
@@ -17,7 +17,7 @@ Bits from LSB to MSB:
     101
     110
     111
-5-6: Averaging
+0-1: Averaging
     00: No averaging
     01: 8 Averaged conversions
     10: 32 averaged conversions
@@ -27,7 +27,7 @@ Bits from LSB to MSB:
 #include <Wire.h>
 #include "Lunar_I2C.h"
 
-#define TMP_CONFIG_STRING 0b0010100
+#define TMP_CONFIG_STRING 0b0111011
 
 #define TMP117_TEMP_I2C 0x48    // TMP I2C Register
 #define TMP117_TEMP_REG 0x00    // TMP Data Register
@@ -48,18 +48,30 @@ void setup(){
     Wire.begin();
     delay(1000);
 
-    uint16_t first = 0b0010;
-    uint16_t second = ((uint16_t)TMP_CONFIG_STRING);
-    uint16_t result = ((0b0010 << 12) | (TMP_CONFIG_STRING << 5));
 
+    //put most sig byte in 0th spot beacuase that is how its written to TMP
+    uint8_t buffer[2];
+    buffer[1] =  ((uint8_t)TMP_CONFIG_STRING << 5);
+    buffer[0] =  ((uint8_t)(TMP_CONFIG_STRING>>3));
+    Serial.println("Buffer: ");
+    Serial.println(buffer[0],HEX);
+    Serial.println(buffer[1],HEX);
+
+
+    Lunar_I2C::writeBytes(TMP117_TEMP_I2C,TMP117_CONFIG_REG,2,buffer);
     //Serial.println(result, BIN);
-    Wire.beginTransmission(TMP117_TEMP_I2C);
-    Wire.write(TMP117_CONFIG_REG);
-    Wire.write((uint8_t)(result >> 8));
-    Wire.write((uint8_t)result);
-    Wire.endTransmission();
+    // Wire.beginTransmission(TMP117_TEMP_I2C);
+    // Wire.write(TMP117_CONFIG_REG);
+    // Wire.write((uint8_t)(result >> 8));
+    // Wire.write((uint8_t)result);
+    // Wire.endTransmission();
 
     //Serial.println("setup done");
+    uint8_t newBuffer[2];
+    Lunar_I2C::readBytes(TMP117_TEMP_I2C,TMP117_CONFIG_REG,2,newBuffer);
+    Serial.println("Read from buffer: ");
+    Serial.println(newBuffer[0],HEX);
+    Serial.println(newBuffer[1],HEX);
 }
 
 void loop(){
