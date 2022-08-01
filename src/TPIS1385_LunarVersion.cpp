@@ -31,7 +31,7 @@ TPIS1385_New::TPIS1385_New(int _id, bool _debug){
 
 void TPIS1385_New::begin(void){
     Wire.begin();                          // Begin i2c coms at standard speed
-	Wire.beginTransmission(0x00);    // Reload all call   
+	Wire.beginTransmission(0x00);    // Reload all call
     Wire.write(0x04);
     Wire.write(0x00);
 	if(Wire.endTransmission()!=0) Serial.println(F("Init call failiure"));
@@ -48,7 +48,7 @@ void TPIS1385_New::readEEprom(void){
     uint8_t data[2] = {0,0};
 
     //TPIS1385_New::writeByte(TP_EEPROM_CONTROL, 0x80); // Set eeprom control to read
-    Wire.beginTransmission(0x0D);               // begin communication with the sensor 
+    Wire.beginTransmission(0x0D);               // begin communication with the sensor
     Wire.write(TP_EEPROM_CONTROL);                                // point to address to be written to
     Wire.write(0x80);                                      // write data to adress specificed above
     Wire.endTransmission();                                     // end communication
@@ -109,7 +109,7 @@ void TPIS1385_New::readEEprom(void){
     Serial.println(TPIS1385_New::sensorCalibration.TObj1);
 
     //TPIS1385_New::writeByte(TP_EEPROM_CONTROL, 0x00); // Stop reading from eeprom
-    //Wire.beginTransmission(0x0D);               // begin communication with the sensor 
+    //Wire.beginTransmission(0x0D);               // begin communication with the sensor
     Wire.write(TP_EEPROM_CONTROL);                                // point to address to be written to
     Wire.write(0x00);                                      // write data to adress specificed above
     Wire.endTransmission();                                     // end communication

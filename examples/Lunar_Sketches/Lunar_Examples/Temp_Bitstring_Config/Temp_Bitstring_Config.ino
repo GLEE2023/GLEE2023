@@ -4,8 +4,8 @@ Bits from LSB to MSB:
 (bits): description
 5-6: mode
   modes:
-    01: Shutdown (SD)
     00: Continuous conversion (CC)
+    01: Shutdown (SD)
     10: Continuous conversion (CC), Same as 00 (reads back = 00)
     11: One-shot conversion (OS)
 2-4: Conversion Time
