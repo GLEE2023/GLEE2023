@@ -47,4 +47,5 @@
 namespace BM1422AGMV_Lunar{
   void setConfig(uint8_t config);
   void getData(uint8_t* buffer);
+  void convertToFloats(uint8_t* buffer, float* nums);
 }
