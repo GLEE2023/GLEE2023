@@ -38,20 +38,22 @@ void setup(){
   Wire.begin();
   Serial.begin(9600);
 
-  uint8_t mode_num = 0;
-  if (mode_num == 0){
-    setConfig(MODE_1_CONFIG);
-  }
+  setConfig(MODE_1_CONFIG);
 }
 
 void loop(){
-  unsigned long timestamp = millis();
+  //used to time how long the loop takes to run
+  unsigned long timestamp = micros();
 
+  //this serves as the array that will store the data accessed over I2C for all the sensors
   uint8_t buffer[6];
 
+  //these arrays will store the data that is calculated from the bits stored in the buffer
   float magData[3];
   float accData[3];
   float temperature;
+
+  //each sensor has its own namespace with functions associated with it to get the data and convert from bytes in the buffer to actual data
 
   //get data from accelerometer
   MPU6000_Lunar::readAccData(buffer);
@@ -61,19 +63,14 @@ void loop(){
   TMP117_Lunar::getData(buffer);
   TMP117_Lunar::convertToTempC(buffer, &temperature);
 
-  // Serial.println("Mag stuff:");
+  // get data from magnetometer
   BM1422AGMV_Lunar::getData(buffer);
   BM1422AGMV_Lunar::convertToFloats(buffer, magData);
 
-  timestamp = millis()-timestamp;
+  timestamp = micros()-timestamp;
 
+  //print data
   Serial.print(timestamp); Serial.print(", "); Serial.print(temperature); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.println();
-
-  // Serial.print(temp);
-  // Serial.print(", ");
-  // Serial.print(mag_x);
-  // Serial.print(", ");
-  // Serial.println(acc_z);
 }
 
 void setConfig(long config){
@@ -86,5 +83,4 @@ void setConfig(long config){
   BM1422AGMV_Lunar::setConfig(config & 0xF);
   // setTPIS((config<<23) & 0x1);
   // setCAP()
-  // setBM14()
 }
