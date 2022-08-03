@@ -27,5 +27,5 @@
 namespace TMP117_Lunar{
   void setConfig(uint8_t config);
   void getData(uint8_t* buffer);
-  float convertToTempC(uint8_t* buffer);
+  float convertToTempC(uint8_t* buffer, float* temperature);
 }

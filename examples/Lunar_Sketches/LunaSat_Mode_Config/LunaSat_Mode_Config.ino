@@ -1,20 +1,14 @@
 /*
 From LSB to MSB:
--TMP117 (20-25)
-25-26 = mode
-22-24 = conversion bits, see convTimes table.
-21-22 = averaging bits, see convTimes table.
+-TMP117 (19-25)
+24-25 = mode
+21-23 = conversion bits, see convTimes table.
+19-20 = averaging bits, see convTimes table.
 
--MPU6000 (5-19)
-18-20 = digital low pass setting, may or may not be removed.
-8-17 = sample rate divisor, number between 0-255
-6-9 = mode, options are in generateBitstrings file.
-
--Therm (4)
-5 = on or off (doesn't do anything)
-
--Cap (3)
-4 = on or off (doesn't actually do anything)
+-MPU6000 (4-18)
+16-18 = digital low pass setting, may or may not be removed.
+6-15 = sample rate divisor, number between 0-255
+4-7 = mode, options are in generateBitstrings file.
 
 -Mag (0-2)
 3   = on or off, 0 is off
@@ -51,29 +45,29 @@ void setup(){
 }
 
 void loop(){
+  unsigned long timestamp = millis();
 
   uint8_t buffer[6];
 
   float magData[3];
   float accData[3];
+  float temperature;
 
   //get data from accelerometer
   MPU6000_Lunar::readAccData(buffer);
-  MPU6000_Lunar::convertAccToFloat(buffer,accData);
+  MPU6000_Lunar::convertAccToFloat(buffer, accData);
 
   //get data from temperature sensor
   TMP117_Lunar::getData(buffer);
-  float temp = TMP117_Lunar::convertToTempC(buffer);
+  TMP117_Lunar::convertToTempC(buffer, &temperature);
 
   // Serial.println("Mag stuff:");
   BM1422AGMV_Lunar::getData(buffer);
-  BM1422AGMV_Lunar::convertToFloats(buffer,magData);
+  BM1422AGMV_Lunar::convertToFloats(buffer, magData);
 
+  timestamp = millis()-timestamp;
 
-  // unsigned short val = (signed short)(buffer[1]<<8) | (buffer[0]);
-  // Serial.print("VAL: "); Serial.println(val);
-  // float mag_x = (float)val / 6;
-  Serial.print(millis()); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.println();
+  Serial.print(timestamp); Serial.print(", "); Serial.print(temperature); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.println();
 
   // Serial.print(temp);
   // Serial.print(", ");
@@ -87,8 +81,8 @@ void setConfig(long config){
   Serial.println(config,HEX);
 
   // setTMP((config<<0) & 0xFF);
-  MPU6000_Lunar::setConfig((config>>5) & 0x7FF);
-  TMP117_Lunar::setConfig((config>>20) & 0x3F);
+  MPU6000_Lunar::setConfig((config>>4) & 0x7FF);
+  TMP117_Lunar::setConfig((config>>19) & 0x3F);
   BM1422AGMV_Lunar::setConfig(config & 0xF);
   // setTPIS((config<<23) & 0x1);
   // setCAP()
