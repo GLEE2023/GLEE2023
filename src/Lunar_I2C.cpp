@@ -7,8 +7,8 @@
 void Lunar_I2C::readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t nBytes, uint8_t * data){
   Wire.beginTransmission(I2CsensorAddress);           // begins forming transmission to sensor
   Wire.write(registerAddress);                     // Add register address to transmission
-  Wire.endTransmission();
-  Wire.requestFrom(I2CsensorAddress, nBytes);         // Request and listen for response
+  Wire.endTransmission(false);
+  Wire.requestFrom(I2CsensorAddress, nBytes, true);         // Request and listen for response
   // Record response, wire will be available until nBytes are read
   int i = 0;
 
