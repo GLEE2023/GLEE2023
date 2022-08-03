@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "Arduino.h"
+#include "Lunar_I2C.h"
 
 #define BM1422AGMV_DEVICE_ADDRESS_0E   (0x0E)    // 7bit Addrss
 #define BM1422AGMV_DEVICE_ADDRESS_0F   (0x0F)    // 7bit Address
@@ -48,12 +49,12 @@ void setup (){
   unsigned char reg;
   unsigned char buf[2];
 
-  read(BM1422AGMV_WIA, &reg, sizeof(reg));
+  //read(BM1422AGMV_WIA, &reg, sizeof(reg));
 
   // Step1
   reg = BM1422AGMV_CNTL1_VAL;
-  write(BM1422AGMV_CNTL1, &reg, sizeof(reg));
-  
+  Lunar_I2C::writeBytes(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL1, sizeof(reg), &reg);
+
   // Check 12bit or 14bit
   buf[0] = (BM1422AGMV_CNTL1_VAL & BM1422AGMV_CNTL1_OUT_BIT);
   if (buf[0] == BM1422AGMV_CNTL1_OUT_BIT) {
@@ -63,33 +64,37 @@ void setup (){
   }
 
   delay(1);
-  
+
   buf[0] = (BM1422AGMV_CNTL4_VAL >> 8) & 0xFF;
   buf[1] = (BM1422AGMV_CNTL4_VAL & 0xFF);
-  write(BM1422AGMV_CNTL4, buf, sizeof(buf));
-  
+  // write(BM1422AGMV_CNTL4, buf, sizeof(buf));
+  Lunar_I2C::writeBytes(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL4, sizeof(buf), buf);
+
   // Step2
   reg = BM1422AGMV_CNTL2_VAL;
-  write(BM1422AGMV_CNTL2, &reg, sizeof(reg));
-  
+  // write(BM1422AGMV_CNTL2, &reg, sizeof(reg));
+  Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL2, reg);
+
+
   // Step3
   // Option
   reg = BM1422AGMV_AVE_A_VAL;
-  write(BM1422AGMV_AVE_A, &reg, sizeof(reg));
+  // write(BM1422AGMV_AVE_A, &reg, sizeof(reg));
+  Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL2,reg);
 };
 
 
-void loop (){ 
+void loop (){
   float magData[3];
   unsigned char val[6];
   signed short rawdata[3];
   unsigned char reg = BM1422AGMV_CNTL3_VAL;
 
 
-  write(BM1422AGMV_CNTL3, &reg, sizeof(reg));
+  Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL3, reg);
   delay(2);
-  read(BM1422AGMV_DATAX, val, 6);
-  
+  Lunar_I2C::readBytes(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_DATAX, 6, val);
+
   rawdata[0] = ((signed short)val[1] << 8) | (val[0]);
   rawdata[1] = ((signed short)val[3] << 8) | (val[2]);
   rawdata[2] = ((signed short)val[5] << 8) | (val[4]);
@@ -114,29 +119,29 @@ void loop (){
 };
 
 
-
-void write(unsigned char memory_address, unsigned char *data, unsigned char size)
-{
-  unsigned int cnt;
-
-  Wire.beginTransmission(BM1422AGMV_DEVICE_ADDRESS_0E);
-  Wire.write(memory_address);
-  Wire.write(data, size);
-  Wire.endTransmission();
-}
-
-void read(unsigned char memory_address, unsigned char *data, int size)
-{
-  unsigned char cnt;
-
-  Wire.beginTransmission(BM1422AGMV_DEVICE_ADDRESS_0E);
-  Wire.write(memory_address);
-  Wire.endTransmission(false);
-  
-  Wire.requestFrom((int)BM1422AGMV_DEVICE_ADDRESS_0E, (int)size, (int)true);
-  cnt = 0;
-  while(Wire.available()) {
-    data[cnt] = Wire.read();
-    cnt++;
-  }
-}
+//
+// void write(unsigned char memory_address, unsigned char *data, unsigned char size)
+// {
+//   unsigned int cnt;
+//
+//   Wire.beginTransmission(BM1422AGMV_DEVICE_ADDRESS_0E);
+//   Wire.write(memory_address);
+//   Wire.write(data, size);
+//   Wire.endTransmission();
+// }
+//
+// void read(unsigned char memory_address, unsigned char *data, int size)
+// {
+//   unsigned char cnt;
+//
+//   Wire.beginTransmission(BM1422AGMV_DEVICE_ADDRESS_0E);
+//   Wire.write(memory_address);
+//   Wire.endTransmission(false);
+//
+//   Wire.requestFrom((int)BM1422AGMV_DEVICE_ADDRESS_0E, (int)size, (int)true);
+//   cnt = 0;
+//   while(Wire.available()) {
+//     data[cnt] = Wire.read();
+//     cnt++;
+//   }
+// }
