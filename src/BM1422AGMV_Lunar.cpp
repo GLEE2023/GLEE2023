@@ -3,8 +3,8 @@
 /*
 -Mag (0-2)
 3   = on or off, 0 is off
-2   = cc or single shot
-0-1 = cc freq
+2   = continuous or single mode
+0-1 = continuous mode freq
 */
 
 void BM1422AGMV_Lunar::setConfig(uint8_t config){
@@ -18,12 +18,12 @@ void BM1422AGMV_Lunar::setConfig(uint8_t config){
   */
 
   #ifdef BM1422AGMV_DEBUG
-    Serial.print(F("BM14 CONFIG STR: 0x")); Serial.print(config,HEX); Serial.print(F(", CONTR1 val (hex):")); Serial.println(((config & 0x8)<<4) | ((config & 0x3)<<3) | ((config & 0x01)<<0),HEX);
+    Serial.print(F("BM14 CONFIG STR: 0x")); Serial.print(config,HEX); Serial.print(F(", CONTR1 val (hex):")); Serial.println(((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1),HEX);
   #endif
 
   //see page 16 in the BM1422AGMV data sheet for steps to set mode
   //step 1
-  Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL1,((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x01)<<0));
+  Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL1,((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1));
   Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL4,0x00);
   Lunar_I2C::writeByte(BM1422AGMV_DEVICE_ADDRESS_0E,BM1422AGMV_CNTL4+1,0x00);
   //step2
