@@ -37,5 +37,6 @@
 namespace MPU6000_Lunar{
 
   void readAccData(uint8_t* buffer);
+  void convertAccToFloat(uint8_t* buffer, float* nums);
   void setConfig(uint16_t config_string);
 }

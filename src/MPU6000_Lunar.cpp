@@ -5,6 +5,13 @@ void MPU6000_Lunar::readAccData(uint8_t* buffer){
   Lunar_I2C::readBytes(MPU6000_I2CADDR_DEFAULT, MPU6000_ACCEL_OUT, 6, &buffer[0]);
 }
 
+//converts buffer to floats assuming the range is +-2g
+void MPU6000_Lunar::convertAccToFloat(uint8_t* buffer, float* nums){
+  nums[0] = (float)(buffer[0] << 8 | buffer[1]) / MPU6000_LSB_PER_G * -1;
+  nums[1] = (float)(buffer[2] << 8 | buffer[3]) / MPU6000_LSB_PER_G * -1;
+  nums[2] = (float)(buffer[4] << 8 | buffer[5]) / MPU6000_LSB_PER_G * -1;
+}
+
 void MPU6000_Lunar::setConfig(uint16_t config_string){
   Serial.print("Acc Config string: ");
   Serial.println(config_string,HEX);

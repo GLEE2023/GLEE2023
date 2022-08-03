@@ -30,7 +30,7 @@ From LSB to MSB:
 
 // #define DBUG true
 
-#define MODE_1_CONFIG 0b010000000000000000010111000
+#define MODE_1_CONFIG 0b010000000000000000010111011
 
 #define MODE_2_CONFIG 10952
 
@@ -55,33 +55,25 @@ void loop(){
   uint8_t buffer[6];
 
   float magData[3];
-  signed short rawdata[3];
-
-  uint8_t _sens = 24;
+  float accData[3];
 
   //get data from accelerometer
-  // MPU6000_Lunar::readAccData(buffer);
-  // float acc_z = (float)(buffer[4] << 8 | buffer[5]) / 16340.0 * -1;
+  MPU6000_Lunar::readAccData(buffer);
+  MPU6000_Lunar::convertAccToFloat(buffer,accData);
 
   //get data from temperature sensor
-  // TMP117_Lunar::getData(buffer);
-  // float temp = TMP117_Lunar::convertToTempC(buffer);
+  TMP117_Lunar::getData(buffer);
+  float temp = TMP117_Lunar::convertToTempC(buffer);
 
   // Serial.println("Mag stuff:");
   BM1422AGMV_Lunar::getData(buffer);
+  BM1422AGMV_Lunar::convertToFloats(buffer,magData);
 
-  rawdata[0] = ((signed short)buffer[1] << 8) | (buffer[0]);
-  rawdata[1] = ((signed short)buffer[3] << 8) | (buffer[2]);
-  rawdata[2] = ((signed short)buffer[5] << 8) | (buffer[4]);
-
-  magData[0] = (float)rawdata[0] / _sens;
-  magData[1] = (float)rawdata[1] / _sens;
-  magData[2] = (float)rawdata[2] / _sens;
 
   // unsigned short val = (signed short)(buffer[1]<<8) | (buffer[0]);
   // Serial.print("VAL: "); Serial.println(val);
   // float mag_x = (float)val / 6;
-  Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.println();
+  Serial.print(millis()); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.println();
 
   // Serial.print(temp);
   // Serial.print(", ");
