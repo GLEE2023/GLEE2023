@@ -8,7 +8,7 @@ Bits from LSB to MSB:
     01: Shutdown (SD)
     10: Continuous conversion (CC), Same as 00 (reads back = 00)
     11: One-shot conversion (OS)
-2-4: Conversion Time
+2-4: Conversion Time 
     000
     001
     010

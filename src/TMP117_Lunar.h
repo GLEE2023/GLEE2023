@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include "Lunar_I2C.h"
 
-#define TMP_DEBUG 
+// #define TMP_DEBUG 
 
 #ifdef TMP_DEBUG
   #define CONFIG_PRINT_STATEMENT Serial.print(F("TMP CONFIG STR: 0x")); Serial.println(config,HEX);

@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Lunar_I2C.h"
 
-#define BM1422AGMV_DEBUG
+// #define BM1422AGMV_DEBUG
 
 #ifndef _BM1422AGMV_H_
 #define _BM1422AGMV_H_
