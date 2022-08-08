@@ -74,7 +74,7 @@ void loop(){
 }
 
 void setConfig(long config){
-  Serial.print("Config string passed into setConfig: ");
+  Serial.print("Config string passed into setConfig (hex): ");
   Serial.println(config,HEX);
 
   // setTMP((config<<0) & 0xFF);
