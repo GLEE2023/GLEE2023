@@ -24,7 +24,7 @@ From LSB to MSB:
 
 // #define DBUG true
 //----------bit numbers:54321098765432109876543210
-#define MODE_1_CONFIG 0b00001110000000000001011011
+#define MODE_1_CONFIG 0b00001110000000000001011011 //max power usage
 // #define MODE_1_CONFIG 0b01000000000000000000000000 //everything put to sleep
 
 #define MODE_2_CONFIG 10952
@@ -36,7 +36,6 @@ From LSB to MSB:
 
 void setup(){
   //setup
-  Wire.begin();
   Serial.begin(9600);
 
   setConfig(MODE_1_CONFIG);
