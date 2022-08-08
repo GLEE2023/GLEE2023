@@ -1,19 +1,19 @@
 /*
 From LSB to MSB:
 -TMP117 (19-25)
-24-25 = mode
-21-23 = conversion bits, see convTimes table.
-19-20 = averaging bits, see convTimes table.
+24-25 = mode, CC:00 (or 11), shutdown:01, single shot:10
+21-23 = conversion bits, see convTimes table in data sheet, from 15ms to 16s.
+19-20 = averaging bits, see convTimes table, from 1 avg to 64 avg.
 
 -MPU6000 (4-18)
-16-18 = digital low pass setting, may or may not be removed.
+16-18 = digital low pass setting, may or may not be removed. from BW of
 6-15 = sample rate divisor, number between 0-255
-4-7 = mode, options are in generateBitstrings file.
+4-7 = mode, see MPU6000_Lunar.cpp
 
 -Mag (0-2)
-3   = on or off, 0 is off
-2   = cc or single shot
-0-1 = cc freq
+3   = on or off, on:1, off:0
+2   = cc or single shot, single: 1, continuous:0
+0-1 = cc freq, (00:10Hz, 10: 20Hz, 01:100Hz, 11:1KHz)
 */
 
 #include <Arduino.h>
@@ -23,8 +23,9 @@ From LSB to MSB:
 #include "BM1422AGMV_Lunar.h"
 
 // #define DBUG true
-
-#define MODE_1_CONFIG 0b010000000000000000010111011
+//----------bit numbers:54321098765432109876543210
+#define MODE_1_CONFIG 0b00001110000000000001011011 //max power usage
+// #define MODE_1_CONFIG 0b01000000000000000000000000 //everything put to sleep
 
 #define MODE_2_CONFIG 10952
 
@@ -35,7 +36,6 @@ From LSB to MSB:
 
 void setup(){
   //setup
-  Wire.begin();
   Serial.begin(9600);
 
   setConfig(MODE_1_CONFIG);
@@ -74,7 +74,7 @@ void loop(){
 }
 
 void setConfig(long config){
-  Serial.print("Config string passed into setConfig: ");
+  Serial.print("Config string passed into setConfig (hex): ");
   Serial.println(config,HEX);
 
   // setTMP((config<<0) & 0xFF);

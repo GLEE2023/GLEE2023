@@ -1,9 +1,10 @@
 #include "BM1422AGMV_Lunar.h"
 
 /*
+config string passed into setConfig
 -Mag (0-2)
 3   = on or off, 0 is off
-2   = continuous or single mode
+2   = continuous:0 or single mode:1
 0-1 = continuous mode freq
 */
 
@@ -18,7 +19,58 @@ void BM1422AGMV_Lunar::setConfig(uint8_t config){
   */
 
   #ifdef BM1422AGMV_DEBUG
+    // ((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1)
+    uint8_t on_or_off = ((config>>3) & 0x1);
+    uint8_t cont_or_single = ((config>>2) & 0x1);
+    uint8_t cont_freq = (config & 0x4);
+
     Serial.print(F("BM14 CONFIG STR: 0x")); Serial.print(config,HEX); Serial.print(F(", CONTR1 val (hex):")); Serial.println(((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1),HEX);
+
+
+    //Is it set on or off
+    switch (on_or_off){
+      case 0x0:
+        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("OFF (The following BM14 prints don't matter)"));
+        break;
+      case 0x1:
+        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("ON"));
+        break;
+      default:
+        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("Something went wrong."));
+        break;
+    };
+
+    // check if mag is set to single mode or continuous mode
+    switch (cont_or_single){
+      case 0x0:
+        Serial.print(F("BM14 continuous or single: ")); Serial.println(F("continuous"));
+        break;
+      case 0x1:
+        Serial.print(F("BM14 continuous or single: ")); Serial.println(F("single"));
+        break;
+      default:
+        Serial.print(F("BM14 continuous or single: ")); Serial.println(F("sonthing went wrong"));
+        break;
+    };
+
+    //print freq of continuous mode
+    switch (cont_freq){
+      case 0x0:
+        Serial.print(F("BM14 confinuous freq:")); Serial.println(F("10Hz"));
+        break;
+      case 0x1:
+        Serial.print(F("BM14 confinuous freq:")); Serial.println(F("100Hz"));
+        break;
+      case 0x2:
+        Serial.print(F("BM14 confinuous freq:")); Serial.println(F("20Hz"));
+        break;
+      case 0x3:
+        Serial.print(F("BM14 confinuous freq:")); Serial.println(F("1kHz"));
+        break;
+      default:
+        Serial.print(F("BM14 confinuous freq:")); Serial.println(F("Somthing went wrong"));
+        break;
+    };
   #endif
 
   //see page 16 in the BM1422AGMV data sheet for steps to set mode
