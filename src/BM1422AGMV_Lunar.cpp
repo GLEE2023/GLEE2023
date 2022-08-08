@@ -20,8 +20,8 @@ void BM1422AGMV_Lunar::setConfig(uint8_t config){
 
   #ifdef BM1422AGMV_DEBUG
     // ((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1)
-    uint8_t on_or_off = (config & 0x8)>>3;
-    uint8_t cont_or_single = ((config & 0x3)<<3);
+    uint8_t on_or_off = ((config>>3) & 0x1);
+    uint8_t cont_or_single = ((config>>2) & 0x1);
     uint8_t cont_freq = (config & 0x4);
 
     Serial.print(F("BM14 CONFIG STR: 0x")); Serial.print(config,HEX); Serial.print(F(", CONTR1 val (hex):")); Serial.println(((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1),HEX);
@@ -30,10 +30,10 @@ void BM1422AGMV_Lunar::setConfig(uint8_t config){
     //Is it set on or off
     switch (on_or_off){
       case 0x0:
-        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("ON"));
+        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("OFF (The following BM14 prints don't matter)"));
         break;
       case 0x1:
-        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("OFF"));
+        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("ON"));
         break;
       default:
         Serial.print(F("BM14 on or sleep: ")); Serial.println(F("Something went wrong."));
