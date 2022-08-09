@@ -17,11 +17,12 @@
 #define MPU6000_PWR_MGMT_1 0x6B         // Primary power/sleep control register
 #define MPU6000_PWR_MGMT_2 0x6C
 #define MPU6000_LSB_PER_G 16384.0       // How many bits per LSB
+#define MPU6000_LSB_PER_DEG 131         // divide gyro output by this to get in deg/s
 #define MPU6000_ACCEL_OUT 0x3B          // base raw accel address (6 bytes for 3 axis)
 #define MPU6000_GYRO_OUT 0x43           // location of gyro output
 #define MPU6000_ACC_ONLY 0x07           //write this to MPU6000_PWR_MGMT_2 to put gyro to sleep
 #define MPU6000_GYRO_ONLY 0x38          //write this to MPU6000_PWR_MGMT_2 to put acc to sleep
-#define MPU6000_ACC_AND_GYRO 0x3F       ////write this to MPU6000_PWR_MGMT_2 to use both acc and gyro
+#define MPU6000_ACC_AND_GYRO 0x00       ////write this to MPU6000_PWR_MGMT_2 to use both acc and gyro
 
 //see register 6B and 6C in the register map for more info
 #define MPU6000_LP_WAKE_REG_6B_VAL 0b00101001    // To turn on Low Power Wake up
@@ -37,7 +38,9 @@
 
 namespace MPU6000_Lunar{
 
+  void setConfig(uint16_t config_string);
   void readAccData(uint8_t* buffer);
   void convertAccToFloat(uint8_t* buffer, float* nums);
-  void setConfig(uint16_t config_string);
+  void readGyroData(uint8_t* buffer);
+  void convertGyroToFloat(uint8_t* buffer, float* nums);
 }

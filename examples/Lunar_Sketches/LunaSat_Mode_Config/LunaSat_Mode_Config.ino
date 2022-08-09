@@ -81,6 +81,7 @@ void loop(){
   //these arrays will store the data that is calculated from the bits stored in the buffer
   float magData[3];
   float accData[3];
+  float gyroData[3];
   float temperature;
 
   //each sensor has its own namespace with functions associated with it to get the data and convert from bytes in the buffer to actual data
@@ -88,6 +89,10 @@ void loop(){
   //get data from accelerometer
   MPU6000_Lunar::readAccData(buffer);
   MPU6000_Lunar::convertAccToFloat(buffer, accData);
+
+  MPU6000_Lunar::readGyroData(buffer);
+  MPU6000_Lunar::convertGyroToFloat(buffer, gyroData);
+
 
   //get data from temperature sensor
   TMP117_Lunar::getData(buffer);
@@ -100,7 +105,7 @@ void loop(){
   timestamp = micros()-timestamp;
 
   //print data
-  Serial.print(timestamp); Serial.print(", "); Serial.print(temperature); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.println();
+  Serial.print(timestamp); Serial.print(", "); Serial.print(temperature); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.print(gyroData[0]); Serial.print(", "); Serial.print(gyroData[1]); Serial.print(", "); Serial.print(gyroData[2]); Serial.println();
 }
 
 void setConfig(long config){
