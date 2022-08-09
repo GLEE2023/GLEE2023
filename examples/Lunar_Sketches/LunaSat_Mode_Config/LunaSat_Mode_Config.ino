@@ -36,7 +36,7 @@ From LSB to MSB:
 
 // TMP only mode configs
 //   ----------bit numbers:54321098765432109876543210
-#define MODE_1_CONFIG 0b00000000000000000000000000 //cc, cc=15.5ms, 1avg
+// #define MODE_1_CONFIG 0b00000000000000000000000000 //cc, cc=15.5ms, 1avg
 // #define MODE_1_CONFIG 0b00001000000000000000000000 //cc, cc=125ms, 1avg
 // #define MODE_1_CONFIG 0b00010000000000000000000000 //cc, cc=250ms, 1avg
 // #define MODE_1_CONFIG 0b00011000000000000000000000 //cc, cc=500ms, 1avg
@@ -54,7 +54,7 @@ From LSB to MSB:
 // #define MODE_1_CONFIG 0b01000000000000000000001001 //continuous 100Hz
 // #define MODE_1_CONFIG 0b01000000000000000000001011 //continuous 1kHz
 
-// #define MODE_1_CONFIG 0b00001110000000000001011011 //max power usage
+#define MODE_1_CONFIG 0b00001110000000000001011011 //max power usage
 
 #define MODE_2_CONFIG 10952
 
@@ -65,6 +65,7 @@ From LSB to MSB:
 
 void setup(){
   //setup
+  Wire.begin();
   Serial.begin(9600);
 
   setConfig(MODE_1_CONFIG);
