@@ -36,25 +36,25 @@ From LSB to MSB:
 
 // TMP only mode configs
 //   ----------bit numbers:54321098765432109876543210
-// #define MODE_1_CONFIG 0b00000000000000000000000000 //cc, cc=15.5ms, 1avg
-// #define MODE_1_CONFIG 0b00001000000000000000000000 //cc, cc=125ms, 1avg
-// #define MODE_1_CONFIG 0b00010000000000000000000000 //cc, cc=250ms, 1avg
-// #define MODE_1_CONFIG 0b00011000000000000000000000 //cc, cc=500ms, 1avg
-// #define MODE_1_CONFIG 0b00100000000000000000000000 //cc, cc=1s, 1avg
-// #define MODE_1_CONFIG 0b00101000000000000000000000 //cc, cc=4s, 1avg
-// #define MODE_1_CONFIG 0b00110000000000000000000000 //cc, cc=8s, 1avg
-// #define MODE_1_CONFIG 0b00111000000000000000000000 //cc, cc=16s, 1avg
-// #define MODE_1_CONFIG 0b00000010000000000000000000 //cc, cc=15.5ms, 8avg
-// #define MODE_1_CONFIG 0b00000100000000000000000000 //cc, cc=15.5ms, 32avg
-// #define MODE_1_CONFIG 0b00000110000000000000000000 //cc, cc=15.5ms, 64avg
+// #define MODE_1_CONFIG 0b00000000000000000000000000 //TMP only, cc, cycle=15.5ms, 1avg
+// #define MODE_1_CONFIG 0b00001000000000000000000000 //TMP only, cc, cycle=125ms, 1avg
+// #define MODE_1_CONFIG 0b00010000000000000000000000 //TMP only, cc, cycle=250ms, 1avg
+// #define MODE_1_CONFIG 0b00011000000000000000000000 //TMP only, cc, cycle=500ms, 1avg
+// #define MODE_1_CONFIG 0b00100000000000000000000000 //TMP only, cc, cycle=1s, 1avg
+// #define MODE_1_CONFIG 0b00101000000000000000000000 //TMP only, cc, cycle=4s, 1avg
+// #define MODE_1_CONFIG 0b00110000000000000000000000 //TMP only, cc, cycle=8s, 1avg
+// #define MODE_1_CONFIG 0b00111000000000000000000000 //TMP only, cc, cycle=16s, 1avg
+// #define MODE_1_CONFIG 0b00000010000000000000000000 //TMP only, cc, cycle=15.5ms, 8avg
+// #define MODE_1_CONFIG 0b00000100000000000000000000 //TMP only, cc, cycle=15.5ms, 32avg
+// #define MODE_1_CONFIG 0b00000110000000000000000000 //TMP only, cc, cycle=15.5ms, 64avg
 
 // BM1422AGMV only modes
-// #define MODE_1_CONFIG 0b01000000000000000000001000 //continuous 10Hz
-// #define MODE_1_CONFIG 0b01000000000000000000001010 //continuous 20Hz
-// #define MODE_1_CONFIG 0b01000000000000000000001001 //continuous 100Hz
-// #define MODE_1_CONFIG 0b01000000000000000000001011 //continuous 1kHz
+// #define MODE_1_CONFIG 0b01000000000000000000001000 //BM14 only, continuous 10Hz
+// #define MODE_1_CONFIG 0b01000000000000000000001010 //BM14 only, continuous 20Hz
+// #define MODE_1_CONFIG 0b01000000000000000000001001 //BM14 only, continuous 100Hz
+// #define MODE_1_CONFIG 0b01000000000000000000001011 //BM14 only, continuous 1kHz
 
-#define MODE_1_CONFIG 0b00001110000000000001011011 //max power usage
+#define MODE_1_CONFIG 0b00001110000000000001111011 //max power usage
 
 #define MODE_2_CONFIG 10952
 
@@ -105,7 +105,7 @@ void loop(){
   timestamp = micros()-timestamp;
 
   //print data
-  Serial.print(timestamp); Serial.print(", "); Serial.print(temperature); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.print(gyroData[0]); Serial.print(", "); Serial.print(gyroData[1]); Serial.print(", "); Serial.print(gyroData[2]); Serial.println();
+  Serial.print(timestamp); Serial.print(", "); Serial.print(temperature); Serial.print(", "); Serial.print(magData[0]); Serial.print(", "); Serial.print(magData[1]); Serial.print(", "); Serial.print(magData[2]); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.print(", "); Serial.print(gyroData[0]); Serial.print(", "); Serial.print(gyroData[1]); Serial.print(", "); Serial.print(gyroData[2]); Serial.println();
 }
 
 void setConfig(long config){
