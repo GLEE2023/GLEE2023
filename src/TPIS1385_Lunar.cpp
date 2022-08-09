@@ -31,10 +31,7 @@ TPIS1385_New::TPIS1385_New(int _id, bool _debug){
 
 void TPIS1385_New::begin(void){
     Wire.begin();                          // Begin i2c coms at standard speed
-	Wire.beginTransmission(0x00);    // Reload all call
-    Wire.write(0x04);
-    Wire.write(0x00);
-	if(Wire.endTransmission()!=0) Serial.println(F("Init call failiure"));
+    Lunar_I2C::writeByte (RELOAD_ALL_CALL, FOUR, ZERO);
     delay(50);  // Wait on i2c transmission
 }
 
@@ -46,15 +43,9 @@ void TPIS1385_New::begin(void){
 void TPIS1385_New::readEEprom(void){
     uint8_t data[2] = {0,0};
 
-    Wire.beginTransmission(0x0D);                                 // begin communication with the sensor
-    Wire.write(TP_EEPROM_CONTROL);                                // point to address to be written to
-    Wire.write(0x80);                                             // write data to adress specificed above
-    Wire.endTransmission();                                       // end communication
+    Lunar_I2C::writeByte (TPIS1385_I2C_ADDR, TP_EEPROM_CONTROL, 0x80);
 
-    Wire.write(TP_PROTOCOL);                                      // identifies register for data to be read from
-    Wire.endTransmission();                                       // end transmission
-    Wire.requestFrom(0x0D, uint8_t (1) );                         // request 1 byte from the sensor address
-    data[0] = Wire.read();                                        // read data and store in the readByte variable
+    Lunar_I2C::readBytes(TPIS1385_I2C_ADDR, TP_PROTOCOL, 1, &data[0]);
 
     // Calibration Constants
     // Read PTAT25 calibration value
@@ -77,13 +68,12 @@ void TPIS1385_New::readEEprom(void){
     TPIS1385_New::sensorCalibration.UOut1 *= 2;
 
     // Read Tobject 1 cal value
-    Wire.write(TP_T_OBJ_1);                                                              // identifies register for data to be read from
-    Wire.requestFrom(0x0D, uint8_t (1) );                                                // request 1 byte from the sensor address
-    TPIS1385_New::sensorCalibration.TObj1 = Wire.read();                                 // read data and store in the readByte variable
 
-    Wire.write(TP_EEPROM_CONTROL);                                                       // point to address to be written to
-    Wire.write(0x00);                                                                    // write data to adress specificed above
-    Wire.endTransmission();                                                              // end communication
+    Lunar_I2C::readBytes(TPIS1385_I2C_ADDR, TP_T_OBJ_1, 1, TPIS1385_New::sensorCalibration.TObj1);
+    
+
+    Lunar_I2C::writeByte (TPIS1385_I2C_ADDR, TP_EEPROM_CONTROL, 0x00);
+
 
     TPIS1385_New::sensorCalibration.K = ((float) (TPIS1385_New::sensorCalibration.UOut1 - TPIS1385_New::sensorCalibration.U0)/ (pow((float) (TPIS1385_New::sensorCalibration.TObj1 + 273.15f),3.8f) - pow(25.0f + 273.15f,3.8f)));
 

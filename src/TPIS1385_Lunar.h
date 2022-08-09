@@ -54,7 +54,11 @@
 #define TP_T_OBJ_1 50                           // 1xbytes 
 
 #define TP_I2C_ADDR 63
-#define TPIS_DEBUG  
+#define TPIS_DEBUG 
+
+#define RELOAD_ALL_CALL 0x00
+#define FOUR 0x4
+#define ZERO 0x00
 
 /*
 *End Register Definitions
