@@ -30,7 +30,7 @@ void BM1422AGMV_Lunar::setConfig(uint8_t config){
     //Is it set on or off
     switch (on_or_off){
       case 0x0:
-        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("OFF (The following BM14 prints don't matter)"));
+        Serial.print(F("BM14 on or sleep: ")); Serial.println(F("SLEEP (The following BM14 prints don't matter)"));
         break;
       case 0x1:
         Serial.print(F("BM14 on or sleep: ")); Serial.println(F("ON"));
