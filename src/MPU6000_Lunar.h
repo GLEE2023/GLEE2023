@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Lunar_I2C.h"
 
-// #define MPU6000_DEBUG
+#define MPU6000_DEBUG
 //Things that john is letting users change - MPU6000_SMPLRT_DIV, DLPF
 
 #define MPU6000_I2CADDR_DEFAULT 0x69    // MPU6000 default i2c address w/ AD0 high
