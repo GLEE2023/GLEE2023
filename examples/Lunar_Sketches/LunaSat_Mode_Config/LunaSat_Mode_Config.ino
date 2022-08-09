@@ -90,9 +90,9 @@ void loop(){
   MPU6000_Lunar::readAccData(buffer);
   MPU6000_Lunar::convertAccToFloat(buffer, accData);
 
+  // get data from gyro 
   MPU6000_Lunar::readGyroData(buffer);
   MPU6000_Lunar::convertGyroToFloat(buffer, gyroData);
-
 
   //get data from temperature sensor
   TMP117_Lunar::getData(buffer);
