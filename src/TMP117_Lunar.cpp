@@ -13,7 +13,7 @@ void TMP117_Lunar::setConfig(uint8_t config){
   buffer[0] =  ((uint8_t)(config>>3));
 
   Lunar_I2C::writeBytes(TMP117_TEMP_I2C, TMP117_CONFIG_REG, 2, buffer);
-  
+
   // CONFIG_PRINT_STATEMENT
   #ifdef TMP_DEBUG
   Serial.print(F("TMP CONFIG STR: 0x")); Serial.println(config,HEX);
@@ -46,40 +46,40 @@ void TMP117_Lunar::setConfig(uint8_t config){
     Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 15.5 ms"));
     break;
     case 0x1:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 125 ms"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (125 ms)"));
     break;
     case 0x2:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 250 ms"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (250 ms)"));
     break;
     case 0x3:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 500 ms"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (500 ms)"));
     break;
     case 0x4:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 1 s"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (1 s)"));
     break;
     case 0x5:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 4 s"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (4 s)"));
     break;
     case 0x6:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 8 s"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (8 s)"));
     break;
     case 0x7:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 16 s"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (16 s)"));
     break;
   };
 
   switch (averaging_bits){
     case 0x0:
-    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" 0 averages (i.e. one data point)"));
+    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" (0 averages (i.e. one data point))"));
     break;
     case 0x1:
-    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" 8 averages"));
+    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" (8 averages)"));
     break;
     case 0x2:
-    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" 32 averages"));
+    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" (32 averages)"));
     break;
     case 0x3:
-    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" 64 averages"));
+    Serial.print(F("TMP averaging_bits bits: ")); Serial.print(averaging_bits,BIN); Serial.println(F(" (64 averages)"));
     break;
     default:
     Serial.print(F("TMP averaging_bits bits: ")); Serial.println(F(" something went wrong"));
