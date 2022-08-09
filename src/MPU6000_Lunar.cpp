@@ -13,7 +13,7 @@ void MPU6000_Lunar::convertAccToFloat(uint8_t* buffer, float* nums){
 }
 
 void MPU6000_Lunar::setConfig(uint16_t config_string){
-  Serial.print("Acc Config string: ");
+  Serial.print("MPU Config string: ");
   Serial.println(config_string,HEX);
   // Set limits to +/- 2g, don't change
   Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_ACCEL_CONFIG, 0x00);
@@ -97,15 +97,15 @@ void MPU6000_Lunar::setConfig(uint16_t config_string){
   //set sampling rate div
   #ifdef MPU6000_DEBUG
     uint8_t sampling_rate_div = (uint8_t)(config_string>>4 & 0xFF);
-    Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,sampling_rate_div);
+    // Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,sampling_rate_div);
     Serial.println("MPU Sampling rate division set to "+String(sampling_rate_div));
 
     // Set digital low pass filter bandwidth
     uint8_t dlpf_value = (uint8_t)(config_string>>12 & 0x7);
-    Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,dlpf_value);
+    // Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,dlpf_value);
     Serial.println("MPU Digtal low pass filter set to "+String(dlpf_value));
-  #else
-    Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,(uint8_t)(config_string>>4 & 0xFF));
-    Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,(uint8_t)(config_string>>12 & 0x7));
   #endif
+  Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_SMPLRT_DIV,(uint8_t)(config_string>>4 & 0xFF));
+  Lunar_I2C::writeByte(MPU6000_I2CADDR_DEFAULT,MPU6000_CONFIG,(uint8_t)(config_string>>12 & 0x7));
+
 }

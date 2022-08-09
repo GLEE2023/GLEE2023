@@ -22,7 +22,7 @@ void BM1422AGMV_Lunar::setConfig(uint8_t config){
     // ((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1)
     uint8_t on_or_off = ((config>>3) & 0x1);
     uint8_t cont_or_single = ((config>>2) & 0x1);
-    uint8_t cont_freq = (config & 0x4);
+    uint8_t cont_freq = (config & 0x3);
 
     Serial.print(F("BM14 CONFIG STR: 0x")); Serial.print(config,HEX); Serial.print(F(", CONTR1 val (hex):")); Serial.println(((config & 0x8)<<4) | (0x40) | ((config & 0x3)<<3) | ((config & 0x4)<<1),HEX);
 

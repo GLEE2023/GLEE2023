@@ -13,7 +13,8 @@ void Lunar_I2C::readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uin
   int i = 0;
 
   #ifdef I2C_DEBUG
-    Serial.print(F("Lunar_I2C::readBytes reading ")); Serial.print(nBytes); Serial.println(F(" bytes of data (hex): "));
+    Serial.print(F("Lunar_I2C::readBytes reading ")); Serial.print(nBytes); Serial.print(F(" bytes of data (hex): "));
+    for (int i=0; i<nBytes; i++) Serial.println(data[i],HEX);
   #endif
 
   while(Wire.available()){
