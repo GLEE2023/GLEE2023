@@ -43,7 +43,7 @@ void TMP117_Lunar::setConfig(uint8_t config){
 
   switch (conversion_bits){
     case 0x0:
-    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" 15.5 ms"));
+    Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (15.5 ms)"));
     break;
     case 0x1:
     Serial.print(F("TMP conversion bits: ")); Serial.print(conversion_bits,BIN); Serial.println(F(" (125 ms)"));
