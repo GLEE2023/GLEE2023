@@ -32,17 +32,22 @@ void Lunar_I2C::readBytes(uint8_t I2CsensorAddress, uint8_t registerAddress, uin
 * Returns: None
 * This function writes data to specified address
 **/
-void Lunar_I2C::writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t writeData){
-  #ifdef I2C_DEBUG
-    Serial.print(F("Lunar_I2C::writeBytes() writing (hex): "));
-    Serial.println(writeData);
-  #endif
-
-  Wire.beginTransmission(I2CsensorAddress);               // begin communication with the sensor
-  Wire.write(registerAddress);                                // point to address to be written to
-  Wire.write(writeData);                                      // write data to adress specificed above
-  Wire.endTransmission();                                     // end communication
+void Lunar_I2C::writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t data){
+  //to save program storage space, calls writeBytes
+  Lunar_I2C::writeBytes(I2CsensorAddress, registerAddress, 1, &data);
 }
+
+// void Lunar_I2C::writeByte (uint8_t I2CsensorAddress, uint8_t registerAddress, uint8_t writeData){
+//   #ifdef I2C_DEBUG
+//     Serial.print(F("Lunar_I2C::writeBytes() writing (hex): "));
+//     Serial.println(writeData);
+//   #endif
+//
+//   Wire.beginTransmission(I2CsensorAddress);               // begin communication with the sensor
+//   Wire.write(registerAddress);                                // point to address to be written to
+//   Wire.write(writeData);                                      // write data to adress specificed above
+//   Wire.endTransmission();                                     // end communication
+// }
 
 
 /**
@@ -61,6 +66,6 @@ void Lunar_I2C::writeBytes (uint8_t I2CsensorAddress, uint8_t registerAddress, u
   }
   #endif
 
-  Wire.write(data[i],nBytes);                                      // write data to adress specificed above
+  Wire.write(data,nBytes);                                      // write data to adress specificed above
   Wire.endTransmission();                                     // end communication
 }
