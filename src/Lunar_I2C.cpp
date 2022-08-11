@@ -54,16 +54,13 @@ void Lunar_I2C::writeBytes (uint8_t I2CsensorAddress, uint8_t registerAddress, u
   Wire.beginTransmission(I2CsensorAddress);               // begin communication with the sensor
   Wire.write(registerAddress);                                // point to address to be written to
 
-  #ifdef I2C_DEBUG //debugging
-    Serial.print(F("Lunar_I2C::writeBytes writiing ")); Serial.print(nBytes); Serial.println(F(" bytes of data (hex): "));
+  #ifdef I2C_DEBUG //for debugging
+  Serial.print(F("Lunar_I2C::writeBytes writiing ")); Serial.print(nBytes); Serial.println(F(" bytes of data (hex): "));
+  for(int i=0; i<nBytes; i++){
+      Serial.print(F("Byte num: "));Serial.print(i); Serial.print(": 0x"); Serial.println(data[i],HEX);
+  }
   #endif
 
-  for(int i=0; i<nBytes; i++){
-    #ifdef I2C_DEBUG //for debugging
-      Serial.print(F("Byte num: "));Serial.print(i); Serial.print(": "); Serial.println(data[i],HEX);
-    #endif
-
-    Wire.write(data[i]);                                      // write data to adress specificed above
-  }
+  Wire.write(data[i],nBytes);                                      // write data to adress specificed above
   Wire.endTransmission();                                     // end communication
 }
