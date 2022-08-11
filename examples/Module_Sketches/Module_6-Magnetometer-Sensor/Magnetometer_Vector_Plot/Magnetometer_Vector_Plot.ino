@@ -79,7 +79,6 @@ void loop (){
   // Calculates angle of magnetic field vector
   angle = atan2((valY-calY),(valX-calX))*180/3.14;
 
-
   // Determine the direction of magnetic field vector based on the angle
   String direction_str = "";
   if (angle <= 22.5 && angle > -22.5){

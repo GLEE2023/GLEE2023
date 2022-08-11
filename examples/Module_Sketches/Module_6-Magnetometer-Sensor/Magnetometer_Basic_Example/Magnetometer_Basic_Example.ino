@@ -12,7 +12,6 @@ void setup (){
         while (1) { delay(10); }
     }
 
-
     // see 18.3.1 in the mlx90395 datasheet for info on default values.
     // The following enumerators are defined in MLX90395.h.
 
@@ -24,14 +23,11 @@ void setup (){
     // These values are equivalent to 1 and are the default
     magnetometer.setResolution(MLX90395_RES_17,MLX90395_RES_17,MLX90395_RES_17);
 
-
     // Set oversampling. See 18.4 in the datasheet
     magnetometer.setOSR(MLX90395_OSR_4); //not default. default is MLX90395_OSR_1 and is equivalent to 0
 
     // Set digital filtering. (Built in averaging)
     magnetometer.setFilter(MLX90395_FILTER_8); //default. MLX90395_FILTER_1 is equivalent to 0
-
-
 
     //Setup done
     Serial.println("Begin printing data:");
@@ -39,7 +35,6 @@ void setup (){
 };
 
 void loop (){
-
     // Get a sample
     sample = magnetometer.getSample();
 
