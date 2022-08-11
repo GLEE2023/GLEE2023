@@ -58,7 +58,7 @@ void setup() {
 
     // Print out data header
     Serial.println("Sample Key: ");
-    Serial.println("Time, TMP117, MPU6000-X, MPU6000-Y, MPU6000-Z, MLX90393-X, MLX90393-Y, MLX90393-Z, TPIS1385-Object, TPIS1385-Ambient, CAP");
+    Serial.println("Time, TMP117, MPU6000-X, MPU6000-Y, MPU6000-Z, MLX90395-X, MLX90395-Y, MLX90395-Z, TPIS1385-Object, TPIS1385-Ambient, CAP");
 
     pinMode(LED1, OUTPUT);
     pinMode(LED2, OUTPUT);
