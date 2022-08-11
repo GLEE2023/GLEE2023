@@ -29,7 +29,7 @@ From LSB to MSB:
 // MPU6000 only mode configs
 // #define MODE_1_CONFIG 0b01000000000000000000010000 //acc only, LPWU 1.25hz
 // #define MODE_1_CONFIG 0b01000000000000000000100000 //acc only, LPWU 5hz
-// #define MODE_1_CONFIG 0b01000000000000000001000000 //acc only, LPWU 20hz
+// #define MODE_1_CONFIG 0b01000000000000000001000000 //acc only, LPWU 40hz
 // #define MODE_1_CONFIG 0b01000000000000000001010000 //acc only, cont conv, dlpf:0, srd:0
 // #define MODE_1_CONFIG 0b01000000000000000001100000 //gyro only
 // #define MODE_1_CONFIG 0b01000000000000000001110000 //acc & gyro
@@ -69,6 +69,9 @@ void setup(){
   Serial.begin(9600);
 
   setConfig(MODE_1_CONFIG);
+
+  Serial.println(); Serial.print(F("Timestamp")); Serial.print(", "); Serial.print(F("Temperature")); Serial.print(", "); Serial.print(F("mag x")); Serial.print(", "); Serial.print(F("mag y")); Serial.print(", "); Serial.print(F("Mag y")); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.print(", "); Serial.print(gyroData[0]); Serial.print(", "); Serial.print(gyroData[1]); Serial.print(", "); Serial.print(gyroData[2]); Serial.println();
+
 }
 
 void loop(){
@@ -90,7 +93,7 @@ void loop(){
   MPU6000_Lunar::readAccData(buffer);
   MPU6000_Lunar::convertAccToFloat(buffer, accData);
 
-  // get data from gyro 
+  // get data from gyro
   MPU6000_Lunar::readGyroData(buffer);
   MPU6000_Lunar::convertGyroToFloat(buffer, gyroData);
 
