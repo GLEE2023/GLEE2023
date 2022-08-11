@@ -71,7 +71,7 @@ void setup(){
 
   setConfig(MODE_1_CONFIG);
 
-  Serial.println(); Serial.print(F("Timestamp")); Serial.print(", "); Serial.print(F("Temperature")); Serial.print(", "); Serial.print(F("mag x")); Serial.print(", "); Serial.print(F("mag y")); Serial.print(", "); Serial.print(F("Mag y")); Serial.print(", "); Serial.print(accData[0]); Serial.print(", "); Serial.print(accData[1]); Serial.print(", "); Serial.print(accData[2]); Serial.print(", "); Serial.print(gyroData[0]); Serial.print(", "); Serial.print(gyroData[1]); Serial.print(", "); Serial.print(gyroData[2]); Serial.println();
+  Serial.print(F("timestamp [uS]")); Serial.print(", "); Serial.print(F("temp [C]")); Serial.print(", "); Serial.print(F("mag x [uT]")); Serial.print(", "); Serial.print(F("mag y [uT]")); Serial.print(", "); Serial.print(F("mag z [uT]")); Serial.print(", "); Serial.print(F("acc x [uT]")); Serial.print(", "); Serial.print(F("acc y [uT]")); Serial.print(", "); Serial.print(F("acc z [uT]")); Serial.print(", "); Serial.print(F("gyro x [uT]")); Serial.print(", "); Serial.print(F("gyro y [uT]")); Serial.print(", "); Serial.print(F("gyro z [uT]")); Serial.println();
 
 }
 
