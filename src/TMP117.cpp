@@ -177,8 +177,7 @@ bool TMP117::dataReady(){
 /**
  * Parameters: registerAddress
  * Returns: 2 bytes 
- * This function returns the I2C address
- * of the temperature sensor.
+ * Returns 2 bytes of located at registerAddress
 **/
 uint16_t TMP117::read2Byte(uint8_t registerAddress){
     uint16_t readByte;              // byte to store data that is read
