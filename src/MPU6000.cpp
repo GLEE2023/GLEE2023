@@ -107,6 +107,15 @@ void MPU6000::setFilterBandwidth(mpu6000_bandwidth_t bandwidth){
 }
 
 /*
+Parameters: none
+Returns: The bandwith for the digital low pass filter
+This function returns the digital low pass filter bandwith
+*/
+mpu6000_bandwidth_t MPU6000::getFilterBandwidth() {
+	return readByte(MPU6000_CONFIG);
+}
+
+/*
 	Parameters: none
 	Returns: The raw acceleration in LSB/G as a struct of sensor_uint16_vec_t type
 	This function reads in the high bytes of the accel for each of the three 
