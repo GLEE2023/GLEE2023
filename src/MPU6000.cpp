@@ -98,6 +98,17 @@ void MPU6000::setSampleRateDivisor(uint8_t divisor){
 }
 
 /*
+Parameters: none
+Returns: Sample rate divisor as an 8-bit unsigned integer
+This function reads the current sample rate divisor from the MPU6000
+*/
+uint8_t MPU6000::getSampleRateDivisor() {
+	uint8_t divisor;
+	divisor = readByte(MPU6000_SMPLRT_DIV);
+	return divisor;
+}
+
+/*
 Parameters: bandwidth wished to be set to as a mpu6000_bandwith_t enumeration
 Returns: none
 This function sets the bandwidth for the low pass filter.
