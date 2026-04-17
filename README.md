@@ -56,7 +56,7 @@ This repo contains the Arduino libraries and sketches which are used to control 
 ## V5 Upload Wire Hookup
 
 <center>
-<img height=300 src="./extras/Docs/Images/lunasat-v5_hookup.jpg">
+<img height=300 src="./extras/Docs/Images/LunaSat-v5_hookup.jpg">
 </center> 
 
 |Wire Color|FTDI|LunaSat|
