@@ -113,6 +113,9 @@ class MPU6000:public Sensor{
         void setSampleRateDivisor(uint8_t divisor);
         void setFilterBandwidth(mpu6000_bandwidth_t bandwidth);
 
+        uint8_t getSampleRateDivisor();
+        mpu6000_bandwidth_t getFilterBandwidth();
+
     private:
         
         sensor_int16_vec_t accelRaw;
