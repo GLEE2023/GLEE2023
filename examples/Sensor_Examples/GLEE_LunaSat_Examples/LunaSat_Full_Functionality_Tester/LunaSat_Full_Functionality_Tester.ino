@@ -64,7 +64,7 @@ void setup() {
     delay(1000); // Delay if issue with serial
   }
 
-  Serial.println(F("LunaSat Connection Succsessful"));
+  Serial.println(F("LunaSat Connection Successful"));
 
   // Initalize Thermopile Sensor
   Wire.beginTransmission(0x00);     // Tx buffer
