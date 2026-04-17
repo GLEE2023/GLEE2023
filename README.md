@@ -53,11 +53,28 @@ This repo contains the Arduino libraries and sketches which are used to control 
 
 
 # How To Use
+## V5 Upload Wire Hookup
+
+<center>
+<img height=300 src="./extras/Docs/Images/lunasat-v5_hookup.jpg">
+</center> 
+
+|Wire Color|FTDI|LunaSat|
+|:---------|:---|:------|
+|Yellow    |DTR |DTR    |
+|Blue      |RXI |TX     |
+|Green     |TXO |RX     |
+|Red       |3V3 |+3.3V  |
+|Black     |GND |GND    |
+
 ## Installation Instructions
 1. Open Arduino
 2. Navigate to `file > tools > library manager`
 3. Search for GLEE2023
-4. Install with dependencies
+4. Install with dependencies:
+    * RadioLib version 5.7.0
+    * Adafruit Unified Sensors
+    * Adafruit BusIO
 
 ## Sensor Libraries
 * GLEE_Sensor: 
